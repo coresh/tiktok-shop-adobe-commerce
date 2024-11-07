@@ -1,0 +1,27 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="m2e_tiktokshop_general_handler"/>
+    <body>
+        <referenceBlock name="menu">
+            <action method="setActive">
+                <argument name="itemId" xsi:type="string">M2E_TikTokShop::listings_items</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceContainer name="content">
+            <container name="m2e.tiktokshop.listing_tabs">
+                <block class="M2E\TikTokShop\Block\Adminhtml\TikTokShop\Listing\Tabs">
+                    <arguments>
+                        <argument name="active_tab" xsi:type="string">all_items</argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+
+        <referenceContainer name="content">
+            <uiComponent name="m2e_tiktokshop_product_all_items_grid"/>
+        </referenceContainer>
+
+    </body>
+
+</page>

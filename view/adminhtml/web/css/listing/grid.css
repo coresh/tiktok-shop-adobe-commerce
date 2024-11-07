@@ -1,0 +1,27 @@
+.grid-listing-column-id {
+    width: 75px;
+}
+
+.grid-listing-column-products_total_count {
+    width: 120px;
+}
+
+.grid-listing-column-products_active_count {
+    width: 120px;
+}
+
+.grid-listing-column-products_inactive_count {
+    width: 130px;
+}
+
+.grid-listing-column-actions {
+    max-width: 150px;
+}
+
+.grid-listing-column-items_sold_count {
+    width: 100px;
+}
+
+.listing-grid-column-setting {
+    width: 240px;
+}

@@ -1,0 +1,141 @@
+<?xml version="1.0" ?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">
+                m2e_tiktokshop_product_by_issues_grid.m2e_tiktokshop_product_by_issues_grid_data_source
+            </item>
+            <item name="deps" xsi:type="string">
+                m2e_tiktokshop_product_by_issues_grid.m2e_tiktokshop_product_by_issues_grid_source
+            </item>
+        </item>
+        <item name="spinner" xsi:type="string">m2e_tiktokshop_product_by_issues_grid_columns</item>
+    </argument>
+
+    <dataSource name="m2e_tiktokshop_product_by_issues_grid_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">
+                Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
+            </argument>
+            <argument name="name" xsi:type="string">m2e_tiktokshop_product_by_issues_grid_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">tag_id</argument>
+            <argument name="requestFieldName" xsi:type="string">tag_id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="update_url" path="mui/index/render" xsi:type="url"/>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">tag_id</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="sticky" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+
+        <filters name="listing_filters">
+
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="templates" xsi:type="array">
+                        <item name="filters" xsi:type="array">
+                            <item name="select" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                                <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+
+            <filterSelect name="account_id"
+                          provider="${ $.parentName }"
+                          template="ui/grid/filters/elements/ui-select"
+                          component="Magento_Ui/js/form/element/ui-select"
+            >
+                <settings>
+                    <label>Account</label>
+                    <dataScope>account_id</dataScope>
+                    <options class="M2E\TikTokShop\Ui\Select\Account"/>
+                </settings>
+            </filterSelect>
+
+        </filters>
+
+        <bookmark name="bookmarks"/>
+
+        <paging name="listing_paging"/>
+
+    </listingToolbar>
+
+    <columns name="m2e_tiktokshop_product_by_issues_grid_columns">
+
+        <settings>
+            <childDefaults>
+                <param name="draggable" xsi:type="boolean">false</param>
+            </childDefaults>
+        </settings>
+
+        <!--  column name from provider  -->
+        <column name="tag_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" translate="true" xsi:type="string">ID</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="error_code">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" translate="true" xsi:type="string">Error Code</item>
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="text">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" translate="true" xsi:type="string">Issue</item>
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="total_items" class="M2E\TikTokShop\Ui\Product\Component\Listing\Column\IssueAffectedItems">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" translate="true" xsi:type="string">Affected Items</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
+                </item>
+            </argument>
+            <settings>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+
+        <column name="impact_rate" class="M2E\TikTokShop\Ui\Product\Component\Listing\Column\IssueImpactRate">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" translate="true" xsi:type="string">Impact Rate</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
+                </item>
+            </argument>
+        </column>
+
+    </columns>
+</listing>

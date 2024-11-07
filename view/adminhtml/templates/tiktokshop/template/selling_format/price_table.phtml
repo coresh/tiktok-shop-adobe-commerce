@@ -1,0 +1,254 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+/** @var \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\SellingFormat\Edit\Form\PriceTable $block */
+
+use M2E\TikTokShop\Model\Template\SellingFormat;
+
+$attributes = $block->getAttributes();
+
+$currency = $block->getData('currency');
+
+$formData = $block->getData('form_data');
+$default = $block->getData('default');
+$formData = array_merge($default, $formData);
+$fixedPriceModifierAttributes = $block->getFixedPriceModifierAttributes($formData['fixed_price_modifier']);
+
+$attributesByInputTypes = $block->getData('attributes_by_input_types');
+
+?>
+
+<table class="data-grid data-grid-not-hovered" id="price_table" cellpadding="0" cellspacing="0">
+    <thead>
+    <tr class="headings">
+        <th class="data-grid-th" style="width: 150px"><?php
+            echo $block->__('Price'); ?></th>
+        <?php
+        if ($currency !== null) : ?>
+            <th class="data-grid-th" style="width: 95px">
+                <?php
+                echo $block->__('Currency'); ?>
+                <?php
+                echo $block->getTooltipHtml(
+                    $block->__(
+                        'The Currency for TikTok Shop Listings. Automatically set based on the Shop you chose earlier.'
+                    ),
+                    true
+                ); ?>
+            </th>
+        <?php
+        endif; ?>
+        <th class="data-grid-th" style="width: 305px"><?php
+            echo $block->__('Source'); ?></th>
+        <th class="data-grid-th" style="width: 325px">
+            <?php
+            echo $block->__('Price Change'); ?>
+            <?php
+            $currencyPlaceholder = $currency === null ? $block->__('[CURRENCY]') :
+                $block->getCurrencySymbol($currency); ?>
+            <?php
+            echo $block->getTooltipHtml(
+                $block->__(
+                    'You may adjust Magento Price value that will be submitted to Channel.',
+                    $currencyPlaceholder
+                )
+            ); ?>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr id="fixed_price_tr">
+
+        <td class="value remove_bottom_border">
+            <label for="fixed_price_mode"
+                   id="fixed_price_label"><?php
+                echo $block->__('Price'); ?>:</label>
+        </td>
+
+        <?php
+        if ($currency !== null) : ?>
+            <td class="value add_rowspan" style="text-align: center; vertical-align: middle;">
+                <div id="fixed_price_currency_td">
+                    <span><?php
+                        echo $currency; ?></span>
+                </div>
+            </td>
+        <?php
+        endif; ?>
+
+        <td class="value remove_bottom_border">
+            <select id="fixed_price_mode" name="selling_format[fixed_price_mode]"
+                    class="select admin__control-select required-entry TikTokShop-custom-attribute-can-be-created"
+                    allowed_attribute_types="text,price" style="width: 80%">
+                <option
+                    value="<?php
+                    echo \M2E\TikTokShop\Model\Template\SellingFormat::PRICE_MODE_PRODUCT; ?>" <?php
+                if (\M2E\TikTokShop\Model\Template\SellingFormat::PRICE_MODE_PRODUCT == $formData['fixed_price_mode']) :
+                    echo ' selected="selected"';
+                endif; ?>><?php
+                    echo $block->__('Product Price'); ?></option>
+                <option
+                    value="<?php
+                    echo \M2E\TikTokShop\Model\Template\SellingFormat::PRICE_MODE_SPECIAL; ?>" <?php
+                if (\M2E\TikTokShop\Model\Template\SellingFormat::PRICE_MODE_SPECIAL == $formData['fixed_price_mode']) :
+                    echo ' selected="selected"';
+                endif; ?>><?php
+                    echo $block->__('Special Price'); ?></option>
+
+                <optgroup class="TikTokShop-custom-attribute-optgroup"
+                          label="Magento Attribute">
+                    <?php
+                    if (
+                        $formData['fixed_price_mode'] == \M2E\TikTokShop\Model\Template\SellingFormat::PRICE_MODE_ATTRIBUTE && !$block->magentoAttributeHelper->isExistInAttributesArray(
+                            $formData['fixed_price_custom_attribute'],
+                            $attributes
+                        ) && $formData['fixed_price_custom_attribute'] != ''
+                    ) : ?>
+                        <option
+                            attribute_code="<?php
+                            echo $block->escapeHtml($formData['fixed_price_custom_attribute']) ?>"
+                            selected="selected"
+                            value="<?php
+                            echo \M2E\TikTokShop\Model\Template\SellingFormat::PRICE_MODE_ATTRIBUTE ?>">
+                            <?php
+                            echo $block->escapeHtml(
+                                $block->magentoAttributeHelper->getAttributeLabel(
+                                    $formData['fixed_price_custom_attribute']
+                                )
+                            ) ?>
+                        </option>
+                    <?php
+                    endif; ?>
+                    <?php
+                    foreach ($attributesByInputTypes['text_price'] as $attribute) : ?>
+                        <option attribute_code="<?php
+                        echo $attribute['code']; ?>"
+                                value="<?php
+                                echo \M2E\TikTokShop\Model\Template\SellingFormat::PRICE_MODE_ATTRIBUTE; ?>"
+                                <?php
+                                if ($formData['fixed_price_mode'] == \M2E\TikTokShop\Model\Template\SellingFormat::PRICE_MODE_ATTRIBUTE && $attribute['code'] == $formData['fixed_price_custom_attribute']) :
+                                ?>selected="selected"<?php
+                        endif; ?>>
+                            <?php
+                            echo $block->escapeHtml($attribute['label']); ?>
+                        </option>
+                    <?php
+                    endforeach; ?>
+                </optgroup>
+
+            </select>
+            <?php
+            echo $block->getTooltipHtml(
+                $block->__(
+                    'The Price for Fixed Price Items.'
+                )
+            ); ?>
+
+            <input type="hidden" name="selling_format[fixed_price_custom_attribute]"
+                   id="fixed_price_custom_attribute"/>
+
+        </td>
+
+        <td class="value add_rowspan" style="vertical-align: middle;">
+            <div id="fixed_price_change_td" style="position: relative;">
+                <div id="fixed_price_change_container"></div>
+                <div id="fixed_price_calculation_example" class="fixed-price-change-row" style="display: none;"></div>
+                <div align="center"><?php
+                    echo $block->getChildHtml('add_fixed_price_change_button') ?></div>
+            </div>
+        </td>
+
+    </tr>
+
+    </tbody>
+    <tfoot>
+    </tfoot>
+</table>
+
+<div id="fixed_price_change_row_template" style="display: none;">
+    <div style="position: relative;" class="fixed-price-change-row">
+        <div class="price_change_container">
+            <select id="fixed_price_modifier_mode_%i%"
+                    name="selling_format[fixed_price_modifier_mode][%i%]"
+                    class="select admin__control-select TikTokShop-validate-price-modifier price_coefficient_mode required-entry"
+                    data-price-change-index="%i%"
+                    style="width: 200px;">
+                <option
+                    value="<?php
+                    echo SellingFormat::PRICE_COEFFICIENT_ABSOLUTE_INCREASE; ?>">
+                    <?php
+                    echo $block->__('Absolute Value increase'); ?></option>
+                <option
+                    value="<?php
+                    echo SellingFormat::PRICE_COEFFICIENT_ABSOLUTE_DECREASE; ?>">
+                    <?php
+                    echo $block->__('Absolute Value decrease'); ?></option>
+                <option
+                    value="<?php
+                    echo SellingFormat::PRICE_COEFFICIENT_PERCENTAGE_INCREASE; ?>">
+                    <?php
+                    echo $block->__('Percentage increase'); ?></option>
+                <option
+                    value="<?php
+                    echo SellingFormat::PRICE_COEFFICIENT_PERCENTAGE_DECREASE; ?>">
+                    <?php
+                    echo $block->__('Percentage decrease'); ?></option>
+
+                <optgroup class="TikTokShop-custom-attribute-optgroup"
+                          label="Magento Attribute">
+                    <?php
+                    foreach ($fixedPriceModifierAttributes as $attributeCode): ?>
+                        <?php
+                        if (!$block->magentoAttributeHelper->isExistInAttributesArray($attributeCode, $attributes)): ?>
+                            <option attribute_code="<?php
+                            echo $attributeCode; ?>"
+                                    value="<?php
+                                    echo SellingFormat::PRICE_COEFFICIENT_ATTRIBUTE; ?>">
+                                <?php
+                                echo $block->escapeHtml(
+                                    $block->magentoAttributeHelper->getAttributeLabel($attributeCode)
+                                ); ?>
+                            </option>
+                        <?php
+                        endif; ?>
+                    <?php
+                    endforeach; ?>
+
+                    <?php
+                    foreach ($attributesByInputTypes['text_price'] as $attribute) : ?>
+                        <option attribute_code="<?php
+                        echo $attribute['code']; ?>"
+                                value="<?php
+                                echo SellingFormat::PRICE_COEFFICIENT_ATTRIBUTE; ?>">
+                            <?php
+                            echo $block->escapeHtml($attribute['label']); ?>
+                        </option>
+                    <?php
+                    endforeach; ?>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="price_coefficient_container">
+            <input name="selling_format[fixed_price_modifier_value][%i%]"
+                   id="fixed_price_modifier_value_%i%"
+                   type="text"
+                   class="admin__control-text TikTokShop-validation-float input-text coef"/>
+        </div>
+
+        <input type="hidden"
+               name="selling_format[fixed_price_modifier_attribute][%i%]"
+               id="fixed_price_modifier_attribute_%i%"/>
+
+        <button title="<?php
+        echo $block->__('Remove'); ?>"
+                id="fixed_price_modifier_row_remove_button_%i%"
+                type="button"
+                class="action-default scalable action primary price_change_remove">
+            <span><?php
+                echo $block->__('Remove'); ?></span>
+        </button>
+    </div>
+</div>

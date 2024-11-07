@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+
+    <group id="default">
+        <job name="m2e_tiktokshop" instance="M2E\TikTokShop\Model\Cron\Runner\Magento" method="process">
+            <schedule>* * * * *</schedule>
+        </job>
+    </group>
+
+</config>

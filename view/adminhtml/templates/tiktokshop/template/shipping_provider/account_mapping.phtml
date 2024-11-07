@@ -1,0 +1,56 @@
+<?php
+
+/** @var \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Account\Edit\Form\Render $this */
+
+$shops = $this->getAccount()->getShops();
+$isEmptyWarehouse = true;
+
+?>
+
+<?php if (!empty($shops)) : ?>
+<style>
+    #shipping-mapping-grid td span.required-field:after {
+        color: #e22626;
+        content: '*';
+        display: inline-block;
+        font-size: 1.6rem;
+        font-weight: 500;
+        line-height: 1;
+        margin-left: 5px;
+    }
+
+    #shipping-mapping-grid tr.new-shop-row:not(:nth-child(1)) {
+        border-top: 1px dashed lightgray;
+    }
+</style>
+<table id="shipping-mapping-grid" class="data-grid">
+    <thead>
+    <tr class="headings">
+        <th class="data-grid-th"><?= __('Shop') ?></th>
+        <th class="data-grid-th"><?= __('Warehouse') ?></th>
+        <th class="data-grid-th"><?= __('Magento Carrier') ?></th>
+        <th class="data-grid-th"><?= __('TTS Carrier') ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    foreach ($shops as $shop) : ?>
+        <?php
+        $isEmptyWarehouse = empty($shop->getWarehouses());
+        foreach ($shop->getWarehouses() as $warehouse) : ?>
+            <?php
+            foreach ($this->getMagentoCarriers() as $key => $magentoCarrier) : ?>
+                <?= $this->renderTableRow($key, $shop, $warehouse, $magentoCarrier) ?>
+            <?php
+            endforeach; ?>
+        <?php
+        endforeach; ?>
+    <?php
+    endforeach; ?>
+    </tbody>
+</table>
+<?php endif; ?>
+
+<?php if ($isEmptyWarehouse) : ?>
+    <p><?= __('To view available warehouses and shipping carriers, please refresh your account data.') ?></p>
+<?php endif; ?>

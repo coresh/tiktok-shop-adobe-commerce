@@ -1,0 +1,74 @@
+<?php
+
+/** @var \M2E\TikTokShop\Block\Adminhtml\HelpBlock $block */
+
+?>
+
+<div
+    id="<?= $block->getHtmlId() ?>"
+    class="block_notices TikTokShop-box-style
+    <?= $block->getClass() ?>
+    <?php
+    if ($block->hasNoCollapse()) :
+        ?>no_collapse<?php
+    endif; ?>
+    <?php
+    if ($block->hasTooltiped()) :
+        ?>tooltiped<?php
+    endif; ?>
+    <?php
+    if ($block->hasAlwaysShow()) :
+        ?>always_show<?php
+    endif; ?>
+    "
+    <?php
+    if ($block->hasStyle()) : ?>
+        style="<?= $block->getStyle() ?>"
+    <?php endif; ?>
+>
+    <div class="bar">
+        <?php
+        if (!$block->getTitle() && !$block->hasNoCollapse()) : ?>
+            <a class="shrink icon icon-shrink" href="javascript://"
+               onclick="BlockNoticeObj.shrinkContent('<?= $block->getHtmlId() ?>')"
+               title="<?= __('Collapse') ?>">
+            </a>
+        <?php endif; ?>
+        <?php
+        if (!$block->hasTooltiped() && !$block->hasNoHide()) : ?>
+            <a class="icon icon-close" href="javascript://"
+               onclick="BlockNoticeObj.hideBlock('<?= $block->getHtmlId() ?>')"
+               title="<?= __('Hide Block') ?>">
+            </a>
+        <?php
+        endif; ?>
+    </div>
+
+    <?php
+    if ($block->getTitle()) : ?>
+        <div class="title title-expand">
+            <a href="javascript://"
+               <?php if (!$block->hasNoCollapse()) : ?>
+                   onclick="BlockNoticeObj.expandTitledContent('<?= $block->getHtmlId() ?>')"
+               <?php endif; ?>
+               title="<?= __('Collapse') ?>"> <?= $block->getTitle() ?> <span class="icon icon-expand"></span>
+            </a>
+        </div>
+    <?php
+    else : ?>
+        <div class="title expand">
+            <a href="javascript://"
+               <?php if (!$block->hasNoCollapse()) :?>
+                   onclick="BlockNoticeObj.expandContent('<?= $block->getHtmlId() ?>')"
+               <?php endif; ?>
+               title="<?= __('Expand') ?>"> <span class="help"><?= __('Help Information') ?></span> <span class="icon icon-expand"></span>
+            </a>
+        </div>
+    <?php
+    endif; ?>
+
+    <div class="content <?php
+    if ($block->getTitle()) :?>titled-content<?php endif; ?>">
+        <?= $block->getContent() ?>
+    </div>
+</div>

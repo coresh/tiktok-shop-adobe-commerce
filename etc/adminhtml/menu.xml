@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+
+    <menu>
+
+        <!-- TikTok Shop Menu-->
+
+        <add id="M2E_TikTokShop::tts" title="TikTok Shop" module="M2E_TikTokShop" sortOrder="31"
+             dependsOnModule="M2E_TikTokShop" resource="M2E_TikTokShop::tts"/>
+
+        <!-- Listing -->
+
+        <add id="M2E_TikTokShop::listings" module="M2E_TikTokShop" sortOrder="10" parent="M2E_TikTokShop::tts"
+             title="Listings" resource="M2E_TikTokShop::listings"/>
+        <add id="M2E_TikTokShop::listings_items" module="M2E_TikTokShop" sortOrder="10"
+             parent="M2E_TikTokShop::listings" title="Items" action="m2e_tiktokshop/tiktokshop_listing/index"
+             resource="M2E_TikTokShop::listings"/>
+        <add id="M2E_TikTokShop::listings_search" module="M2E_TikTokShop" sortOrder="20"
+             parent="M2E_TikTokShop::listings" title="Search" action="m2e_tiktokshop/product_grid/allItems"
+             resource="M2E_TikTokShop::listings"/>
+        <add id="M2E_TikTokShop::listings_logs" title="Logs &#38; Events" module="M2E_TikTokShop" sortOrder="30"
+             parent="M2E_TikTokShop::listings" action="m2e_tiktokshop/tiktokshop_log_listing_product/index"
+             resource="M2E_TikTokShop::listings_logs"/>
+
+        <!-- Configuration -->
+
+        <add id="M2E_TikTokShop::configuration" module="M2E_TikTokShop" sortOrder="20" parent="M2E_TikTokShop::tts"
+             title="Configuration" resource="M2E_TikTokShop::configuration"/>
+        <add id="M2E_TikTokShop::configuration_accounts" title="Accounts" module="M2E_TikTokShop" sortOrder="10"
+             parent="M2E_TikTokShop::configuration" action="m2e_tiktokshop/tiktokshop_account/index"
+             resource="M2E_TikTokShop::configuration_accounts"/>
+        <add id="M2E_TikTokShop::configuration_categories" module="M2E_TikTokShop" sortOrder="20"
+             parent="M2E_TikTokShop::configuration" title="Categories"
+             action="m2e_tiktokshop/tiktokshop_template_category/index"
+             resource="M2E_TikTokShop::configuration_categories"/>
+        <add id="M2E_TikTokShop::configuration_templates" title="Policies" module="M2E_TikTokShop" sortOrder="30"
+             parent="M2E_TikTokShop::configuration" action="m2e_tiktokshop/tiktokshop_template/index"
+             resource="M2E_TikTokShop::configuration_templates"/>
+        <add id="M2E_TikTokShop::configuration_settings" title="Settings" module="M2E_TikTokShop" sortOrder="40"
+             parent="M2E_TikTokShop::configuration" action="m2e_tiktokshop/settings/index"
+             resource="M2E_TikTokShop::configuration_settings"/>
+
+        <!-- Sales -->
+
+        <add id="M2E_TikTokShop::sales" module="M2E_TikTokShop" sortOrder="30" parent="M2E_TikTokShop::tts"
+             title="Sales" resource="M2E_TikTokShop::sales"/>
+        <add id="M2E_TikTokShop::sales_orders" module="M2E_TikTokShop" sortOrder="10" parent="M2E_TikTokShop::sales"
+             title="Orders" action="m2e_tiktokshop/tiktokshop_order/index" resource="M2E_TikTokShop::sales_orders"/>
+        <add id="M2E_TikTokShop::sales_logs" title="Logs &#38; Events" module="M2E_TikTokShop" sortOrder="20"
+             parent="M2E_TikTokShop::sales" action="m2e_tiktokshop/tiktokshop_log_order/index"
+             resource="M2E_TikTokShop::sales_logs"/>
+
+        <!-- Help center -->
+
+        <add id="M2E_TikTokShop::help_center" title="Help Center" module="M2E_TikTokShop" sortOrder="40"
+             parent="M2E_TikTokShop::tts" resource="M2E_TikTokShop::help_center"/>
+        <add id="M2E_TikTokShop::help_center_health_status" title="Health Status" module="M2E_TikTokShop" sortOrder="10"
+             parent="M2E_TikTokShop::help_center" action="m2e_tiktokshop/healthStatus/index"
+             resource="M2E_TikTokShop::help_center_health_status"/>
+        <add id="M2E_TikTokShop::help_center_synchronization_log" title="Synchronization Logs" module="M2E_TikTokShop"
+             sortOrder="20" parent="M2E_TikTokShop::help_center" action="m2e_tiktokshop/synchronization_log/index"
+             resource="M2E_TikTokShop::help_center_synchronization_log"/>
+        <add id="M2E_TikTokShop::help_center_m2e_support" title="M2E Support" module="M2E_TikTokShop" sortOrder="30"
+             parent="M2E_TikTokShop::help_center" action="m2e_tiktokshop/support/index"
+             resource="M2E_TikTokShop::help_center_m2e_support"/>
+
+    </menu>
+
+</config>

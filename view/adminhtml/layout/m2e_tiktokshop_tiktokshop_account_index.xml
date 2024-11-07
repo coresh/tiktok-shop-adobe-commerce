@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      layout="admin-1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="m2e_tiktokshop_general_handler"/>
+    <head>
+        <css src="M2E_TikTokShop::css/account/grid.css"/>
+    </head>
+    <body>
+        <referenceBlock name="menu">
+            <action method="setActive">
+                <argument name="itemId" xsi:type="string">M2E_TikTokShop::configuration_accounts</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceBlock  name="main.top">
+            <block class="M2E\TikTokShop\Block\Adminhtml\TikTokShop\Account\HelpBlock" />
+        </referenceBlock >
+
+        <referenceContainer name="content">
+            <container name="m2e.tiktokshop.account.grid">
+                <uiComponent name="m2e_tiktokshop_account_grid"/>
+            </container>
+        </referenceContainer>
+    </body>
+</page>

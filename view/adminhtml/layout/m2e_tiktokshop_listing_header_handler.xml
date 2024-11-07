@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <container name="m2e.tiktokshop.listing.header">
+                <block class="M2E\TikTokShop\Block\Adminhtml\Listing\View\Header"/>
+            </container>
+        </referenceContainer>
+    </body>
+</page>

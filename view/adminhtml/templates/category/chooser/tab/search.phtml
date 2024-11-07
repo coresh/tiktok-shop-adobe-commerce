@@ -1,0 +1,50 @@
+<?php
+
+/** @var \M2E\TikTokShop\Block\Adminhtml\Category\Chooser\Tab\Search $this */
+
+?>
+
+<div id="category_search" data-bind="scope: 'category_search'">
+    <input id='query'
+           class='search-input'
+           type='text'
+           placeholder="<?= __('Enter keyword(s) or Category ID...') ?>"
+           data-bind="textInput: query, event: {keypress: searchOnEnter}">
+    <button class='action primary search-btn' data-bind="click: search"><?= __('Search') ?></button>
+    <a class="reset-input" data-bind="click: reset" style="margin-left: 23px;"><?= __('Reset') ?></a>
+
+    <div id="search_results_container">
+        <div data-bind='if: hasMoreCategories'>
+            <div class='message message-notice notice'>
+                <div data-ui-id='messages-message-notice'>
+                    <?= __('Showing the top 20 matching TikTok Shop categories below. For more options, please refine your search with a more specific query.') ?>
+                </div>
+            </div>
+        </div>
+        <table id="search_results_table" class="search_results_table">
+        <tbody data-bind="foreach: {data: foundCategories, as: 'category', noChildContext: true}">
+            <tr>
+                <td>
+                    <span data-bind="style: {color: category.is_invite_only ? 'gray' : 'black'}, text: category.name"></span>
+                </td>
+                <td style='text-align: right'>
+                    <!--  ko ifnot: category.is_invite_only -->
+                    <a class='choice-category'
+                       data-bind="ifnot: category.is_invite_only,
+                       attr: {'data-category-id': category.id},
+                       click: selectCategory.bind($data, category.id)"><?= __('Select') ?></a>
+                    <!--  /ko -->
+                </td>
+            </tr>
+        </tbody>
+        <tr data-bind="if: !hasFoundCategories">
+            <td colspan="2">
+                <span data-bind="if: searched"><?= __('No matching Categories are found.') ?></span>
+                <span data-bind="ifnot: searched"><?= __('Enter keyword(s) or Category ID to search.') ?></span>
+            </td>
+        </tr>
+    </table>
+    </div>
+</div>
+
+

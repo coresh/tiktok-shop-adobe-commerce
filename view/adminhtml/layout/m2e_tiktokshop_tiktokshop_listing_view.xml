@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      layout="admin-1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="M2E_TikTokShop::css/listing/autoAction.css"/>
+        <css src="M2E_TikTokShop::css/listing/view.css"/>
+    </head>
+    <body>
+        <referenceContainer name="main.top">
+            <container name="m2e.tiktokshop.help">
+                <block class="M2E\TikTokShop\Block\Adminhtml\HelpBlock">
+                    <arguments>
+                        <argument name="content" xsi:type="string" translate="true">M2E TikTok Shop Connect Listing is a group of Magento Products sold on a certain Shop from a particular Account. M2E TikTok Shop Connect has several options to display the content of Listings referring to different data details. Each of the view options contains a unique set of available Actions accessible in the Mass Actions drop-down.</argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+
+        <referenceContainer name="page.main.actions">
+            <container name="m2e.tiktokshop.listing.switcher">
+                <block class="M2E\TikTokShop\Block\Adminhtml\Listing\View\Switcher"/>
+            </container>
+        </referenceContainer>
+
+        <referenceContainer name="content">
+            <block class="M2E\TikTokShop\Block\Adminhtml\Category\Chooser\Prepare"/>
+
+            <container name="m2e.tiktokshop.listing.header">
+                <block class="M2E\TikTokShop\Block\Adminhtml\Listing\View\Header">
+                    <arguments>
+                        <argument name="listing_view_mode" xsi:type="boolean">true</argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+    </body>
+</page>

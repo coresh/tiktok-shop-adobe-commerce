@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+
+    <default>
+
+        <carriers>
+            <tiktokshopshipping>
+                <active>1</active>
+                <allowed_methods>tiktokshopshipping</allowed_methods>
+                <methods>tiktokshopshipping</methods>
+                <sallowspecific>0</sallowspecific>
+                <model>M2E\TikTokShop\Model\Magento\Shipping</model>
+                <name>M2E TikTok Shop Connect Shipping</name>
+                <title>M2E TikTok Shop Connect Shipping</title>
+                <handling_type>F</handling_type>
+            </tiktokshopshipping>
+        </carriers>
+
+        <payment>
+            <tiktokshoppayment>
+                <active>1</active>
+                <model>M2E\TikTokShop\Model\Magento\Payment</model>
+                <order_status>pending</order_status>
+                <title>M2E TikTok Shop Connect Payment</title>
+                <allowspecific>0</allowspecific>
+                <sort_order>1</sort_order>
+            </tiktokshoppayment>
+        </payment>
+
+    </default>
+
+</config>

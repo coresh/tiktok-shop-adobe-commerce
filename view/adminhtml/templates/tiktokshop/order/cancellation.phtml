@@ -1,0 +1,26 @@
+<?php
+
+/** @var \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Order\View\CancellationRequest $block */
+
+?>
+
+<div class="fieldset-wrapper">
+    <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
+        <strong class="admin__collapsible-title">
+            <span><?= __('Buyer Cancellation Request') ?></span>
+        </strong>
+    </div>
+    <table class="order-info form-list">
+        <tr>
+            <td class="label"><?= __('Cancellation Reason') ?></td>
+            <td><p><?= $block->getBuyerCancellationRequestReason() ?></p></td>
+        </tr>
+        <tr>
+            <td class="label"><?= __('Action') ?></td>
+            <td>
+                <button class="primary buyer-cancellation-accept"><?= __('Accept') ?></button>
+                <button class="primary buyer-cancellation-decline"><?= __('Decline') ?></button>
+            </td>
+        </tr>
+    </table>
+</div>

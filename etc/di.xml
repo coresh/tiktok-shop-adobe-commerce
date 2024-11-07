@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- stockitem -->
+
+    <type name="Magento\CatalogInventory\Model\Stock\Item">
+        <plugin name="tiktokshop_plugin_stockitem_magento_cataloginventory_model_stock_item"
+                type="M2E\TikTokShop\Plugin\StockItem\Magento\CatalogInventory\Model\Stock\Item"/>
+    </type>
+
+    <!-- Bulk Update Products (Website) -->
+
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="tiktokshop_plugin_product_action_bulk_update"
+                type="M2E\TikTokShop\Plugin\Product\Action\BulkUpdate"/>
+    </type>
+
+    <!-- order -->
+
+    <type name="Magento\Framework\App\Config">
+        <plugin name="tiktokshop_plugin_order_magento_framework_app_config"
+                type="M2E\TikTokShop\Plugin\Order\Magento\Framework\App\Config"/>
+    </type>
+
+    <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
+        <plugin name="tiktokshop_plugin_order_magento_quote_model_quote_item_toorderitem"
+                type="M2E\TikTokShop\Plugin\Order\Magento\Quote\Model\Quote\Item\ToOrderItem"/>
+    </type>
+
+    <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList">
+        <plugin name="tiktokshop_plugin_stockitem_magento_cataloginventory_model_quote_item_quantityvalidator_quoteitemqtylist"
+                type="M2E\TikTokShop\Plugin\StockItem\Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList"/>
+    </type>
+
+    <type name="Magento\Quote\Model\Quote\TotalsCollectorList">
+        <plugin name="tiktokshop_plugin_order_magento_quote_model_quote_totalscollectorlist"
+                type="M2E\TikTokShop\Plugin\Order\Magento\Quote\Model\Quote\TotalsCollectorList"/>
+    </type>
+
+    <!-- MSI -->
+
+    <type name="Magento\Inventory\Model\Source\Command\SaveInterface">
+        <plugin name="tiktokshop_plugin_msi_magento_inventory_model_source_command_save"
+                type="M2E\TikTokShop\Plugin\MSI\Magento\Inventory\Model\Source\Command\Save"/>
+    </type>
+
+    <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
+        <plugin name="tiktokshop_plugin_msi_magento_inventory_model_sourceitem_command_save"
+                type="M2E\TikTokShop\Plugin\MSI\Magento\Inventory\Model\SourceItem\Command\Save"/>
+    </type>
+
+    <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
+        <plugin name="tiktokshop_plugin_msi_magento_inventory_model_sourceitem_command_delete"
+                type="M2E\TikTokShop\Plugin\MSI\Magento\Inventory\Model\SourceItem\Command\Delete"/>
+    </type>
+
+    <type name="Magento\InventoryApi\Api\StockSourceLinksSaveInterface">
+        <plugin name="tiktokshop_plugin_msi_magento_inventory_model_stocksourcelink_command_save"
+                type="M2E\TikTokShop\Plugin\MSI\Magento\Inventory\Model\StockSourceLink\Command\Save"/>
+    </type>
+
+    <type name="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface">
+        <plugin name="tiktokshop_plugin_msi_magento_inventory_model_stocksourcelink_command_delete"
+                type="M2E\TikTokShop\Plugin\MSI\Magento\Inventory\Model\StockSourceLink\Command\Delete"/>
+    </type>
+
+    <type name="Magento\InventorySalesApi\Model\ReplaceSalesChannelsForStockInterface">
+        <plugin name="tiktokshop_plugin_msi_magento_inventorysales_model_resourcemodel_replacesaleschannelsdataforstock"
+                type="M2E\TikTokShop\Plugin\MSI\Magento\InventorySales\Model\ResourceModel\ReplaceSalesChannelsDataForStock"/>
+    </type>
+
+    <type name="Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface">
+        <plugin name="tiktokshop_plugin_msi_magento_inventorysales_model_placereservationforsalesevent"
+                type="M2E\TikTokShop\Plugin\MSI\Magento\InventorySales\Model\PlaceReservationsForSalesEvent"/>
+    </type>
+
+    <type name="Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem">
+        <plugin name="tiktokshop_plugin_msi_magento_inventorycatalog_model_resourcemodel_setdatatolegacestockitem"
+                type="M2E\TikTokShop\Plugin\MSI\Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem"/>
+    </type>
+
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\Processor">
+        <plugin name="tiktokshop_plugin_msi_magento_cataloginventory_model_indexer_stock_processor"
+                type="M2E\TikTokShop\Plugin\MSI\Magento\CatalogInventory\Model\Indexer\Stock\Processor"/>
+    </type>
+
+    <type name="Magento\InventoryReservations\Model\ResourceModel\GetReservationsQuantityCache">
+        <plugin name="tiktokshop_plugin_msi_magento_inventoryreservations_model_resourcemodel_getreservationsquantitycache"
+                type="M2E\TikTokShop\Plugin\MSI\Magento\InventoryReservations\Model\ResourceModel\GetReservationsQuantityCache"/>
+    </type>
+
+    <!-- fix for type error copied from vendor/magento/module-cms/etc/adminhtml/di.xml -->
+    <type name="Magento\Cms\Model\Wysiwyg\CompositeConfigProvider">
+        <arguments>
+            <argument name="variablePluginConfigProvider" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Variable\Model\Variable\ConfigProvider</item>
+            </argument>
+            <argument name="widgetPluginConfigProvider" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Widget\Model\Widget\Config</item>
+            </argument>
+            <argument name="wysiwygConfigPostProcessor" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Cms\Model\Wysiwyg\DefaultConfigProvider</item>
+            </argument>
+            <argument name="galleryConfigProvider" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Install -->
+
+    <type name="M2E\TikTokShop\Model\Setup\InstallHandlerRepository">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="core" xsi:type="object">M2E\TikTokShop\Setup\Install\CoreHandler</item>
+                <item name="account" xsi:type="object">M2E\TikTokShop\Setup\Install\AccountHandler</item>
+                <item name="listing" xsi:type="object">M2E\TikTokShop\Setup\Install\ListingHandler</item>
+                <item name="log" xsi:type="object">M2E\TikTokShop\Setup\Install\LogHandler</item>
+                <item name="order" xsi:type="object">M2E\TikTokShop\Setup\Install\OrderHandler</item>
+                <item name="product" xsi:type="object">M2E\TikTokShop\Setup\Install\ProductHandler</item>
+                <item name="policy" xsi:type="object">M2E\TikTokShop\Setup\Install\PolicyHandler</item>
+                <item name="category" xsi:type="object">M2E\TikTokShop\Setup\Install\CategoryHandler</item>
+                <item name="tag" xsi:type="object">M2E\TikTokShop\Setup\Install\TagHandler</item>
+                <item name="processing" xsi:type="object">M2E\TikTokShop\Setup\Install\ProcessingHandler</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!--  UI  -->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="m2e_tiktokshop_account_grid_data_source" xsi:type="string">
+                    M2E\TikTokShop\Model\ResourceModel\Account\Grid\Collection
+                </item>
+                <item name="m2e_tiktokshop_product_all_items_grid_source" xsi:type="string">
+                    M2E\TikTokShop\Model\ResourceModel\Product\Grid\AllItems\Collection
+                </item>
+                <item name="m2e_tiktokshop_product_by_issues_grid_source" xsi:type="string">
+                    M2E\TikTokShop\Model\ResourceModel\Product\Grid\ByIssues\Collection
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+</config>

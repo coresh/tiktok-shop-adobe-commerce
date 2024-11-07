@@ -1,0 +1,18 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+/** @var \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Description\Preview\Body $block */
+?>
+
+<?php
+if (($title = $block->getData('title'))) { ?>
+    <div class="entry-edit" id="magento_block_template_description_preview" style="padding: 5px;">
+        <h2 style="color: maroon; margin-bottom: 5px;"><?php
+            echo \M2E\TikTokShop\Helper\Data::escapeHtml($title); ?></h2>
+        <hr/><?php
+        echo $block->getData('description'); ?>
+    </div>
+
+<?php
+} ?>

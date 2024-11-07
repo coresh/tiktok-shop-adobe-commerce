@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+
+    <system>
+
+        <!-- main tab -->
+
+        <tab id="m2e_tts" translate="label" sortOrder="450" class="m2e-tab-tts">
+            <label>M2E TikTok Shop Connect</label>
+        </tab>
+
+        <!-- module & channels tab -->
+
+        <section id="tiktokshop_module_and_channels" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Module</label>
+            <tab>m2e_tts</tab>
+            <resource>M2E_TikTokShop::system_configuration</resource>
+            <frontend_model>M2E\TikTokShop\Block\Adminhtml\System\Config\Sections\ModuleAndChannels</frontend_model>
+        </section>
+
+        <!-- interface and magento inventory tab -->
+
+        <section id="tiktokshop_interface_and_magento_inventory" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Interface &amp; Magento inventory</label>
+            <tab>m2e_tts</tab>
+            <resource>M2E_TikTokShop::system_configuration</resource>
+            <frontend_model>M2E\TikTokShop\Block\Adminhtml\System\Config\Sections\InterfaceAndMagentoInventory</frontend_model>
+        </section>
+
+        <!-- logs clearing tab -->
+
+        <section id="tiktokshop_logs_clearing" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Logs Clearing</label>
+            <tab>m2e_tts</tab>
+            <resource>M2E_TikTokShop::system_configuration</resource>
+            <frontend_model>M2E\TikTokShop\Block\Adminhtml\System\Config\Sections\LogsClearing</frontend_model>
+        </section>
+
+        <!-- extension key tab -->
+
+        <section id="tiktokshop_extension_key" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Extension Key</label>
+            <tab>m2e_tts</tab>
+            <resource>M2E_TikTokShop::system_configuration</resource>
+            <frontend_model>M2E\TikTokShop\Block\Adminhtml\System\Config\Sections\License</frontend_model>
+        </section>
+
+        <!-- payment method -->
+
+        <section id="payment">
+            <group id="tiktokshoppayment" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>M2E TikTok Shop Connect Payment</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Title</label>
+                </field>
+            </group>
+        </section>
+
+        <!-- shipping method -->
+
+        <section id="carriers">
+            <group id="tiktokshopshipping" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>M2E TikTok Shop Connect Shipping</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Title</label>
+                </field>
+            </group>
+        </section>
+
+    </system>
+
+</config>

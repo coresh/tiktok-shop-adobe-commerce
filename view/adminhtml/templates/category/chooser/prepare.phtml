@@ -1,0 +1,32 @@
+<?php
+/**
+ * @var \M2E\TikTokShop\Block\Adminhtml\Category\Chooser\Prepare $block
+ */
+?>
+
+<script>
+    require([
+        'TikTokShop/Category/Chooser'
+    ], () => {
+        window.TikTokShopCategoryChooserObj = new TikTokShopCategoryChooser(
+            <?= $block->getShopId() ?>,
+            <?= $block->getAccountId() ?>
+        );
+    });
+</script>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "category_search": {
+                        "component": "M2E_TikTokShop/js/Category/Chooser/Tabs/Search",
+                        "searchUrl": "<?= $block->getSearchUrl() ?>",
+                        "shopId": <?= $block->getShopId() ?>
+                    }
+                }
+            }
+        }
+    }
+</script>

@@ -1,0 +1,47 @@
+<?php
+
+/** @var \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Category\Chooser\Tabs\Browse $block */
+
+$isWizard = !$block->viewHelper->isInstallationWizardFinished();
+
+$block->jsUrl->add($block->getUrl('*/general/getChildCategories'), 'general/getChildCategories');
+
+$block->js->add(
+    "
+require([
+    'TikTokShop/TikTokShop/Template/Category/Chooser/Tabs/Browse'
+], function(){
+
+    window.TikTokShopTemplateCategoryChooserTabsBrowseObj = new TikTokShopTemplateCategoryChooserTabsBrowse();
+
+    TikTokShopTemplateCategoryChooserTabsBrowseObj.setShopId(TikTokShopCategoryChooserObj.getShopId());
+    TikTokShopTemplateCategoryChooserTabsBrowseObj.setAccountId(TikTokShopCategoryChooserObj.getAccountId());
+    TikTokShopTemplateCategoryChooserTabsBrowseObj.renderTopLevelCategories('chooser_browser-selects');
+    TikTokShopTemplateCategoryChooserTabsBrowseObj.observe('leaf_selected', function(selectedCategories) {
+        const lastCategory = selectedCategories[selectedCategories.length-1];
+        if (lastCategory['invite_only'] == 1) {
+            TikTokShopCategoryChooserObj.unSelectCategory();
+        } else {
+            TikTokShopCategoryChooserObj.selectCategory(lastCategory['value']);
+        }
+    });
+});
+
+"
+);
+?>
+
+<style>
+    .category-children-block {
+        display: inline-block;
+        margin-left: 10px;
+    }
+    [data-invite_only="1"] {
+        color: gray
+    }
+</style>
+
+<div id="chooser_browser">
+    <div id="chooser_browser-message_wrapper"><?= $block->getInviteOnlyNotice() ?></div>
+    <div id="chooser_browser-selects"></div>
+</div>
