@@ -7,10 +7,10 @@ namespace M2E\TikTokShop\Observer\Product;
 class Delete extends AbstractProduct
 {
     private \M2E\TikTokShop\Model\Listing\RemoveDeletedProduct $listingRemoveDeletedProduct;
-    private \M2E\TikTokShop\Model\Listing\Other\UnmapDeletedProduct $unmanagedUnmapDeletedProduct;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\UnmapDeletedProduct $unmanagedUnmapDeletedProduct;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Listing\Other\UnmapDeletedProduct $unmanagedUnmapDeletedProduct,
+        \M2E\TikTokShop\Model\UnmanagedProduct\UnmapDeletedProduct $unmanagedUnmapDeletedProduct,
         \M2E\TikTokShop\Model\Listing\RemoveDeletedProduct $listingRemoveDeletedProduct,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \M2E\TikTokShop\Model\Magento\ProductFactory $ourMagentoProductFactory,

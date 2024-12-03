@@ -23,6 +23,7 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
     /** @var \M2E\TikTokShop\Model\Product\QtyCalculatorFactory */
     private QtyCalculatorFactory $qtyCalculatorFactory;
     private \M2E\TikTokShop\Model\Magento\Product $magentoProduct;
+    private \M2E\TikTokShop\Model\ProductPromotionService $productPromotionService;
 
     public function __construct(
         \M2E\TikTokShop\Model\Magento\Product\CacheFactory $magentoProductFactory,
@@ -30,6 +31,7 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
         Repository $productRepository,
         \M2E\TikTokShop\Model\Product\PriceCalculatorFactory $priceCalculatorFactory,
         \M2E\TikTokShop\Model\Product\QtyCalculatorFactory $qtyCalculatorFactory,
+        \M2E\TikTokShop\Model\ProductPromotionService $productPromotionService,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry
     ) {
@@ -40,6 +42,7 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
         $this->warehouseRepository = $warehouseRepository;
         $this->priceCalculatorFactory = $priceCalculatorFactory;
         $this->qtyCalculatorFactory = $qtyCalculatorFactory;
+        $this->productPromotionService = $productPromotionService;
     }
 
     public function _construct(): void
@@ -61,20 +64,18 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
         return $this;
     }
 
-    public function fillFromUnmanagedProduct(\M2E\TikTokShop\Model\Listing\Other $unmanagedProduct): self
-    {
+    public function fillFromUnmanagedVariant(
+        \M2E\TikTokShop\Model\UnmanagedProduct\VariantSku $unmanagedVariantProduct
+    ): self {
         $this
-            ->setMagentoProductId($unmanagedProduct->getMagentoProductId())
-            ->setSkuId($unmanagedProduct->getSkuId())
-            ->setOnlineSku($unmanagedProduct->getSku())
-            ->setOnlineQty($unmanagedProduct->getQty())
-            ->setOnlineCurrentPrice($unmanagedProduct->getPrice())
-            ->setStatus($unmanagedProduct->getStatus())
-            ->setOnlineIdentifier($unmanagedProduct->getIdentifier());
-
-        if ($unmanagedProduct->getWarehouseId() !== null) {
-            $this->setWarehouseId($unmanagedProduct->getWarehouseId());
-        }
+            ->setMagentoProductId($unmanagedVariantProduct->getMagentoProductId())
+            ->setSkuId($unmanagedVariantProduct->getSkuId())
+            ->setOnlineSku($unmanagedVariantProduct->getSku())
+            ->setOnlineQty($unmanagedVariantProduct->getQty())
+            ->setOnlineCurrentPrice($unmanagedVariantProduct->getCurrentPrice())
+            ->setStatus($unmanagedVariantProduct->getStatus())
+            ->setOnlineIdentifier($unmanagedVariantProduct->getIdentifier())
+            ->setWarehouseId($unmanagedVariantProduct->getWarehouseId());
 
         return $this;
     }
@@ -298,6 +299,7 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
 
         return $this;
     }
+
     //endregion
 
     public function setOnlineQty(int $value): self
@@ -410,5 +412,14 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
     public function getSyncPolicy(): \M2E\TikTokShop\Model\Template\Synchronization
     {
         return $this->getProduct()->getSynchronizationTemplate();
+    }
+
+    public function hasActiveOrNotStartPromotion(): bool
+    {
+        return $this->productPromotionService->isProductVariantOnPromotion(
+            $this,
+            $this->getProduct()->getAccount(),
+            $this->getProduct()->getShop()
+        );
     }
 }

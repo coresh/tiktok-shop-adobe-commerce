@@ -135,7 +135,9 @@ class Diff extends \M2E\TikTokShop\Model\ActiveRecord\Diff
             || $this->isReviseCategoriesEnabled()
             || $this->isReviseCategoriesDisabled()
             || $this->isReviseOtherEnabled()
-            || $this->isReviseOtherDisabled();
+            || $this->isReviseOtherDisabled()
+            || $this->isReviseComplianceEnabled()
+            || $this->isReviseCategoriesDisabled();
     }
 
     public function isReviseQtyEnabled(): bool
@@ -272,5 +274,23 @@ class Diff extends \M2E\TikTokShop\Model\ActiveRecord\Diff
 
         return !empty($oldSnapshotData[SynchronizationResource::COLUMN_REVISE_UPDATE_OTHER])
             && empty($newSnapshotData[SynchronizationResource::COLUMN_REVISE_UPDATE_OTHER]);
+    }
+
+    public function isReviseComplianceEnabled(): bool
+    {
+        $newSnapshotData = $this->newSnapshot;
+        $oldSnapshotData = $this->oldSnapshot;
+
+        return empty($oldSnapshotData[SynchronizationResource::COLUMN_REVISE_UPDATE_COMPLIANCE])
+            && !empty($newSnapshotData[SynchronizationResource::COLUMN_REVISE_UPDATE_COMPLIANCE]);
+    }
+
+    public function isReviseComplianceDisabled(): bool
+    {
+        $newSnapshotData = $this->newSnapshot;
+        $oldSnapshotData = $this->oldSnapshot;
+
+        return !empty($oldSnapshotData[SynchronizationResource::COLUMN_REVISE_UPDATE_COMPLIANCE])
+            && empty($newSnapshotData[SynchronizationResource::COLUMN_REVISE_UPDATE_COMPLIANCE]);
     }
 }

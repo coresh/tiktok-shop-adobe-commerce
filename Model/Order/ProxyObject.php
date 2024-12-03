@@ -2,6 +2,8 @@
 
 namespace M2E\TikTokShop\Model\Order;
 
+use M2E\TikTokShop\Model\Magento\Payment as TikTokShopPayment;
+
 class ProxyObject
 {
     public const CHECKOUT_GUEST = 'guest';
@@ -10,7 +12,7 @@ class ProxyObject
     public const USER_ID_ATTRIBUTE_CODE = 'tiktok_user_id';
 
     protected \M2E\TikTokShop\Model\Currency $currency;
-    protected \M2E\TikTokShop\Model\Magento\Payment $payment;
+    protected TikTokShopPayment $payment;
     protected \M2E\TikTokShop\Model\Order $order;
     protected \Magento\Customer\Model\CustomerFactory $customerFactory;
     protected \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository;
@@ -30,7 +32,7 @@ class ProxyObject
         \M2E\TikTokShop\Model\Magento\CustomerFactory $magentoCustomerFactory,
         \Magento\Tax\Model\Calculation $taxCalculation,
         \M2E\TikTokShop\Model\Currency $currency,
-        \M2E\TikTokShop\Model\Magento\Payment $payment,
+        TikTokShopPayment $payment,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \M2E\TikTokShop\Model\Order\UserInfoFactory $userInfoFactory
@@ -338,20 +340,15 @@ class ProxyObject
         return $this->currency->convertPriceToBaseCurrency($price, $this->getCurrency(), $this->getStore());
     }
 
-    /**
-     * @return array
-     */
-    public function getPaymentData()
+    public function getPaymentData(): array
     {
-        $paymentData = [
-            'method' => $this->payment->getCode(),
-            'payment_method' => '',
-            'channel_order_id' => $this->order->getTtsOrderId(),
-            'cash_on_delivery_cost' => 0,
-            'transactions' => [],
+        return [
+            \Magento\Quote\Api\Data\PaymentInterface::KEY_METHOD => $this->payment->getCode(),
+            \Magento\Quote\Api\Data\PaymentInterface::KEY_ADDITIONAL_DATA => [
+                TikTokShopPayment::ADDITIONAL_DATA_KEY_PAYMENT_METHOD => $this->order->getPaymentMethod(),
+                TikTokShopPayment::ADDITIONAL_DATA_KEY_CHANNEL_ORDER_ID => $this->order->getTtsOrderId(),
+            ]
         ];
-
-        return $paymentData;
     }
 
     /**

@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Controller\Adminhtml\Listing\Other\Mapping;
 
 class AutoMap extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
 {
-    private \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository;
-    private \M2E\TikTokShop\Model\Listing\Other\MappingService $mappingService;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\Repository $unmanagedRepository;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\MappingService $mappingService;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Listing\Other\MappingService $mappingService,
-        \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository,
+        \M2E\TikTokShop\Model\UnmanagedProduct\MappingService $mappingService,
+        \M2E\TikTokShop\Model\UnmanagedProduct\Repository $unmanagedRepository,
         $context = null
     ) {
         parent::__construct($context);
-        $this->listingOtherRepository = $listingOtherRepository;
+
+        $this->unmanagedRepository = $unmanagedRepository;
         $this->mappingService = $mappingService;
     }
 
@@ -31,15 +34,15 @@ class AutoMap extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
 
         $productsForMapping = [];
         foreach ($productIds as $productId) {
-            $listingOther = $this->listingOtherRepository->get($productId);
-            if ($listingOther->hasMagentoProductId()) {
+            $unmanaged = $this->unmanagedRepository->get((int)$productId);
+            if ($unmanaged->hasMagentoProductId()) {
                 continue;
             }
 
-            $productsForMapping[] = $listingOther;
+            $productsForMapping[] = $unmanaged;
         }
 
-        if (!$this->mappingService->autoMapOtherListingsProducts($productsForMapping)) {
+        if (!$this->mappingService->autoMapUnmanagedProducts($productsForMapping)) {
             $this->setAjaxContent('1', false);
 
             return $this->getResult();

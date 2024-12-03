@@ -156,6 +156,9 @@ class Edit extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractContaine
             case \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SYNCHRONIZATION:
                 $title = __('Synchronization');
                 break;
+            case \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE:
+                $title = __('Compliance');
+                break;
         }
 
         return $title;

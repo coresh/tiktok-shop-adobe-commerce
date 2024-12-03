@@ -95,6 +95,9 @@ class Log extends \M2E\TikTokShop\Model\Log\AbstractModel
     public const ACTION_REMAP_LISTING_PRODUCT = 34;
     public const _ACTION_REMAP_LISTING_PRODUCT = 'Relink';
 
+    public const ACTION_PROMOTION = 38;
+    public const _ACTION_PROMOTION = 'ActionPromotion';
+
     private \M2E\TikTokShop\Model\Magento\ProductFactory $magentoProductFactory;
 
     public function __construct(

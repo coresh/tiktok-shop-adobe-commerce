@@ -8,6 +8,7 @@ class ModelGetAll extends \M2E\TikTokShop\Controller\Adminhtml\AbstractGeneral
     {
         $model = $this->getRequest()->getParam('model', '');
         $shopId = $this->getRequest()->getParam('shop_id', '');
+        $accountId = (int)$this->getRequest()->getParam('account_id', '');
         $isCustomTemplate = $this->getRequest()->getParam('is_custom_template', null);
 
         $idField = $this->getRequest()->getParam('id_field', 'id');
@@ -22,6 +23,10 @@ class ModelGetAll extends \M2E\TikTokShop\Controller\Adminhtml\AbstractGeneral
         $model = str_replace('_', '\\', $model);
 
         $collection = $this->activeRecordFactory->getObject($model)->getCollection();
+
+        if ($accountId !== 0) {
+            $collection->addFieldToFilter('account_id', $accountId);
+        }
 
         $shopId != '' && $collection->addFieldToFilter('shop_id', $shopId);
         $isCustomTemplate != null && $collection->addFieldToFilter('is_custom_template', $isCustomTemplate);

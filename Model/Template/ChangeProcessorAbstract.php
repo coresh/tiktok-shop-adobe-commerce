@@ -13,6 +13,7 @@ abstract class ChangeProcessorAbstract
     public const INSTRUCTION_TYPE_IMAGES_DATA_CHANGED = 'template_images_data_changed';
     public const INSTRUCTION_TYPE_CATEGORIES_DATA_CHANGED = 'template_categories_data_changed';
     public const INSTRUCTION_TYPE_OTHER_DATA_CHANGED = 'template_other_data_changed';
+    public const INSTRUCTION_TYPE_COMPLIANCE_DATA_CHANGED = 'template_compliance_data_changed';
 
     private \M2E\TikTokShop\Model\InstructionService $instructionService;
 

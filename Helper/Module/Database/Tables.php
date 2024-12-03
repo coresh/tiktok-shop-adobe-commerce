@@ -45,6 +45,7 @@ class Tables
     public const TABLE_NAME_TEMPLATE_SELLING_FORMAT = self::PREFIX . 'template_selling_format';
     public const TABLE_NAME_TEMPLATE_SYNCHRONIZATION = self::PREFIX . 'template_synchronization';
     public const TABLE_NAME_TEMPLATE_DESCRIPTION = self::PREFIX . 'template_description';
+    public const TABLE_NAME_TEMPLATE_COMPLIANCE = self::PREFIX . 'template_compliance';
 
     public const TABLE_NAME_TAG = self::PREFIX . 'tag';
     public const TABLE_NAME_PRODUCT_TAG_RELATION = self::PREFIX . 'product_tag_relation';
@@ -62,7 +63,11 @@ class Tables
     public const TABLE_NAME_ORDER_NOTE = self::PREFIX . 'order_note';
     public const TABLE_NAME_ORDER_CHANGE = self::PREFIX . 'order_change';
 
-    public const TABLE_NAME_LISTING_OTHER = self::PREFIX . 'listing_other';
+    public const TABLE_NAME_UNMANAGED_PRODUCT = self::PREFIX . 'unmanaged_product';
+    public const TABLE_NAME_UNMANAGED_PRODUCT_VARIANT_SKU = self::PREFIX . 'unmanaged_product_variant_sku';
+
+    public const TABLE_NAME_PROMOTION = self::PREFIX . 'promotion';
+    public const TABLE_NAME_PROMOTION_PRODUCT = self::PREFIX . 'promotion_product';
 
     private \Magento\Framework\App\ResourceConnection $resourceConnection;
     private Structure $databaseHelper;
@@ -195,6 +200,10 @@ class Tables
             self::TABLE_NAME_ORDER_NOTE,
             self::TABLE_NAME_ORDER_CHANGE,
             self::TABLE_NAME_SHIPPING_PROVIDERS,
+            self::TABLE_NAME_UNMANAGED_PRODUCT,
+            self::TABLE_NAME_UNMANAGED_PRODUCT_VARIANT_SKU,
+            self::TABLE_NAME_PROMOTION,
+            self::TABLE_NAME_PROMOTION_PRODUCT
         ];
     }
 }

@@ -55,6 +55,9 @@ class Switcher extends AbstractBlock
             case \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SYNCHRONIZATION:
                 $title = __('Synchronization');
                 break;
+            case \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE:
+                $title = __('Compliance');
+                break;
         }
 
         return $title;
@@ -168,6 +171,9 @@ class Switcher extends AbstractBlock
                 break;
             case \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SYNCHRONIZATION:
                 $blockName = \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Synchronization\Edit\Form\Data::class;
+                break;
+            case \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE:
+                $blockName = \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Compliance\Edit\Form\Data::class;
                 break;
         }
 

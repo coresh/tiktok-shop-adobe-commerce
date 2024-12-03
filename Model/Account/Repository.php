@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace M2E\TikTokShop\Model\Account;
 
 use M2E\TikTokShop\Model\ResourceModel\Account as AccountResource;
+use M2E\TikTokShop\Model\ResourceModel\Shop as ShopResource;
 
 class Repository
 {
@@ -14,17 +15,20 @@ class Repository
     private \M2E\TikTokShop\Model\AccountFactory $accountFactory;
     private \M2E\TikTokShop\Model\ResourceModel\Account $accountResource;
     private \M2E\TikTokShop\Helper\Data\Cache\Permanent $cache;
+    private \M2E\TikTokShop\Model\ResourceModel\Shop $shopResource;
 
     public function __construct(
         \M2E\TikTokShop\Model\AccountFactory $accountFactory,
         \M2E\TikTokShop\Model\ResourceModel\Account $accountResource,
         \M2E\TikTokShop\Model\ResourceModel\Account\CollectionFactory $collectionFactory,
+        \M2E\TikTokShop\Model\ResourceModel\Shop $shopResource,
         \M2E\TikTokShop\Helper\Data\Cache\Permanent $cache
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->accountFactory = $accountFactory;
         $this->accountResource = $accountResource;
         $this->cache = $cache;
+        $this->shopResource = $shopResource;
     }
 
     public function find(int $id): ?\M2E\TikTokShop\Model\Account
@@ -77,13 +81,44 @@ class Repository
         return array_values($collection->getItems());
     }
 
-    public function getFirst(): \M2E\TikTokShop\Model\Account
+    public function findWithEUShop(): array
     {
         $collection = $this->collectionFactory->create();
-        /** @var \M2E\TikTokShop\Model\Account $firstAccount */
-        $firstAccount = $collection->getFirstItem();
+        $collection->addFieldToFilter(AccountResource::COLUMN_IS_ACTIVE, 1);
 
+        $collection->join(
+            ['s' => $this->shopResource->getMainTable()],
+            sprintf(
+                '`s`.%s = `main_table`.%s',
+                ShopResource::COLUMN_ACCOUNT_ID,
+                AccountResource::COLUMN_ID,
+            ),
+            [],
+        );
+
+        $collection->addFieldToFilter(
+            sprintf('s.%s', ShopResource::COLUMN_REGION),
+            ['in' => \M2E\TikTokShop\Model\Shop::REGION_EU]
+        );
+
+        return array_values($collection->getItems());
+    }
+
+    public function findFirst(): ?\M2E\TikTokShop\Model\Account
+    {
+        $collection = $this->collectionFactory->create();
+        $firstAccount = $collection->getFirstItem();
         if ($firstAccount->isObjectNew()) {
+            return null;
+        }
+
+        return $firstAccount;
+    }
+
+    public function getFirst(): \M2E\TikTokShop\Model\Account
+    {
+        $firstAccount = $this->findFirst();
+        if ($firstAccount === null) {
             throw new \LogicException('Not found any accounts');
         }
 

@@ -65,8 +65,10 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
     private \M2E\TikTokShop\Model\Warehouse\Repository $warehouseRepository;
     private Order\Item\Repository $orderItemRepository;
+    private \M2E\TikTokShop\Model\Order\EventDispatcher $orderEventDispatcher;
 
     public function __construct(
+        \M2E\TikTokShop\Model\Order\EventDispatcher $orderEventDispatcher,
         \M2E\TikTokShop\Model\Warehouse\Repository $warehouseRepository,
         \M2E\TikTokShop\Model\Account\Repository $accountRepository,
         \M2E\TikTokShop\Model\Magento\Quote\Manager $quoteManager,
@@ -137,6 +139,7 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->accountRepository = $accountRepository;
         $this->warehouseRepository = $warehouseRepository;
         $this->orderItemRepository = $orderItemRepository;
+        $this->orderEventDispatcher = $orderEventDispatcher;
     }
 
     //########################################
@@ -795,7 +798,7 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $magentoOrderUpdater->finishUpdate();
         // ---------------------------------------
 
-        $this->_eventManager->dispatch('m2e_tts_order_place_success', ['order' => $this]);
+        $this->orderEventDispatcher->dispatchEventsMagentoOrderCreated($this);
 
         $this->addSuccessLog('Magento Order #%order_id% was created.', [
             '!order_id' => $this->getMagentoOrder()->getRealOrderId(),
@@ -960,6 +963,8 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
                 'Invoice #%invoice_id% was created.',
                 ['!invoice_id' => $invoice->getIncrementId()]
             );
+
+            $this->orderEventDispatcher->dispatchEventInvoiceCreated($this);
         }
 
         return $invoice;

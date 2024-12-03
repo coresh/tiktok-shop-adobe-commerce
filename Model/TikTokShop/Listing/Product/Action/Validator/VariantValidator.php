@@ -27,7 +27,10 @@ class VariantValidator
         $messages = [];
 
         foreach ($product->getVariants() as $variant) {
-            if ($variantSettings->isSkipAction($variant->getId())) {
+            if (
+                $variantSettings->isSkipAction($variant->getId())
+                || $variantSettings->isStopAction($variant->getId())
+            ) {
                 continue;
             }
 

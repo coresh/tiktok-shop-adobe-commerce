@@ -20,6 +20,8 @@ class Product extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\AbstractM
     public const COLUMN_ONLINE_QTY = 'online_qty';
     public const COLUMN_ONLINE_MIN_PRICE = 'online_min_price';
     public const COLUMN_ONLINE_MAX_PRICE = 'online_max_price';
+    public const COLUMN_ONLINE_MANUFACTURER_ID = 'online_manufacturer_id';
+    public const COLUMN_ONLINE_RESPONSIBLE_PERSON_ID = 'online_responsible_person_id';
     public const COLUMN_TEMPLATE_CATEGORY_ID = 'template_category_id';
     public const COLUMN_LAST_BLOCKING_ERROR_DATE = 'last_blocking_error_date';
     public const COLUMN_ADDITIONAL_DATA = 'additional_data';

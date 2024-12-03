@@ -9,11 +9,13 @@ class Save extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractTempl
     private \M2E\TikTokShop\Model\Template\Synchronization\SaveService $synchronizationSaveService;
     private \M2E\TikTokShop\Model\Template\Description\SaveService $descriptionSaveService;
     private \M2E\TikTokShop\Model\Template\SellingFormat\SaveService $sellingFormatSaveService;
+    private \M2E\TikTokShop\Model\Template\Compliance\SaveService $complianceSaveService;
 
     public function __construct(
         \M2E\TikTokShop\Model\Template\SellingFormat\SaveService $sellingFormatSaveService,
         \M2E\TikTokShop\Model\Template\Synchronization\SaveService $synchronizationSaveService,
         \M2E\TikTokShop\Model\Template\Description\SaveService $descriptionSaveService,
+        \M2E\TikTokShop\Model\Template\Compliance\SaveService $complianceSaveService,
         \M2E\TikTokShop\Helper\Module\Wizard $wizardHelper,
         \M2E\TikTokShop\Helper\Url $urlHelper,
         \M2E\TikTokShop\Model\TikTokShop\Template\Manager $templateManager
@@ -25,6 +27,7 @@ class Save extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractTempl
         $this->synchronizationSaveService = $synchronizationSaveService;
         $this->descriptionSaveService = $descriptionSaveService;
         $this->sellingFormatSaveService = $sellingFormatSaveService;
+        $this->complianceSaveService = $complianceSaveService;
     }
 
     public function execute()
@@ -126,6 +129,10 @@ class Save extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractTempl
 
         if ($nick === \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SELLING_FORMAT) {
             return $this->sellingFormatSaveService->save($data);
+        }
+
+        if ($nick === \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE) {
+            return $this->complianceSaveService->save($data);
         }
 
         throw new \M2E\TikTokShop\Model\Exception\Logic('Unknown nick ' . $nick);

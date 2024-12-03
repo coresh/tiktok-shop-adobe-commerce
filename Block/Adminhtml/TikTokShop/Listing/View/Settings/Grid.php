@@ -314,6 +314,12 @@ JS
             $this->getUrl('*/listing_product_category_settings/edit', ['_current' => true]),
             'listing_product_category_settings/edit'
         );
+        $this->jsUrl->add(
+            $this->getUrl('*/tiktokshop_listing/saveCategoryTemplate', [
+                'listing_id' => $this->getListing()->getId(),
+            ]),
+            'tiktokshop_listing/saveCategoryTemplate'
+        );
 
         //------------------------------
         $temp = $this->sessionDataHelper->getValue('products_ids_for_list', true);

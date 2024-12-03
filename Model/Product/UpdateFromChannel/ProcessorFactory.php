@@ -15,7 +15,7 @@ class ProcessorFactory
 
     public function create(
         \M2E\TikTokShop\Model\Product $product,
-        \M2E\TikTokShop\Model\Listing\Other\TtsProduct $channelProduct
+        \M2E\TikTokShop\Model\Listing\InventorySync\Channel\Product $channelProduct
     ): Processor {
         return $this->objectManager->create(
             Processor::class,

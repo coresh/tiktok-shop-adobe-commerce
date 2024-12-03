@@ -29,6 +29,9 @@ class ChangeProcessor extends \M2E\TikTokShop\Model\Template\Synchronization\Cha
     public const INSTRUCTION_TYPE_REVISE_OTHER_ENABLED = 'template_synchronization_revise_other_enabled';
     public const INSTRUCTION_TYPE_REVISE_OTHER_DISABLED = 'template_synchronization_revise_other_disabled';
 
+    public const INSTRUCTION_TYPE_REVISE_COMPLIANCE_ENABLED = 'template_synchronization_revise_compliance_enabled';
+    public const INSTRUCTION_TYPE_REVISE_COMPLIANCE_DISABLED = 'template_synchronization_revise_compliance_disabled';
+
     /**
      * @param \M2E\TikTokShop\Model\Template\Synchronization\Diff $diff
      */
@@ -134,6 +137,20 @@ class ChangeProcessor extends \M2E\TikTokShop\Model\Template\Synchronization\Cha
         } elseif ($diff->isReviseOtherDisabled()) {
             $data[] = [
                 'type' => self::INSTRUCTION_TYPE_REVISE_OTHER_DISABLED,
+                'priority' => 5,
+            ];
+        }
+
+        //----------------------------------------
+
+        if ($diff->isReviseComplianceEnabled()) {
+            $data[] = [
+                'type' => self::INSTRUCTION_TYPE_REVISE_COMPLIANCE_ENABLED,
+                'priority' => $status === \M2E\TikTokShop\Model\Product::STATUS_LISTED ? 30 : 5,
+            ];
+        } elseif ($diff->isReviseComplianceDisabled()) {
+            $data[] = [
+                'type' => self::INSTRUCTION_TYPE_REVISE_COMPLIANCE_DISABLED,
                 'priority' => 5,
             ];
         }

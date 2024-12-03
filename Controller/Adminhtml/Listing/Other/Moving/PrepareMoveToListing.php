@@ -1,17 +1,17 @@
 <?php
 
-namespace M2E\TikTokShop\Controller\Adminhtml\Listing\Other\Moving;
+declare(strict_types=1);
 
-use M2E\TikTokShop\Model\ResourceModel\Listing\Other as ListingOtherResource;
+namespace M2E\TikTokShop\Controller\Adminhtml\Listing\Other\Moving;
 
 class PrepareMoveToListing extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
 {
     private \M2E\TikTokShop\Helper\Data\Session $sessionHelper;
     private \M2E\TikTokShop\Helper\Module\Database\Structure $dbStructureHelper;
-    private \M2E\TikTokShop\Model\Listing\Other\Repository $otherRepository;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\Repository $unmanagedRepository;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Listing\Other\Repository $otherRepository,
+        \M2E\TikTokShop\Model\UnmanagedProduct\Repository $unmanagedRepository,
         \M2E\TikTokShop\Helper\Data\Session $sessionHelper,
         \M2E\TikTokShop\Helper\Module\Database\Structure $dbStructureHelper,
         \M2E\TikTokShop\Controller\Adminhtml\Context $context
@@ -20,7 +20,7 @@ class PrepareMoveToListing extends \M2E\TikTokShop\Controller\Adminhtml\Abstract
 
         $this->sessionHelper = $sessionHelper;
         $this->dbStructureHelper = $dbStructureHelper;
-        $this->otherRepository = $otherRepository;
+        $this->unmanagedRepository = $unmanagedRepository;
     }
 
     public function execute()
@@ -51,14 +51,14 @@ class PrepareMoveToListing extends \M2E\TikTokShop\Controller\Adminhtml\Abstract
             return $this->getResult();
         }
 
-        $listingOtherCollection = $this->otherRepository->createCollection();
-        $listingOtherCollection->addFieldToFilter('id', ['in' => $selectedProducts]);
-        $listingOtherCollection->addFieldToFilter(
-            \M2E\TikTokShop\Model\ResourceModel\Listing\Other::COLUMN_MAGENTO_PRODUCT_ID,
+        $unmanagedCollection = $this->unmanagedRepository->createCollection();
+        $unmanagedCollection->addFieldToFilter('id', ['in' => $selectedProducts]);
+        $unmanagedCollection->addFieldToFilter(
+            \M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct::COLUMN_MAGENTO_PRODUCT_ID,
             ['notnull' => true],
         );
 
-        if ($listingOtherCollection->getSize() != count($selectedProducts)) {
+        if ($unmanagedCollection->getSize() != count($selectedProducts)) {
             $this->sessionHelper->removeValue($sessionKey);
 
             $this->setJsonContent(
@@ -71,14 +71,14 @@ class PrepareMoveToListing extends \M2E\TikTokShop\Controller\Adminhtml\Abstract
             return $this->getResult();
         }
 
-        $listingOtherCollection
+        $unmanagedCollection
             ->getSelect()
             ->join(
                 ['cpe' => $this->dbStructureHelper->getTableNameWithPrefix('catalog_product_entity')],
-                sprintf('%s = cpe.entity_id', ListingOtherResource::COLUMN_MAGENTO_PRODUCT_ID),
+                sprintf('%s = cpe.entity_id', \M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct::COLUMN_MAGENTO_PRODUCT_ID),
             );
 
-        $row = $listingOtherCollection
+        $row = $unmanagedCollection
             ->getSelect()
             ->group(['account_id', 'shop_id'])
             ->reset(\Magento\Framework\DB\Select::COLUMNS)

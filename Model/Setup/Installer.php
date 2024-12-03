@@ -61,7 +61,7 @@ class Installer
             $this->installSchema($this->installerRepository->getAll());
             $this->installData($this->installerRepository->getAll());
         } catch (\Throwable $exception) {
-            $this->logger->error($exception, ['source' => 'Install']);
+            $this->logger->error($exception->getMessage(), ['exception' => $exception, 'source' => 'Install']);
 
             if (isset($setupObject)) {
                 $setupObject->setProfilerData($exception->__toString());

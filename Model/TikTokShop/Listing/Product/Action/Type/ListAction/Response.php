@@ -36,6 +36,10 @@ class Response extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\T
                 ->setOnlineTitle($requestMetadata[DataBuilder\Title::NICK]['online_title'])
                 ->setOnlineMainCategory($requestMetadata[DataBuilder\Categories::NICK]['online_category_id'])
                 ->setOnlineCategoryData($requestMetadata[DataBuilder\Categories::NICK]['online_category_data'])
+                ->setOnlineManufacturerId($requestMetadata[DataBuilder\Compliance::NICK]['online_manufacturer_id'])
+                ->setOnlineResponsiblePersonId(
+                    $requestMetadata[DataBuilder\Compliance::NICK]['online_responsible_person_id']
+                )
                 ->removeBlockingByError()
                 ->recalculateOnlineDataByVariants();
 

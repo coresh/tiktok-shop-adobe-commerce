@@ -10,7 +10,7 @@ use M2E\TikTokShop\Model\Product;
 class Processor
 {
     private \M2E\TikTokShop\Model\Product $product;
-    private \M2E\TikTokShop\Model\Listing\Other\TtsProduct $channelProduct;
+    private \M2E\TikTokShop\Model\Listing\InventorySync\Channel\Product $channelProduct;
     /** @var \M2E\TikTokShop\Model\Product\CalculateStatusByChannel */
     private Product\CalculateStatusByChannel $calculateStatusByChannel;
 
@@ -20,7 +20,7 @@ class Processor
 
     public function __construct(
         \M2E\TikTokShop\Model\Product $product,
-        \M2E\TikTokShop\Model\Listing\Other\TtsProduct $channelProduct,
+        \M2E\TikTokShop\Model\Listing\InventorySync\Channel\Product $channelProduct,
         \M2E\TikTokShop\Model\Product\CalculateStatusByChannel $calculateStatusByChannel
     ) {
         $this->product = $product;
@@ -51,7 +51,7 @@ class Processor
     private function processVariants(): bool
     {
         $isChanged = false;
-        foreach ($this->channelProduct->getVariantSkuCollection()->getAll() as $channelVariant) {
+        foreach ($this->channelProduct->getVariantCollection()->getAll() as $channelVariant) {
             $existVariant = $this->product->findVariantBySkuId($channelVariant->getSkuId());
 
             if ($existVariant === null) {
@@ -186,7 +186,7 @@ class Processor
 
     private function isNeedUpdateVariantQty(
         VariantSku $variant,
-        \M2E\TikTokShop\Model\Listing\Other\TtsProductSku $channelVariantSku
+        \M2E\TikTokShop\Model\Listing\InventorySync\Channel\ProductSku $channelVariantSku
     ): bool {
         if (!$this->product->isStatusListed()) {
             return false;
@@ -210,7 +210,7 @@ class Processor
 
     private function isNeedUpdateVariantPrice(
         VariantSku $variant,
-        \M2E\TikTokShop\Model\Listing\Other\TtsProductSku $channelVariant
+        \M2E\TikTokShop\Model\Listing\InventorySync\Channel\ProductSku $channelVariant
     ): bool {
         if (!$this->product->isStatusListed()) {
             return false;
@@ -298,7 +298,7 @@ class Processor
 
     private function isNeedUpdateIdentifier(
         VariantSku $existVariant,
-        \M2E\TikTokShop\Model\Listing\Other\TtsProductSku $channelVariant
+        \M2E\TikTokShop\Model\Listing\InventorySync\Channel\ProductSku $channelVariant
     ): bool {
         $existIdentifier = $existVariant->getOnlineIdentifier();
         $channelIdentifier = $channelVariant->getIdentifier();

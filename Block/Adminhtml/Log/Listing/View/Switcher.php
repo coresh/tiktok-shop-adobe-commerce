@@ -28,7 +28,7 @@ class Switcher extends \M2E\TikTokShop\Block\Adminhtml\Switcher
         return (string)__('View Mode');
     }
 
-    public function getStyle()
+    public function getStyle(): int
     {
         return self::ADVANCED_STYLE;
     }

@@ -46,6 +46,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @throws \M2E\TikTokShop\Model\Exception\Logic
+     * @deprecated
      */
     public function delete()
     {

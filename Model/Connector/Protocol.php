@@ -6,11 +6,12 @@ namespace M2E\TikTokShop\Model\Connector;
 
 class Protocol implements ProtocolInterface
 {
-    public const COMPONENT_VERSION = 8;
+    public const COMPONENT_NAME = 'TikTokShop';
+    public const COMPONENT_VERSION = 10;
 
     public function getComponent(): string
     {
-        return 'TikTokShop';
+        return self::COMPONENT_NAME;
     }
 
     public function getComponentVersion(): int

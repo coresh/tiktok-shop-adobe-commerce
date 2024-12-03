@@ -332,6 +332,17 @@ HTML
                         'is_custom_template' => 0,
                     ]
                 ),
+                'getComplianceTemplates' => $this->getUrl(
+                    '*/general/modelGetAll',
+                    [
+                        'model' => 'Template_Compliance',
+                        'id_field' => 'id',
+                        'data_field' => 'title',
+                        'sort_field' => 'title',
+                        'sort_dir' => 'ASC',
+                        'is_custom_template' => 0,
+                    ]
+                ),
             ]
         );
 

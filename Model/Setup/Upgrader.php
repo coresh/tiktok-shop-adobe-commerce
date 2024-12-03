@@ -57,6 +57,8 @@ class Upgrader
         '1.10.1' => ['to' => '1.10.2', 'upgrade' => \M2E\TikTokShop\Setup\Upgrade\v1_10_2\Config::class],
         '1.10.2' => ['to' => '1.10.3', 'upgrade' => null],
         '1.10.3' => ['to' => '1.10.4', 'upgrade' => null],
+        '1.10.4' => ['to' => '1.11.0', 'upgrade' => \M2E\TikTokShop\Setup\Upgrade\v1_11_0\Config::class],
+        '1.11.0' => ['to' => '1.12.0', 'upgrade' => \M2E\TikTokShop\Setup\Upgrade\v1_12_0\Config::class],
     ];
 
     private \Psr\Log\LoggerInterface $logger;
@@ -107,7 +109,7 @@ class Upgrader
                 $this->setupRepository->save($setupObject);
             }
         } catch (\Throwable $exception) {
-            $this->logger->error($exception, ['source' => 'Upgrade']);
+            $this->logger->error($exception->getMessage(), ['exception' => $exception, 'source' => 'Upgrade']);
 
             if (isset($setupObject)) {
                 $setupObject->setProfilerData($exception->__toString());

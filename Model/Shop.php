@@ -15,6 +15,10 @@ class Shop extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public const REGION_GB = 'GB';
     public const REGION_ES = 'ES';
 
+    public const REGION_EU = [
+        self::REGION_ES,
+    ];
+
     private Account\Repository $accountRepository;
     private Warehouse\Repository $warehouseRepository;
 
@@ -176,6 +180,16 @@ class Shop extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public function isRegionGB(): bool
     {
         return $this->getRegion() === self::REGION_GB;
+    }
+
+    public function isRegionES(): bool
+    {
+        return $this->getRegion() === self::REGION_ES;
+    }
+
+    public function isRegionEU(): bool
+    {
+        return in_array($this->getRegion(), self::REGION_EU);
     }
 
     public function setRegion(string $region): self

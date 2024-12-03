@@ -16,6 +16,7 @@ class Factory
         VariantSku::NICK => VariantSku::class,
         SizeChart::NICK => SizeChart::class,
         Title::NICK => Title::class,
+        Compliance::NICK => Compliance::class,
     ];
 
     private \Magento\Framework\ObjectManagerInterface $objectManager;

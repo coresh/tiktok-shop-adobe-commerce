@@ -49,11 +49,11 @@ class SaveAfter extends \M2E\TikTokShop\Observer\AbstractObserver
             '!id' => $shipment->getIncrementId(),
         ]);
 
-        if ($this->eventRuntimeManager->isNeedSkipShippingHandler()) {
+        if ($this->eventRuntimeManager->isShipmentProcessed($shipment)) {
             return;
         }
 
         $this->shipmentHandler->shipByShipment($order, $shipment, \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION);
-        $this->eventRuntimeManager->skipShippingHandler();
+        $this->eventRuntimeManager->markShipmentAsProcessed($shipment);
     }
 }

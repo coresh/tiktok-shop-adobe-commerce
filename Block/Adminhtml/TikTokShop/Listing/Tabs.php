@@ -11,6 +11,17 @@ class Tabs extends \M2E\TikTokShop\Block\Adminhtml\Magento\Tabs\AbstractHorizont
     private const ITEMS_BY_LISTING_TAB_ID = 'items_by_listing';
     private const UNMANAGED_ITEMS_TAB_ID = 'unmanaged_items';
 
+    private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
+
+    public function __construct(
+        \M2E\TikTokShop\Model\Account\Repository $accountRepository,
+        \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
+        array $data = []
+    ) {
+        $this->accountRepository = $accountRepository;
+        parent::__construct($context, $data);
+    }
+
     protected function init(): void
     {
         $cssMb20 = 'margin-bottom: 20px;';
@@ -36,12 +47,18 @@ class Tabs extends \M2E\TikTokShop\Block\Adminhtml\Magento\Tabs\AbstractHorizont
 
         // ---------------------------------------
 
-        $this->addTab(
-            self::UNMANAGED_ITEMS_TAB_ID,
-            (string)__('Unmanaged Items'),
-            $this->getUrl('*/tiktokshop_listing_unmanaged/index')
-        );
-        $this->registerCssForTab(self::UNMANAGED_ITEMS_TAB_ID, $cssMb20);
+        $firstAccount = $this->accountRepository->findFirst();
+        if ($firstAccount !== null) {
+            $this->addTab(
+                self::UNMANAGED_ITEMS_TAB_ID,
+                (string)__('Unmanaged Items'),
+                $this->getUrl(
+                    '*/tiktokshop_listing_unmanaged/index',
+                    ['account' => $firstAccount->getId()]
+                )
+            );
+            $this->registerCssForTab(self::UNMANAGED_ITEMS_TAB_ID, $cssMb20);
+        }
 
         // ---------------------------------------
 

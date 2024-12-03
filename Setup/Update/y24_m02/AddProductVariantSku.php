@@ -7,7 +7,6 @@ namespace M2E\TikTokShop\Setup\Update\y24_m02;
 use M2E\TikTokShop\Helper\Module\Database\Tables as TablesHelper;
 use M2E\TikTokShop\Model\ResourceModel\Product as ListingProductResource;
 use M2E\TikTokShop\Model\ResourceModel\Product\VariantSku as ListingProductVariantResource;
-use M2E\TikTokShop\Model\ResourceModel\Listing\Other as ListingOtherResource;
 use Magento\Framework\DB\Ddl\Table;
 
 class AddProductVariantSku extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
@@ -356,27 +355,27 @@ class AddProductVariantSku extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\Ab
 
     private function modifyUnmanagedProductTable(): void
     {
-        $modifier = $this->createTableModifier(TablesHelper::TABLE_NAME_LISTING_OTHER);
+        $modifier = $this->createTableModifier(TablesHelper::PREFIX . 'listing_other');
         $modifier
             ->addColumn(
-                ListingOtherResource::COLUMN_WAREHOUSE_ID,
+                'warehouse_id',
                 'INT UNSIGNED DEFAULT NULL',
                 null,
-                ListingOtherResource::COLUMN_SHOP_ID,
+                'shop_id',
                 true,
                 false,
             )
             ->addColumn(
-                ListingOtherResource::COLUMN_CATEGORY_ID,
+                'category_id',
                 'VARCHAR(255)',
                 null,
-                ListingOtherResource::COLUMN_INVENTORY_DATA,
+                'inventory_data',
                 false,
                 false,
             )
             ->commit();
 
-        $modifier->renameColumn('product_id', ListingOtherResource::COLUMN_TTS_PRODUCT_ID);
+        $modifier->renameColumn('product_id', 'tts_product_id');
         $modifier->dropIndex('account_id__shop_id__product_id__sku_id');
     }
 }

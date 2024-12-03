@@ -17,7 +17,7 @@ class DeleteService
     private \M2E\TikTokShop\Helper\Module\Exception $exceptionHelper;
     private \M2E\TikTokShop\Helper\Data\Cache\Permanent $cache;
     private \M2E\TikTokShop\Model\ShippingProvider\Repository $shippingProviderRepository;
-    private \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\DeleteService $deleteService;
     private \M2E\TikTokShop\Model\Listing\DeleteService $listingDeleteService;
     private \M2E\TikTokShop\Model\Processing\DeleteService $processingDeleteService;
     private \M2E\TikTokShop\Model\Category\Tree\DeleteService $categoryTreeDeleteService;
@@ -34,7 +34,7 @@ class DeleteService
         \M2E\TikTokShop\Helper\Module\Exception $exceptionHelper,
         \M2E\TikTokShop\Model\Listing\Log\Repository $listingLogRepository,
         \M2E\TikTokShop\Model\ShippingProvider\Repository $shippingProviderRepository,
-        \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository,
+        \M2E\TikTokShop\Model\UnmanagedProduct\DeleteService $deleteService,
         \M2E\TikTokShop\Helper\Data\Cache\Permanent $cache,
         \M2E\TikTokShop\Model\Category\Tree\DeleteService $categoryTreeDeleteService,
         \M2E\TikTokShop\Model\Category\Dictionary\DeleteService $categoryDeleteService
@@ -48,7 +48,7 @@ class DeleteService
         $this->exceptionHelper = $exceptionHelper;
         $this->cache = $cache;
         $this->shippingProviderRepository = $shippingProviderRepository;
-        $this->listingOtherRepository = $listingOtherRepository;
+        $this->deleteService = $deleteService;
         $this->listingDeleteService = $listingDeleteService;
         $this->processingDeleteService = $processingDeleteService;
         $this->categoryTreeDeleteService = $categoryTreeDeleteService;
@@ -74,7 +74,7 @@ class DeleteService
 
             $this->listingLogRepository->removeByAccountId($accountId);
 
-            $this->listingOtherRepository->removeByAccountId($accountId);
+            $this->deleteService->deleteUnmanagedByAccountId($accountId);
 
             $this->removeListings($account);
 

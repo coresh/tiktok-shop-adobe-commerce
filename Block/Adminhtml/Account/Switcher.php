@@ -17,19 +17,14 @@ class Switcher extends \M2E\TikTokShop\Block\Adminhtml\Switcher
         $this->accountRepository = $accountRepository;
     }
 
-    public function getLabel()
+    public function getLabel(): string
     {
         return (string)__('Account');
     }
 
-    protected function loadItems()
+    protected function loadItems(): void
     {
         $accounts = $this->accountRepository->getAll(true);
-        if (empty($accounts)) {
-            $this->items = [];
-
-            return;
-        }
 
         if (count($accounts) < 2) {
             $this->hasDefaultOption = false;

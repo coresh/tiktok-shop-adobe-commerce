@@ -231,4 +231,9 @@ class Synchronization extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     {
         return $this->getData(SynchronizationResource::COLUMN_REVISE_UPDATE_CATEGORIES) != 0;
     }
+
+    public function isReviseUpdateCompliance(): bool
+    {
+        return $this->getData(SynchronizationResource::COLUMN_REVISE_UPDATE_COMPLIANCE) != 0;
+    }
 }

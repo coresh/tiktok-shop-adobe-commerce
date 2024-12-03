@@ -4,6 +4,7 @@ namespace M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template;
 
 use M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid;
 use Magento\Framework\DB\Select;
+use M2E\TikTokShop\Model\ResourceModel\Account as AccountResource;
 
 class Grid extends AbstractGrid
 {
@@ -12,11 +13,19 @@ class Grid extends AbstractGrid
     private \M2E\TikTokShop\Model\ResourceModel\Template\SellingFormat\CollectionFactory $sellingCollectionFactory;
     private \M2E\TikTokShop\Model\ResourceModel\Template\Description\CollectionFactory $descriptionCollectionFactory;
     private \M2E\TikTokShop\Model\ResourceModel\Template\Synchronization\CollectionFactory $syncCollectionFactory;
+    private \M2E\TikTokShop\Model\ResourceModel\Template\Compliance\CollectionFactory $complianceCollectionFactory;
+    private \M2E\TikTokShop\Model\ResourceModel\Account $accountResource;
+    private \M2E\TikTokShop\Model\ResourceModel\Account\CollectionFactory $accountCollectionFactory;
+    /** @var \M2E\TikTokShop\Model\ResourceModel\Account\Collection */
+    private AccountResource\Collection $enabledAccountCollection;
 
     public function __construct(
+        \M2E\TikTokShop\Model\ResourceModel\Account $accountResource,
+        \M2E\TikTokShop\Model\ResourceModel\Account\CollectionFactory $accountCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Template\SellingFormat\CollectionFactory $sellingCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Template\Description\CollectionFactory $descriptionCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Template\Synchronization\CollectionFactory $syncCollectionFactory,
+        \M2E\TikTokShop\Model\ResourceModel\Template\Compliance\CollectionFactory $complianceCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Collection\WrapperFactory $wrapperCollectionFactory,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
@@ -25,11 +34,13 @@ class Grid extends AbstractGrid
     ) {
         $this->wrapperCollectionFactory = $wrapperCollectionFactory;
         $this->resourceConnection = $resourceConnection;
-
-        parent::__construct($context, $backendHelper, $data);
+        $this->accountResource = $accountResource;
         $this->sellingCollectionFactory = $sellingCollectionFactory;
         $this->descriptionCollectionFactory = $descriptionCollectionFactory;
         $this->syncCollectionFactory = $syncCollectionFactory;
+        $this->complianceCollectionFactory = $complianceCollectionFactory;
+        $this->accountCollectionFactory = $accountCollectionFactory;
+        parent::__construct($context, $backendHelper, $data);
     }
 
     public function _construct()
@@ -60,7 +71,8 @@ class Grid extends AbstractGrid
             [
                 'id as template_id',
                 'title',
-                new \Zend_Db_Expr('\'0\' as `marketplace`'),
+                new \Zend_Db_Expr('NULL as `account_title`'),
+                new \Zend_Db_Expr('\'0\' as `account_id`'),
                 new \Zend_Db_Expr(
                     '\'' . \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SELLING_FORMAT . '\' as `nick`'
                 ),
@@ -79,7 +91,8 @@ class Grid extends AbstractGrid
             [
                 'id as template_id',
                 'title',
-                new \Zend_Db_Expr('\'0\' as `marketplace`'),
+                new \Zend_Db_Expr('NULL as `account_title`'),
+                new \Zend_Db_Expr('\'0\' as `account_id`'),
                 new \Zend_Db_Expr(
                     '\'' . \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SYNCHRONIZATION . '\' as `nick`'
                 ),
@@ -97,9 +110,38 @@ class Grid extends AbstractGrid
             [
                 'id as template_id',
                 'title',
-                new \Zend_Db_Expr('\'0\' as `marketplace`'),
+                new \Zend_Db_Expr('NULL as `account_title`'),
+                new \Zend_Db_Expr('\'0\' as `account_id`'),
                 new \Zend_Db_Expr(
                     '\'' . \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_DESCRIPTION . '\' as `nick`'
+                ),
+                'create_date',
+                'update_date',
+            ]
+        );
+
+        // Prepare Compliance collection
+        // ----------------------------------------
+        $collectionCompliance = $this->complianceCollectionFactory->create();
+        $collectionCompliance->getSelect()->reset(Select::COLUMNS);
+        $collectionCompliance->getSelect()->join(
+            ['account' => $this->accountResource->getMainTable()],
+            sprintf(
+                'account.%s = main_table.%s',
+                \M2E\TikTokShop\Model\ResourceModel\Account::COLUMN_ID,
+                \M2E\TikTokShop\Model\ResourceModel\Template\Compliance::COLUMN_ACCOUNT_ID
+            ),
+            []
+        );
+
+        $collectionCompliance->getSelect()->columns(
+            [
+                'id as template_id',
+                'title',
+                new \Zend_Db_Expr('account.title as `account_title`'),
+                new \Zend_Db_Expr('account.id as `account_id`'),
+                new \Zend_Db_Expr(
+                    '\'' . \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE . '\' as `nick`'
                 ),
                 'create_date',
                 'update_date',
@@ -115,6 +157,7 @@ class Grid extends AbstractGrid
             $collectionSellingFormat->getSelect(),
             $collectionSynchronization->getSelect(),
             $collectionDescription->getSelect(),
+            $collectionCompliance->getSelect()
         ]);
         // ---------------------------------------
 
@@ -124,7 +167,7 @@ class Grid extends AbstractGrid
         $resultCollection->setConnection($this->resourceConnection->getConnection());
         $resultCollection->getSelect()->reset()->from(
             ['main_table' => $unionSelect],
-            ['template_id', 'title', 'nick', 'marketplace', 'create_date', 'update_date']
+            ['template_id', 'title', 'account_title', 'account_id', 'nick', 'create_date', 'update_date']
         );
         // ---------------------------------------
 
@@ -148,6 +191,7 @@ class Grid extends AbstractGrid
             \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SELLING_FORMAT => __('Selling'),
             \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_DESCRIPTION => __('Description'),
             \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SYNCHRONIZATION => __('Synchronization'),
+            \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE => __('Compliance'),
         ];
         $this->addColumn('nick', [
             'header' => __('Type'),
@@ -160,17 +204,17 @@ class Grid extends AbstractGrid
             'options' => $options,
         ]);
 
-        //$this->addColumn('marketplace', [
-        //    'header' => __('Marketplace'),
-        //    'align' => 'left',
-        //    'type' => 'options',
-        //    'width' => '100px',
-        //    'index' => 'marketplace',
-        //    'filter_index' => 'main_table.marketplace',
-        //    'filter_condition_callback' => [$this, 'callbackFilterMarketplace'],
-        //    'frame_callback' => [$this, 'callbackColumnMarketplace'],
-        //    'options' => $this->getEnabledMarketplaceTitles(),
-        //]);
+        $this->addColumn('account', [
+            'header' => $this->__('Account'),
+            'align' => 'left',
+            'type' => 'options',
+            'width' => '100px',
+            'index' => 'account_title',
+            'filter_index' => 'account_title',
+            'filter_condition_callback' => [$this, 'callbackFilterAccount'],
+            'frame_callback' => [$this, 'callbackColumnAccount'],
+            'options' => $this->getEnabledAccountTitles(),
+        ]);
 
         $this->addColumn('create_date', [
             'header' => (string)__('Creation Date'),
@@ -250,5 +294,47 @@ class Grid extends AbstractGrid
                 'back' => 1,
             ]
         );
+    }
+
+    protected function callbackFilterAccount($collection, $column)
+    {
+        $value = $column->getFilter()->getValue();
+        if ($value == null) {
+            return;
+        }
+
+        $collection->getSelect()->where('account_id = 0 OR account_id = ?', (int)$value);
+    }
+
+    public function callbackColumnAccount($value, $row, $column, $isExport)
+    {
+        if (empty($value)) {
+            return __('Any');
+        }
+
+        return $value;
+    }
+
+    private function getEnabledAccountCollection(): AccountResource\Collection
+    {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
+        if (!isset($this->enabledAccountCollection)) {
+            $collection = $this->accountCollectionFactory->create();
+            $collection->setOrder(AccountResource::COLUMN_TITLE, 'ASC');
+
+            $this->enabledAccountCollection = $collection;
+        }
+
+        return $this->enabledAccountCollection;
+    }
+
+    private function getEnabledAccountTitles(): array
+    {
+        $result = [];
+        foreach ($this->getEnabledAccountCollection()->getItems() as $account) {
+            $result[$account->getId()] = $account->getTitle();
+        }
+
+        return $result;
     }
 }

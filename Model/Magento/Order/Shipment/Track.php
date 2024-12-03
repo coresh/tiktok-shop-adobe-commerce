@@ -139,12 +139,20 @@ class Track
         string $trackNumber,
         \Magento\Sales\Model\Order\Shipment $shipment
     ): bool {
+        $trackNumber = $this->clearTrackNumber($trackNumber);
+
         foreach ($shipment->getTracks() as $track) {
-            if ($track->getTrackNumber() === $trackNumber) {
+            $shippingTrackNumber = $this->clearTrackNumber($track->getTrackNumber());
+            if ($shippingTrackNumber === $trackNumber) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private function clearTrackNumber(string $trackNumber): string
+    {
+        return str_replace(['/', ' ', '-'], '', $trackNumber);
     }
 }

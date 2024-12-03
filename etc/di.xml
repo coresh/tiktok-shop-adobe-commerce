@@ -124,6 +124,7 @@
                 <item name="category" xsi:type="object">M2E\TikTokShop\Setup\Install\CategoryHandler</item>
                 <item name="tag" xsi:type="object">M2E\TikTokShop\Setup\Install\TagHandler</item>
                 <item name="processing" xsi:type="object">M2E\TikTokShop\Setup\Install\ProcessingHandler</item>
+                <item name="promotion" xsi:type="object">M2E\TikTokShop\Setup\Install\PromotionHandler</item>
             </argument>
         </arguments>
     </type>

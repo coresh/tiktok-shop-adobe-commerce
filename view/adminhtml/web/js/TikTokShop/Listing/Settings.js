@@ -58,6 +58,22 @@ define([
             if ($('template_synchronization_id').value) {
                 $('template_synchronization_id').simulate('change');
             }
+
+            $('template_compliance_id').observe('change', function () {
+                if ($('template_compliance_id').value) {
+                    $('edit_compliance_template_link').show();
+                } else {
+                    $('edit_compliance_template_link').hide();
+                }
+            });
+            $('template_compliance_id').simulate('change');
+
+            $('template_compliance_id').observe('change', function () {
+                TikTokShopListingSettingsObj.hideEmptyOption(this);
+            });
+            if ($('template_compliance_id').value) {
+                $('template_compliance_id').simulate('change');
+            }
         },
 
         // ---------------------------------------
@@ -120,19 +136,19 @@ define([
                 asynchronous: false,
                 onSuccess: function (transport) {
 
-                    var data = transport.responseText.evalJSON(true);
+                    const data = transport.responseText.evalJSON(true);
 
-                    var options = '';
+                    let options = '';
 
-                    var firstItemValue = '';
-                    var currentValue = $(id).value;
+                    let firstItemValue = '';
+                    const currentValue = $(id).value;
 
                     data.each(function (paris) {
-                        var key = (typeof paris.key != 'undefined') ? paris.key : paris.id;
-                        var val = (typeof paris.value != 'undefined') ? paris.value : paris.title;
+                        const key = (typeof paris.key != 'undefined') ? paris.key : paris.id;
+                        const val = (typeof paris.value != 'undefined') ? paris.value : paris.title;
                         options += '<option value="' + key + '">' + val + '</option>\n';
 
-                        if (firstItemValue == '') {
+                        if (firstItemValue === '') {
                             firstItemValue = key;
                         }
                     });
@@ -140,7 +156,7 @@ define([
                     $(id).update();
                     $(id).insert(options);
 
-                    if (currentValue != '') {
+                    if (currentValue !== '') {
                         $(id).value = currentValue;
                     } else {
                         if (TikTokShop.formData[id] > 0) {
@@ -217,6 +233,21 @@ define([
                 $('template_description_id').hide();
                 noteEl && $('template_description_note').hide();
                 $('template_description_label').show();
+            }
+        },
+
+        newComplianceTemplateCallback: function () {
+            const noteEl = $('template_compliance_note');
+
+            TikTokShopListingSettingsObj.reload(TikTokShop.url.get('getComplianceTemplates'), 'template_compliance_id');
+            if ($('template_compliance_id').children.length > 0) {
+                $('template_compliance_id').show();
+                noteEl && $('template_compliance_note').show();
+                $('template_compliance_label').hide();
+            } else {
+                $('template_compliance_id').hide();
+                noteEl && $('template_compliance_note').hide();
+                $('template_compliance_label').show();
             }
         },
 

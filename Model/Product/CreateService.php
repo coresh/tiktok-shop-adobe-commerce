@@ -27,7 +27,7 @@ class CreateService
         \M2E\TikTokShop\Model\Magento\Product $m2eMagentoProduct,
         int $categoryDictionaryId,
         ?int $warehouseId,
-        ?\M2E\TikTokShop\Model\Listing\Other $unmanagedProduct = null
+        ?\M2E\TikTokShop\Model\UnmanagedProduct $unmanagedProduct = null
     ): \M2E\TikTokShop\Model\Product {
         $this->checkSupportedMagentoType($m2eMagentoProduct);
 
@@ -44,9 +44,10 @@ class CreateService
         }
 
         $this->listingProductRepository->create($listingProduct);
+        $variants = $this->createVariants($warehouseId, $listingProduct, $m2eMagentoProduct, $unmanagedProduct);
 
-        $this->createVariants($warehouseId, $listingProduct, $m2eMagentoProduct, $unmanagedProduct);
-
+        $this->listingProductRepository->createVariantsSku($variants);
+        $this->listingProductRepository->save($listingProduct->recalculateOnlineDataByVariants());
         return $listingProduct;
     }
 
@@ -54,43 +55,52 @@ class CreateService
         ?int $warehouseId,
         \M2E\TikTokShop\Model\Product $listingProduct,
         \M2E\TikTokShop\Model\Magento\Product $m2eMagentoProduct,
-        $unmanagedProduct = null
-    ): void {
-        $variants = [];
-        if ($m2eMagentoProduct->isSimpleType()) {
-            $variants[] = $this->createVariantEntity(
-                $listingProduct,
-                $m2eMagentoProduct,
-                $warehouseId,
-                $unmanagedProduct,
-            );
-        } else {
-            if ($m2eMagentoProduct->isGroupedType()) {
-                foreach ($m2eMagentoProduct->getGroupedChildren() as $child) {
-                    $variants[] = $this->createVariantEntity($listingProduct, $child, $warehouseId, $unmanagedProduct);
-                }
-            }
-
-            if ($m2eMagentoProduct->isConfigurableType()) {
-                foreach ($m2eMagentoProduct->getConfigurableChildren() as $child) {
-                    $variants[] = $this->createVariantEntity($listingProduct, $child, $warehouseId, $unmanagedProduct);
+        ?\M2E\TikTokShop\Model\UnmanagedProduct $unmanagedProduct
+    ): array {
+        $unmanagedVariants = [];
+        if ($unmanagedProduct !== null) {
+            foreach ($unmanagedProduct->getVariants() as $variant) {
+                if ($variant->hasMagentoProductId()) {
+                    $unmanagedVariants[$variant->getMagentoProductId()] = $variant;
                 }
             }
         }
 
-        $this->listingProductRepository->createVariantsSku($variants);
+        if ($m2eMagentoProduct->isSimpleType()) {
+            return [
+                $this->createVariantEntity(
+                    $listingProduct,
+                    $m2eMagentoProduct,
+                    $warehouseId,
+                    $unmanagedVariants[$m2eMagentoProduct->getProductId()] ?? null
+                ),
+            ];
+        }
+
+        $variants = [];
+        foreach ($m2eMagentoProduct->getConfigurableChildren() as $child) {
+            $variants[] = $this->createVariantEntity(
+                $listingProduct,
+                $child,
+                $warehouseId,
+                $unmanagedVariants[$child->getProductId()] ?? null
+            );
+        }
+
+        return $variants;
     }
 
     private function createVariantEntity(
         \M2E\TikTokShop\Model\Product $listingProduct,
         \M2E\TikTokShop\Model\Magento\Product $m2eMagentoProduct,
         ?int $warehouseId,
-        $unmanagedProduct = null
+        ?\M2E\TikTokShop\Model\UnmanagedProduct\VariantSku $variant = null
     ): VariantSku {
         $variantSku = $this->variantSkuFactory->create();
         $variantSku->init($listingProduct, $m2eMagentoProduct->getProductId(), $warehouseId);
-        if ($unmanagedProduct !== null) {
-            $variantSku->fillFromUnmanagedProduct($unmanagedProduct);
+
+        if ($variant !== null) {
+            $variantSku->fillFromUnmanagedVariant($variant);
         }
 
         return $variantSku;

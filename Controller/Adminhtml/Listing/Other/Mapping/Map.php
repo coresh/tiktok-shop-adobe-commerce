@@ -1,29 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Controller\Adminhtml\Listing\Other\Mapping;
 
 class Map extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
 {
     private \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory;
-    private \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\MappingService $unmanagedMappingService;
 
     public function __construct(
+        \M2E\TikTokShop\Model\UnmanagedProduct\MappingService $unmanagedMappingService,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository,
         \M2E\TikTokShop\Controller\Adminhtml\Context $context
     ) {
         parent::__construct($context);
 
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->listingOtherRepository = $listingOtherRepository;
+        $this->unmanagedMappingService = $unmanagedMappingService;
     }
 
     public function execute()
     {
         $productId = $this->getRequest()->getParam('product_id'); // Magento
-        $productOtherId = $this->getRequest()->getParam('other_product_id');
+        $productUnmanagedId = $this->getRequest()->getParam('other_product_id');
 
-        if (!$productId || !$productOtherId) {
+        if (!$productId || !$productUnmanagedId) {
             $this->setJsonContent(['result' => false]);
 
             return $this->getResult();
@@ -41,11 +43,11 @@ class Map extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
 
         $productId = $magentoCatalogProductModel->getId();
 
-        $listingOther = $this->listingOtherRepository->get($productOtherId);
+        if (!$this->unmanagedMappingService->manualMapProduct((int)$productUnmanagedId, (int)$productId)) {
+            $this->setJsonContent(['result' => false]);
 
-        $listingOther->mapToMagentoProduct((int)$productId);
-
-        $this->listingOtherRepository->save($listingOther);
+            return $this->getResult();
+        }
 
         $this->setJsonContent(['result' => true]);
 

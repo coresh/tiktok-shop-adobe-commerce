@@ -30,16 +30,16 @@ class DeleteService
     }
 
     public function process(
-        \M2E\TikTokShop\Model\Product $listingProduct,
+        \M2E\TikTokShop\Model\Product $product,
         $initiator
     ): void {
-        $this->removeTags($listingProduct);
+        $this->removeTags($product);
 
-        $this->removeScheduledActions($listingProduct);
-        $this->removeInstructions($listingProduct);
+        $this->removeScheduledActions($product);
+        $this->removeInstructions($product);
 
         $this->listingLogService->addProduct(
-            $listingProduct,
+            $product,
             $initiator,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_DELETE_PRODUCT_FROM_LISTING,
             $this->listingLogService->getNextActionId(),
@@ -47,31 +47,31 @@ class DeleteService
             \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_INFO,
         );
 
-        $this->imageRelationRepository->deleteByListingProductId($listingProduct->getId());
+        $this->imageRelationRepository->deleteByListingProductId($product->getId());
 
-        foreach ($listingProduct->getVariants() as $variant) {
+        foreach ($product->getVariants() as $variant) {
             $this->listingProductRepository->deleteVariantSku($variant);
         }
 
-        $this->listingProductRepository->delete($listingProduct);
+        $this->listingProductRepository->delete($product);
     }
 
-    private function removeTags(\M2E\TikTokShop\Model\Product $listingProduct): void
+    private function removeTags(\M2E\TikTokShop\Model\Product $product): void
     {
-        $this->tagBuffer->removeAllTags($listingProduct);
+        $this->tagBuffer->removeAllTags($product);
         $this->tagBuffer->flush();
     }
 
-    private function removeScheduledActions(\M2E\TikTokShop\Model\Product $listingProduct): void
+    private function removeScheduledActions(\M2E\TikTokShop\Model\Product $product): void
     {
-        $scheduledAction = $this->scheduledActionRepository->findByListingProductId($listingProduct->getId());
+        $scheduledAction = $this->scheduledActionRepository->findByListingProductId($product->getId());
         if ($scheduledAction !== null) {
             $this->scheduledActionRepository->remove($scheduledAction);
         }
     }
 
-    private function removeInstructions(\M2E\TikTokShop\Model\Product $listingProduct): void
+    private function removeInstructions(\M2E\TikTokShop\Model\Product $product): void
     {
-        $this->instructionRepository->removeByListingProduct($listingProduct->getId());
+        $this->instructionRepository->removeByListingProduct($product->getId());
     }
 }

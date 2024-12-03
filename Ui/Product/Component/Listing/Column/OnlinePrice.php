@@ -46,13 +46,26 @@ class OnlinePrice extends \Magento\Ui\Component\Listing\Columns\Column
                 \M2E\TikTokShop\Model\Shop::getCurrencyCodeByRegion($row['shop_region'])
             );
 
+            $promotionHtml = '';
+            if ($row['has_promotion']) {
+                $promotionHtml =
+                    '<div class="fix-magento-tooltip on-promotion" style="float:right; text-align: left; margin-left: 5px;">' .
+                    '<div class="m2epro-field-tooltip admin__field-tooltip">' .
+                    '<a class="admin__field-tooltip-action" href="javascript://"></a>' .
+                    '<div class="admin__field-tooltip-content">' .
+                    'This Product is added to a promotion.' .
+                    '</div>' .
+                    '</div>' .
+                    '</div>';
+            }
+
             if ($product->isStatusInactive()) {
                 $row['product_online_price'] =  sprintf(
                     '<span style="color: gray; text-decoration: line-through;">%s</span>',
-                    $onlinePrice
+                    $onlinePrice . $promotionHtml
                 );
             } else {
-                $row['product_online_price'] = $onlinePrice;
+                $row['product_online_price'] = $onlinePrice . $promotionHtml;
             }
         }
 

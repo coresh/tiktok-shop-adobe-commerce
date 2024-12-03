@@ -28,7 +28,7 @@ class UpdateFromChannel
     }
 
     public function process(
-        \M2E\TikTokShop\Model\Listing\Other\TtsProductCollection $channelProductCollection,
+        \M2E\TikTokShop\Model\Listing\InventorySync\Channel\ProductCollection $channelProductCollection,
         \M2E\TikTokShop\Model\Account $account,
         \M2E\TikTokShop\Model\Shop $shop
     ): void {

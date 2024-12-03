@@ -57,6 +57,18 @@ class VariantSettings
             && $this->variants[$variantId] === self::ACTION_SKIP;
     }
 
+    public function isAddAction(int $variantId): bool
+    {
+        return isset($this->variants[$variantId])
+            && $this->variants[$variantId] === self::ACTION_ADD;
+    }
+
+    public function isReviseAction(int $variantId): bool
+    {
+        return isset($this->variants[$variantId])
+            && $this->variants[$variantId] === self::ACTION_REVISE;
+    }
+
     // ----------------------------------------
 
     public function toArray(): array

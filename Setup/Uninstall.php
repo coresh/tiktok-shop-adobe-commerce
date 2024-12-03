@@ -58,7 +58,7 @@ class Uninstall implements \Magento\Framework\Setup\UninstallInterface
             );
             // -----------------------
         } catch (\Throwable $exception) {
-            $this->logger->error($exception, ['source' => 'Uninstall']);
+            $this->logger->error($exception->getMessage(), ['exception' => $exception, 'source' => 'Uninstall']);
         }
     }
 

@@ -200,6 +200,24 @@ class Checker
 
     public function isNeedReviseForOther(\M2E\TikTokShop\Model\Product $listingProduct): bool
     {
+        if (!$this->isComplianceReviseEnabled($listingProduct)) {
+            return false;
+        }
+
+        /** @var ActionBuilder\Compliance $actionDataBuilder */
+        $actionDataBuilder = $this->dataBuilderFactory->create(ActionBuilder\Compliance::NICK, $listingProduct);
+
+        $actionDataBuilder->getBuilderData();
+
+        $metadata = $actionDataBuilder->getMetaData()[ActionBuilder\Compliance::NICK];
+        if ($metadata['online_manufacturer_id'] !== $listingProduct->getOnlineManufacturerId()) {
+            return true;
+        }
+
+        if ($metadata['online_responsible_person_id'] !== $listingProduct->getOnlineResponsiblePersonId()) {
+            return true;
+        }
+
         return false;
     }
 
@@ -223,5 +241,9 @@ class Checker
     private function isCategoriesReviseEnabled(\M2E\TikTokShop\Model\Product $listingProduct): bool
     {
         return $listingProduct->getSynchronizationTemplate()->isReviseUpdateCategories();
+    }
+    private function isComplianceReviseEnabled(\M2E\TikTokShop\Model\Product $listingProduct): bool
+    {
+        return $listingProduct->getSynchronizationTemplate()->isReviseUpdateCompliance();
     }
 }

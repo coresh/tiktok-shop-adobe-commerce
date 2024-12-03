@@ -189,6 +189,21 @@ HTML
             ]
         );
 
+        $fieldset->addField(
+            'revise_update_compliance',
+            self::SELECT,
+            [
+                'name' => 'synchronization[revise_update_compliance]',
+                'label' => __('Product Compliance'),
+                'value' => $formData['revise_update_compliance'],
+                'values' => [
+                    0 => __('No'),
+                    1 => __('Yes'),
+                ],
+                'tooltip' => __('Use this Policy to provide the name and contact details of the manufacturer and responsible person to ensure that your products meet the applicable regulatory requirements.'),
+            ]
+        );
+
         $form->addField(
             'revise_qty_max_applied_value_confirmation_popup_template',
             self::CUSTOM_CONTAINER,

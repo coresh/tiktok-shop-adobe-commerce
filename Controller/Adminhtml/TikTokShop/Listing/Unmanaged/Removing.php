@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Listing\Unmanaged;
 
 class Removing extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractListing
 {
-    private \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository;
-    private \M2E\TikTokShop\Model\Listing\Other\DeleteService $deleteService;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\Repository $listingOtherRepository;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\DeleteService $deleteService;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository,
-        \M2E\TikTokShop\Model\Listing\Other\DeleteService $deleteService
+        \M2E\TikTokShop\Model\UnmanagedProduct\Repository $listingOtherRepository,
+        \M2E\TikTokShop\Model\UnmanagedProduct\DeleteService $deleteService
     ) {
         parent::__construct();
         $this->listingOtherRepository = $listingOtherRepository;
@@ -35,7 +37,7 @@ class Removing extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractL
         }
 
         foreach ($productArray as $productId) {
-            $listingOther = $this->listingOtherRepository->get($productId);
+            $listingOther = $this->listingOtherRepository->get((int)$productId);
 
             $this->deleteService->process($listingOther);
         }

@@ -11,7 +11,19 @@ abstract class Switcher extends Magento\AbstractBlock
 
     protected $paramName = null;
 
-    protected $hasDefaultOption = true;
+    protected bool $hasDefaultOption = true;
+
+    protected function _construct(): void
+    {
+        parent::_construct();
+
+        if ($this->getStyle() === self::ADVANCED_STYLE) {
+            $this->setTemplate('switcher/advanced.phtml');
+        } else {
+            $this->setTemplate('switcher/simple.phtml');
+        }
+        $this->css->addFile('switcher.css');
+    }
 
     /**
      * @return string
@@ -22,17 +34,6 @@ abstract class Switcher extends Magento\AbstractBlock
      * @return void
      */
     abstract protected function loadItems();
-
-    protected function _construct()
-    {
-        parent::_construct();
-
-        if ($this->getStyle() === self::ADVANCED_STYLE) {
-            $this->setTemplate('switcher/advanced.phtml');
-        } else {
-            $this->setTemplate('switcher/simple.phtml');
-        }
-    }
 
     public function getItems()
     {
@@ -53,7 +54,7 @@ abstract class Switcher extends Magento\AbstractBlock
         $controllerName = $this->getData('controller_name') ? $this->getData('controller_name') : '*';
 
         return $this->getUrl(
-            "*/{$controllerName}/*",
+            "*/$controllerName/*",
             ['_current' => true, $this->getParamName() => $this->getParamPlaceHolder()]
         );
     }
@@ -116,7 +117,11 @@ JS;
 
     public function hasDefaultOption(): bool
     {
-        return (bool)$this->hasDefaultOption;
+        if ($this->getData('has_default_option') !== null) {
+            $this->hasDefaultOption = (bool)$this->getData('has_default_option');
+        }
+
+        return $this->hasDefaultOption;
     }
 
     public function getDefaultOptionName(): string

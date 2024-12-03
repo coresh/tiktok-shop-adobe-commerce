@@ -33,6 +33,7 @@ class View extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractContaine
                     'grid_url' => $this->getData('grid_url'),
                     'mapping_handler_js' => $this->getData('mapping_handler_js'),
                     'mapping_action' => $this->getData('mapping_action'),
+                    'product_type' => $this->getData('product_type'),
                 ],
             ]
         );

@@ -47,8 +47,13 @@ class Config implements \M2E\TikTokShop\Model\Setup\Upgrade\Entity\ConfigInterfa
                 \M2E\TikTokShop\Setup\Update\y24_m09\RemoveReferencesOfPolicyFromProduct::class,
             ],
             'y24_m10' => [
+                \M2E\TikTokShop\Setup\Update\y24_m10\AddPromotion::class,
                 \M2E\TikTokShop\Setup\Update\y24_m10\AddColumnsToOrderItem::class,
+                \M2E\TikTokShop\Setup\Update\y24_m10\AddUnmanagedProductVariant::class,
             ],
+            'y24_m11' => [
+                \M2E\TikTokShop\Setup\Update\y24_m11\AddCompliancePolicy::class,
+            ]
         ];
     }
 }

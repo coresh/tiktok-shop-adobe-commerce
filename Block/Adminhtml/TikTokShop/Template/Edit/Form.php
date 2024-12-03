@@ -6,14 +6,17 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
 {
     /** @var \M2E\TikTokShop\Helper\Data\GlobalData */
     private $globalDataHelper;
+    private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
 
     public function __construct(
+        \M2E\TikTokShop\Model\Account\Repository $accountRepository,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper,
         array $data = []
     ) {
+        $this->accountRepository = $accountRepository;
         $this->globalDataHelper = $globalDataHelper;
 
         parent::__construct($context, $registry, $formFactory, $data);
@@ -42,6 +45,24 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
             ],
         ]);
 
+        $templateNick = $this->getTemplateNick();
+
+        if ($templateNick == \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE) {
+            $form->addField(
+                'template_compliance_form_help_info',
+                self::HELP_BLOCK,
+                [
+                    'content' => __(
+                        'To comply with EU regulations, please provide the Manufacturer and Responsible Person
+                     details for your products. The Manufacturer is the entity that produces the product, while
+                     the Responsible Person is the individual or company within the EU responsible for product
+                     compliance and safety. With the settings below, you may select a manufacturer and responsible
+                     person already created on TikTok Shop or create a new one.'
+                    ),
+                ]
+            );
+        }
+
         $fieldset = $form->addFieldset(
             'general_fieldset',
             ['legend' => __('General'), 'collapsable' => false]
@@ -62,6 +83,33 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
             ]
         );
 
+        if ($templateNick === \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE) {
+            if ($this->getRequest()->getParam('account_id', false) !== false) {
+                $fieldset->addField(
+                    'account_id_hidden',
+                    'hidden',
+                    [
+                        'name' => 'compliance[account_id]',
+                        'value' => $templateData['account_id'],
+                    ]
+                );
+            }
+
+            $fieldset->addField(
+                'account_id',
+                'select',
+                [
+                    'name' => 'compliance[account_id]',
+                    'label' => __('Account'),
+                    'title' => __('Account'),
+                    'values' => $this->getAccountIdOptionsForEU(),
+                    'value' => $templateData['account_id'],
+                    'required' => true,
+                    'disabled' => !empty($templateData['account_id']),
+                ]
+            );
+        }
+
         $form->setUseContainer(true);
         $this->setForm($form);
 
@@ -70,12 +118,24 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
 
     public function getTemplateData()
     {
+        $accountId = $this->getRequest()->getParam('account_id', false);
+
         $nick = $this->getTemplateNick();
         $templateData = $this->globalDataHelper->getValue("tiktokshop_template_$nick");
 
         return array_merge([
             'title' => '',
+            'account_id' => ($accountId !== false) ? $accountId : '',
         ], $templateData->getData());
+    }
+
+    /**
+     * @return \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Edit
+     */
+    public function getParentBlock()
+    {
+        /** @var \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Edit */
+        return parent::getParentBlock();
     }
 
     public function getTemplateNick()
@@ -88,6 +148,31 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
         $template = $this->getParentBlock()->getTemplateObject();
 
         return $template ? $template->getId() : null;
+    }
+
+    private function getAccountOptions(): array
+    {
+        return $this->formatAccountOptions($this->accountRepository->getAll());
+    }
+
+    private function getAccountIdOptionsForEU(): array
+    {
+        return $this->formatAccountOptions($this->accountRepository->findWithEUShop());
+    }
+
+    private function formatAccountOptions(array $accounts): array
+    {
+        $optionsResult = [
+            ['value' => '', 'label' => ''],
+        ];
+        foreach ($accounts as $account) {
+            $optionsResult[] = [
+                'value' => $account->getId(),
+                'label' => $account->getTitle(),
+            ];
+        }
+
+        return $optionsResult;
     }
 
     protected function _toHtml()

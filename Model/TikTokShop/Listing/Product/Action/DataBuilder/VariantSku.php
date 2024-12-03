@@ -42,6 +42,8 @@ class VariantSku extends AbstractDataBuilder
         $isConfigurable = $parentMagentoProduct->isConfigurableType();
         $configurableAttributes = $isConfigurable ? $parentMagentoProduct->getConfigurableAttributes() : [];
 
+        $hasActivePromotionByProduct = $this->getListingProduct()->hasActiveOrNotStartPromotion();
+
         $variants = $this->getListingProduct()->getVariants();
         $skuItems = new \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder\VariantSku\Collection();
 
@@ -56,10 +58,22 @@ class VariantSku extends AbstractDataBuilder
                 $qty = $variant->getQty();
             }
 
+            if (
+                (
+                    $hasActivePromotionByProduct
+                    || $variant->hasActiveOrNotStartPromotion()
+                )
+                && $variantSettings->isReviseAction($variant->getId())
+            ) {
+                $price = $variant->getOnlineCurrentPrice();
+            } else {
+                $price = (float)$variant->getFixedPrice();
+            }
+
             $skuItems->addItem(
                 $this->createVariantItem(
                     $variant,
-                    (float)$variant->getFixedPrice(),
+                    $price,
                     $qty,
                     $isConfigurable,
                     $configurableAttributes,

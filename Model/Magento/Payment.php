@@ -1,23 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Model\Magento;
 
-/**
- * Class \M2E\TikTokShop\Model\Magento\Payment
- */
 class Payment extends \Magento\Payment\Model\Method\AbstractMethod
 {
+    public const ADDITIONAL_DATA_KEY_PAYMENT_METHOD = 'payment_method';
+    public const ADDITIONAL_DATA_KEY_CHANNEL_ORDER_ID = 'channel_order_id';
+
     protected $_code = 'tiktokshoppayment';
 
     protected $_canUseCheckout = false;
     protected $_canUseInternal = false;
-    protected $_canUseForMultishipping = false;
     protected $_canRefund = true;
     protected $_canRefundInvoicePartial = true;
 
     protected $_infoBlockType = \M2E\TikTokShop\Block\Adminhtml\Magento\Payment\Info::class;
-
-    //########################################
 
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
@@ -29,17 +28,12 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         $data = $data->getData()['additional_data'];
 
         $details = [
-            'payment_method' => $data['payment_method'],
-            'channel_order_id' => $data['channel_order_id'],
-            'cash_on_delivery_cost' => $data['cash_on_delivery_cost'] ?? null,
-            'transactions' => $data['transactions'],
-            'tax_id' => isset($data['tax_id']) ? $data['tax_id'] : null,
+            self::ADDITIONAL_DATA_KEY_PAYMENT_METHOD => $data[self::ADDITIONAL_DATA_KEY_PAYMENT_METHOD],
+            self::ADDITIONAL_DATA_KEY_CHANNEL_ORDER_ID => $data[self::ADDITIONAL_DATA_KEY_CHANNEL_ORDER_ID],
         ];
 
         $this->getInfoInstance()->setAdditionalInformation($details);
 
         return $this;
     }
-
-    //########################################
 }

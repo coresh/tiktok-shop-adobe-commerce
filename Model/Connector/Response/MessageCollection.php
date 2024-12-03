@@ -77,13 +77,26 @@ class MessageCollection
         return $messages;
     }
 
-    public function getCombinedSystemErrorsString(): ?string
+    public function getCombinedSystemErrorsString(): string
     {
         $messages = $this->getSystemErrors();
 
         return !empty($messages) ?
-            implode(', ', array_map(static fn (Message $message) => $message->getText(), $messages)) :
-            null;
+            implode(', ', array_map(static fn(Message $message) => $message->getText(), $messages)) :
+            '';
+    }
+
+    public function getCombinedComponentErrorsString(): string
+    {
+        $messages = [];
+        foreach ($this->getErrors() as $message) {
+            if (!$message->isSenderComponent()) {
+                continue;
+            }
+            $messages[] = $message->getText();
+        }
+
+        return !empty($messages) ? implode(', ', $messages) : '';
     }
 
     /**

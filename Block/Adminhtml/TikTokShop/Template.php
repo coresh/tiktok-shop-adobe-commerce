@@ -5,13 +5,8 @@ namespace M2E\TikTokShop\Block\Adminhtml\TikTokShop;
 use M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractContainer;
 use M2E\TikTokShop\Model\TikTokShop\Template\Manager;
 
-/**
- * Class \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template
- */
 class Template extends AbstractContainer
 {
-    //########################################
-
     public function _construct()
     {
         parent::_construct();
@@ -25,8 +20,6 @@ class Template extends AbstractContainer
         $this->removeButton('save');
         $this->removeButton('edit');
     }
-
-    //########################################
 
     protected function _prepareLayout()
     {
@@ -53,8 +46,6 @@ class Template extends AbstractContainer
         return parent::_prepareLayout();
     }
 
-    //########################################
-
     protected function _getAddTemplateButtonOptions()
     {
         $data = [
@@ -76,6 +67,12 @@ class Template extends AbstractContainer
                 'onclick' => "setLocation('" . $this->getTemplateUrl(Manager::TEMPLATE_SYNCHRONIZATION) . "')",
                 'default' => false,
             ],
+            Manager::TEMPLATE_COMPLIANCE => [
+                'label' => __('Compliance'),
+                'id' => 'compliance',
+                'onclick' => "setLocation('" . $this->getTemplateUrl(Manager::TEMPLATE_COMPLIANCE) . "')",
+                'default' => false,
+            ],
         ];
 
         return $data;
@@ -85,6 +82,4 @@ class Template extends AbstractContainer
     {
         return $this->getUrl('*/tiktokshop_template/new', ['nick' => $nick]);
     }
-
-    //########################################
 }

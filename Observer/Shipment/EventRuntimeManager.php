@@ -7,7 +7,7 @@ namespace M2E\TikTokShop\Observer\Shipment;
 class EventRuntimeManager
 {
     private static bool $isNeedSkipEvents = false;
-    private static bool $isNeedSkipShippingHandler = false;
+    private static array $processedShipments = [];
 
     public function skipEvents(): void
     {
@@ -24,18 +24,13 @@ class EventRuntimeManager
         return self::$isNeedSkipEvents;
     }
 
-    public function skipShippingHandler(): void
+    public function markShipmentAsProcessed(\Magento\Sales\Model\Order\Shipment $shipment): void
     {
-        self::$isNeedSkipShippingHandler = true;
+        self::$processedShipments[$shipment->getId()] = true;
     }
 
-    public function doNotSkipShippingHandler(): void
+    public function isShipmentProcessed(\Magento\Sales\Model\Order\Shipment $shipment): bool
     {
-        self::$isNeedSkipShippingHandler = false;
-    }
-
-    public function isNeedSkipShippingHandler(): bool
-    {
-        return self::$isNeedSkipShippingHandler;
+        return array_key_exists($shipment->getId(), self::$processedShipments);
     }
 }

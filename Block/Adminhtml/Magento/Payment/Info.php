@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Block\Adminhtml\Magento\Payment;
+
+use M2E\TikTokShop\Model\Magento\Payment as TikTokShopPayment;
 
 class Info extends \Magento\Payment\Block\Info
 {
@@ -56,44 +60,17 @@ class Info extends \Magento\Payment\Block\Info
         return $this->order;
     }
 
-    /**
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
     public function getPaymentMethod(): string
     {
-        return (string)$this->getInfo()->getAdditionalInformation('payment_method');
+        return (string)$this
+            ->getInfo()
+            ->getAdditionalInformation(TikTokShopPayment::ADDITIONAL_DATA_KEY_PAYMENT_METHOD);
     }
 
-    /**
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
     public function getChannelOrderId(): string
     {
-        return (string)$this->getInfo()->getAdditionalInformation('channel_order_id');
-    }
-
-    /**
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function getTaxId(): string
-    {
-        return (string)$this->getInfo()->getAdditionalInformation('tax_id');
-    }
-
-    public function getChannelOrderUrl(): string
-    {
-        return '';
-    }
-
-    /**
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function getCashOnDeliveryCost(): float
-    {
-        if ($this->getIsSecureMode()) {
-            return 0.0;
-        }
-
-        return (float)$this->getInfo()->getAdditionalInformation('cash_on_delivery_cost');
+        return (string)$this
+            ->getInfo()
+            ->getAdditionalInformation(TikTokShopPayment::ADDITIONAL_DATA_KEY_CHANNEL_ORDER_ID);
     }
 }

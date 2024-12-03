@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Block\Adminhtml\Listing\Mapping;
 
 class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
@@ -49,7 +51,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
             [
                 [
                     'attribute' => 'type_id',
-                    'in' => \M2E\TikTokShop\Helper\Magento\Product::TYPE_SIMPLE,
+                    'in' => $this->getData('product_type')
                 ],
             ]
         );
@@ -90,20 +92,6 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         );
 
         $this->addColumn(
-            'type',
-            [
-                'header' => __('Type'),
-                'align' => 'left',
-                'width' => '120px',
-                'type' => 'options',
-                'sortable' => false,
-                'index' => 'type_id',
-                'filter_index' => 'type_id',
-                'options' => $this->getProductTypes(),
-            ]
-        );
-
-        $this->addColumn(
             'stock_availability',
             [
                 'header' => __('Stock Availability'),
@@ -121,6 +109,19 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         );
 
         $this->addColumn(
+            'type',
+            [
+                'header' => __('Type'),
+                'align' => 'left',
+                'type' => 'text',
+                'width' => '120px',
+                'sortable' => false,
+                'filter' => false,
+                'frame_callback' => [$this, 'callbackColumnType'],
+            ]
+        );
+
+        $this->addColumn(
             'actions',
             [
                 'header' => __('Actions'),
@@ -134,7 +135,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         );
     }
 
-    //########################################
+    // ----------------------------------------
 
     public function callbackColumnTitle($value, $row, $column, $isExport)
     {
@@ -154,7 +155,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
 
     public function callbackColumnType($value, $row, $column, $isExport)
     {
-        return '<div style="margin-left: 3px">' . \M2E\TikTokShop\Helper\Data::escapeHtml($value) . '</div>';
+        return '<div style="margin-left: 3px">' . \M2E\TikTokShop\Helper\Data::escapeHtml(ucfirst($row->getTypeId())) . '</div>';
     }
 
     public function callbackColumnIsInStock($value, $row, $column, $isExport)
@@ -196,7 +197,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         );
     }
 
-    //########################################
+    // ----------------------------------------
 
     protected function _beforeToHtml()
     {
@@ -221,15 +222,19 @@ JS
         return parent::_beforeToHtml();
     }
 
-    //########################################
+    // ----------------------------------------
 
     public function getGridUrl()
     {
+        $params = ['_current' => true];
+
+        if (!empty($this->getData('product_type'))) {
+            $params = array_merge($params, ['type' => $this->getData('product_type')]);
+        }
+
         return $this->getUrl(
             $this->getData('grid_url'),
-            [
-                '_current' => true,
-            ]
+            $params
         );
     }
 
@@ -238,23 +243,5 @@ JS
         return false;
     }
 
-    //########################################
-
-    protected function getProductTypes()
-    {
-        $magentoProductTypes = $this->type->getOptionArray();
-        $knownTypes = $this->magentoProductHelper->getOriginKnownTypes();
-
-        foreach ($magentoProductTypes as $type => $magentoProductTypeLabel) {
-            if (in_array($type, $knownTypes)) {
-                continue;
-            }
-
-            unset($magentoProductTypes[$type]);
-        }
-
-        return $magentoProductTypes;
-    }
-
-    //########################################
+    // ----------------------------------------
 }

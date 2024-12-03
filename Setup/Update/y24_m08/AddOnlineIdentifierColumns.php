@@ -41,22 +41,22 @@ class AddOnlineIdentifierColumns extends \M2E\TikTokShop\Model\Setup\Upgrade\Ent
 
     private function addIdentifierToListingOther()
     {
-        $modifier = $this->createTableModifier(Tables::TABLE_NAME_LISTING_OTHER);
+        $modifier = $this->createTableModifier(Tables::PREFIX . 'listing_other');
 
         $modifier->addColumn(
-            \M2E\TikTokShop\Model\ResourceModel\Listing\Other::COLUMN_IDENTIFIER_ID,
+            'identifier_id',
             'VARCHAR(50)',
             null,
-            \M2E\TikTokShop\Model\ResourceModel\Listing\Other::COLUMN_CATEGORIES_DATA,
+            'categories_data',
             false,
             false
         );
 
         $modifier->addColumn(
-            \M2E\TikTokShop\Model\ResourceModel\Listing\Other::COLUMN_IDENTIFIER_TYPE,
+            'identifier_type',
             'VARCHAR(10)',
             null,
-            \M2E\TikTokShop\Model\ResourceModel\Listing\Other::COLUMN_IDENTIFIER_ID,
+            'identifier_id',
             false,
             false
         );

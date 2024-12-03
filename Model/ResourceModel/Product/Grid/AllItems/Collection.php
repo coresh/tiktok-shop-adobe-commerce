@@ -7,10 +7,12 @@ namespace M2E\TikTokShop\Model\ResourceModel\Product\Grid\AllItems;
 use M2E\TikTokShop\Model\ResourceModel\Account as AccountResource;
 use M2E\TikTokShop\Model\ResourceModel\Listing as ListingResource;
 use M2E\TikTokShop\Model\ResourceModel\Product as ProductResource;
+use M2E\TikTokShop\Model\ResourceModel\Promotion as PromotionResource;
 use M2E\TikTokShop\Model\ResourceModel\Shop as ShopResource;
 use M2E\TikTokShop\Model\ResourceModel\Tag\ListingProduct\Relation as TagProductRelationResource;
 use M2E\TikTokShop\Model\ResourceModel\Tag as TagResource;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use M2E\TikTokShop\Model\ResourceModel\Promotion\Product as PromotionProductResource;
 
 class Collection extends \Magento\Framework\Data\Collection implements SearchResultInterface
 {
@@ -35,6 +37,8 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
     /** @var \M2E\TikTokShop\Model\ResourceModel\Tag */
     private TagResource $tagResource;
     private bool $isGetAllItemsFromFilter = false;
+    private \M2E\TikTokShop\Model\ResourceModel\Promotion\Product $promotionProductResource;
+    private \M2E\TikTokShop\Model\ResourceModel\Promotion $promotionResource;
 
     public function __construct(
         ProductResource $listingProductResource,
@@ -45,6 +49,8 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
         TagResource $tagResource,
         \M2E\TikTokShop\Model\Product\Ui\RuntimeStorage $productUiRuntimeStorage,
         \M2E\TikTokShop\Model\ResourceModel\Magento\Product\CollectionFactory $magentoProductCollectionFactory,
+        \M2E\TikTokShop\Model\ResourceModel\Promotion\Product $promotionProductResource,
+        \M2E\TikTokShop\Model\ResourceModel\Promotion $promotionResource,
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
     ) {
         parent::__construct($entityFactory);
@@ -56,6 +62,8 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
         $this->wrappedCollection = $magentoProductCollectionFactory->create();
         $this->tagProductRelationResource = $tagProductRelationResource;
         $this->tagResource = $tagResource;
+        $this->promotionProductResource = $promotionProductResource;
+        $this->promotionResource = $promotionResource;
         $this->prepareCollection();
     }
 
@@ -117,6 +125,40 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
                 'account_' . AccountResource::COLUMN_SELLER_NAME => AccountResource::COLUMN_SELLER_NAME,
             ],
         );
+
+        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+        $this->wrappedCollection->joinTable(
+            ['promotion_product' => $this->promotionProductResource->getMainTable()],
+            'product_id = product_tts_product_id',
+            [
+                'has_promotion' => new \Zend_Db_Expr(
+                    "IF(
+                promotion_product.product_id IS NOT NULL
+                AND promotion.start_date <= '{$now}'
+                AND promotion.end_date >= '{$now}',
+                true,
+                false
+            )"
+                ),
+                'promotion_id' => PromotionProductResource::COLUMN_PROMOTION_ID,
+                'promotion_' . PromotionProductResource::COLUMN_PRODUCT_ID => PromotionProductResource::COLUMN_PRODUCT_ID,
+            ],
+            null,
+            'left'
+        );
+
+        $this->wrappedCollection->joinTable(
+            ['promotion' => $this->promotionResource->getMainTable()],
+            sprintf('id = %s', PromotionResource::COLUMN_PROMOTION_ID),
+            [
+                'start_date' => PromotionResource::COLUMN_START_DATE,
+                'end_date' => PromotionResource::COLUMN_END_DATE
+            ],
+            null,
+            'left'
+        );
+
+        $this->wrappedCollection->getSelect()->distinct();
     }
 
     public function getItems()
@@ -154,6 +196,12 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
             return $this;
         }
 
+        if ($field === 'on_promotion') {
+            $this->buildFilterByPromotion($condition);
+
+            return $this;
+        }
+
         if ($field === self::FILTER_BY_ERROR_CODE_FILED_NAME) {
             $this->addFilterByTag($condition);
 
@@ -175,6 +223,28 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
         if (isset($condition['lteq'])) {
             $field = 'product_' . ProductResource::COLUMN_ONLINE_MAX_PRICE;
             $this->wrappedCollection->addFieldToFilter($field, $condition);
+        }
+    }
+
+    private function buildFilterByPromotion($condition): void
+    {
+        $conditionValue = (int)$condition['eq'];
+        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+
+        if ($conditionValue === 1) {
+            $this->wrappedCollection->getSelect()->where(
+                'promotion_product.product_id IS NOT NULL
+            AND promotion.start_date <= ?
+            AND promotion.end_date >= ?',
+                $now
+            );
+        } else {
+            $this->wrappedCollection->getSelect()->where(
+                'promotion_product.product_id IS NULL
+            OR promotion.start_date > ?
+            OR promotion.end_date < ?',
+                $now
+            );
         }
     }
 

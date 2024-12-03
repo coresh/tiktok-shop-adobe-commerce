@@ -12,9 +12,9 @@ class ResultHandler implements \M2E\TikTokShop\Model\Processing\PartialResultHan
 
     private \M2E\TikTokShop\Model\Account $account;
     private \M2E\TikTokShop\Model\Shop $shop;
-    private \M2E\TikTokShop\Model\Listing\Other\UpdaterFactory $listingOtherUpdaterFactory;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\UpdaterFactory $listingUnmanagedUpdaterFactory;
     private \M2E\TikTokShop\Model\Listing\InventorySync\AccountLockManager $accountLockManager;
-    private \M2E\TikTokShop\Model\Listing\Other\Updater\ServerToTtsProductConverterFactory $otherConverterFactory;
+    private \M2E\TikTokShop\Model\Listing\InventorySync\ProductBuilderFactory $unmanagedBuilderFactory;
     private \M2E\TikTokShop\Model\Product\UpdateFromChannel $productUpdateFromChannelProcessor;
     private \DateTime $fromDate;
     private \M2E\TikTokShop\Model\Shop\Repository $shopRepository;
@@ -22,15 +22,15 @@ class ResultHandler implements \M2E\TikTokShop\Model\Processing\PartialResultHan
     public function __construct(
         \M2E\TikTokShop\Model\Account\Repository $accountRepository,
         \M2E\TikTokShop\Model\Shop\Repository $shopRepository,
-        \M2E\TikTokShop\Model\Listing\Other\UpdaterFactory $listingOtherUpdaterFactory,
+        \M2E\TikTokShop\Model\UnmanagedProduct\UpdaterFactory $listingUnmanagedUpdaterFactory,
         \M2E\TikTokShop\Model\Listing\InventorySync\AccountLockManager $accountLockManager,
-        \M2E\TikTokShop\Model\Listing\Other\Updater\ServerToTtsProductConverterFactory $otherConverterFactory,
+        \M2E\TikTokShop\Model\Listing\InventorySync\ProductBuilderFactory $unmanagedBuilderFactory,
         \M2E\TikTokShop\Model\Product\UpdateFromChannel $productUpdateFromChannelProcessor
     ) {
         $this->accountRepository = $accountRepository;
-        $this->listingOtherUpdaterFactory = $listingOtherUpdaterFactory;
+        $this->listingUnmanagedUpdaterFactory = $listingUnmanagedUpdaterFactory;
         $this->accountLockManager = $accountLockManager;
-        $this->otherConverterFactory = $otherConverterFactory;
+        $this->unmanagedBuilderFactory = $unmanagedBuilderFactory;
         $this->productUpdateFromChannelProcessor = $productUpdateFromChannelProcessor;
         $this->shopRepository = $shopRepository;
     }
@@ -68,10 +68,10 @@ class ResultHandler implements \M2E\TikTokShop\Model\Processing\PartialResultHan
 
     public function processPartialResult(array $partialData): void
     {
-        $itemConverter = $this->otherConverterFactory->create($this->account, $this->shop);
-        $itemsCollection = $itemConverter->convert($partialData);
+        $unmanagedBuilder = $this->unmanagedBuilderFactory->create($this->account, $this->shop);
+        $itemsCollection = $unmanagedBuilder->build($partialData);
 
-        $existInListingCollection = $this->listingOtherUpdaterFactory
+        $existInListingCollection = $this->listingUnmanagedUpdaterFactory
             ->create($this->account, $this->shop)
             ->process(clone $itemsCollection);
         if ($existInListingCollection === null) {

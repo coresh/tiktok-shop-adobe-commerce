@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\Product;
 
-use M2E\TikTokShop\Model\Listing\Other\TtsProduct as ChannelProduct;
+use M2E\TikTokShop\Model\Listing\InventorySync\Channel\Product as ChannelProduct;
 use M2E\TikTokShop\Model\Product as ExtensionProduct;
 
 class CalculateStatusByChannel

@@ -12,20 +12,17 @@ class AddProductsService
     private \M2E\TikTokShop\Model\InstructionService $instructionService;
     private \M2E\TikTokShop\Model\Listing\LogService $listingLogService;
     private \M2E\TikTokShop\Model\Magento\ProductFactory $magentoProductFactory;
-    /** @var \M2E\TikTokShop\Model\Listing\Other\Repository */
-    private Other\Repository $unmanagedProductRepository;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\Repository $unmanagedProductRepository;
     /** @var \M2E\TikTokShop\Model\Product\CreateService */
     private Product\CreateService $createProductService;
-    private \Magento\Framework\App\ResourceConnection $resourceModel;
 
     public function __construct(
         \M2E\TikTokShop\Model\Product\CreateService $createProductService,
         Product\Repository $listingProductRepository,
-        \M2E\TikTokShop\Model\Listing\Other\Repository $unmanagedProductRepository,
+        \M2E\TikTokShop\Model\UnmanagedProduct\Repository $unmanagedProductRepository,
         \M2E\TikTokShop\Model\InstructionService $instructionService,
         \M2E\TikTokShop\Model\Listing\LogService $listingLogService,
-        \M2E\TikTokShop\Model\Magento\ProductFactory $magentoProductFactory,
-        \Magento\Framework\App\ResourceConnection $resourceModel
+        \M2E\TikTokShop\Model\Magento\ProductFactory $magentoProductFactory
     ) {
         $this->listingProductRepository = $listingProductRepository;
         $this->instructionService = $instructionService;
@@ -33,7 +30,6 @@ class AddProductsService
         $this->magentoProductFactory = $magentoProductFactory;
         $this->unmanagedProductRepository = $unmanagedProductRepository;
         $this->createProductService = $createProductService;
-        $this->resourceModel = $resourceModel;
     }
 
     public function addProduct(
@@ -41,7 +37,7 @@ class AddProductsService
         int $magentoProductId,
         int $categoryDictionaryId,
         int $initiator,
-        ?\M2E\TikTokShop\Model\Listing\Other $unmanagedProduct = null
+        ?\M2E\TikTokShop\Model\UnmanagedProduct $unmanagedProduct = null
     ): ?Product {
         $listingProduct = $this->findExistProduct($listing, $magentoProductId);
         if ($listingProduct !== null) {
@@ -94,7 +90,7 @@ class AddProductsService
 
     public function addFromUnmanaged(
         \M2E\TikTokShop\Model\Listing $listing,
-        \M2E\TikTokShop\Model\Listing\Other $unmanagedProduct,
+        \M2E\TikTokShop\Model\UnmanagedProduct $unmanagedProduct,
         int $categoryDictionaryId,
         int $initiator
     ): ?Product {

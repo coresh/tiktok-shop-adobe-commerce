@@ -7,6 +7,8 @@ use M2E\TikTokShop\Block\Adminhtml\Log\AbstractGrid;
 use M2E\TikTokShop\Block\Adminhtml\TikTokShop\Listing\View\TikTokShop\Row as Row;
 use M2E\TikTokShop\Model\Product;
 use M2E\TikTokShop\Model\ResourceModel\Product as ListingProductResource;
+use M2E\TikTokShop\Model\ResourceModel\Promotion\Product as PromotionProductResource;
+use M2E\TikTokShop\Model\ResourceModel\Promotion as PromotionResource;
 
 class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
 {
@@ -24,6 +26,9 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
     private \M2E\TikTokShop\Model\ResourceModel\Listing $listingResource;
     private \M2E\TikTokShop\Model\ResourceModel\Shop $shopResource;
     private \M2E\TikTokShop\Model\Product\Repository $productRepository;
+    private \M2E\TikTokShop\Model\ResourceModel\Promotion\Product $promotionProductResource;
+    private \M2E\TikTokShop\Model\Promotion\Product\Repository $promotionProductRepository;
+    private \M2E\TikTokShop\Model\ResourceModel\Promotion $promotionResource;
 
     public function __construct(
         \M2E\TikTokShop\Model\ResourceModel\Listing $listingResource,
@@ -34,6 +39,9 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         \M2E\TikTokShop\Model\ResourceModel\Magento\Product\CollectionFactory $magentoProductCollectionFactory,
         \M2E\TikTokShop\Model\Magento\ProductFactory $ourMagentoProductFactory,
         \M2E\TikTokShop\Helper\Data\Session $sessionDataHelper,
+        \M2E\TikTokShop\Model\ResourceModel\Promotion\Product $promotionProductResource,
+        \M2E\TikTokShop\Model\Promotion\Product\Repository $promotionProductRepository,
+        \M2E\TikTokShop\Model\ResourceModel\Promotion $promotionResource,
         \M2E\TikTokShop\Model\Listing\Ui\RuntimeStorage $uiListingRuntimeStorage,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Backend\Helper\Data $backendHelper,
@@ -51,6 +59,9 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         $this->urlHelper = $urlHelper;
         $this->ourMagentoProductFactory = $ourMagentoProductFactory;
         $this->listingResource = $listingResource;
+        $this->promotionProductResource = $promotionProductResource;
+        $this->promotionProductRepository = $promotionProductRepository;
+        $this->promotionResource = $promotionResource;
         parent::__construct(
             $uiListingRuntimeStorage,
             $context,
@@ -160,6 +171,39 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             'left'
         );
 
+        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+        $collection->joinTable(
+            ['promotion_product' => $this->promotionProductResource->getMainTable()],
+            sprintf('product_id = %s', PromotionProductResource::COLUMN_PRODUCT_ID),
+            [
+                'has_promotion' => new \Zend_Db_Expr(
+                    "IF(
+                promotion_product.product_id IS NOT NULL
+                AND promotion.start_date <= '{$now}'
+                AND promotion.end_date >= '{$now}',
+                true,
+                false
+            )"
+                ),
+                'promotion_id' => PromotionProductResource::COLUMN_PROMOTION_ID
+            ],
+            null,
+            'left'
+        );
+
+        $collection->joinTable(
+            ['promotion' => $this->promotionResource->getMainTable()],
+            sprintf('id = %s', PromotionResource::COLUMN_PROMOTION_ID),
+            [
+                'start_date' => PromotionResource::COLUMN_START_DATE,
+                'end_date' => PromotionResource::COLUMN_END_DATE
+            ],
+            null,
+            'left'
+        );
+
+        $collection->getSelect()->group('listing_product.id');
+
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -213,19 +257,29 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             ]
         );
 
-        $this->addColumn(
-            'price',
-            [
-                'header' => __('Price'),
-                'align' => 'right',
-                'width' => '50px',
-                'type' => 'number',
-                'index' => self::COLUMN_INDEX_VARIANTS_PRICE,
-                'sortable' => true,
-                'frame_callback' => [$this, 'callbackColumnPrice'],
-                'filter_condition_callback' => [$this, 'callbackFilterPrice'],
-            ]
-        );
+        $priceColumn = [
+            'header' => __('Price'),
+            'align' => 'right',
+            'width' => '50px',
+            'type' => 'number',
+            'index' => self::COLUMN_INDEX_VARIANTS_PRICE,
+            'sortable' => true,
+            'frame_callback' => [$this, 'callbackColumnPrice'],
+            'filter_condition_callback' => [$this, 'callbackFilterPrice'],
+        ];
+
+        $ttsProductIds = [];
+        foreach ($this->getListing()->getProducts() as $ttsProduct) {
+            $ttsProductIds[] = $ttsProduct->getTTSProductId();
+        }
+
+        if (
+            $this->promotionProductRepository->isExistPromotionProductByProductIds($ttsProductIds)
+        ) {
+            $priceColumn['filter'] = \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Grid\Column\Filter\Price::class;
+        }
+
+        $this->addColumn('price', $priceColumn);
 
         $statusColumn = [
             'header' => __('Status'),
@@ -435,6 +489,19 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             );
         }
 
+        $promotionHtml = '';
+        if ($row['has_promotion']) {
+            $promotionHtml =
+                '<div class="fix-magento-tooltip on-promotion" style="float:right; text-align: left; margin-left: 5px;">' .
+                '<div class="m2epro-field-tooltip admin__field-tooltip">' .
+                '<a class="admin__field-tooltip-action" href="javascript://"></a>' .
+                '<div class="admin__field-tooltip-content">' .
+                'This Product is added to a promotion.' .
+                '</div>' .
+                '</div>' .
+                '</div>';
+        }
+
         $minPrice = $row->getData('online_min_price');
         $maxPrice = $row->getData('online_max_price');
 
@@ -442,7 +509,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             return $this->currency->formatPrice(
                 $this->getListing()->getShop()->getCurrencyCode(),
                 (float)$minPrice
-            );
+            ) . $promotionHtml;
         }
 
         $formattedMinPrice = $this->currency->formatPrice(
@@ -455,7 +522,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             (float)$maxPrice
         );
 
-        return sprintf('%s - %s', $formattedMinPrice, $formattedMaxPrice);
+        return sprintf('%s - %s', $formattedMinPrice, $formattedMaxPrice) . $promotionHtml;
     }
 
     /**
@@ -472,21 +539,40 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         }
 
         $from = $condition['from'] ?? null;
-        if (!is_numeric($from)) {
-            $from = PHP_INT_MIN;
-        }
-
         $to = $condition['to'] ?? null;
-        if (!is_numeric($to)) {
-            $to = PHP_INT_MAX;
-        }
 
         $whereConditions = [];
-        $whereConditions[] = sprintf('%s <= online_max_price AND online_max_price <= %s', $from, $to);
-        $whereConditions[] = sprintf('%s <= online_min_price AND online_min_price <= %s', $from, $to);
-        $whereConditions[] = sprintf('online_min_price <= %s AND %s <= online_max_price', $from, $to);
+        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
 
-        $collection->getSelect()->where(implode(' OR ', $whereConditions));
+        if ($from === null || $to === null) {
+            $value = $column->getFilter()->getValue();
+            if (isset($value['on_promotion']) && $value['on_promotion'] !== '') {
+                if ((int)$value['on_promotion'] === 1) {
+                    $whereConditions[] = "promotion_product.product_id IS NOT NULL
+                              AND promotion.start_date <= '{$now}'
+                              AND promotion.end_date >= '{$now}'";
+                } else {
+                    $whereConditions[] = "promotion_product.product_id IS NULL
+                              OR promotion.start_date > '{$now}'
+                              OR promotion.end_date < '{$now}'";
+                }
+            }
+        } else {
+            if (!is_numeric($from)) {
+                $from = PHP_INT_MIN;
+            }
+            if (!is_numeric($to)) {
+                $to = PHP_INT_MAX;
+            }
+
+            $whereConditions[] = sprintf('%s <= online_max_price AND online_max_price <= %s', $from, $to);
+            $whereConditions[] = sprintf('%s <= online_min_price AND online_min_price <= %s', $from, $to);
+            $whereConditions[] = sprintf('online_min_price <= %s AND %s <= online_max_price', $from, $to);
+        }
+
+        $collection->getSelect()->where('(' . implode(' OR ', $whereConditions) . ')');
+
+        $this->setCollection($collection);
     }
 
     protected function callbackFilterStatus($collection, $column)
@@ -553,21 +639,13 @@ HTML;
         ]);
 
         $this->jsUrl->add(
-            $this->getUrl('*/tiktokshop_listing/saveCategoryTemplate', [
-                'listing_id' => $this->getListing()->getId(),
-            ]),
-            'tiktokshop_listing/saveCategoryTemplate'
-        );
-
-        $this->jsUrl->add(
             $this->getUrl('*/tiktokshop_log_listing_product/index'),
             'tiktokshop_log_listing_product/index'
         );
 
         $this->jsUrl->add(
             $this->getUrl('*/tiktokshop_log_listing_product/index', [
-                AbstractGrid::LISTING_ID_FIELD =>
-                    $this->getListing()->getId(),
+                AbstractGrid::LISTING_ID_FIELD => $this->getListing()->getId(),
                 'back' => $this->urlHelper->makeBackUrlParam(
                     '*/tiktokshop_listing/view',
                     ['id' => $this->getListing()->getId()]

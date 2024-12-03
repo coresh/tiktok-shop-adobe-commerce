@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Controller\Adminhtml\Listing\Other\Mapping;
 
 class MapGrid extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
@@ -14,6 +16,7 @@ class MapGrid extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
                     'grid_url' => '*/listing_other_mapping/mapGrid',
                     'mapping_handler_js' => 'ListingOtherMappingObj',
                     'mapping_action' => 'map',
+                    'product_type' => $this->getRequest()->getParam('type') ?? ''
                 ],
             ]
         );

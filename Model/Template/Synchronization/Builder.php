@@ -116,6 +116,10 @@ class Builder extends \M2E\TikTokShop\Model\TikTokShop\Template\AbstractBuilder
             $data['revise_update_other'] = (int)$this->rawData['revise_update_other'];
         }
 
+        if (isset($this->rawData['revise_update_compliance'])) {
+            $data['revise_update_compliance'] = (int)$this->rawData['revise_update_compliance'];
+        }
+
         return $data;
     }
 
@@ -253,6 +257,7 @@ class Builder extends \M2E\TikTokShop\Model\TikTokShop\Template\AbstractBuilder
             'revise_update_images' => 0,
             'revise_update_categories' => 0,
             'revise_update_other' => 0,
+            'revise_update_compliance' => 0,
 
             // stop
             'stop_mode' => 1,

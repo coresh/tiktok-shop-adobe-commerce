@@ -175,6 +175,17 @@
                 </settings>
             </filterSelect>
 
+            <filterSelect name="on_promotion"
+                          provider="${ $.parentName }"
+                          component="Magento_Ui/js/form/element/select"
+            >
+                <settings>
+                    <options class="M2E\TikTokShop\Ui\Select\Promotion"/>
+                    <label translate="true">On Promotion</label>
+                    <dataScope>on_promotion</dataScope>
+                </settings>
+            </filterSelect>
+
         </filters>
 
         <massaction name="listing_massaction" component="M2E_TikTokShop/js/Magento/Ui/Grid/massactions">

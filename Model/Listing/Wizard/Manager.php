@@ -267,11 +267,11 @@ class Manager
     }
 
     /**
-     * @param \M2E\TikTokShop\Model\Listing\Other $unmanagedProduct
+     * @param \M2E\TikTokShop\Model\UnmanagedProduct $unmanagedProduct
      *
      * @return void
      */
-    public function addUnmanagedProduct(\M2E\TikTokShop\Model\Listing\Other $unmanagedProduct): ?\M2E\TikTokShop\Model\Listing\Wizard\Product
+    public function addUnmanagedProduct(\M2E\TikTokShop\Model\UnmanagedProduct $unmanagedProduct): ?\M2E\TikTokShop\Model\Listing\Wizard\Product
     {
         if ($this->findProductByMagentoId($unmanagedProduct->getMagentoProductId())) {
             return null;

@@ -16,10 +16,11 @@ class Title extends Column
 
         foreach ($dataSource['data']['items'] as &$row) {
             $accountTitle = $row['title'];
+            $sellerName = $row['seller_name'];
 
             $html = sprintf('<p>%s</p>', \M2E\TikTokShop\Helper\Data::escapeHtml($accountTitle));
 
-            $html .= $this->renderLine((string)\__('Seller Name'), $accountTitle);
+            $html .= $this->renderLine((string)\__('Seller Name'), \M2E\TikTokShop\Helper\Data::escapeHtml($sellerName));
 
             $row['title'] = $html;
         }

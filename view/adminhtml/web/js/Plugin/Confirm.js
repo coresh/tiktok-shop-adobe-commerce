@@ -1,9 +1,10 @@
 define([
     'jquery',
     'underscore',
+    'mage/translate',
     'jquery/ui',
     'Magento_Ui/js/modal/confirm'
-], function ($, _) {
+], function ($, _, $t) {
     'use strict';
 
     $.widget('mage.m2e-confirm', $.mage.confirm);
@@ -11,16 +12,16 @@ define([
     return function (config) {
 
         config = _.extend({
-            title: TikTokShop.translator.translate('Confirmation'),
-            content: TikTokShop.translator.translate('Are you sure?'),
+            title: $t('Confirmation'),
+            content: $t('Are you sure?'),
             buttons: [{
-                text: TikTokShop.translator.translate('Cancel'),
+                text: $t('Cancel'),
                 class: 'action-secondary action-dismiss',
                 click: function (event) {
                     this.closeModal(event);
                 }
             }, {
-                text: TikTokShop.translator.translate('Confirm'),
+                text: $t('Confirm'),
                 class: 'action-primary action-accept',
                 click: function (event) {
                     this.closeModal(event, true);

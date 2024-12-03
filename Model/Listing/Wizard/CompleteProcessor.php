@@ -7,13 +7,13 @@ namespace M2E\TikTokShop\Model\Listing\Wizard;
 class CompleteProcessor
 {
     private \M2E\TikTokShop\Model\Listing\AddProductsService $addProductsService;
-    private \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository;
-    private \M2E\TikTokShop\Model\Listing\Other\DeleteService $unmanagedProductDeleteService;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\Repository $listingOtherRepository;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\DeleteService $unmanagedProductDeleteService;
 
     public function __construct(
         \M2E\TikTokShop\Model\Listing\AddProductsService $addProductsService,
-        \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository,
-        \M2E\TikTokShop\Model\Listing\Other\DeleteService $unmanagedProductDeleteService
+        \M2E\TikTokShop\Model\UnmanagedProduct\Repository $listingOtherRepository,
+        \M2E\TikTokShop\Model\UnmanagedProduct\DeleteService $unmanagedProductDeleteService
     ) {
         $this->addProductsService = $addProductsService;
         $this->listingOtherRepository = $listingOtherRepository;

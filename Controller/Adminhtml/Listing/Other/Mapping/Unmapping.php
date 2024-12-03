@@ -1,17 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Controller\Adminhtml\Listing\Other\Mapping;
 
 class Unmapping extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
 {
-    private \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\Repository $unmanagedRepository;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\MappingService $unmanagedMappingService;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository,
+        \M2E\TikTokShop\Model\UnmanagedProduct\MappingService $unmanagedMappingService,
+        \M2E\TikTokShop\Model\UnmanagedProduct\Repository $unmanagedRepository,
         $context = null
     ) {
         parent::__construct($context);
-        $this->listingOtherRepository = $listingOtherRepository;
+
+        $this->unmanagedMappingService = $unmanagedMappingService;
+        $this->unmanagedRepository = $unmanagedRepository;
     }
 
     public function execute()
@@ -33,15 +39,17 @@ class Unmapping extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
         }
 
         foreach ($productArray as $productId) {
-            $listingOther = $this->listingOtherRepository->get($productId);
+            $product = $this->unmanagedRepository->findById((int)$productId);
 
-            if (!$listingOther->hasMagentoProductId()) {
+            if (!$product) {
                 continue;
             }
 
-            $listingOther->unmapProduct();
+            if (!$product->hasMagentoProductId()) {
+                continue;
+            }
 
-            $this->listingOtherRepository->save($listingOther);
+            $this->unmanagedMappingService->unmapProduct($product);
         }
 
         $this->setAjaxContent('1', false);

@@ -31,6 +31,7 @@ class Request extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Ty
         $request = $this->appendSizeChartData($request);
         $request = $this->appendBrandData($request);
         $request = $this->appendPackageData($request);
+        $request = $this->appendComplianceData($request);
 
         return $request;
     }

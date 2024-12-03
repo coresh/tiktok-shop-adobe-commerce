@@ -28,14 +28,14 @@ class SaveAfter extends \M2E\TikTokShop\Observer\AbstractObserver
             return;
         }
 
-        if ($this->eventRuntimeManager->isNeedSkipShippingHandler()) {
-            return;
-        }
-
         /** @var \Magento\Sales\Model\Order\Shipment\Track $track */
         $track = $this->getEvent()->getTrack();
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
         $shipment = $track->getShipment();
+
+        if ($this->eventRuntimeManager->isShipmentProcessed($shipment)) {
+            return;
+        }
 
         $magentoOrderId = (int)$shipment->getOrderId();
 

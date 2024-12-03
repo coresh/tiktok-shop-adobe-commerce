@@ -24,6 +24,7 @@ class Synchronization extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\A
     public const COLUMN_REVISE_UPDATE_CATEGORIES = 'revise_update_categories';
     public const COLUMN_REVISE_UPDATE_IMAGES = 'revise_update_images';
     public const COLUMN_REVISE_UPDATE_DESCRIPTION = 'revise_update_description';
+    public const COLUMN_REVISE_UPDATE_COMPLIANCE = 'revise_update_compliance';
     public const COLUMN_REVISE_UPDATE_OTHER = 'revise_update_other';
     public const COLUMN_RELIST_MODE = 'relist_mode';
     public const COLUMN_RELIST_FILTER_USER_LOCK = 'relist_filter_user_lock';

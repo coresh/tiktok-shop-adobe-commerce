@@ -269,4 +269,24 @@ abstract class AbstractRequest extends \M2E\TikTokShop\Model\TikTokShop\Listing\
 
         return $request;
     }
+
+    protected function appendComplianceData(array $request): array
+    {
+        /** @var \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder\Compliance $dataBuilder */
+        $dataBuilder = $this->getDataBuilder(DataBuilder\Compliance::NICK);
+
+        $builderData = $dataBuilder->getBuilderData();
+
+        if (
+            $builderData['manufacturer_id'] === null
+            || $builderData['responsible_person_id'] === null
+        ) {
+            return $request;
+        }
+
+        $request['product_data']['manufacturer_ids'] = [$builderData['manufacturer_id']];
+        $request['product_data']['responsible_person_ids'] = [$builderData['responsible_person_id']];
+
+        return $request;
+    }
 }

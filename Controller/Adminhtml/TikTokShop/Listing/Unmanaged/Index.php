@@ -7,12 +7,18 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractList
     use \M2E\TikTokShop\Controller\Adminhtml\Listing\Wizard\WizardTrait;
 
     private \M2E\TikTokShop\Model\Listing\Wizard\Repository $wizardRepository;
+    private \M2E\TikTokShop\Model\Account\Ui\RuntimeStorage $uiAccountRuntimeStorage;
+    private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Listing\Wizard\Repository $wizardRepository
+        \M2E\TikTokShop\Model\Listing\Wizard\Repository $wizardRepository,
+        \M2E\TikTokShop\Model\Account\Ui\RuntimeStorage $uiAccountRuntimeStorage,
+        \M2E\TikTokShop\Model\Account\Repository $accountRepository
     ) {
         parent::__construct();
 
+        $this->uiAccountRuntimeStorage = $uiAccountRuntimeStorage;
+        $this->accountRepository = $accountRepository;
         $this->wizardRepository = $wizardRepository;
     }
 
@@ -28,6 +34,14 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractList
             );
 
             return $this->redirectToIndex($wizard->getId());
+        }
+
+        try {
+            $this->loadAccount();
+        } catch (\Throwable $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+
+            return $this->_redirect('*/tiktokshop_listing/index');
         }
 
         if ($this->getRequest()->getQuery('ajax')) {
@@ -49,5 +63,17 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractList
         $this->setPageHelpLink('https://docs-m2.m2epro.com/unmanaged-listings-on-m2e-tiktok-shop');
 
         return $this->getResult();
+    }
+
+    private function loadAccount(): void
+    {
+        $accountId = $this->getRequest()->getParam('account');
+        if (empty($accountId)) {
+            $account = $this->accountRepository->getFirst();
+        } else {
+            $account = $this->accountRepository->get((int)$accountId);
+        }
+
+        $this->uiAccountRuntimeStorage->setAccount($account);
     }
 }

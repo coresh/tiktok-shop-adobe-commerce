@@ -592,6 +592,7 @@ class Product
 
         $nameValue = '';
         while ($tempValue = $queryStmt->fetchColumn()) {
+            /** @psalm-suppress RedundantCondition */
             if (!empty($tempValue)) {
                 $nameValue = $tempValue;
                 break;

@@ -1,0 +1,37 @@
+<?php
+/**
+ * @var $this \Magento\Framework\View\TemplateEngine\Php
+ * @var $block \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Listing\Unmanaged\ButtonsBlock
+ * @var $escaper \Magento\Framework\Escaper
+ */
+
+?>
+<div class="listing-unmanaged-buttons" data-bind="scope: 'unmanaged_buttons'">
+    <!-- ko template: resetBtnTemplate  -->
+    <!-- /ko   -->
+
+    <!-- ko template: enableBtnTemplate  -->
+    <!-- /ko   -->
+
+    <!-- ko template: inProgressBtnTemplate -->
+    <!-- /ko   -->
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "unmanaged_buttons": {
+                        "component": "M2E_TikTokShop/js/Listing/Unmanaged/Buttons",
+                        "urlOpenSettings": "<?php echo $block->getUrlForOpenSettings(); ?>",
+                        "urlResetUnmanaged": "<?php echo $block->getUrlForResetUnmanaged(); ?>",
+                        "isShowSettingsBtn": <?php echo (int)$block->isNeedShowOpenSettingsButton(); ?>,
+                        "isShowResetBtn": <?php echo (int)$block->isNeedShowResetButton(); ?>,
+                        "isShowInProgressBtn": <?php echo (int)$block->isNeedShowInProgressButton(); ?>
+                    }
+                }
+            }
+        }
+    }
+</script>

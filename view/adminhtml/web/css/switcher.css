@@ -37,6 +37,10 @@
     margin-left: 10px;
 }
 
+.filter_block.ui {
+    float: left;
+}
+
 .static-switcher-block {
     float: right;
     margin-top: 7px;

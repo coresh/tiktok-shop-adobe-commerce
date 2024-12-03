@@ -5,6 +5,7 @@ namespace M2E\TikTokShop\Model\Product;
 use M2E\TikTokShop\Model\ResourceModel\Listing as ListingResource;
 use M2E\TikTokShop\Model\ResourceModel\Product as ListingProductResource;
 use M2E\TikTokShop\Model\ResourceModel\Product\VariantSku as VariantSkuResource;
+use M2E\TikTokShop\Model\ResourceModel\Promotion\Product as PromotionProductResource;
 
 class Repository
 {
@@ -20,6 +21,7 @@ class Repository
     private VariantSkuFactory $variantSkuFactory;
     private \M2E\TikTokShop\Model\Product\AffectedProduct\Finder $affectedVariantSkuFinder;
     private \M2E\TikTokShop\Helper\Module\Database\Structure $dbStructureHelper;
+    private \M2E\TikTokShop\Model\ResourceModel\Promotion\Product $promotionProductResource;
 
     public function __construct(
         VariantSkuFactory $variantSkuFactory,
@@ -30,7 +32,8 @@ class Repository
         ListingProductResource\VariantSku $variantSkuResource,
         \M2E\TikTokShop\Model\ResourceModel\Product\VariantSku\CollectionFactory $variantSkuCollectionFactory,
         \M2E\TikTokShop\Model\Product\AffectedProduct\Finder $affectedVariantSkuFinder,
-        \M2E\TikTokShop\Helper\Module\Database\Structure $dbStructureHelper
+        \M2E\TikTokShop\Helper\Module\Database\Structure $dbStructureHelper,
+        \M2E\TikTokShop\Model\ResourceModel\Promotion\Product $promotionProductResource
     ) {
         $this->listingProductResource = $listingProductResource;
         $this->listingProductCollectionFactory = $listingProductCollectionFactory;
@@ -41,6 +44,7 @@ class Repository
         $this->variantSkuFactory = $variantSkuFactory;
         $this->affectedVariantSkuFinder = $affectedVariantSkuFinder;
         $this->dbStructureHelper = $dbStructureHelper;
+        $this->promotionProductResource = $promotionProductResource;
     }
 
     public function create(\M2E\TikTokShop\Model\Product $product): void
@@ -212,6 +216,34 @@ class Repository
         }
 
         return array_values($collection->getItems());
+    }
+
+    public function findByTtsProductId(
+        string $ttsProductsId,
+        int $accountId,
+        int $shopId
+    ): ?\M2E\TikTokShop\Model\Product {
+        $collection = $this->listingProductCollectionFactory->create();
+        $collection
+            ->join(
+                ['l' => $this->listingResource->getMainTable()],
+                sprintf(
+                    '`l`.%s = `main_table`.%s',
+                    ListingResource::COLUMN_ID,
+                    ListingProductResource::COLUMN_LISTING_ID,
+                ),
+                [],
+            )
+            ->addFieldToFilter(sprintf('main_table.%s', ListingProductResource::COLUMN_TTS_PRODUCT_ID), $ttsProductsId)
+            ->addFieldToFilter(sprintf('l.%s', ListingResource::COLUMN_ACCOUNT_ID), $accountId)
+            ->addFieldToFilter(sprintf('l.%s', ListingResource::COLUMN_SHOP_ID), $shopId);
+
+        $product = $collection->getFirstItem();
+        if ($product->isObjectNew()) {
+            return null;
+        }
+
+        return $product;
     }
 
     public function getCountListedProductsForListing(\M2E\TikTokShop\Model\Listing $listing): int
@@ -483,5 +515,102 @@ class Repository
             [ListingProductResource::COLUMN_LAST_BLOCKING_ERROR_DATE => $dateTime->format('Y-m-d H:i:s')],
             ['id IN (?)' => $listingProductIds]
         );
+    }
+
+    /**
+     * @param \M2E\TikTokShop\Model\Promotion $promotion
+     * @param string[] $specificsPromotionChannelProductsIds
+     *
+     * @return \M2E\TikTokShop\Model\Product[]
+     */
+    public function findProductsByPromotion(
+        \M2E\TikTokShop\Model\Promotion $promotion,
+        array $specificsPromotionChannelProductsIds = []
+    ): array {
+        if (!$promotion->isProductLevelByProduct()) {
+            return [];
+        }
+
+        $collection = $this->listingProductCollectionFactory->create();
+
+        $collection
+            ->join(
+                ['p' => $this->promotionProductResource->getMainTable()],
+                sprintf(
+                    '`p`.%s = `main_table`.%s',
+                    PromotionProductResource::COLUMN_PRODUCT_ID,
+                    ListingProductResource::COLUMN_TTS_PRODUCT_ID,
+                ),
+                [],
+            );
+
+        $collection->addFieldToFilter(
+            'p.' . PromotionProductResource::COLUMN_PROMOTION_ID,
+            $promotion->getId()
+        );
+
+        if (!empty($specificsPromotionChannelProductsIds)) {
+            $collection->addFieldToFilter(
+                ListingProductResource::COLUMN_TTS_PRODUCT_ID,
+                ['in' => $specificsPromotionChannelProductsIds]
+            );
+        }
+
+        return array_values($collection->getItems());
+    }
+
+    /**
+     * @param \M2E\TikTokShop\Model\Promotion $promotion
+     * @param array $specificsPromotionChannelProductsSkus
+     *
+     * @return \M2E\TikTokShop\Model\Product[]
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function findProductsWithVariantOnPromotionByPromotion(
+        \M2E\TikTokShop\Model\Promotion $promotion,
+        array $specificsPromotionChannelProductsSkus = []
+    ): array {
+        if (!$promotion->isProductLevelByVariation()) {
+            return [];
+        }
+
+        $collection = $this->listingProductCollectionFactory->create();
+        $collection->getSelect()->distinct(true);
+
+        $collection
+            ->join(
+                ['v' => $this->variantSkuResource->getMainTable()],
+                sprintf(
+                    'main_table.%s = v.%s',
+                    ListingProductResource::COLUMN_ID,
+                    VariantSkuResource::COLUMN_PRODUCT_ID
+                ),
+                []
+            );
+
+        $collection
+            ->join(
+                ['p' => $this->promotionProductResource->getMainTable()],
+                sprintf(
+                    '`p`.%s = `v`.%s',
+                    PromotionProductResource::COLUMN_SKU_ID,
+                    VariantSkuResource::COLUMN_SKU_ID
+                ),
+                []
+            );
+
+        $collection->addFieldToFilter(
+            'p.' . PromotionProductResource::COLUMN_PROMOTION_ID,
+            $promotion->getId()
+        );
+
+        if (!empty($specificsPromotionChannelProductsSkus)) {
+            $collection->addFieldToFilter(
+                'v.' . VariantSkuResource::COLUMN_SKU_ID,
+                ['in' => $specificsPromotionChannelProductsSkus]
+            );
+        }
+
+        return array_values($collection->getItems());
     }
 }

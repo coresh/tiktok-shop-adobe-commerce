@@ -60,6 +60,15 @@ class Response extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\T
             $product->setOnlineQty($this->getOnlineQtyFromVariants());
         }
 
+        if (
+            isset($requestMetadata[DataBuilder\Compliance::NICK])
+        ) {
+            $product->setOnlineManufacturerId($requestMetadata[DataBuilder\Compliance::NICK]['online_manufacturer_id'])
+                    ->setOnlineResponsiblePersonId(
+                        $requestMetadata[DataBuilder\Compliance::NICK]['online_responsible_person_id']
+                    );
+        }
+
         $product
             ->recalculateOnlineDataByVariants()
             ->removeBlockingByError();

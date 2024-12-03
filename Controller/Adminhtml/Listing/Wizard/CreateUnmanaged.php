@@ -10,7 +10,7 @@ class CreateUnmanaged extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListi
 
     private \M2E\TikTokShop\Model\Listing\Repository $listingRepository;
     private \M2E\TikTokShop\Model\Listing\Wizard\Create $createModel;
-    private \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\Repository $listingOtherRepository;
     private \M2E\TikTokShop\Helper\Data\Session $sessionDataHelper;
     private \M2E\TikTokShop\Model\Listing\Wizard\ManagerFactory $wizardManagerFactory;
     private \M2E\TikTokShop\Model\Product\Repository $productRepository;
@@ -18,7 +18,7 @@ class CreateUnmanaged extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListi
     public function __construct(
         \M2E\TikTokShop\Model\Listing\Repository $listingRepository,
         \M2E\TikTokShop\Model\Listing\Wizard\Create $createModel,
-        \M2E\TikTokShop\Model\Listing\Other\Repository $listingOtherRepository,
+        \M2E\TikTokShop\Model\UnmanagedProduct\Repository $listingOtherRepository,
         \M2E\TikTokShop\Helper\Data\Session $sessionDataHelper,
         \M2E\TikTokShop\Model\Listing\Wizard\ManagerFactory $wizardManagerFactory,
         \M2E\TikTokShop\Model\Product\Repository $productRepository

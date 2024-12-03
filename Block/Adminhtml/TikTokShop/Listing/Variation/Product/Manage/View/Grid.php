@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace M2E\TikTokShop\Block\Adminhtml\TikTokShop\Listing\Variation\Product\Manage\View;
 
 use M2E\TikTokShop\Model\Product;
+use M2E\TikTokShop\Model\ResourceModel\Promotion\Product as PromotionProductResource;
+use M2E\TikTokShop\Model\ResourceModel\Promotion as PromotionResource;
 
 class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
 {
@@ -14,6 +16,8 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
     private \M2E\TikTokShop\Model\ResourceModel\Product\VariantSku $variantSkuResource;
     private \M2E\TikTokShop\Model\Magento\ProductFactory $magentoProductFactory;
     private array $filterByIds;
+    private \M2E\TikTokShop\Model\ResourceModel\Promotion\Product $promotionProductResource;
+    private \M2E\TikTokShop\Model\ResourceModel\Promotion $promotionResource;
 
     public function __construct(
         Product $listingProduct,
@@ -22,6 +26,8 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         \M2E\TikTokShop\Model\ResourceModel\Product\VariantSku $variantSkuResource,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
+        \M2E\TikTokShop\Model\ResourceModel\Promotion\Product $promotionProductResource,
+        \M2E\TikTokShop\Model\ResourceModel\Promotion $promotionResource,
         \Magento\Backend\Helper\Data $backendHelper,
         array $filterByIds = [],
         array $data = []
@@ -34,6 +40,8 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         $this->variantSkuResource = $variantSkuResource;
         $this->magentoProductFactory = $magentoProductFactory;
         $this->filterByIds = $filterByIds;
+        $this->promotionResource = $promotionResource;
+        $this->promotionProductResource = $promotionProductResource;
     }
 
     // ----------------------------------------
@@ -75,6 +83,37 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
                 'online_price' => \M2E\TikTokShop\Model\ResourceModel\Product\VariantSku::COLUMN_ONLINE_PRICE,
                 'online_qty' => \M2E\TikTokShop\Model\ResourceModel\Product\VariantSku::COLUMN_ONLINE_QTY,
             ]
+        );
+
+        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+        $collection->joinTable(
+            ['promotion_product' => $this->promotionProductResource->getMainTable()],
+            sprintf('sku_id = %s', PromotionProductResource::COLUMN_SKU_ID),
+            [
+                'has_promotion' => new \Zend_Db_Expr(
+                    "IF(
+                promotion_product.sku_id IS NOT NULL
+                AND promotion.start_date <= '{$now}'
+                AND promotion.end_date >= '{$now}',
+                true,
+                false
+            )"
+                ),
+                'promotion_id' => PromotionProductResource::COLUMN_PROMOTION_ID
+            ],
+            null,
+            'left'
+        );
+
+        $collection->joinTable(
+            ['promotion' => $this->promotionResource->getMainTable()],
+            sprintf('id = %s', PromotionResource::COLUMN_PROMOTION_ID),
+            [
+                'start_date' => PromotionResource::COLUMN_START_DATE,
+                'end_date' => PromotionResource::COLUMN_END_DATE
+            ],
+            null,
+            'left'
         );
 
         $collection->addFieldToFilter('product_id', ['eq' => $this->listingProduct->getId()]);
@@ -208,9 +247,22 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
             return '<span style="color: #f00;">0</span>';
         }
 
+        $promotionHtml = '';
+        if ($row['has_promotion']) {
+            $promotionHtml =
+                '<div class="fix-magento-tooltip on-promotion" style="float:right; text-align: left; margin-left: 5px;">' .
+                '<div class="m2epro-field-tooltip admin__field-tooltip">' .
+                '<a class="admin__field-tooltip-action" href="javascript://"></a>' .
+                '<div class="admin__field-tooltip-content">' .
+                'This Product is added to a promotion.' .
+                '</div>' .
+                '</div>' .
+                '</div>';
+        }
+
         $currency = $this->listingProduct->getShop()->getCurrencyCode();
 
-        $priceStr = $this->localeCurrency->getCurrency($currency)->toCurrency($value);
+        $priceStr = $this->localeCurrency->getCurrency($currency)->toCurrency($value) . $promotionHtml;
 
         return $priceStr;
     }

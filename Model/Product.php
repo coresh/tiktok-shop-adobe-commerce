@@ -48,6 +48,8 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     private \M2E\TikTokShop\Model\Product\Repository $productRepository;
     /** @var \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Description\RendererFactory */
     private TikTokShop\Listing\Product\Description\RendererFactory $descriptionRendererFactory;
+    /** @var \M2E\TikTokShop\Model\ProductPromotionService */
+    private ProductPromotionService $productPromotionService;
 
     public function __construct(
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Description\RendererFactory $descriptionRendererFactory,
@@ -55,6 +57,7 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         \M2E\TikTokShop\Model\Magento\Product\CacheFactory $magentoProductFactory,
         \M2E\TikTokShop\Model\Category\Dictionary\Repository $categoryDictionaryRepository,
         \M2E\TikTokShop\Model\Product\Repository $productRepository,
+        \M2E\TikTokShop\Model\ProductPromotionService $productPromotionService,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry
     ) {
@@ -65,6 +68,7 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->magentoProductFactory = $magentoProductFactory;
         $this->productRepository = $productRepository;
         $this->descriptionRendererFactory = $descriptionRendererFactory;
+        $this->productPromotionService = $productPromotionService;
     }
 
     protected function _construct(): void
@@ -90,7 +94,7 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         return $this;
     }
 
-    public function fillFromUnmanagedProduct(\M2E\TikTokShop\Model\Listing\Other $unmanagedProduct): self
+    public function fillFromUnmanagedProduct(\M2E\TikTokShop\Model\UnmanagedProduct $unmanagedProduct): self
     {
         $this->setTtsProductId($unmanagedProduct->getProductId())
              ->setStatus($unmanagedProduct->getStatus(), self::STATUS_CHANGER_COMPONENT)
@@ -639,6 +643,30 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         return (string)$this->getData(ListingProductResource::COLUMN_ONLINE_CATEGORIES_DATA);
     }
 
+    public function setOnlineManufacturerId(?string $value): self
+    {
+        $this->setData(ListingProductResource::COLUMN_ONLINE_MANUFACTURER_ID, $value);
+
+        return $this;
+    }
+
+    public function getOnlineManufacturerId(): ?string
+    {
+        return $this->getData(ListingProductResource::COLUMN_ONLINE_MANUFACTURER_ID);
+    }
+
+    public function setOnlineResponsiblePersonId(?string $value): self
+    {
+        $this->setData(ListingProductResource::COLUMN_ONLINE_RESPONSIBLE_PERSON_ID, $value);
+
+        return $this;
+    }
+
+    public function getOnlineResponsiblePersonId(): ?string
+    {
+        return $this->getData(ListingProductResource::COLUMN_ONLINE_RESPONSIBLE_PERSON_ID);
+    }
+
     // ----------------------------------------
 
     private function setStatusChanger(int $statusChanger): void
@@ -777,5 +805,10 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->setData(ListingProductResource::COLUMN_LAST_BLOCKING_ERROR_DATE, null);
 
         return $this;
+    }
+
+    public function hasActiveOrNotStartPromotion(): bool
+    {
+        return $this->productPromotionService->isProductOnPromotion($this);
     }
 }

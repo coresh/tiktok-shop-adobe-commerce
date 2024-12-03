@@ -62,7 +62,7 @@ class Overview extends AbstractForm
                                 \M2E\TikTokShop\Helper\Module\Database\Tables::TABLE_NAME_WAREHOUSE,
                                 \M2E\TikTokShop\Helper\Module\Database\Tables::TABLE_NAME_LISTING,
                                 \M2E\TikTokShop\Helper\Module\Database\Tables::TABLE_NAME_PRODUCT,
-                                \M2E\TikTokShop\Helper\Module\Database\Tables::TABLE_NAME_LISTING_OTHER,
+                                \M2E\TikTokShop\Helper\Module\Database\Tables::TABLE_NAME_UNMANAGED_PRODUCT,
                             ],
                             'Processing' => [
                                 \M2E\TikTokShop\Helper\Module\Database\Tables::TABLE_NAME_PROCESSING,

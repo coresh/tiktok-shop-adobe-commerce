@@ -10,12 +10,12 @@ class DetectDirectlyDeleted extends \M2E\TikTokShop\Model\Cron\AbstractTask
 
     private \M2E\TikTokShop\Model\Listing\RemoveDeletedProduct $listingRemoveDeletedProduct;
     private \M2E\TikTokShop\Model\Product\Repository $productRepository;
-    private \M2E\TikTokShop\Model\Listing\Other\Repository $otherRepository;
-    private \M2E\TikTokShop\Model\Listing\Other\UnmapDeletedProduct $unmanagedUnmapDeletedProduct;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\Repository $otherRepository;
+    private \M2E\TikTokShop\Model\UnmanagedProduct\UnmapDeletedProduct $unmanagedUnmapDeletedProduct;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Listing\Other\UnmapDeletedProduct $unmanagedUnmapDeletedProduct,
-        \M2E\TikTokShop\Model\Listing\Other\Repository $otherRepository,
+        \M2E\TikTokShop\Model\UnmanagedProduct\UnmapDeletedProduct $unmanagedUnmapDeletedProduct,
+        \M2E\TikTokShop\Model\UnmanagedProduct\Repository $otherRepository,
         \M2E\TikTokShop\Model\Product\Repository $productRepository,
         \M2E\TikTokShop\Model\Listing\RemoveDeletedProduct $listingRemoveDeletedProduct,
         \M2E\TikTokShop\Model\Cron\Manager $cronManager,

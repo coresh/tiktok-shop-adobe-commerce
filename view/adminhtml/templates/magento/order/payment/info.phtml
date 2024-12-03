@@ -7,65 +7,17 @@
 ?>
 
 <table>
-    <?php
-    if ($block->getPaymentMethod() != '') : ?>
+    <?php if ($block->getPaymentMethod() != '') : ?>
         <tr>
             <td style="width: 200px;"><label><?= __('Payment Method'); ?>:</label></td>
-            <td><strong><?php
-                    echo $block->escapeHtml($block->getPaymentMethod()); ?></strong></td>
+            <td><strong><?= $block->escapeHtml($block->getPaymentMethod()); ?></strong></td>
         </tr>
-    <?php
-    endif; ?>
+    <?php endif; ?>
 
-    <?php
-    if ($block->getChannelOrderId() != '') : ?>
+    <?php if ($block->getChannelOrderId() != '') : ?>
         <tr>
             <td style="width: 200px;"><?= __('TikTok Shop Order ID') ?>:</td>
-            <td>
-                <?php
-                if ($block->getChannelOrderUrl() !== '') : ?>
-                    <a href="<?= $block->getChannelOrderUrl() ?>" target="_blank">
-                        <?php
-                        echo $block->escapeHtml($block->getChannelOrderId()); ?>
-                    </a>
-                <?php
-                else : ?>
-                    <strong><?php
-                        echo $block->escapeHtml($block->getChannelOrderId()); ?></strong>
-                <?php
-                endif; ?>
-            </td>
+            <td><strong><?= $block->escapeHtml($block->getChannelOrderId()); ?></strong></td>
         </tr>
-    <?php
-    endif; ?>
-
-    <?php
-    if ($block->getCashOnDeliveryCost() > 0) : ?>
-        <tr>
-            <td style="width: 200px;"><?= __('Cash On Delivery Cost') ?>:</td>
-            <td>
-                <strong>
-                    <?php
-                    if ($block->getOrder() !== null) : ?>
-                        <?= $block->getOrder()->formatPrice($block->getCashOnDeliveryCost()) ?>
-                    <?php
-                    else : ?>
-                        <?= $block->getCashOnDeliveryCost() ?>
-                    <?php
-                    endif; ?>
-                </strong>
-            </td>
-        </tr>
-    <?php
-    endif; ?>
-
-    <?php
-    if ($block->getTaxId() != '') : ?>
-        <tr>
-            <td style="width: 200px;"><?= __('Buyer Tax ID') ?>:</td>
-            <td><strong><?php
-                    echo $block->getTaxId(); ?></strong></td>
-        </tr>
-    <?php
-    endif; ?>
+    <?php endif; ?>
 </table>

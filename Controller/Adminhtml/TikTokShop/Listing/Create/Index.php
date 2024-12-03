@@ -123,6 +123,7 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractList
         }
 
         if ($this->getRequest()->isPost()) {
+            /** @var \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Listing\Create\Templates\Form $form */
             $form = $this->getLayout()->createBlock(
                 \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Listing\Create\Templates\Form::class
             );
