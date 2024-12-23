@@ -19,27 +19,30 @@ class UpdateService
 
     public function update(
         \M2E\TikTokShop\Model\Category\Dictionary $dictionary
-    ): \M2E\TikTokShop\Model\Category\Dictionary {
+    ): void {
         $shop = $dictionary->getShop();
         $categoryId = $dictionary->getCategoryId();
 
-        $categoryData = $this->attributeService->getCategoryDataFromServer($shop, $categoryId);
-        $authorizedBrandData = $this->attributeService->getBrandsDataFromServer($shop, $categoryId);
+        try {
+            $categoryData = $this->attributeService->getCategoryDataFromServer($shop, $categoryId);
+            $authorizedBrandData = $this->attributeService->getBrandsDataFromServer($shop, $categoryId);
 
-        $productAttributes = $this->attributeService->getProductAttributes($categoryData);
-        $salesAttributes = $this->attributeService->getSalesAttributes($categoryData);
-        $totalProductAttributes = $this->attributeService->getTotalProductAttributes($categoryData);
-        $hasRequiredProductAttributes = $this->attributeService->getHasRequiredAttributes($categoryData);
+            $productAttributes = $this->attributeService->getProductAttributes($categoryData);
+            $salesAttributes = $this->attributeService->getSalesAttributes($categoryData);
+            $totalProductAttributes = $this->attributeService->getTotalProductAttributes($categoryData);
+            $hasRequiredProductAttributes = $this->attributeService->getHasRequiredAttributes($categoryData);
 
-        $dictionary->setAuthorizedBrands($authorizedBrandData->getBrands());
-        $dictionary->setProductAttributes($productAttributes);
-        $dictionary->setSalesAttributes($salesAttributes);
-        $dictionary->setCategoryRules($categoryData->getRules());
-        $dictionary->setTotalProductAttributes($totalProductAttributes);
-        $dictionary->setHasRequiredProductAttributes($hasRequiredProductAttributes);
+            $dictionary->setAuthorizedBrands($authorizedBrandData->getBrands());
+            $dictionary->setProductAttributes($productAttributes);
+            $dictionary->setSalesAttributes($salesAttributes);
+            $dictionary->setCategoryRules($categoryData->getRules());
+            $dictionary->setTotalProductAttributes($totalProductAttributes);
+            $dictionary->setHasRequiredProductAttributes($hasRequiredProductAttributes);
+            $dictionary->markCategoryAsValid();
+        } catch (\M2E\TikTokShop\Model\Exception\CategoryInvalid $exception) {
+            $dictionary->markCategoryAsInvalid();
+        }
 
         $this->categoryDictionaryRepository->save($dictionary);
-
-        return $dictionary;
     }
 }

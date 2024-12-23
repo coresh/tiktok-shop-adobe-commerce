@@ -126,3 +126,27 @@ a.ebay-listing-view-icon.ebay-listing-view-remove:before {
 }
 
 /* ================================================ */
+[data-has-recommendations] {
+    cursor: pointer;
+}
+
+[data-has-recommendations]:after {
+    color: #514943;
+    vertical-align: initial;
+    display: inline-block;
+    font-size: 1.5rem;
+    font-family: 'Admin Icons';
+    content:  '\e61A';
+    vertical-align: middle;
+    text-align: center;
+    overflow: hidden;
+    font-weight: normal;
+    line-height: 1;
+    speak: none;
+    text-decoration: none !important;
+    margin-left: 7px;
+}
+
+.tts-listing-quality-recomendation-list {
+    margin-left: 2rem;
+}

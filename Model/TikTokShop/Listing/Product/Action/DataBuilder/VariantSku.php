@@ -207,7 +207,7 @@ class VariantSku extends AbstractDataBuilder
 
         $attributeCode = $this->ttsConfiguration->getIdentifierCodeCustomAttribute();
         $value = $variantSku->getMagentoProduct()->getAttributeValue($attributeCode);
-        if (empty($value)) {
+        if (empty($value) || $this->isSpecialIdentifierValue($value)) {
             $this->processNotFoundAttributes((string)__('Product ID'), $this->getListingProduct()->getMagentoProduct());
 
             return null;
@@ -215,7 +215,12 @@ class VariantSku extends AbstractDataBuilder
 
         $type = $this->getIdentifierType($value);
         if ($type === null) {
-            $this->addWarningMessage('Product ID Type invalid');
+            $this->addWarningMessage(
+                (string)__(
+                    'The Product ID (e.g., EAN, UPC, GTIN) value you provided does not meet the required format '
+                    . 'and was not set to the channel.'
+                )
+            );
 
             return null;
         }
@@ -231,5 +236,10 @@ class VariantSku extends AbstractDataBuilder
         }
 
         return self::$identifierTypeMap[$type] ?? null;
+    }
+
+    private function isSpecialIdentifierValue(string $value): bool
+    {
+        return $value === \M2E\TikTokShop\Helper\Data\Product\Identifier::SPECIAL_EMPTY_IDENTIFIER_VALUE;
     }
 }

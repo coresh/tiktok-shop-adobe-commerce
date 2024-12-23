@@ -30,6 +30,6 @@ class Refresh extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractAc
             $this->messageManager->addErrorMessage(__('The account data failed to be updated, please try to refresh it again.'));
         }
 
-        return $this->_redirect('*/*/edit', ['id' => $id ]);
+        return $this->_redirect('*/*/edit', ['id' => $id, 'after_refresh_data' => true]);
     }
 }

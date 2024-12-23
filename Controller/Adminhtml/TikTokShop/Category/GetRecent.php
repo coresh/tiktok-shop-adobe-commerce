@@ -25,6 +25,7 @@ class GetRecent extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Abstract
             $result[] = [
                 'id' => $category->getCategoryId(),
                 'path' => $category->getPathWithCategoryId(),
+                'is_valid' => $category->isCategoryValid()
             ];
         }
 

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\Template\Compliance;
 
-use M2E\Otto\Model\Template\Shipping;
-
 class SaveService
 {
     private \M2E\TikTokShop\Model\Template\ComplianceFactory $complianceFactory;

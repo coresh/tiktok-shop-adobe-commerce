@@ -4,28 +4,37 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\Product\UpdateFromChannel;
 
-use M2E\TikTokShop\Model\Product\VariantSku;
 use M2E\TikTokShop\Model\Product;
+use M2E\TikTokShop\Model\Product\VariantSku;
 
 class Processor
 {
-    private \M2E\TikTokShop\Model\Product $product;
-    private \M2E\TikTokShop\Model\Listing\InventorySync\Channel\Product $channelProduct;
-    /** @var \M2E\TikTokShop\Model\Product\CalculateStatusByChannel */
-    private Product\CalculateStatusByChannel $calculateStatusByChannel;
-
     private array $instructionsData = [];
     /** @var \M2E\TikTokShop\Model\Listing\Log\Record[] */
     private array $logs = [];
 
+    private \M2E\TikTokShop\Model\Product $product;
+    private \M2E\TikTokShop\Model\Listing\InventorySync\Channel\Product $channelProduct;
+    /** @var \M2E\TikTokShop\Model\Product\CalculateStatusByChannel */
+    private Product\CalculateStatusByChannel $calculateStatusByChannel;
+    private \M2E\TikTokShop\Model\Listing\InventorySync\Channel\ListingQuality\Converter $listingQualityConverter;
+    private \M2E\TikTokShop\Model\TikTokShop\TagFactory $tagFactory;
+    private \M2E\TikTokShop\Model\Tag\ListingProduct\Buffer $tagBuffer;
+
     public function __construct(
         \M2E\TikTokShop\Model\Product $product,
         \M2E\TikTokShop\Model\Listing\InventorySync\Channel\Product $channelProduct,
-        \M2E\TikTokShop\Model\Product\CalculateStatusByChannel $calculateStatusByChannel
+        \M2E\TikTokShop\Model\Product\CalculateStatusByChannel $calculateStatusByChannel,
+        \M2E\TikTokShop\Model\Listing\InventorySync\Channel\ListingQuality\Converter $listingQualityConverter,
+        \M2E\TikTokShop\Model\TikTokShop\TagFactory $tagFactory,
+        \M2E\TikTokShop\Model\Tag\ListingProduct\Buffer $tagBuffer
     ) {
         $this->product = $product;
         $this->channelProduct = $channelProduct;
         $this->calculateStatusByChannel = $calculateStatusByChannel;
+        $this->listingQualityConverter = $listingQualityConverter;
+        $this->tagFactory = $tagFactory;
+        $this->tagBuffer = $tagBuffer;
     }
 
     public function processChanges(): ChangeResult
@@ -231,8 +240,6 @@ class Processor
 
     private function processProduct(): bool
     {
-        $isChangedProduct = false;
-
         if ($this->isNeedChangeStatus($this->product->getStatus(), $this->channelProduct->getStatus())) {
             $this->addInstructionData(
                 Product::INSTRUCTION_TYPE_CHANNEL_STATUS_CHANGED,
@@ -255,11 +262,29 @@ class Processor
             }
 
             $this->addLog($this->processNewStatus($calculatedStatus));
-
-            $isChangedProduct = true;
         }
 
-        return $isChangedProduct;
+        if ($this->isNeedUpdateManufacturerId()) {
+            $this->addInstructionData(
+                Product::INSTRUCTION_TYPE_CHANNEL_MANUFACTURER_CHANGED,
+                20,
+            );
+
+            $this->product->setOnlineManufacturerId($this->channelProduct->getManufacturerId());
+        }
+
+        if ($this->isNeedUpdateResponsiblePersonId()) {
+            $this->addInstructionData(
+                Product::INSTRUCTION_TYPE_CHANNEL_RESPONSIBLE_PERSON_CHANGED,
+                20,
+            );
+
+            $this->product->setOnlineResponsiblePersonId($this->channelProduct->getResponsiblePersonId());
+        }
+
+        $this->updateProductListingQuality();
+
+        return true;
     }
 
     private function processNewStatus(
@@ -320,5 +345,35 @@ class Processor
 
         return $existIdentifier->getId() !== $channelIdentifier->getId()
             || $existIdentifier->getType() !== $channelIdentifier->getType();
+    }
+
+    private function isNeedUpdateManufacturerId(): bool
+    {
+        return $this->channelProduct->getManufacturerId() !== null
+            && $this->product->getOnlineManufacturerId() !== $this->channelProduct->getManufacturerId();
+    }
+
+    private function isNeedUpdateResponsiblePersonId(): bool
+    {
+        return $this->channelProduct->getResponsiblePersonId() !== null
+            && $this->product->getOnlineResponsiblePersonId() !== $this->channelProduct->getResponsiblePersonId();
+    }
+
+    private function updateProductListingQuality(): void
+    {
+        $channelListingQuality = $this->channelProduct->getListingQuality();
+        $productListingQuality = $this
+            ->listingQualityConverter
+            ->toProductListingQuality($channelListingQuality);
+
+        $this->product->setListingQuality($productListingQuality);
+
+        $tags = [];
+        foreach ($productListingQuality->getRecommendationCollection()->getAll() as $recommendation) {
+            $tags[] = $this->tagFactory->createByErrorCode($recommendation->code, $recommendation->howToSolve);
+        }
+
+        $this->tagBuffer->addTags($this->product, $tags);
+        $this->tagBuffer->flush();
     }
 }

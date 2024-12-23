@@ -118,6 +118,13 @@ abstract class AbstractDataBuilder
 
     // ---------------------------------------
 
+    protected function addWarningMessage(string $message): AbstractDataBuilder
+    {
+        $this->warningMessages[sha1($message)] = $message;
+
+        return $this;
+    }
+
     private function addNotFoundAttributesMessages(string $title, array $attributes): void
     {
         $attributesTitles = [];
@@ -138,12 +145,5 @@ abstract class AbstractDataBuilder
                 implode(',', $attributesTitles),
             ),
         );
-    }
-
-    protected function addWarningMessage(string $message): AbstractDataBuilder
-    {
-        $this->warningMessages[sha1($message)] = $message;
-
-        return $this;
     }
 }

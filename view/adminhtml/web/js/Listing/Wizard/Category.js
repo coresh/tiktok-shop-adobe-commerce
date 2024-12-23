@@ -44,15 +44,27 @@ define([
             });
         },
 
-        saveCategorySettings: function () {
+        confirmCategoriesData: function () {
             this.initFormValidation('#modal_view_action_dialog');
 
             if (!jQuery('#modal_view_action_dialog').valid()) {
                 return;
             }
 
-            const self = this;
             const selectedCategory = this.getChooserSelectedCategory();
+
+            TikTokShopCategoryChooserObj.messagesClearAll()
+            if (!selectedCategory.is_all_required_attributes_filled) {
+                TikTokShopCategoryChooserObj.messageAddErrorToModalHeaderBlock($t('Please complete all required attributes to proceed.'));
+                return;
+            }
+
+            this.saveCategorySettings(selectedCategory);
+        },
+
+        saveCategorySettings: function (selectedCategory) {
+            const self = this;
+
             selectedCategory.specific = this.getChooserSelectedAttributes();
 
             new Ajax.Request(TikTokShop.url.get('tiktokshop_listing/saveCategoryTemplate'), {
@@ -107,7 +119,7 @@ define([
                     attr: {id: 'done_button'},
                     class: 'action-primary action-accept',
                     click: function () {
-                        self.saveCategorySettings();
+                        self.confirmCategoriesData();
                     }
                 }],
                 closed: function () {

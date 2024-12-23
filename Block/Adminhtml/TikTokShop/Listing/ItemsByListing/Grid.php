@@ -285,7 +285,7 @@ HTML;
 
         $accountTitle = $row->getData('account_title');
         $shopTitle = $row->getData('shop_name');
-        $shopRegionTitle = $this->convertRegionCodeToName($row->getData('shop_region_code') ?? '');
+        $shopRegionTitle = \M2E\TikTokShop\Model\Shop::getRegionNameByCode($row->getData('shop_region_code') ?? '');
 
         $storeModel = $this->_storeManager->getStore($row->getStoreId());
         $storeView = $this->_storeManager->getWebsite($storeModel->getWebsiteId())->getName();
@@ -384,22 +384,5 @@ JS
         );
 
         return parent::_toHtml();
-    }
-
-    private function convertRegionCodeToName(string $regionCode): string
-    {
-        if ($regionCode === \M2E\TikTokShop\Model\Shop::REGION_US) {
-            return (string)__('United States');
-        }
-
-        if ($regionCode === \M2E\TikTokShop\Model\Shop::REGION_GB) {
-            return (string)__('United Kingdom');
-        }
-
-        if ($regionCode === \M2E\TikTokShop\Model\Shop::REGION_ES) {
-            return (string)__('Spain');
-        }
-
-        return '';
     }
 }

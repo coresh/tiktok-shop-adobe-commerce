@@ -177,6 +177,18 @@ class ProductHandler implements \M2E\TikTokShop\Model\Setup\InstallHandlerInterf
                 ['default' => null]
             )
             ->addColumn(
+                ListingProductResource::COLUMN_LISTING_QUALITY_TIER,
+                Table::TYPE_TEXT,
+                20,
+                ['default' => null]
+            )
+            ->addColumn(
+                ListingProductResource::COLUMN_LISTING_QUALITY_RECOMMENDATIONS,
+                Table::TYPE_TEXT,
+                \M2E\TikTokShop\Model\Setup\Installer::LONG_COLUMN_SIZE,
+                ['default' => null]
+            )
+            ->addColumn(
                 ListingProductResource::COLUMN_UPDATE_DATE,
                 Table::TYPE_DATETIME,
                 null,

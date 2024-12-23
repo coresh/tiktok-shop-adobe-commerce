@@ -15,6 +15,7 @@ define([
 
         categoryInfoBlockMessages: null,
         categoryChangeBlockMessages: null,
+        modalHeaderBlockMessages: null,
 
         selectedCategory: {},
         selectedSpecifics: {},
@@ -30,6 +31,9 @@ define([
 
             this.categoryChangeBlockMessages = Object.create(MessageObj);
             this.categoryChangeBlockMessages.setContainer('#change_category_messaged_container');
+
+            this.modalHeaderBlockMessages = Object.create(MessageObj);
+            this.categoryChangeBlockMessages.setContainer('.modal-header');
         },
 
         initObservers: function () {
@@ -315,10 +319,15 @@ define([
                     if (transport.responseText.length > 2) {
                         html += '<tr><td width="730px"></td><td width="70px"></td></tr>';
                         categories.each(function (category) {
+                            if (!category.is_valid) {
+                                return;
+                            }
+
                             html += '<tr><td>' + category.path + '</td>' +
                                     '<td style="width: 60px"><a href="javascript:void(0)" ' +
                                     'onclick="TikTokShopCategoryChooserObj.selectCategory(\'' + category.id + '\')">' +
                                     $t('Select') + '</a></td></tr>';
+
                         });
                     } else {
                         html += '<tr><td colspan="2" style="padding-left: 200px"><strong>' + $t('No saved Categories') + '</strong></td></tr>';
@@ -478,12 +487,21 @@ define([
         messagesClearAll: function () {
             this.messagesClearOnCategoryInfoBlock();
             this.messagesClearOnCategoryChangeBlock();
+            this.messagesClearOnModalHeaderBlock();
         },
 
         // ----------------------------------------
 
         messagesClearOnCategoryInfoBlock: function () {
             this.categoryInfoBlockMessages.clearAll();
+        },
+
+        messagesClearOnCategoryChangeBlock: function () {
+            this.categoryChangeBlockMessages.clearAll();
+        },
+
+        messagesClearOnModalHeaderBlock: function () {
+            this.categoryChangeBlockMessages.clearAll();
         },
 
         messageAddErrorToCategoryInfoBlock: function (message) {
@@ -496,12 +514,12 @@ define([
             this.categoryInfoBlockMessages.addSuccess(message);
         },
 
-        messagesClearOnCategoryChangeBlock: function (message) {
-            this.categoryChangeBlockMessages.clearAll();
-        },
-
         messageAddErrorToCategoryChangeBlock: function (message) {
             this.messagesClearOnCategoryChangeBlock();
+            this.categoryChangeBlockMessages.addError(message);
+        },
+
+        messageAddErrorToModalHeaderBlock: function (message) {
             this.categoryChangeBlockMessages.addError(message);
         }
     });

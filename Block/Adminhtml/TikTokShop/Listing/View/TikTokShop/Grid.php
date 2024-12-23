@@ -6,9 +6,10 @@ use M2E\TikTokShop\Block\Adminhtml\Grid\Column\Renderer\TtsProductId as TtsProdu
 use M2E\TikTokShop\Block\Adminhtml\Log\AbstractGrid;
 use M2E\TikTokShop\Block\Adminhtml\TikTokShop\Listing\View\TikTokShop\Row as Row;
 use M2E\TikTokShop\Model\Product;
+use M2E\TikTokShop\Model\Product\ListingQuality as ProductListingQuality;
 use M2E\TikTokShop\Model\ResourceModel\Product as ListingProductResource;
-use M2E\TikTokShop\Model\ResourceModel\Promotion\Product as PromotionProductResource;
 use M2E\TikTokShop\Model\ResourceModel\Promotion as PromotionResource;
+use M2E\TikTokShop\Model\ResourceModel\Promotion\Product as PromotionProductResource;
 
 class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
 {
@@ -157,7 +158,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             ['shop' => $this->shopResource->getMainTable()],
             'id = shop_id',
             [
-                'shop_region' => 'region'
+                'shop_region' => 'region',
             ]
         );
 
@@ -185,7 +186,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
                 false
             )"
                 ),
-                'promotion_id' => PromotionProductResource::COLUMN_PROMOTION_ID
+                'promotion_id' => PromotionProductResource::COLUMN_PROMOTION_ID,
             ],
             null,
             'left'
@@ -196,7 +197,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             sprintf('id = %s', PromotionResource::COLUMN_PROMOTION_ID),
             [
                 'start_date' => PromotionResource::COLUMN_START_DATE,
-                'end_date' => PromotionResource::COLUMN_END_DATE
+                'end_date' => PromotionResource::COLUMN_END_DATE,
             ],
             null,
             'left'
@@ -235,7 +236,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         ]);
 
         $this->addColumn('tik_tok_shop_product_id', [
-            'header' => __('TTS Product ID'),
+            'header' => __('TikTok Shop Product ID'),
             'align' => 'left',
             'width' => '100',
             'type' => 'text',
@@ -280,6 +281,30 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         }
 
         $this->addColumn('price', $priceColumn);
+
+        if ($this->getListing()->getShop()->isRegionUS()) {
+            $this->addColumn('listing_quality', [
+                'header' => __('Listing Quality'),
+                'align' => 'left',
+                'width' => '100',
+                'type' => 'options',
+                'options' => [
+                    ProductListingQuality::TIER_POOR => ProductListingQuality::getTierLabel(
+                        ProductListingQuality::TIER_POOR
+                    ),
+                    ProductListingQuality::TIER_FAIR => ProductListingQuality::getTierLabel(
+                        ProductListingQuality::TIER_FAIR
+                    ),
+                    ProductListingQuality::TIER_GOOD => ProductListingQuality::getTierLabel(
+                        ProductListingQuality::TIER_GOOD
+                    ),
+                ],
+                'index' => 'listing_quality_tier',
+                'frame_callback' => [$this, 'callbackColumnListingQuality'],
+                'renderer' => \M2E\TikTokShop\Block\Adminhtml\Grid\Column\Renderer\Status::class,
+                'filter_condition_callback' => [$this, 'callbackFilterListingQuality'],
+            ]);
+        }
 
         $statusColumn = [
             'header' => __('Status'),
@@ -506,10 +531,12 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         $maxPrice = $row->getData('online_max_price');
 
         if ($minPrice === $maxPrice) {
-            return $this->currency->formatPrice(
+            $price = $this->currency->formatPrice(
                 $this->getListing()->getShop()->getCurrencyCode(),
                 (float)$minPrice
-            ) . $promotionHtml;
+            );
+
+            return $price . $promotionHtml;
         }
 
         $formattedMinPrice = $this->currency->formatPrice(
@@ -593,6 +620,80 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         }
     }
 
+    //region Column Listing Quality
+
+    /**
+     * @param $value
+     * @param Row $row
+     * @param $column
+     * @param $isExport
+     *
+     * @return string
+     */
+    public function callbackColumnListingQuality($value, $row, $column, $isExport)
+    {
+        $listingProduct = $row->getListingProduct();
+
+        if ($listingProduct->isStatusNotListed()) {
+            if ($isExport) {
+                return '';
+            }
+
+            return sprintf(
+                '<span style="color: gray;">%s</span>',
+                __('Not Listed')
+            );
+        }
+
+        if (!$listingProduct->isStatusListed()) {
+            return __('N/A');
+        }
+
+        $listingQuality = $row->getListingProduct()->getListingQuality();
+
+        if (
+            $isExport
+            || !$listingQuality->hasTier()
+            || $listingQuality->isTierGood()
+        ) {
+            return ProductListingQuality::getTierLabel($listingQuality->getTier());
+        }
+
+        return sprintf(
+            '<span style="color:%s" data-product-id="%s" %s>%s</span>',
+            $listingQuality->isTierPoor() ? '#e62e00' : '#e69900',
+            $row->getListingProduct()->getId(),
+            $listingQuality->hasRecommendations() ? 'data-has-recommendations' : '',
+            ProductListingQuality::getTierLabel($listingQuality->getTier())
+        );
+    }
+
+    /**
+     * @param \M2E\TikTokShop\Model\ResourceModel\Magento\Product\Collection $collection
+     * @param $column
+     *
+     * @return void
+     */
+    public function callbackFilterListingQuality($collection, $column)
+    {
+        $value = $column->getFilter()->getValue();
+        if (empty($value)) {
+            return;
+        }
+
+        $collection->getSelect()->where(
+            sprintf(
+                "listing_product.%s = '%s' AND listing_product.%s = %s",
+                \M2E\TikTokShop\Model\ResourceModel\Product::COLUMN_LISTING_QUALITY_TIER,
+                $value,
+                \M2E\TikTokShop\Model\ResourceModel\Product::COLUMN_STATUS,
+                \M2E\TikTokShop\Model\Product::STATUS_LISTED,
+            )
+        );
+    }
+
+    //endregion
+
     public function getGridUrl()
     {
         return $this->getUrl('*/tiktokshop_listing/view', ['_current' => true]);
@@ -636,6 +737,9 @@ HTML;
             'runStopProducts' => $this->getUrl('*/tiktokshop_listing/runStopProducts'),
             'runStopAndRemoveProducts' => $this->getUrl('*/tiktokshop_listing/runStopAndRemoveProducts'),
             'previewItems' => $this->getUrl('*/tiktokshop_listing/previewItems'),
+            'getListingQualityRecommendation' => $this->getUrl(
+                '*/listing_product_view/getListingQualityRecommendation'
+            ),
         ]);
 
         $this->jsUrl->add(
@@ -660,11 +764,15 @@ HTML;
             'tiktokshop_listing_moving/moveToListingGrid'
         );
 
-        $taskCompletedWarningMessage = __('"%task_title%" task has completed with warnings. ' .
-            '<a target="_blank" href="%url%">View Log</a> for details.');
+        $taskCompletedWarningMessage = __(
+            '"%task_title%" task has completed with warnings. ' .
+            '<a target="_blank" href="%url%">View Log</a> for details.'
+        );
 
-        $taskCompletedErrorMessage = __('"%task_title%" task has completed with errors. ' .
-            '<a target="_blank" href="%url%">View Log</a> for details.');
+        $taskCompletedErrorMessage = __(
+            '"%task_title%" task has completed with errors. ' .
+            '<a target="_blank" href="%url%">View Log</a> for details.'
+        );
 
         $this->jsTranslator->addTranslations([
             'task_completed_message' => __('Task completed. Please wait ...'),
@@ -677,7 +785,9 @@ HTML;
             'revising_selected_items_message' => __('Revising Selected Items On TikTok Shop'),
             'relisting_selected_items_message' => __('Relisting Selected Items On TikTok Shop'),
             'stopping_selected_items_message' => __('Stopping Selected Items On TikTok Shop'),
-            'stopping_and_removing_selected_items_message' => __('Removing from TikTok Shop And Removing From Listing Selected Items'),
+            'stopping_and_removing_selected_items_message' => __(
+                'Removing from TikTok Shop And Removing From Listing Selected Items'
+            ),
             'removing_selected_items_message' => __('Removing From Listing Selected Items'),
 
             'Please select the Products you want to perform the Action on.' =>
@@ -720,10 +830,12 @@ JS;
             <<<JS
     require([
         'TikTokShop/TikTokShop/Listing/View/TikTokShop/Grid',
-        'TikTokShop/TikTokShop/Listing/VariationProductManage'
+        'TikTokShop/TikTokShop/Listing/VariationProductManage',
+        'TikTokShop/Listing/View/ListingQuality',
     ], function() {
         window.TikTokShopListingVariationProductManageObj = new TikTokShopListingVariationProductManage()
-        window.TikTokShopListingViewTikTokShopGridObj = new TikTokShopListingViewTikTokShopGrid('$gridId', {$this->getListing()->getId()});
+        window.TikTokShopListingViewTikTokShopGridObj = new TikTokShopListingViewTikTokShopGrid('$gridId', {$this->getListing(
+            )->getId()});
 
         TikTokShopListingViewTikTokShopGridObj.afterInitPage();
 

@@ -98,6 +98,9 @@ class Log extends \M2E\TikTokShop\Model\Log\AbstractModel
     public const ACTION_PROMOTION = 38;
     public const _ACTION_PROMOTION = 'ActionPromotion';
 
+    public const ACTION_EDIT_LISTING_SETTINGS = 42;
+    public const _ACTION_EDIT_LISTING_SETTINGS = 'Edit Listing Settings';
+
     private \M2E\TikTokShop\Model\Magento\ProductFactory $magentoProductFactory;
 
     public function __construct(

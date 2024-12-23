@@ -80,6 +80,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
                 'escape' => true,
                 'index' => 'path',
                 'filter_condition_callback' => [$this, 'callbackFilterPath'],
+                'frame_callback' => [$this, 'callbackColumnFilterPath'],
             ]
         );
 
@@ -165,6 +166,23 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         );
 
         return parent::_prepareMassaction();
+    }
+
+    public function callbackColumnFilterPath($value, $row, $column, $isExport)
+    {
+        if (empty($value)) {
+            return '';
+        }
+
+        if (!$row->isCategoryValid()) {
+            return sprintf(
+                '%s <span style="color: #f00;">%s</span>',
+                $row->getPath(),
+                __('Invalid')
+            );
+        }
+
+        return $row->getPath();
     }
 
     protected function callbackFilterPath($collection, $column)

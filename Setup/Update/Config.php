@@ -53,7 +53,12 @@ class Config implements \M2E\TikTokShop\Model\Setup\Upgrade\Entity\ConfigInterfa
             ],
             'y24_m11' => [
                 \M2E\TikTokShop\Setup\Update\y24_m11\AddCompliancePolicy::class,
-            ]
+                \M2E\TikTokShop\Setup\Update\y24_m11\AddColumnToCategoryDictionary::class,
+                \M2E\TikTokShop\Setup\Update\y24_m11\AddProductListingQuality::class,
+            ],
+            'y24_m12' => [
+                \M2E\TikTokShop\Setup\Update\y24_m12\FixVariantSettingsFieldType::class
+            ],
         ];
     }
 }

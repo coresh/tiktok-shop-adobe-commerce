@@ -19,8 +19,11 @@ class Product
     private int $status;
     private string $title;
     private array $categoriesData;
+    private array $manufacturersIds;
+    private array $responsiblePersonIds;
     private ?string $categoryId;
     private \M2E\TikTokShop\Model\Listing\InventorySync\Channel\ProductSkuCollection $variantCollection;
+    private \M2E\TikTokShop\Model\Listing\InventorySync\Channel\ListingQuality $listingQuality;
 
     public function __construct(
         int $accountId,
@@ -30,7 +33,10 @@ class Product
         string $title,
         ?string $categoryId,
         array $categoriesData,
-        ProductSkuCollection $variantCollection
+        array $manufacturersIds,
+        array $responsiblePersonIds,
+        ProductSkuCollection $variantCollection,
+        ListingQuality $listingQuality
     ) {
         $this->accountId = $accountId;
         $this->shopId = $shopId;
@@ -38,8 +44,11 @@ class Product
         $this->status = $status;
         $this->title = $title;
         $this->categoriesData = $categoriesData;
+        $this->manufacturersIds = $manufacturersIds;
+        $this->responsiblePersonIds = $responsiblePersonIds;
         $this->categoryId = $categoryId;
         $this->variantCollection = $variantCollection;
+        $this->listingQuality = $listingQuality;
     }
 
     public function getCategoryId(): ?string
@@ -80,6 +89,21 @@ class Product
     public function getVariantCollection(): ProductSkuCollection
     {
         return $this->variantCollection;
+    }
+
+    public function getManufacturerId(): ?string
+    {
+        return !empty($this->manufacturersIds) ? reset($this->manufacturersIds) : null;
+    }
+
+    public function getResponsiblePersonId(): ?string
+    {
+        return !empty($this->responsiblePersonIds) ? reset($this->responsiblePersonIds) : null;
+    }
+
+    public function getListingQuality(): ListingQuality
+    {
+        return $this->listingQuality;
     }
 
     // ----------------------------------------

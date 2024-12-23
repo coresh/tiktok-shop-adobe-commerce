@@ -25,10 +25,10 @@
         <tbody data-bind="foreach: {data: foundCategories, as: 'category', noChildContext: true}">
             <tr>
                 <td>
-                    <span data-bind="style: {color: category.is_invite_only ? 'gray' : 'black'}, text: category.name"></span>
+                    <span data-bind="style: { color: (!category.is_valid || category.is_invite_only) ? 'gray' : 'black' }, text: category.name"></span>
                 </td>
                 <td style='text-align: right'>
-                    <!--  ko ifnot: category.is_invite_only -->
+                    <!--  ko ifnot: (!category.is_valid || category.is_invite_only) -->
                     <a class='choice-category'
                        data-bind="ifnot: category.is_invite_only,
                        attr: {'data-category-id': category.id},

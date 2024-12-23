@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Model\ShippingProvider;
 
 class SynchronizeService
 {
     private \M2E\TikTokShop\Model\Connector\Client\Single $singleClient;
     private \M2E\TikTokShop\Model\ShippingProviderFactory $shippingProviderFactory;
-    private \M2E\TikTokShop\Model\ResourceModel\ShippingProvider $shippingProviderResource;
+    private \M2E\TikTokShop\Model\ShippingProvider\Repository $shippingProviderRepository;
 
     public function __construct(
         \M2E\TikTokShop\Model\Connector\Client\Single $singleClient,
         \M2E\TikTokShop\Model\ShippingProviderFactory $shippingProviderFactory,
-        \M2E\TikTokShop\Model\ResourceModel\ShippingProvider $shippingProviderResource
+        \M2E\TikTokShop\Model\ShippingProvider\Repository $shippingProviderRepository
     ) {
         $this->singleClient = $singleClient;
         $this->shippingProviderFactory = $shippingProviderFactory;
-        $this->shippingProviderResource = $shippingProviderResource;
+        $this->shippingProviderRepository = $shippingProviderRepository;
     }
 
     /**
@@ -39,6 +41,9 @@ class SynchronizeService
                 $deliveryOption
             );
 
+            $providers = [];
+            $existedShippingProviders = $this->shippingProviderRepository->getByAccountShopDeliveryOption($account, $shop, $deliveryOption->getId());
+
             foreach ($shippingProviders->getShippingProviders() as $shippingProvider) {
                 $entity = $this->shippingProviderFactory->create();
                 $entity->create(
@@ -50,8 +55,40 @@ class SynchronizeService
                     $shippingProvider->getName(),
                 );
 
-                $this->shippingProviderResource->save($entity);
+                $providers[$shippingProvider->getId()] = $entity;
+                $existedProvider = $this->shippingProviderRepository->findExistedShippingProvider($entity);
+
+                if ($existedProvider === null) {
+                    $this->shippingProviderRepository->create($entity);
+                    continue;
+                }
+
+                if ($existedProvider->getShippingProviderName() !== $shippingProvider->getName()) {
+                    $existedProvider->setShippingProviderName($shippingProvider->getName());
+                    $this->shippingProviderRepository->save($existedProvider);
+                }
             }
+
+            $this->removeNotExistedShippingProviders($existedShippingProviders, $providers);
+        }
+    }
+
+    /**
+     * @param \M2E\TikTokShop\Model\ShippingProvider[] $extensionShippingProviders
+     * @param array<string,\M2E\TikTokShop\Model\ShippingProvider> $chanelShippingProviders
+     */
+    private function removeNotExistedShippingProviders(array $extensionShippingProviders, array $chanelShippingProviders): void
+    {
+        if (empty($extensionShippingProviders)) {
+            return;
+        }
+
+        foreach ($extensionShippingProviders as $shippingProvider) {
+            if (isset($chanelShippingProviders[$shippingProvider->getShippingProviderId()])) {
+                continue;
+            }
+
+            $this->shippingProviderRepository->delete($shippingProvider);
         }
     }
 

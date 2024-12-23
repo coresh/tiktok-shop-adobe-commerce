@@ -5,25 +5,29 @@ declare(strict_types=1);
 namespace M2E\TikTokShop\Model\ShippingProvider;
 
 use M2E\TikTokShop\Model\ResourceModel\ShippingProvider as ShippingProviderResource;
+use M2E\TikTokShop\Model\ResourceModel\ShippingProvider\CollectionFactory as ShippingProviderCollectionFactory;
 
 class Repository
 {
-    private \M2E\TikTokShop\Model\ResourceModel\ShippingProvider\CollectionFactory $collectionFactory;
+    private ShippingProviderCollectionFactory $collectionFactory;
+    private ShippingProviderResource $shippingProviderResource;
 
     public function __construct(
-        \M2E\TikTokShop\Model\ResourceModel\ShippingProvider\CollectionFactory $collectionFactory
+        ShippingProviderCollectionFactory $collectionFactory,
+        ShippingProviderResource $ShippingProviderResource
     ) {
         $this->collectionFactory = $collectionFactory;
+        $this->shippingProviderResource = $ShippingProviderResource;
     }
 
     public function create(\M2E\TikTokShop\Model\ShippingProvider $shippingProvider): void
     {
-        $shippingProvider->save();
+        $this->shippingProviderResource->save($shippingProvider);
     }
 
     public function save(\M2E\TikTokShop\Model\ShippingProvider $shippingProvider): void
     {
-        $shippingProvider->save();
+        $this->shippingProviderResource->save($shippingProvider);
     }
 
     /**
@@ -38,6 +42,22 @@ class Repository
         $collection->addFieldToFilter(ShippingProviderResource::COLUMN_ACCOUNT_ID, ['eq' => $account->getId()])
                    ->addFieldToFilter(ShippingProviderResource::COLUMN_SHOP_ID, ['eq' => $shop->getId()])
                    ->addFieldToFilter(ShippingProviderResource::COLUMN_WAREHOUSE_ID, ['eq' => $warehouse->getId()]);
+
+        return array_values($collection->getItems());
+    }
+
+    /**
+     * @return \M2E\TikTokShop\Model\ShippingProvider[]
+     */
+    public function getByAccountShopDeliveryOption(
+        \M2E\TikTokShop\Model\Account $account,
+        \M2E\TikTokShop\Model\Shop $shop,
+        string $deliveryOptionId
+    ): array {
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToFilter(ShippingProviderResource::COLUMN_ACCOUNT_ID, ['eq' => $account->getId()])
+                   ->addFieldToFilter(ShippingProviderResource::COLUMN_SHOP_ID, ['eq' => $shop->getId()])
+                   ->addFieldToFilter(ShippingProviderResource::COLUMN_DELIVERY_OPTION_ID, ['eq' => $deliveryOptionId]);
 
         return array_values($collection->getItems());
     }
@@ -73,5 +93,30 @@ class Repository
         }
 
         return reset($providers);
+    }
+
+    public function findExistedShippingProvider(
+        \M2E\TikTokShop\Model\ShippingProvider $object
+    ): ?\M2E\TikTokShop\Model\ShippingProvider {
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToFilter(ShippingProviderResource::COLUMN_ACCOUNT_ID, $object->getAccountId());
+        $collection->addFieldToFilter(ShippingProviderResource::COLUMN_SHOP_ID, $object->getShopId());
+        $collection->addFieldToFilter(ShippingProviderResource::COLUMN_WAREHOUSE_ID, $object->getWarehouseId());
+        $collection->addFieldToFilter(ShippingProviderResource::COLUMN_DELIVERY_OPTION_ID, $object->getDeliveryOptionId());
+        $collection->addFieldToFilter(ShippingProviderResource::COLUMN_SHIPPING_PROVIDER_ID, $object->getShippingProviderId());
+
+        /** @var \M2E\TikTokShop\Model\ShippingProvider $shippingProvider */
+        $shippingProvider = $collection->getFirstItem();
+
+        if ($shippingProvider->isObjectNew()) {
+            return null;
+        }
+
+        return $shippingProvider;
+    }
+
+    public function delete(\M2E\TikTokShop\Model\ShippingProvider $shippingProvider): void
+    {
+        $this->shippingProviderResource->delete($shippingProvider);
     }
 }

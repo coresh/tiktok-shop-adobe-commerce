@@ -41,6 +41,7 @@ class Search extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractCat
                 'id' => $item->categoryId,
                 'path' => $item->path,
                 'is_invite' => $item->isInviteOnly,
+                'is_valid' => $item->isValid,
             ];
         }, $searchResult->getAll());
 

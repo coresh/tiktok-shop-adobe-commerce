@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\Listing\InventorySync;
 
+use M2E\TikTokShop\Model\Listing\InventorySync\Channel\ListingQuality;
+use M2E\TikTokShop\Model\Listing\InventorySync\Channel\ListingQuality\Recommendation;
+
 class ProductBuilder
 {
     private \M2E\TikTokShop\Model\Account $account;
@@ -41,6 +44,18 @@ class ProductBuilder
                 $ttsProductVariantCollection->add($ttsVariant);
             }
 
+            $listingQuality = new ListingQuality($unmanagedItem['listing_quality_tier']);
+            foreach ($unmanagedItem['listing_quality_recommendations'] ?? [] as $rawRecommendation) {
+                $recommendation = new Recommendation(
+                    $rawRecommendation['code'],
+                    $rawRecommendation['field'],
+                    $rawRecommendation['section'],
+                    $rawRecommendation['how_to_solve'],
+                    $rawRecommendation['quality_tier']
+                );
+                $listingQuality->addRecommendation($recommendation);
+            }
+
             $ttsProduct = new \M2E\TikTokShop\Model\Listing\InventorySync\Channel\Product(
                 $this->account->getId(),
                 $this->shop->getId(),
@@ -51,7 +66,10 @@ class ProductBuilder
                 $title,
                 $this->resolveCategoryId($unmanagedItem['category_chains']),
                 $unmanagedItem['category_chains'],
-                $ttsProductVariantCollection
+                $unmanagedItem['manufacturer_ids'],
+                $unmanagedItem['responsible_person_ids'],
+                $ttsProductVariantCollection,
+                $listingQuality
             );
 
             $result->add($ttsProduct);

@@ -147,7 +147,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         ]);
 
         $this->addColumn('product_id', [
-            'header' => __('TTS Product ID'),
+            'header' => __('TikTok Shop Product ID'),
             'align' => 'left',
             'width' => '100px',
             'type' => 'text',

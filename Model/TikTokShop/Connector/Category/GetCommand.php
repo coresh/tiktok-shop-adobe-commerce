@@ -36,6 +36,8 @@ class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
 
     public function parseResponse(\M2E\TikTokShop\Model\Connector\Response $response): Get\Response
     {
+        $this->processError($response);
+
         $result = new Get\Response();
         foreach ($response->getResponseData() as $categoryData) {
             $permissionStatuses = $this->sanitizePermissionStatuses($categoryData['permission_statuses']);
@@ -72,5 +74,22 @@ class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
         }
 
         return $result;
+    }
+
+    private function processError(\M2E\TikTokShop\Model\Connector\Response $response): void
+    {
+        if (!$response->isResultError()) {
+            return;
+        }
+
+        foreach ($response->getMessageCollection()->getMessages() as $message) {
+            if ($message->isError()) {
+                throw new \M2E\TikTokShop\Model\Exception\CategoryInvalid(
+                    $message->getText(),
+                    [],
+                    (int)$message->getCode()
+                );
+            }
+        }
     }
 }

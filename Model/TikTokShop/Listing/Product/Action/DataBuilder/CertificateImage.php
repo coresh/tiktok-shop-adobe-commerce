@@ -52,13 +52,19 @@ class CertificateImage extends AbstractDataBuilder
             }
 
             $attributeCode = $certificate->getCustomAttributeValue();
-
             $attributeValue = $magentoProduct->getAttributeValue($attributeCode);
 
             if (empty($attributeValue)) {
                 continue;
             }
 
+            if (!\M2E\TikTokShop\Helper\Data::isValidUrl($attributeValue)) {
+                $this->addWarningMessage((string)__(
+                    'An invalid image URL is set for the Product Certificate "%1"',
+                    $certificate->getAttributeName()
+                ));
+                continue;
+            }
             $magentoProductImage = $this->magentoProductImageFactory->create();
             $magentoProductImage->setUrl($attributeValue);
 

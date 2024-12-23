@@ -13,7 +13,8 @@ abstract class AbstractBase extends Action
     public const MESSAGE_IDENTIFIER = 'tiktokshop_messages';
     public const GLOBAL_MESSAGES_GROUP = 'tiktokshop_global_messages_group';
 
-    protected \Magento\Framework\View\Result\Page $resultPage;
+    /** @var \Magento\Framework\View\Result\Page $resultPage */
+    protected $resultPage;
     protected \Magento\Framework\Controller\Result\Raw $rawResult;
     protected \Magento\Framework\View\LayoutInterface $emptyLayout;
     private bool $generalBlockWasAppended = false;

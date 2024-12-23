@@ -130,4 +130,16 @@ class Store
 
         return $website ? $website->getName() : '';
     }
+
+    public function getStoreNameById(int $storeId): string
+    {
+        try {
+            $store = $this->storeManager->getStore($storeId);
+            $result = $store->getName();
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $result = __('Unknown Store (ID: %1)', $storeId);
+        }
+
+        return (string)$result;
+    }
 }

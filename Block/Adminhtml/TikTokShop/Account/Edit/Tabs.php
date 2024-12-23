@@ -141,6 +141,9 @@ class Tabs extends \M2E\TikTokShop\Block\Adminhtml\Magento\Tabs\AbstractTabs
                 'Account\Settings\Order::LISTINGS_OTHER_PRODUCT_MODE_IGNORE' => OrderSettings::LISTINGS_OTHER_PRODUCT_MODE_IGNORE,
                 'Account\Settings\Order::NUMBER_SOURCE_CHANNEL' => OrderSettings::NUMBER_SOURCE_CHANNEL,
                 'Account\Settings\Order::LISTINGS_STORE_MODE_CUSTOM' => OrderSettings::LISTINGS_STORE_MODE_CUSTOM,
+                'Account\Settings\Order::ORDERS_STATUS_MAPPING_MODE_DEFAULT' => OrderSettings::ORDERS_STATUS_MAPPING_MODE_DEFAULT,
+                'Account\Settings\Order::ORDERS_STATUS_MAPPING_PROCESSING' => OrderSettings::ORDERS_STATUS_MAPPING_PROCESSING,
+                'Account\Settings\Order::ORDERS_STATUS_MAPPING_SHIPPED' => OrderSettings::ORDERS_STATUS_MAPPING_SHIPPED,
             ],
         );
 

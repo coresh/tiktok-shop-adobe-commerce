@@ -298,6 +298,8 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
             SyncPolicy\ChangeProcessor::INSTRUCTION_TYPE_REVISE_COMPLIANCE_ENABLED,
             SyncPolicy\ChangeProcessor::INSTRUCTION_TYPE_REVISE_COMPLIANCE_DISABLED,
             \M2E\TikTokShop\Model\Template\ChangeProcessorAbstract::INSTRUCTION_TYPE_COMPLIANCE_DATA_CHANGED,
+            Product::INSTRUCTION_TYPE_CHANNEL_MANUFACTURER_CHANGED,
+            Product::INSTRUCTION_TYPE_CHANNEL_RESPONSIBLE_PERSON_CHANGED,
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_PRODUCT_MOVED_FROM_OTHER,
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_PRODUCT_MOVED_FROM_LISTING,
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_PRODUCT_REMAP_FROM_LISTING,

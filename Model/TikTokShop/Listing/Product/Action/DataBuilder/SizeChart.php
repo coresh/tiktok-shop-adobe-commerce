@@ -62,6 +62,12 @@ class SizeChart extends AbstractDataBuilder
             return [];
         }
 
+        if (!\M2E\TikTokShop\Helper\Data::isValidUrl($attributeValue)) {
+            $this->addWarningMessage((string)__('An invalid image URL is set for the Product Size Chart'));
+
+            return [];
+        }
+
         $magentoProductImage = $this->magentoProductImageFactory->create();
         $magentoProductImage->setUrl($attributeValue);
 

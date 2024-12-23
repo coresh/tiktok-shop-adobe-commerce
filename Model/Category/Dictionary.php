@@ -296,6 +296,21 @@ class Dictionary extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->setData(DictionaryResource::COLUMN_HAS_REQUIRED_PRODUCT_ATTRIBUTES, $hasRequiredProductAttributes);
     }
 
+    public function markCategoryAsValid(): self
+    {
+        return $this->setData(DictionaryResource::COLUMN_IS_VALID, 1);
+    }
+
+    public function markCategoryAsInvalid(): self
+    {
+        return $this->setData(DictionaryResource::COLUMN_IS_VALID, 0);
+    }
+
+    public function isCategoryValid(): bool
+    {
+        return (bool)$this->getData(DictionaryResource::COLUMN_IS_VALID);
+    }
+
     public function setCreateDate(\DateTime $dateTime)
     {
         $this->setData(
@@ -367,12 +382,20 @@ class Dictionary extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             $brandValues
         );
 
+        $sizeChartAttribute = $this->getSizeChartAttribute();
+        if ($sizeChartAttribute) {
+            $virtualAttributes[] = $sizeChartAttribute;
+        }
+
+        return $virtualAttributes;
+    }
+
+    public function getSizeChartAttribute(): ?\M2E\TikTokShop\Model\Category\Dictionary\Attribute\SizeChartAttribute
+    {
+        $result = null;
         $rules = $this->getCategoryRules();
-        if (
-            isset($rules['size_chart']['is_supported'])
-            && $rules['size_chart']['is_supported']
-        ) {
-            $virtualAttributes[] = new \M2E\TikTokShop\Model\Category\Dictionary\Attribute\SizeChartAttribute(
+        if (isset($rules['size_chart']['is_supported']) && $rules['size_chart']['is_supported']) {
+            $result = new \M2E\TikTokShop\Model\Category\Dictionary\Attribute\SizeChartAttribute(
                 'size-chart',
                 'Size Chart',
                 $rules['size_chart']['is_required'],
@@ -381,7 +404,7 @@ class Dictionary extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             );
         }
 
-        return $virtualAttributes;
+        return $result;
     }
 
     /**

@@ -10,27 +10,16 @@ class Validator implements \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Acti
 {
     use Action\Type\ValidatorTrait;
 
-    private Action\Validator\TitleValidator $titleValidator;
-    private Action\Validator\ImagesValidator $imagesValidator;
-    private Action\Validator\CategoryValidator $categoryValidator;
-    private Action\Validator\PackageWeightValidator $packageWeightValidator;
-    private Action\Validator\PackageSizeValidator $packageSizeValidator;
     private Action\Validator\VariantValidator $variantValidator;
+    /** @var \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\ValidatorInterface[] */
+    private array $validators;
 
     public function __construct(
-        Action\Validator\TitleValidator $titleValidator,
-        Action\Validator\ImagesValidator $imagesValidator,
-        Action\Validator\CategoryValidator $categoryValidator,
-        Action\Validator\PackageWeightValidator $packageWeightValidator,
-        Action\Validator\PackageSizeValidator $packageSizeValidator,
-        Action\Validator\VariantValidator $variantValidator
+        Action\Validator\VariantValidator $variantValidator,
+        array $validators = []
     ) {
-        $this->titleValidator = $titleValidator;
-        $this->imagesValidator = $imagesValidator;
-        $this->categoryValidator = $categoryValidator;
-        $this->packageWeightValidator = $packageWeightValidator;
-        $this->packageSizeValidator = $packageSizeValidator;
         $this->variantValidator = $variantValidator;
+        $this->validators = $validators;
     }
 
     public function validate(
@@ -53,13 +42,7 @@ class Validator implements \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Acti
         $this->validateProductBy(
             $product,
             $actionConfigurator,
-            [
-                $this->categoryValidator,
-                $this->titleValidator,
-                $this->imagesValidator,
-                $this->packageSizeValidator,
-                $this->packageWeightValidator,
-            ]
+            $this->validators
         );
 
         $variantErrors = $this->variantValidator->validate($product, $variantSettings);

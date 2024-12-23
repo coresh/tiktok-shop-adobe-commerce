@@ -89,11 +89,16 @@ define([
                             name += ` [${$t('INVITE ONLY')}]`;
                         }
 
+                        if (!categoryData.is_valid) {
+                            name += ` [${$t('INVALID CATEGORY')}]`;
+                        }
+
                         this.foundCategories.push(
                                 {
                                     'id': categoryData.id,
                                     'name': name,
                                     'is_invite_only': categoryData.is_invite,
+                                    'is_valid': categoryData.is_valid,
                                 },
                         );
                     },

@@ -85,6 +85,8 @@ class General extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
         $this->setForm($form);
 
         $id = $this->getRequest()->getParam('id');
+        $afterRefreshData = $this->getRequest()->getParam('after_refresh_data');
+
         $this->js->add("TikTokShop.formData.id = '$id';");
 
         $this->js->add(
@@ -92,7 +94,7 @@ class General extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
     require([
         'TikTokShop/TikTokShop/Account'
     ], function(){
-        window.TikTokShopAccountObj = new TikTokShopAccount('{$id}');
+        window.TikTokShopAccountObj = new TikTokShopAccount('{$id}', '{$afterRefreshData}');
         TikTokShopAccountObj.initObservers();
     });
 JS,

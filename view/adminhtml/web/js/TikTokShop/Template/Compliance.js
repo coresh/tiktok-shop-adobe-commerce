@@ -323,7 +323,7 @@ define([
 
         submitForm: function(formId, url, messageObj) {
             const form = jQuery('#' + formId);
-            if (!form.valid()) {
+            if (!form.validation() || !form.validation('isValid')) {
                 return false;
             }
 

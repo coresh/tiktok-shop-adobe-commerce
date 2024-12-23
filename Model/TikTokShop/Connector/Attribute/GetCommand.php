@@ -100,7 +100,7 @@ class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
 
         foreach ($response->getMessageCollection()->getMessages() as $message) {
             if ($message->isError()) {
-                throw new \M2E\TikTokShop\Model\Exception\Logic(
+                throw new \M2E\TikTokShop\Model\Exception\CategoryInvalid(
                     $message->getText(),
                     [],
                     (int)$message->getCode()

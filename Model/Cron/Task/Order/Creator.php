@@ -126,6 +126,10 @@ class Creator extends \Magento\Framework\DataObject
 
         $order->createShipments();
 
+        if ($order->getStatusUpdateRequired()) {
+            $order->updateMagentoOrderStatus();
+        }
+
         if ($order->canCreateTracks()) {
             $order->createTracks();
         }

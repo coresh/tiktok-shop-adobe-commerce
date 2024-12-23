@@ -60,6 +60,8 @@ class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
 
     public function parseResponse(\M2E\TikTokShop\Model\Connector\Response $response): object
     {
+        $this->processError($response);
+
         $responseData = $response->getResponseData();
 
         return new \M2E\TikTokShop\Model\TikTokShop\Connector\Brands\Get\Response(
@@ -67,5 +69,22 @@ class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
             $responseData['total'],
             $responseData['next_page_token'] ?? null
         );
+    }
+
+    private function processError(\M2E\TikTokShop\Model\Connector\Response $response): void
+    {
+        if (!$response->isResultError()) {
+            return;
+        }
+
+        foreach ($response->getMessageCollection()->getMessages() as $message) {
+            if ($message->isError()) {
+                throw new \M2E\TikTokShop\Model\Exception\CategoryInvalid(
+                    $message->getText(),
+                    [],
+                    (int)$message->getCode()
+                );
+            }
+        }
     }
 }

@@ -302,4 +302,21 @@ class Shop extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
         return $currencyMap[$region] ?? '';
     }
+
+    public static function getAvailableRegions(): array
+    {
+        return [
+            self::REGION_GB => __('United Kingdom'),
+            self::REGION_US => __('United States'),
+            self::REGION_ES => __('Spain'),
+        ];
+    }
+
+    public static function getRegionNameByCode(string $regionCode): string
+    {
+        $regionsNames = self::getAvailableRegions();
+        $regionCode = strtoupper($regionCode);
+
+        return $regionsNames[$regionCode] ? (string)$regionsNames[$regionCode] : $regionCode;
+    }
 }

@@ -19,10 +19,22 @@ class ImagesValidator implements ValidatorInterface
             ->getImageSet()
             ->getAll();
 
-        if (count($images) <= 0) {
-            return 'Product Images are missing. To list the Product, ' .
+        if (count($images) === 0) {
+            return (string)__(
+                'Product Images are missing. To list the Product, ' .
                 'please make sure that the Image settings in the Description policy are correct and the Images ' .
-                'are available in the Magento Product.';
+                'are available in the Magento Product.'
+            );
+        }
+
+        foreach ($images as $image) {
+            if (!\M2E\TikTokShop\Helper\Data::isValidUrl($image->getUrl())) {
+                return (string)__(
+                    'Product Images are invalid. To list the Product, ' .
+                    'please make sure that the Image settings in the Description policy are correct and the Images ' .
+                    'are available in the Magento Product.'
+                );
+            }
         }
 
         return null;

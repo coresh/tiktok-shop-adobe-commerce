@@ -9,17 +9,12 @@ class ShopRegion implements \Magento\Framework\Data\OptionSourceInterface
     public function toOptionArray(): array
     {
         $options = [];
+        $regionsNames = \M2E\TikTokShop\Model\Shop::getAvailableRegions();
 
-        $regionsNames = [
-            \M2E\TikTokShop\Model\Shop::REGION_GB => __('United Kingdom'),
-            \M2E\TikTokShop\Model\Shop::REGION_US => __('United States'),
-            \M2E\TikTokShop\Model\Shop::REGION_ES => __('Spain'),
-        ];
-
-        foreach (array_keys($regionsNames) as $region) {
+        foreach ($regionsNames as $code => $name) {
             $options[] = [
-                'label' => $regionsNames[$region],
-                'value' => $region,
+                'label' => $name,
+                'value' => $code,
             ];
         }
 

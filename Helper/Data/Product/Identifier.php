@@ -10,6 +10,11 @@ class Identifier
     public const GTIN = 'GTIN';
 
     /**
+     * The special value of the identifier attribute will be treated as empty.
+     */
+    public const SPECIAL_EMPTY_IDENTIFIER_VALUE = 'Does not apply';
+
+    /**
      * @param string $string
      *
      * @return bool

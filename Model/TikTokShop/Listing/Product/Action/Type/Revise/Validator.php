@@ -10,21 +10,16 @@ class Validator implements \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Acti
 {
     use Action\Type\ValidatorTrait;
 
-    private Action\Validator\TitleValidator $titleValidator;
-    private Action\Validator\PackageWeightValidator $packageWeightValidator;
-    private Action\Validator\PackageSizeValidator $packageSizeValidator;
     private Action\Validator\VariantValidator $variantValidator;
+    /** @var \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\ValidatorInterface[] */
+    private array $validators;
 
     public function __construct(
-        Action\Validator\TitleValidator $titleValidator,
-        Action\Validator\PackageWeightValidator $packageWeightValidator,
-        Action\Validator\PackageSizeValidator $packageSizeValidator,
-        Action\Validator\VariantValidator $variantValidator
+        Action\Validator\VariantValidator $variantValidator,
+        array $validators = []
     ) {
-        $this->titleValidator = $titleValidator;
-        $this->packageWeightValidator = $packageWeightValidator;
-        $this->packageSizeValidator = $packageSizeValidator;
         $this->variantValidator = $variantValidator;
+        $this->validators = $validators;
     }
 
     public function validate(
@@ -33,7 +28,7 @@ class Validator implements \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Acti
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings $variantSettings
     ): bool {
         if (!$product->isRevisable()) {
-            $this->addErrorMessage('Item is not Listed or not available');
+            $this->addErrorMessage((string)__('Item is not Listed or not available'));
 
             return false;
         }
@@ -45,11 +40,7 @@ class Validator implements \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Acti
         $this->validateProductBy(
             $product,
             $actionConfigurator,
-            [
-                $this->titleValidator,
-                $this->packageSizeValidator,
-                $this->packageWeightValidator,
-            ]
+            $this->validators
         );
 
         $variantErrors = $this->variantValidator->validate($product, $variantSettings);

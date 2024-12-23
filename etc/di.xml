@@ -146,4 +146,81 @@
         </arguments>
     </type>
 
+
+    <!--  Validators  -->
+    <type name="M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type\ListAction\Validator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="title" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\TitleValidator
+                </item>
+                <item name="images" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\ImagesValidator
+                </item>
+                <item name="category" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\CategoryValidator
+                </item>
+                <item name="package_weight" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\PackageWeightValidator
+                </item>
+                <item name="package_size" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\PackageSizeValidator
+                </item>
+                <item name="certificates_image_url" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\CertificatesImageUrlValidator
+                </item>
+                <item name="size_chart_image_url" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\SizeChartImageUrlValidator
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type\Relist\Validator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="title" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\TitleValidator
+                </item>
+                <item name="images" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\ImagesValidator
+                </item>
+                <item name="package_weight" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\PackageWeightValidator
+                </item>
+                <item name="package_size" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\PackageSizeValidator
+                </item>
+                <item name="certificates_image_url" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\CertificatesImageUrlValidator
+                </item>
+                <item name="size_chart_image_url" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\SizeChartImageUrlValidator
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type\Revise\Validator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="title" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\TitleValidator
+                </item>
+                <item name="images" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\ImagesValidator
+                </item>
+                <item name="package_weight" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\PackageWeightValidator
+                </item>
+                <item name="package_size" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\PackageSizeValidator
+                </item>
+                <item name="certificates_image_url" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\CertificatesImageUrlValidator
+                </item>
+                <item name="size_chart_image_url" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\SizeChartImageUrlValidator
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

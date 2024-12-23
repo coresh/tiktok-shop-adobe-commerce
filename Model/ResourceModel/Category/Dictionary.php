@@ -20,6 +20,7 @@ class Dictionary extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\Abstra
     public const COLUMN_USED_SALES_ATTRIBUTES = 'used_sales_attributes';
     public const COLUMN_USED_PRODUCT_ATTRIBUTES = 'used_product_attributes';
     public const COLUMN_HAS_REQUIRED_PRODUCT_ATTRIBUTES = 'has_required_product_attributes';
+    public const COLUMN_IS_VALID = 'is_valid';
     public const COLUMN_UPDATE_DATE = 'update_date';
     public const COLUMN_CREATE_DATE = 'create_date';
 

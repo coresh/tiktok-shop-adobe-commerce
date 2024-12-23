@@ -45,11 +45,7 @@ class Content extends AbstractForm
                 'label' => $this->__('Select type of the Account you would like to connect:'),
                 'id' => 'region',
                 'name' => 'region',
-                'values' => [
-                    \M2E\TikTokShop\Model\Shop::REGION_GB => __('United Kingdom'),
-                    \M2E\TikTokShop\Model\Shop::REGION_US => __('United States'),
-                    \M2E\TikTokShop\Model\Shop::REGION_ES => __('Spain'),
-                ]
+                'values' => \M2E\TikTokShop\Model\Shop::getAvailableRegions()
             ]
         );
 

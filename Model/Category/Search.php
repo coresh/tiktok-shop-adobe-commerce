@@ -11,13 +11,16 @@ class Search
 {
     private \M2E\TikTokShop\Model\Category\Tree\Repository $categoryRepository;
     private \M2E\TikTokShop\Model\Category\Tree\PathBuilder $pathBuilder;
+    private \M2E\TikTokShop\Model\Category\Dictionary\Repository $dictionaryRepository;
 
     public function __construct(
         \M2E\TikTokShop\Model\Category\Tree\Repository $categoryRepository,
-        \M2E\TikTokShop\Model\Category\Tree\PathBuilder $pathBuilder
+        \M2E\TikTokShop\Model\Category\Tree\PathBuilder $pathBuilder,
+        \M2E\TikTokShop\Model\Category\Dictionary\Repository $dictionaryRepository
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->pathBuilder = $pathBuilder;
+        $this->dictionaryRepository = $dictionaryRepository;
     }
 
     public function process(int $shopId, string $searchQuery, int $limit): ResultCollection
@@ -46,11 +49,17 @@ class Search
 
     private function addLeafItem(ResultCollection $resultCollection, Tree $treeItem): void
     {
+        $categoryId = $treeItem->getCategoryId();
+        $shopId = $treeItem->getShopId();
+
+        $dictionary = $this->dictionaryRepository->findByShopAndCategoryId($shopId, $categoryId);
+
         $resultCollection->add(
             new ResultItem(
-                $treeItem->getCategoryId(),
+                $categoryId,
                 $this->pathBuilder->getPath($treeItem),
-                $treeItem->isInviteOnly()
+                $treeItem->isInviteOnly(),
+                $dictionary->isCategoryValid()
             )
         );
     }

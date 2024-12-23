@@ -162,6 +162,12 @@ define([
 
             const selectedCategory = TikTokShopCategoryChooserObj.selectedCategory;
 
+            TikTokShopCategoryChooserObj.messagesClearAll()
+            if (!selectedCategory.is_all_required_attributes_filled) {
+                TikTokShopCategoryChooserObj.messageAddErrorToModalHeaderBlock($t('Please complete all required attributes to proceed.'));
+                return;
+            }
+
             this.saveCategoriesData(selectedCategory);
         },
 

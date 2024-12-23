@@ -121,6 +121,28 @@ class ResponsiblePersonPopup extends \M2E\TikTokShop\Block\Adminhtml\Magento\For
         );
 
         $fieldSet->addField(
+            'address1',
+            'text',
+            [
+                'name' => 'responsible_person[address_1]',
+                'label' => __('Address Line 1'),
+                'required' => true,
+                'value' => $formData['address_line_1'],
+            ]
+        );
+
+        $fieldSet->addField(
+            'address2',
+            'text',
+            [
+                'name' => 'responsible_person[address_2]',
+                'label' => __('Address Line 2'),
+                'required' => false,
+                'value' => $formData['address_line_2'],
+            ]
+        );
+
+        $fieldSet->addField(
             'district',
             'text',
             [
@@ -172,28 +194,6 @@ class ResponsiblePersonPopup extends \M2E\TikTokShop\Block\Adminhtml\Magento\For
                 'label' => __('Country'),
                 'required' => true,
                 'value' => $formData['country'],
-            ]
-        );
-
-        $fieldSet->addField(
-            'address1',
-            'text',
-            [
-                'name' => 'responsible_person[address_1]',
-                'label' => __('Address Line 1'),
-                'required' => true,
-                'value' => $formData['address_line_1'],
-            ]
-        );
-
-        $fieldSet->addField(
-            'address2',
-            'text',
-            [
-                'name' => 'responsible_person[address_2]',
-                'label' => __('Address Line 2'),
-                'required' => false,
-                'value' => $formData['address_line_2'],
             ]
         );
 

@@ -1,5 +1,6 @@
 define([
     'Magento_Ui/js/modal/modal',
+    'mage/validation',
     'TikTokShop/Common',
     'extjs/ext-tree-checkbox',
     'mage/adminhtml/form'
@@ -7,9 +8,13 @@ define([
 
     window.TikTokShopAccount = Class.create(Common, {
 
+        afterRefreshData: undefined,
+
         // ---------------------------------------
 
-        initialize: function () {
+        initialize: function (id, afterRefreshData) {
+            this.afterRefreshData = afterRefreshData
+
             jQuery.validator.addMethod('TikTokShop-account-customer-id', function (value) {
 
                 var checkResult = false;
@@ -104,7 +109,13 @@ define([
                         .observe('change', this.magentoOrdersCustomerModeChange)
                         .simulate('change');
 
+                $('magento_orders_status_mapping_mode').observe('change', TikTokShopAccountObj.magentoOrdersStatusMappingModeChange);
+
                 $('order_number_example-note').previous().remove();
+            }
+
+            if (this.afterRefreshData) {
+                this.isValidForm();
             }
         },
 
@@ -186,6 +197,16 @@ define([
                 $('magento_orders_listings_store_id_container').hide();
                 $('magento_orders_listings_store_id').value = '';
             }
+        },
+
+        magentoOrdersStatusMappingModeChange: function() {
+            // Reset dropdown selected values to default
+            $('magento_orders_status_mapping_processing').value = TikTokShop.php.constant('Account\\Settings\\Order::ORDERS_STATUS_MAPPING_PROCESSING');
+            $('magento_orders_status_mapping_shipped').value = TikTokShop.php.constant('Account\\Settings\\Order::ORDERS_STATUS_MAPPING_SHIPPED');
+
+            var disabled = $('magento_orders_status_mapping_mode').value == TikTokShop.php.constant('Account\\Settings\\Order::ORDERS_STATUS_MAPPING_MODE_DEFAULT');
+            $('magento_orders_status_mapping_processing').disabled = disabled;
+            $('magento_orders_status_mapping_shipped').disabled = disabled;
         },
 
         magentoOrdersListingsOtherModeChange: function () {

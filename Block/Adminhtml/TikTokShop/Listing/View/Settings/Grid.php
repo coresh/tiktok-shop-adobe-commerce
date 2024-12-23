@@ -101,6 +101,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
                 [
                     'path' => CategoryDictionaryResource::COLUMN_PATH,
                     'category_id' => CategoryDictionaryResource::COLUMN_CATEGORY_ID,
+                    'is_valid' => CategoryDictionaryResource::COLUMN_IS_VALID,
                 ],
                 null,
                 'left'
@@ -217,11 +218,18 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
 
         $view = sprintf('%s (%s)', $path, $categoryId);
 
-        return <<<HTML
-    <div>
-        <p style="padding: 2px 0 0 10px">$view</p>
-    </div>
-HTML;
+        if (!$row->getData('is_valid')) {
+            return sprintf(
+                '<div><p style="padding: 2px 0 0 10px">%s <span style="color: #f00;">%s</span></p></span>',
+                $view,
+                __('Invalid')
+            );
+        }
+
+        return sprintf(
+            '<div><p style="padding: 2px 0 0 10px">%s</p></span>',
+            $view
+        );
     }
 
     public function callbackFilterTitle($collection, $column)

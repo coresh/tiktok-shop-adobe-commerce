@@ -16,7 +16,7 @@ class Validator implements \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Acti
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings $variantSettings
     ): bool {
         if (!$product->isStoppable()) {
-            $this->addErrorMessage('Item is not Listed or not available');
+            $this->addErrorMessage((string)__('Item is not Listed or not available'));
 
             return false;
         }

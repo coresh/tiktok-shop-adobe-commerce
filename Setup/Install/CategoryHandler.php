@@ -6,6 +6,7 @@ namespace M2E\TikTokShop\Setup\Install;
 
 use M2E\TikTokShop\Helper\Module\Database\Tables as TablesHelper;
 use M2E\TikTokShop\Model\ResourceModel\Category\Attribute as CategoryAttributeResource;
+use M2E\TikTokShop\Model\ResourceModel\Category\Dictionary as CategoryResource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 
@@ -37,7 +38,7 @@ class CategoryHandler implements \M2E\TikTokShop\Model\Setup\InstallHandlerInter
 
         $table
             ->addColumn(
-                'id',
+                CategoryResource::COLUMN_ID,
                 Table::TYPE_INTEGER,
                 null,
                 [
@@ -48,94 +49,100 @@ class CategoryHandler implements \M2E\TikTokShop\Model\Setup\InstallHandlerInter
                 ]
             )
             ->addColumn(
-                'shop_id',
+                CategoryResource::COLUMN_SHOP_ID,
                 Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false,]
             )
             ->addColumn(
-                'category_id',
+                CategoryResource::COLUMN_CATEGORY_ID,
                 Table::TYPE_TEXT,
                 255,
                 ['nullable' => false,]
             )
             ->addColumn(
-                'state',
+                CategoryResource::COLUMN_STATE,
                 Table::TYPE_SMALLINT,
                 null,
                 ['unsigned' => true, 'nullable' => false,]
             )
             ->addColumn(
-                'path',
+                CategoryResource::COLUMN_PATH,
                 Table::TYPE_TEXT,
                 255,
                 ['nullable' => false,]
             )
             ->addColumn(
-                'sales_attributes',
+                CategoryResource::COLUMN_SALES_ATTRIBUTES,
                 Table::TYPE_TEXT,
                 \M2E\TikTokShop\Model\Setup\Installer::LONG_COLUMN_SIZE
             )
             ->addColumn(
-                'product_attributes',
+                CategoryResource::COLUMN_PRODUCT_ATTRIBUTES,
                 Table::TYPE_TEXT,
                 \M2E\TikTokShop\Model\Setup\Installer::LONG_COLUMN_SIZE
             )
             ->addColumn(
-                'category_rules',
+                CategoryResource::COLUMN_CATEGORY_RULES,
                 Table::TYPE_TEXT,
                 \M2E\TikTokShop\Model\Setup\Installer::LONG_COLUMN_SIZE
             )
             ->addColumn(
-                'authorized_brands',
+                CategoryResource::COLUMN_AUTHORIZED_BRANDS,
                 Table::TYPE_TEXT,
                 \M2E\TikTokShop\Model\Setup\Installer::LONG_COLUMN_SIZE
             )
             ->addColumn(
-                'total_sales_attributes',
+                CategoryResource::COLUMN_TOTAL_SALES_ATTRIBUTES,
                 Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => 0]
             )
             ->addColumn(
-                'total_product_attributes',
+                CategoryResource::COLUMN_TOTAL_PRODUCT_ATTRIBUTES,
                 Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => 0]
             )
             ->addColumn(
-                'used_sales_attributes',
+                CategoryResource::COLUMN_USED_SALES_ATTRIBUTES,
                 Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => 0]
             )
             ->addColumn(
-                'used_product_attributes',
+                CategoryResource::COLUMN_USED_PRODUCT_ATTRIBUTES,
                 Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => 0]
             )
             ->addColumn(
-                'has_required_product_attributes',
+                CategoryResource::COLUMN_HAS_REQUIRED_PRODUCT_ATTRIBUTES,
                 Table::TYPE_BOOLEAN,
                 null,
                 ['default' => 0]
             )
             ->addColumn(
-                'update_date',
+                CategoryResource::COLUMN_IS_VALID,
+                Table::TYPE_BOOLEAN,
+                null,
+                ['default' => 1]
+            )
+            ->addColumn(
+                CategoryResource::COLUMN_UPDATE_DATE,
                 Table::TYPE_DATETIME,
                 null,
                 ['default' => null]
             )
             ->addColumn(
-                'create_date',
+                CategoryResource::COLUMN_CREATE_DATE,
                 Table::TYPE_DATETIME,
                 null,
                 ['default' => null]
             )
             ->addIndex(
                 'shop_id__category_id',
-                ['shop_id', 'category_id'],
+                [CategoryResource::COLUMN_SHOP_ID, CategoryResource::COLUMN_CATEGORY_ID],
                 ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             );
 

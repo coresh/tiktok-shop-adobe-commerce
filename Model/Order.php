@@ -18,6 +18,8 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public const STATUS_SHIPPED = 3;
     public const STATUS_CANCELED = 4;
 
+    private $statusUpdateRequired = false;
+
     /** @var float|int|null */
     private $subTotalPrice = null;
     private ?float $grandTotalPrice = null;
@@ -1475,5 +1477,44 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public function getBuyerCancellationRequestReason(): string
     {
         return (string)$this->getData(OrderResource::COLUMN_BUYER_CANCELLATION_REQUEST_REASON);
+    }
+
+    public function getStatusForMagentoOrder(): string
+    {
+        if ($this->isStatusUnshipping()) {
+            return $this->getAccount()->getOrdersSettings()->getStatusMappingForProcessing();
+        }
+
+        if ($this->isStatusShipping()) {
+             return $this->getAccount()->getOrdersSettings()->getStatusMappingForProcessingShipped();
+        }
+
+        return '';
+    }
+
+    public function updateMagentoOrderStatus(): void
+    {
+        $magentoOrder = $this->getMagentoOrder();
+        if ($magentoOrder === null) {
+            return;
+        }
+
+        $magentoOrderUpdater = $this->magentoOrderUpdater;
+        $magentoOrderUpdater->setMagentoOrder($magentoOrder);
+        $magentoOrderUpdater->updateStatus($this->getStatusForMagentoOrder());
+
+        $magentoOrderUpdater->finishUpdate();
+    }
+
+    public function markStatusUpdateRequired(): self
+    {
+        $this->statusUpdateRequired = true;
+
+        return $this;
+    }
+
+    public function getStatusUpdateRequired(): bool
+    {
+        return $this->statusUpdateRequired;
     }
 }

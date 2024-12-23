@@ -19,4 +19,46 @@ class Collection extends AbstractCollection implements SearchResultInterface
             \M2E\TikTokShop\Model\ResourceModel\Account::class,
         );
     }
+
+    protected function _initSelect()
+    {
+        parent::_initSelect();
+
+        $this
+            ->getSelect()
+            ->joinLeft(
+                ['shop' => $this->getShopTableSubquery()],
+                sprintf(
+                    'shop.%s = main_table.%s',
+                    \M2E\TikTokShop\Model\ResourceModel\Shop::COLUMN_ACCOUNT_ID,
+                    \M2E\TikTokShop\Model\ResourceModel\Account::COLUMN_ID
+                ),
+                ['shop_region_codes' => $this->getRegionCodesExpression()]
+            )
+            ->group('main_table.' . \M2E\TikTokShop\Model\ResourceModel\Account::COLUMN_ID);
+
+        return $this;
+    }
+
+    private function getShopTableSubquery(): \Zend_Db_Expr
+    {
+        return new \Zend_Db_Expr(
+            sprintf(
+                '(SELECT %s, %s from %s)',
+                \M2E\TikTokShop\Model\ResourceModel\Shop::COLUMN_REGION,
+                \M2E\TikTokShop\Model\ResourceModel\Shop::COLUMN_ACCOUNT_ID,
+                $this->getTable(\M2E\TikTokShop\Helper\Module\Database\Tables::TABLE_NAME_SHOP),
+            )
+        );
+    }
+
+    private function getRegionCodesExpression(): \Zend_Db_Expr
+    {
+        return new \Zend_Db_Expr(
+            sprintf(
+                'GROUP_CONCAT(shop.%s SEPARATOR ";")',
+                \M2E\TikTokShop\Model\ResourceModel\Shop::COLUMN_REGION
+            )
+        );
+    }
 }

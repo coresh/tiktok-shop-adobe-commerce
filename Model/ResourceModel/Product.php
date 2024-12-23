@@ -25,6 +25,8 @@ class Product extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\AbstractM
     public const COLUMN_TEMPLATE_CATEGORY_ID = 'template_category_id';
     public const COLUMN_LAST_BLOCKING_ERROR_DATE = 'last_blocking_error_date';
     public const COLUMN_ADDITIONAL_DATA = 'additional_data';
+    public const COLUMN_LISTING_QUALITY_TIER = 'listing_quality_tier';
+    public const COLUMN_LISTING_QUALITY_RECOMMENDATIONS = 'listing_quality_recommendations';
     public const COLUMN_UPDATE_DATE = 'update_date';
     public const COLUMN_CREATE_DATE = 'create_date';
 

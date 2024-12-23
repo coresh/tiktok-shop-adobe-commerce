@@ -314,7 +314,7 @@
         <column name="product_tts_product_id" class="M2E\TikTokShop\Ui\Product\Component\Listing\Column\TtsProductId">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" translate="true" xsi:type="string">TTS Product ID</item>
+                    <item name="label" translate="true" xsi:type="string">TikTok Shop Product ID</item>
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="filter" xsi:type="string">text</item>

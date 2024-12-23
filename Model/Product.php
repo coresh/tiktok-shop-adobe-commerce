@@ -30,6 +30,8 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public const INSTRUCTION_TYPE_CHANNEL_STATUS_CHANGED = 'channel_status_changed';
     public const INSTRUCTION_TYPE_CHANNEL_QTY_CHANGED = 'channel_qty_changed';
     public const INSTRUCTION_TYPE_CHANNEL_PRICE_CHANGED = 'channel_price_changed';
+    public const INSTRUCTION_TYPE_CHANNEL_MANUFACTURER_CHANGED = 'channel_manufacturer_changed';
+    public const INSTRUCTION_TYPE_CHANNEL_RESPONSIBLE_PERSON_CHANGED = 'channel_responsible_person_changed';
     public const INSTRUCTION_TYPE_VARIANT_SKU_REMOVED = 'variant_sku_removed';
 
     private \M2E\TikTokShop\Model\Listing $listing;
@@ -763,7 +765,7 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             self::STATUS_CHANGER_SYNCH,
             self::STATUS_CHANGER_USER,
             self::STATUS_CHANGER_COMPONENT,
-            self::STATUS_CHANGER_OBSERVER
+            self::STATUS_CHANGER_OBSERVER,
         ];
 
         if (!in_array($changer, $allowed)) {
@@ -811,4 +813,74 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     {
         return $this->productPromotionService->isProductOnPromotion($this);
     }
+
+    //region ListingQuality
+    public function setListingQuality(Product\ListingQuality $listingQuality): self
+    {
+        if (!$listingQuality->hasTier()) {
+            $this->setData(ListingProductResource::COLUMN_LISTING_QUALITY_TIER, null);
+            $this->setData(ListingProductResource::COLUMN_LISTING_QUALITY_RECOMMENDATIONS, null);
+
+            return $this;
+        }
+
+        if ($listingQuality->isTierGood()) {
+            $this->setData(ListingProductResource::COLUMN_LISTING_QUALITY_TIER, $listingQuality->getTier());
+            $this->setData(ListingProductResource::COLUMN_LISTING_QUALITY_RECOMMENDATIONS, null);
+
+            return $this;
+        }
+
+        $this->setData(ListingProductResource::COLUMN_LISTING_QUALITY_TIER, $listingQuality->getTier());
+        $recommendationsArray = $listingQuality->getRecommendationCollection()->toArray();
+
+        $this->setData(
+            ListingProductResource::COLUMN_LISTING_QUALITY_RECOMMENDATIONS,
+            json_encode($recommendationsArray, JSON_THROW_ON_ERROR)
+        );
+
+        return $this;
+    }
+
+    public function getListingQuality(): Product\ListingQuality
+    {
+        $listingQuality = new Product\ListingQuality($this->getListingQuantityTier());
+
+        $recommendations = $this->getListingQuantityRecommendations();
+        foreach ($recommendations as $recommendation) {
+            $listingQuality->addRecommendation(new Product\ListingQuality\Recommendation(
+                $recommendation['code'],
+                $recommendation['field'],
+                $recommendation['section'],
+                $recommendation['how_to_solve'],
+                $recommendation['quality_tier'],
+            ));
+        }
+
+        return $listingQuality;
+    }
+
+    private function getListingQuantityTier(): ?string
+    {
+        $tier = (string)$this->getData(ListingProductResource::COLUMN_LISTING_QUALITY_TIER);
+        if (empty($tier)) {
+            return null;
+        }
+
+        return $tier;
+    }
+
+    /**
+     * @return array{ array{code:string, field: string, section: string, how_to_solve: string, quality_tier: string} }
+     */
+    private function getListingQuantityRecommendations(): array
+    {
+        $recommendations = $this->getData(ListingProductResource::COLUMN_LISTING_QUALITY_RECOMMENDATIONS);
+        if (empty($recommendations)) {
+            return [];
+        }
+
+        return json_decode($recommendations, true);
+    }
+    //endregion
 }

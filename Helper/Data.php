@@ -503,4 +503,9 @@ class Data
                 return self::INITIATOR_EXTENSION;
         }
     }
+
+    public static function isValidUrl(string $url): bool
+    {
+        return filter_var($url, FILTER_VALIDATE_URL) !== false;
+    }
 }

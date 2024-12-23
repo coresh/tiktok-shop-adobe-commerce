@@ -28,16 +28,16 @@
 
         <add id="M2E_TikTokShop::configuration" module="M2E_TikTokShop" sortOrder="20" parent="M2E_TikTokShop::tts"
              title="Configuration" resource="M2E_TikTokShop::configuration"/>
-        <add id="M2E_TikTokShop::configuration_accounts" title="Accounts" module="M2E_TikTokShop" sortOrder="10"
-             parent="M2E_TikTokShop::configuration" action="m2e_tiktokshop/tiktokshop_account/index"
-             resource="M2E_TikTokShop::configuration_accounts"/>
+        <add id="M2E_TikTokShop::configuration_templates" title="Policies" module="M2E_TikTokShop" sortOrder="10"
+             parent="M2E_TikTokShop::configuration" action="m2e_tiktokshop/tiktokshop_template/index"
+             resource="M2E_TikTokShop::configuration_templates"/>
         <add id="M2E_TikTokShop::configuration_categories" module="M2E_TikTokShop" sortOrder="20"
              parent="M2E_TikTokShop::configuration" title="Categories"
              action="m2e_tiktokshop/tiktokshop_template_category/index"
              resource="M2E_TikTokShop::configuration_categories"/>
-        <add id="M2E_TikTokShop::configuration_templates" title="Policies" module="M2E_TikTokShop" sortOrder="30"
-             parent="M2E_TikTokShop::configuration" action="m2e_tiktokshop/tiktokshop_template/index"
-             resource="M2E_TikTokShop::configuration_templates"/>
+        <add id="M2E_TikTokShop::configuration_accounts" title="Accounts" module="M2E_TikTokShop" sortOrder="30"
+             parent="M2E_TikTokShop::configuration" action="m2e_tiktokshop/tiktokshop_account/index"
+             resource="M2E_TikTokShop::configuration_accounts"/>
         <add id="M2E_TikTokShop::configuration_settings" title="Settings" module="M2E_TikTokShop" sortOrder="40"
              parent="M2E_TikTokShop::configuration" action="m2e_tiktokshop/settings/index"
              resource="M2E_TikTokShop::configuration_settings"/>

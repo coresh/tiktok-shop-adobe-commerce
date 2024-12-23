@@ -59,4 +59,11 @@ class ShippingProvider extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     {
         return (string)$this->getData(ShippingProviderResource::COLUMN_SHIPPING_PROVIDER_NAME);
     }
+
+    public function setShippingProviderName(string $value): self
+    {
+        $this->setData(ShippingProviderResource::COLUMN_SHIPPING_PROVIDER_NAME, $value);
+
+        return $this;
+    }
 }

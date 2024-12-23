@@ -161,12 +161,14 @@ class Builder extends \Magento\Framework\DataObject
         if ($existOrder === null) {
             $this->status = self::STATUS_NEW;
             $this->order = $this->orderFactory->create();
+            $this->order->markStatusUpdateRequired();
 
             return;
         }
 
         $this->order = $existOrder;
         $this->status = self::STATUS_UPDATED;
+        $this->order->markStatusUpdateRequired();
     }
 
     private function getExistedOrder(): ?\M2E\TikTokShop\Model\Order
@@ -400,6 +402,7 @@ class Builder extends \Magento\Framework\DataObject
 
         $magentoOrderUpdater = $this->magentoOrderUpdater;
         $magentoOrderUpdater->setMagentoOrder($magentoOrder);
+        $magentoOrderUpdater->updateStatus($this->order->getStatusForMagentoOrder());
 
         if ($this->hasUpdate(self::UPDATE_BUYER_CANCELLATION_REQUEST)) {
             $magentoOrderUpdater->updateComments(['Buyer requested Order Cancellation.']);

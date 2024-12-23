@@ -290,8 +290,3 @@ label.mage-error[for="description_template"] {
     padding-right: 10px;
     padding-left: 10px;
 }
-
-#modal_manufacturer_popup .error,
-#modal_person_popup .error {
-    display: block;
-}

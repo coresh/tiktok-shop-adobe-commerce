@@ -16,6 +16,10 @@ abstract class AbstractMain extends \M2E\TikTokShop\Controller\Adminhtml\Abstrac
 
     protected function initResultPage(): void
     {
+        if ($this->resultPage !== null) {
+            return;
+        }
+        
         parent::initResultPage();
 
         $this->getResultPage()

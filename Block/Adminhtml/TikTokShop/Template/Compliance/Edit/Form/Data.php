@@ -68,6 +68,7 @@ class Data extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
                 'label' => __('Manufacturer'),
                 'title' => __('Manufacturer'),
                 'required' => true,
+                'style' => 'max-width: 30%;',
                 'after_element_html' => $this->createButtonsBlock(
                     [
                         $this->getManufacturerLinksHtml(true),
@@ -94,6 +95,7 @@ class Data extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
                 'title' => __('Responsible Person'),
                 'class' => 'admin__control-select',
                 'required' => true,
+                'style' => 'max-width: 30%;',
                 'after_element_html' => $this->createButtonsBlock(
                     [
                         $this->getResponsiblePersonLinksHtml(true),

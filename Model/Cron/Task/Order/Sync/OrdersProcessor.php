@@ -40,6 +40,8 @@ class OrdersProcessor
 
         $this->processResponseMessages($response->getMessageCollection());
 
+        $this->updateLastOrderSynchronizationDate($this->shop, $response->getMaxDateInResult());
+
         if (empty($response->getOrders())) {
             return;
         }
@@ -48,8 +50,6 @@ class OrdersProcessor
 
         $processedTikTokOrders = $ordersCreator->processTikTokOrders($this->shop, $response->getOrders());
         $ordersCreator->processMagentoOrders($processedTikTokOrders);
-
-        $this->updateLastOrderSynchronizationDate($this->shop, $response->getMaxDateInResult());
     }
 
     // ---------------------------------------
