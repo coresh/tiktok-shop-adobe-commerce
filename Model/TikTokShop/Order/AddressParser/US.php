@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Order\AddressParser;
 
-class US extends \M2E\TikTokShop\Model\TikTokShop\Order\AbstractAddressParser
+class US extends \M2E\TikTokShop\Model\TikTokShop\Order\BaseAddressParser
 {
     public function getCity(): string
     {

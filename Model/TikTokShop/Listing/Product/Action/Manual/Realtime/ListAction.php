@@ -28,7 +28,7 @@ class ListAction extends AbstractRealtime
             $product,
             \M2E\TikTokShop\Helper\Data::INITIATOR_USER,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_LIST_PRODUCT,
-            null,
+            $this->getLogActionId(),
             $this->createSkipListMessage(),
             \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_INFO,
         );

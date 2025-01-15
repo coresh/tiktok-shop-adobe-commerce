@@ -25,6 +25,7 @@ class EventDispatcher
         $this->eventManager->dispatch('ess_magento_order_created', [
             'channel' => self::CHANEL_NAME,
             'channel_order_id' => (int)$order->getId(),
+            'channel_external_order_id' => $order->getTtsOrderId(),
             'magento_order_id' => (int)$order->getMagentoOrderId(),
             'magento_order_increment_id' => $order->getMagentoOrder()->getIncrementId(),
             'channel_purchase_date' => $this->getPurchaseDate($order),
@@ -49,7 +50,7 @@ class EventDispatcher
 
     private function resolveRegion(\M2E\TikTokShop\Model\Shop $shop): string
     {
-        if ($shop->isRegionUS()) {
+        if ($shop->getRegion()->isUS()) {
             return self::REGION_AMERICA;
         }
 

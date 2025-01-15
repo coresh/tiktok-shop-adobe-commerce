@@ -31,7 +31,7 @@ class ReviseAction extends AbstractRealtime
             $product,
             \M2E\TikTokShop\Helper\Data::INITIATOR_USER,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_REVISE_PRODUCT,
-            null,
+            $this->getLogActionId(),
             $this->createSkipReviseMessage(),
             \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_INFO,
         );

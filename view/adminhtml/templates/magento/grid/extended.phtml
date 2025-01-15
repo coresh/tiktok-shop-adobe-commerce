@@ -62,7 +62,7 @@ if ($block->canDisplayContainer()): ?>
                     <?php
                     endif; ?>
                     <?php
-                    $countRecords = count($block->getCollection()->getItems()); ?>
+                    $countRecords = $block->getCollection()->getSize(); ?>
                     <div class="admin__control-support-text">
                         <span id="<?= $escaper->escapeHtml($block->getHtmlId()) ?>-total-count" <?= $block->getUiId(
                             'total-count'

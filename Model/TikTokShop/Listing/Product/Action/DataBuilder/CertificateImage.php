@@ -51,14 +51,13 @@ class CertificateImage extends AbstractDataBuilder
                 continue;
             }
 
-            $attributeCode = $certificate->getCustomAttributeValue();
-            $attributeValue = $magentoProduct->getAttributeValue($attributeCode);
+            $certificateUrl = $this->getCertificateUrl($certificate, $magentoProduct);
 
-            if (empty($attributeValue)) {
+            if (empty($certificateUrl)) {
                 continue;
             }
 
-            if (!\M2E\TikTokShop\Helper\Data::isValidUrl($attributeValue)) {
+            if (!\M2E\TikTokShop\Helper\Data::isValidUrl($certificateUrl)) {
                 $this->addWarningMessage((string)__(
                     'An invalid image URL is set for the Product Certificate "%1"',
                     $certificate->getAttributeName()
@@ -66,7 +65,7 @@ class CertificateImage extends AbstractDataBuilder
                 continue;
             }
             $magentoProductImage = $this->magentoProductImageFactory->create();
-            $magentoProductImage->setUrl($attributeValue);
+            $magentoProductImage->setUrl($certificateUrl);
 
             $image = $this->imageRepository->findByHashAndType(
                 $magentoProductImage->getHash(),
@@ -97,5 +96,37 @@ class CertificateImage extends AbstractDataBuilder
         return [
             self::NICK => $this->onlineData,
         ];
+    }
+
+    private function getCertificateUrl($certificate, $magentoProduct): string
+    {
+        if ($certificate->isValueModeCustomValue()) {
+            $customValue = $certificate->getCustomValue();
+            if (empty($customValue)) {
+                $this->addWarningMessage(
+                    (string)__(
+                        'Certificate "%1" is missing a value.',
+                        $certificate->getAttributeName()
+                    )
+                );
+
+                return '';
+            }
+
+            return $customValue;
+        }
+
+        if ($certificate->isValueModeCustomAttribute()) {
+            $attributeCode = $certificate->getCustomAttributeValue();
+            $attributeValue = $magentoProduct->getAttributeValue($attributeCode);
+
+            if (empty($attributeValue)) {
+                return '';
+            }
+
+            return $attributeValue;
+        }
+
+        return '';
     }
 }

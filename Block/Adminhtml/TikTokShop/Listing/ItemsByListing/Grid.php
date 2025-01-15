@@ -13,6 +13,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Grid
     private $urlHelper;
     /** @var \M2E\TikTokShop\Model\ResourceModel\Listing\CollectionFactory */
     private $listingCollectionFactory;
+    private \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection;
 
     public function __construct(
         \M2E\TikTokShop\Model\ResourceModel\Product $listingProductResource,
@@ -24,6 +25,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Grid
         \M2E\TikTokShop\Helper\Data $dataHelper,
         \M2E\TikTokShop\Helper\Url $urlHelper,
         \M2E\TikTokShop\Model\ResourceModel\Listing\CollectionFactory $listingCollectionFactory,
+        \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection,
         array $data = []
     ) {
         parent::__construct($urlHelper, $viewHelper, $context, $backendHelper, $dataHelper, $data);
@@ -33,6 +35,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Grid
         $this->listingProductResource = $listingProductResource;
         $this->urlHelper = $urlHelper;
         $this->listingCollectionFactory = $listingCollectionFactory;
+        $this->regionCollection = $regionCollection;
     }
 
     /**
@@ -285,7 +288,7 @@ HTML;
 
         $accountTitle = $row->getData('account_title');
         $shopTitle = $row->getData('shop_name');
-        $shopRegionTitle = \M2E\TikTokShop\Model\Shop::getRegionNameByCode($row->getData('shop_region_code') ?? '');
+        $shopRegionTitle = $this->regionCollection->getByCode($row->getData('shop_region_code'))->getLabel();
 
         $storeModel = $this->_storeManager->getStore($row->getStoreId());
         $storeView = $this->_storeManager->getWebsite($storeModel->getWebsiteId())->getName();

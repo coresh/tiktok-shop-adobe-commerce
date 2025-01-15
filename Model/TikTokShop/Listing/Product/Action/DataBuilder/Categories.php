@@ -56,13 +56,14 @@ class Categories extends AbstractDataBuilder
     private function getProductAttributeData(\M2E\TikTokShop\Model\Product $listingProduct): array
     {
         $categoryId = $listingProduct->getTemplateCategoryId();
-
         $attributes = $this->attributeRepository->findByDictionaryId($categoryId, [
             CategoryAttribute::ATTRIBUTE_TYPE_PRODUCT,
             CategoryAttribute::ATTRIBUTE_TYPE_SALES,
         ]);
-
         $result = [];
+        $magentoProduct = $listingProduct->getMagentoProduct();
+
+        $this->searchNotFoundAttributes($magentoProduct);
 
         foreach ($attributes as $attribute) {
             if ($attribute->isValueModeNone()) {
@@ -86,13 +87,14 @@ class Categories extends AbstractDataBuilder
             }
 
             if ($attribute->isValueModeCustomAttribute()) {
-                $magentoProduct = $listingProduct->getMagentoProduct();
                 $attributeVal = $magentoProduct->getAttributeValue($attribute->getCustomAttributeValue());
                 if (!empty($attributeVal)) {
                     $result[$attribute->getAttributeId()][] = ['name' => $attributeVal];
                 }
             }
         }
+
+        $this->processNotFoundAttributes((string)__('Product'), $magentoProduct);
 
         return $result;
     }

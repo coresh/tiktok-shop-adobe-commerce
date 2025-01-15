@@ -8,6 +8,19 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 class Title extends Column
 {
+    private \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection;
+
+    public function __construct(
+        \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
+        \Magento\Framework\View\Element\UiComponentFactory $uiComponentFactory,
+        \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection,
+        array $components = [],
+        array $data = []
+    ) {
+        parent::__construct($context, $uiComponentFactory, $components, $data);
+        $this->regionCollection = $regionCollection;
+    }
+
     public function prepareDataSource(array $dataSource): array
     {
         if (empty($dataSource['data']['items'])) {
@@ -43,7 +56,7 @@ class Title extends Column
         $result = [];
         $regions = explode(';', $regionCodes);
         foreach ($regions as $regionCode) {
-            $result[] = \M2E\TikTokShop\Model\Shop::getRegionNameByCode($regionCode);
+            $result[] = $this->regionCollection->getByCode($regionCode)->getLabel();
         }
 
         return implode(', ', $result);

@@ -1,0 +1,55 @@
+<?php
+
+declare(strict_types=1);
+
+namespace M2E\TikTokShop\Model\Shop\Region;
+
+use M2E\TikTokShop\Model\Shop\Region;
+
+class Provider
+{
+    /**
+     * @return Region[]
+     */
+    public function retrieve(): iterable
+    {
+        return [
+            new Region(
+                Region::REGION_GB,
+                (string)__('United Kingdom'),
+                Region::CURRENCY_GBP,
+                Region::SIZE_DIMENSION_CENTIMETER,
+                Region::WEIGHT_DIMENSION_KILOGRAM,
+                new PackageWeightRestrictions(30, 'kg'),
+                new ProductPriceRestrictions(0.01, 5600)
+            ),
+            new Region(
+                Region::REGION_US,
+                (string)__('United States'),
+                Region::CURRENCY_USD,
+                Region::SIZE_DIMENSION_INCH,
+                Region::WEIGHT_DIMENSION_POUND,
+                new PackageWeightRestrictions(150, 'lb'),
+                new ProductPriceRestrictions(0.01, 7600)
+            ),
+            new Region(
+                Region::REGION_ES,
+                (string)__('Spain'),
+                Region::CURRENCY_EUR,
+                Region::SIZE_DIMENSION_CENTIMETER,
+                Region::WEIGHT_DIMENSION_KILOGRAM,
+                new PackageWeightRestrictions(30, 'kg'),
+                new ProductPriceRestrictions(0.01, 6300)
+            ),
+            new Region(
+                Region::REGION_IE,
+                (string)__('Ireland'),
+                Region::CURRENCY_EUR,
+                Region::SIZE_DIMENSION_CENTIMETER,
+                Region::WEIGHT_DIMENSION_KILOGRAM,
+                new PackageWeightRestrictions(30, 'kg'),
+                new ProductPriceRestrictions(0.01, 6300)
+            ),
+        ];
+    }
+}

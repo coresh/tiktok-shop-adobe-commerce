@@ -101,4 +101,15 @@ class Repository
         $this->resource->delete($shop);
         $this->cache->removeValue($this->makeCacheKey($shop, $shop->getId()));
     }
+
+    public function isExistInEuRegion(): bool
+    {
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToFilter(
+            \M2E\TikTokShop\Model\ResourceModel\Shop::COLUMN_REGION,
+            ['in' => \M2E\TikTokShop\Model\Shop\Region::EU_REGION_CODES]
+        );
+
+        return (int)$collection->getSize() > 0;
+    }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Order;
 
-abstract class AbstractAddressParser
+class BaseAddressParser
 {
     private array $serverData;
 
@@ -13,9 +13,21 @@ abstract class AbstractAddressParser
         $this->serverData = $serverData;
     }
 
-    abstract public function getCity(): string;
+    public function getCity(): string
+    {
+        foreach ($this->getDistricts() as $district) {
+            if ($district['level'] === 'county') {
+                return $district['name'];
+            }
+        }
 
-    abstract public function getState(): string;
+        return '';
+    }
+
+    public function getState(): string
+    {
+        return '';
+    }
 
     public function getBuyerName(): string
     {

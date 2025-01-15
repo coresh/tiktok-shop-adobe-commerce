@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Block\Adminhtml\TikTokShop;
 
 use M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractContainer;
@@ -7,6 +9,17 @@ use M2E\TikTokShop\Model\TikTokShop\Template\Manager;
 
 class Template extends AbstractContainer
 {
+    private \M2E\TikTokShop\Model\Shop\Repository $shopRepository;
+
+    public function __construct(
+        \M2E\TikTokShop\Model\Shop\Repository $shopRepository,
+        \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Widget $context
+    ) {
+        $this->shopRepository = $shopRepository;
+
+        parent::__construct($context);
+    }
+
     public function _construct()
     {
         parent::_construct();
@@ -67,15 +80,25 @@ class Template extends AbstractContainer
                 'onclick' => "setLocation('" . $this->getTemplateUrl(Manager::TEMPLATE_SYNCHRONIZATION) . "')",
                 'default' => false,
             ],
-            Manager::TEMPLATE_COMPLIANCE => [
-                'label' => __('Compliance'),
-                'id' => 'compliance',
-                'onclick' => "setLocation('" . $this->getTemplateUrl(Manager::TEMPLATE_COMPLIANCE) . "')",
-                'default' => false,
-            ],
         ];
 
+        $this->addComplianceTemplateButton($data);
+
         return $data;
+    }
+
+    private function addComplianceTemplateButton(array &$data): void
+    {
+        if (!$this->shopRepository->isExistInEuRegion()) {
+            return;
+        }
+
+        $data[Manager::TEMPLATE_COMPLIANCE] = [
+            'label' => __('Compliance'),
+            'id' => 'compliance',
+            'onclick' => "setLocation('" . $this->getTemplateUrl(Manager::TEMPLATE_COMPLIANCE) . "')",
+            'default' => false,
+        ];
     }
 
     protected function getTemplateUrl($nick)

@@ -47,13 +47,7 @@ class WeightFinder extends AbstractDimensionFinder
 
     private function getUnit(\M2E\TikTokShop\Model\Product $product): string
     {
-        $weightUnitMap = [
-            \M2E\TikTokShop\Model\Shop::REGION_GB => 'KILOGRAM',
-            \M2E\TikTokShop\Model\Shop::REGION_US => 'POUND',
-            \M2E\TikTokShop\Model\Shop::REGION_ES => 'KILOGRAM',
-        ];
-
-        return $weightUnitMap[$product->getShop()->getRegion()];
+        return $product->getShop()->getRegion()->getWeightDimension();
     }
 
     /**

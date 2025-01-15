@@ -10,13 +10,16 @@ class UpdateService
 {
     private \M2E\TikTokShop\Model\ShopFactory $shopFactory;
     private \M2E\TikTokShop\Model\Shop\Repository $shopRepository;
+    private \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection;
 
     public function __construct(
         \M2E\TikTokShop\Model\ShopFactory $shopFactory,
-        \M2E\TikTokShop\Model\Shop\Repository $shopRepository
+        \M2E\TikTokShop\Model\Shop\Repository $shopRepository,
+        \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection
     ) {
         $this->shopFactory = $shopFactory;
         $this->shopRepository = $shopRepository;
+        $this->regionCollection = $regionCollection;
     }
 
     /**
@@ -42,7 +45,7 @@ class UpdateService
                     || $existShop->getType() !== $this->getType($responseShop->getType())
                 ) {
                     $existShop->setShopName($responseShop->getShopName())
-                              ->setRegion($responseShop->getRegion())
+                              ->setRegion($this->regionCollection->getByCode($responseShop->getRegion()))
                               ->setType($this->getType($responseShop->getType()));
 
                     $this->shopRepository->save($existShop);
@@ -56,7 +59,7 @@ class UpdateService
                 $account,
                 $responseShop->getShopId(),
                 $responseShop->getShopName(),
-                $responseShop->getRegion(),
+                $this->regionCollection->getByCode($responseShop->getRegion()),
                 $this->getType($responseShop->getType())
             );
             $this->shopRepository->create($shop);

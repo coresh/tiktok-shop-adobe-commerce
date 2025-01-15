@@ -51,25 +51,20 @@ class SizeChart extends AbstractDataBuilder
             return [];
         }
 
-        $attributeCode = $sizeChartAttribute->getCustomAttributeValue();
-        $magentoProduct = $this->getListingProduct()->getMagentoProduct();
+        $sizeChartUrl = $this->getSizeChartUrl($sizeChartAttribute);
 
-        $this->searchNotFoundAttributes($magentoProduct);
-        $attributeValue = $magentoProduct->getAttributeValue($attributeCode);
-        $this->processNotFoundAttributes((string)__('Size Chart'), $magentoProduct);
-
-        if (empty($attributeValue)) {
+        if (empty($sizeChartUrl)) {
             return [];
         }
 
-        if (!\M2E\TikTokShop\Helper\Data::isValidUrl($attributeValue)) {
+        if (!\M2E\TikTokShop\Helper\Data::isValidUrl($sizeChartUrl)) {
             $this->addWarningMessage((string)__('An invalid image URL is set for the Product Size Chart'));
 
             return [];
         }
 
         $magentoProductImage = $this->magentoProductImageFactory->create();
-        $magentoProductImage->setUrl($attributeValue);
+        $magentoProductImage->setUrl($sizeChartUrl);
 
         $image = $this->imageRepository->findByHashAndType(
             $magentoProductImage->getHash(),
@@ -96,5 +91,36 @@ class SizeChart extends AbstractDataBuilder
                 ],
             ],
         ];
+    }
+
+    private function getSizeChartUrl($sizeChartAttribute): string
+    {
+        if ($sizeChartAttribute->isValueModeCustomValue()) {
+            $attributeValue = $sizeChartAttribute->getCustomValue();
+            if (empty($attributeValue)) {
+                $this->addWarningMessage((string)__('Size Chart is missing a value.'));
+
+                return '';
+            }
+
+            return $attributeValue;
+        }
+
+        if ($sizeChartAttribute->isValueModeCustomAttribute()) {
+            $attributeCode = $sizeChartAttribute->getCustomAttributeValue();
+            $magentoProduct = $this->getListingProduct()->getMagentoProduct();
+
+            $this->searchNotFoundAttributes($magentoProduct);
+            $attributeValue = $magentoProduct->getAttributeValue($attributeCode);
+            $this->processNotFoundAttributes((string)__('Size Chart'), $magentoProduct);
+
+            if (empty($attributeValue)) {
+                return '';
+            }
+
+            return $attributeValue;
+        }
+
+        return '';
     }
 }

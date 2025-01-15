@@ -6,15 +6,20 @@ namespace M2E\TikTokShop\Ui\Select;
 
 class ShopRegion implements \Magento\Framework\Data\OptionSourceInterface
 {
+    private \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection;
+
+    public function __construct(\M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection)
+    {
+        $this->regionCollection = $regionCollection;
+    }
+
     public function toOptionArray(): array
     {
         $options = [];
-        $regionsNames = \M2E\TikTokShop\Model\Shop::getAvailableRegions();
-
-        foreach ($regionsNames as $code => $name) {
+        foreach ($this->regionCollection->getAll() as $region) {
             $options[] = [
-                'label' => $name,
-                'value' => $code,
+                'label' => $region->getLabel(),
+                'value' => $region->getRegionCode(),
             ];
         }
 

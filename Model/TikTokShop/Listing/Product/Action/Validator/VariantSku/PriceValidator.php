@@ -14,27 +14,19 @@ class PriceValidator implements ValidatorInterface
         );
     }
 
-    private function validateByRegion(string $regionCode, float $price): ?string
+    private function validateByRegion(\M2E\TikTokShop\Model\Shop\Region $region, float $price): ?string
     {
-        $validatorDataMap = [
-            \M2E\TikTokShop\Model\Shop::REGION_US => ['min' => 0.01, 'max' => 7600],
-            \M2E\TikTokShop\Model\Shop::REGION_GB => ['min' => 0.01, 'max' => 5600],
-            \M2E\TikTokShop\Model\Shop::REGION_ES => ['min' => 0.01, 'max' => 5600],
-        ];
+        $validatorData = $region->getProductPriceRestrictions();
 
-        $validatorData = $validatorDataMap[$regionCode] ?? null;
-        if ($validatorData === null) {
-            return null;
-        }
-
-        $currency = \M2E\TikTokShop\Model\Shop::getCurrencyCodeByRegion($regionCode);
-
-        if ($price < $validatorData['min'] || $price > $validatorData['max']) {
+        if (
+            $price < $validatorData->getMinProductPrice()
+            || $price > $validatorData->getMaxProductPrice()
+        ) {
             return sprintf(
                 'The product price must be between %1$s %3$s and %2$s %3$s.',
-                $validatorData['min'],
-                $validatorData['max'],
-                $currency
+                $validatorData->getMinProductPrice(),
+                $validatorData->getMaxProductPrice(),
+                $region->getCurrency()
             );
         }
 

@@ -173,37 +173,47 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         );
 
         $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
-        $collection->joinTable(
-            ['promotion_product' => $this->promotionProductResource->getMainTable()],
-            sprintf('product_id = %s', PromotionProductResource::COLUMN_PRODUCT_ID),
+        $select = $this->promotionProductResource->getConnection()->select();
+        $select->from(
+            $this->promotionProductResource->getMainTable(),
             [
-                'has_promotion' => new \Zend_Db_Expr(
-                    "IF(
-                promotion_product.product_id IS NOT NULL
-                AND promotion.start_date <= '{$now}'
-                AND promotion.end_date >= '{$now}',
-                true,
-                false
-            )"
-                ),
+                'promotion_product_id' => PromotionProductResource::COLUMN_PRODUCT_ID,
                 'promotion_id' => PromotionProductResource::COLUMN_PROMOTION_ID,
-            ],
-            null,
-            'left'
+            ]
         );
+        $select->group('promotion_product_id');
 
-        $collection->joinTable(
-            ['promotion' => $this->promotionResource->getMainTable()],
-            sprintf('id = %s', PromotionResource::COLUMN_PROMOTION_ID),
+        $collection->getSelect()->joinLeft(
+            ['promotion_product' => new \Zend_Db_Expr('(' . $select . ')')],
+            sprintf(
+                '%s = promotion_product.promotion_product_id',
+                ListingProductResource::COLUMN_TTS_PRODUCT_ID
+            ),
             [
-                'start_date' => PromotionResource::COLUMN_START_DATE,
-                'end_date' => PromotionResource::COLUMN_END_DATE,
-            ],
-            null,
-            'left'
+                'promotion_id' => 'promotion_id',
+            ]
         );
 
-        $collection->getSelect()->group('listing_product.id');
+        $collection->getSelect()->joinLeft(
+            ['promotion' => $this->promotionResource->getMainTable()],
+            'promotion.id = promotion_product.promotion_id',
+            [
+                'promotion_start_date' => PromotionResource::COLUMN_START_DATE,
+                'promotion_end_date' => PromotionResource::COLUMN_END_DATE,
+            ]
+        );
+
+        $collection->getSelect()->columns([
+            'has_promotion' => new \Zend_Db_Expr(
+                "IF(
+            promotion_product.promotion_product_id IS NOT NULL
+            AND promotion.start_date <= '{$now}'
+            AND promotion.end_date >= '{$now}',
+            true,
+            false
+        )"
+            )
+        ]);
 
         $this->setCollection($collection);
 
@@ -282,7 +292,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
 
         $this->addColumn('price', $priceColumn);
 
-        if ($this->getListing()->getShop()->isRegionUS()) {
+        if ($this->getListing()->getShop()->getRegion()->isRegionCodeUS()) {
             $this->addColumn('listing_quality', [
                 'header' => __('Listing Quality'),
                 'align' => 'left',
@@ -575,11 +585,11 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             $value = $column->getFilter()->getValue();
             if (isset($value['on_promotion']) && $value['on_promotion'] !== '') {
                 if ((int)$value['on_promotion'] === 1) {
-                    $whereConditions[] = "promotion_product.product_id IS NOT NULL
+                    $whereConditions[] = "promotion_product.promotion_product_id IS NOT NULL
                               AND promotion.start_date <= '{$now}'
                               AND promotion.end_date >= '{$now}'";
                 } else {
-                    $whereConditions[] = "promotion_product.product_id IS NULL
+                    $whereConditions[] = "promotion_product.promotion_product_id IS NULL
                               OR promotion.start_date > '{$now}'
                               OR promotion.end_date < '{$now}'";
                 }

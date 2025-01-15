@@ -8,18 +8,21 @@ class OnlinePrice extends \Magento\Ui\Component\Listing\Columns\Column
 {
     private \M2E\TikTokShop\Model\Product\Ui\RuntimeStorage $productUiRuntimeStorage;
     private \Magento\Framework\Locale\CurrencyInterface $localeCurrency;
+    private \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection;
 
     public function __construct(
         \M2E\TikTokShop\Model\Product\Ui\RuntimeStorage $productUiRuntimeStorage,
         \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
         \Magento\Framework\View\Element\UiComponentFactory $uiComponentFactory,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
+        \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->productUiRuntimeStorage = $productUiRuntimeStorage;
         $this->localeCurrency = $localeCurrency;
+        $this->regionCollection = $regionCollection;
     }
 
     public function prepareDataSource(array $dataSource): array
@@ -43,7 +46,7 @@ class OnlinePrice extends \Magento\Ui\Component\Listing\Columns\Column
             $onlinePrice = $this->formatOnlinePrice(
                 $product->getMinPrice(),
                 $product->getMaxPrice(),
-                \M2E\TikTokShop\Model\Shop::getCurrencyCodeByRegion($row['shop_region'])
+                $this->regionCollection->getByCode($row['shop_region'])->getCurrency()
             );
 
             $promotionHtml = '';

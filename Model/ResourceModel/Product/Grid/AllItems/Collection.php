@@ -6,6 +6,7 @@ namespace M2E\TikTokShop\Model\ResourceModel\Product\Grid\AllItems;
 
 use M2E\TikTokShop\Model\ResourceModel\Account as AccountResource;
 use M2E\TikTokShop\Model\ResourceModel\Listing as ListingResource;
+use M2E\TikTokShop\Model\ResourceModel\Product as ListingProductResource;
 use M2E\TikTokShop\Model\ResourceModel\Product as ProductResource;
 use M2E\TikTokShop\Model\ResourceModel\Promotion as PromotionResource;
 use M2E\TikTokShop\Model\ResourceModel\Shop as ShopResource;
@@ -127,38 +128,47 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
         );
 
         $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
-        $this->wrappedCollection->joinTable(
-            ['promotion_product' => $this->promotionProductResource->getMainTable()],
-            'product_id = product_tts_product_id',
+        $select = $this->promotionProductResource->getConnection()->select();
+        $select->from(
+            $this->promotionProductResource->getMainTable(),
             [
-                'has_promotion' => new \Zend_Db_Expr(
-                    "IF(
-                promotion_product.product_id IS NOT NULL
-                AND promotion.start_date <= '{$now}'
-                AND promotion.end_date >= '{$now}',
-                true,
-                false
-            )"
-                ),
+                'promotion_product_id' => PromotionProductResource::COLUMN_PRODUCT_ID,
                 'promotion_id' => PromotionProductResource::COLUMN_PROMOTION_ID,
-                'promotion_' . PromotionProductResource::COLUMN_PRODUCT_ID => PromotionProductResource::COLUMN_PRODUCT_ID,
-            ],
-            null,
-            'left'
+            ]
         );
+        $select->group('promotion_product_id');
 
-        $this->wrappedCollection->joinTable(
-            ['promotion' => $this->promotionResource->getMainTable()],
-            sprintf('id = %s', PromotionResource::COLUMN_PROMOTION_ID),
+        $this->wrappedCollection->getSelect()->joinLeft(
+            ['promotion_product' => new \Zend_Db_Expr('(' . $select . ')')],
+            sprintf(
+                '%s = promotion_product.promotion_product_id',
+                ListingProductResource::COLUMN_TTS_PRODUCT_ID
+            ),
             [
-                'start_date' => PromotionResource::COLUMN_START_DATE,
-                'end_date' => PromotionResource::COLUMN_END_DATE
-            ],
-            null,
-            'left'
+                'promotion_id' => 'promotion_id',
+            ]
         );
 
-        $this->wrappedCollection->getSelect()->distinct();
+        $this->wrappedCollection->getSelect()->joinLeft(
+            ['promotion' => $this->promotionResource->getMainTable()],
+            'promotion.id = promotion_product.promotion_id',
+            [
+                'promotion_start_date' => PromotionResource::COLUMN_START_DATE,
+                'promotion_end_date' => PromotionResource::COLUMN_END_DATE,
+            ]
+        );
+
+        $this->wrappedCollection->getSelect()->columns([
+            'has_promotion' => new \Zend_Db_Expr(
+                "IF(
+            promotion_product.promotion_product_id IS NOT NULL
+            AND promotion.start_date <= '{$now}'
+            AND promotion.end_date >= '{$now}',
+            true,
+            false
+        )"
+            )
+        ]);
     }
 
     public function getItems()
@@ -233,14 +243,14 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
 
         if ($conditionValue === 1) {
             $this->wrappedCollection->getSelect()->where(
-                'promotion_product.product_id IS NOT NULL
+                'promotion_product.promotion_product_id IS NOT NULL
             AND promotion.start_date <= ?
             AND promotion.end_date >= ?',
                 $now
             );
         } else {
             $this->wrappedCollection->getSelect()->where(
-                'promotion_product.product_id IS NULL
+                'promotion_product.promotion_product_id IS NULL
             OR promotion.start_date > ?
             OR promotion.end_date < ?',
                 $now

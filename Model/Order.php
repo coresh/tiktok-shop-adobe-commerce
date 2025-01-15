@@ -12,6 +12,8 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public const MAGENTO_ORDER_CREATION_FAILED_YES = 1;
     public const MAGENTO_ORDER_CREATION_FAILED_NO = 0;
 
+    public const MAGENTO_ORDER_CREATE_MAX_TRIES = 3;
+
     public const STATUS_UNKNOWN = 0;
     public const STATUS_PENDING = 1;
     public const STATUS_UNSHIPPED = 2;

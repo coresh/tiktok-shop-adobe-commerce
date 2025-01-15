@@ -33,24 +33,15 @@ class PackageWeightValidator implements ValidatorInterface
     /**
      * The product package weight limit cannot exceed 150 lb (for US) or 30 kg (for EU)
      */
-    private function validateByRegion(string $regionCode, float $weight): ?string
+    private function validateByRegion(\M2E\TikTokShop\Model\Shop\Region $region, float $weight): ?string
     {
-        $validatorDataMap = [
-            \M2E\TikTokShop\Model\Shop::REGION_US => ['max' => 150, 'unit' => 'lb'],
-            \M2E\TikTokShop\Model\Shop::REGION_GB => ['max' => 30, 'unit' => 'kg'],
-            \M2E\TikTokShop\Model\Shop::REGION_ES => ['max' => 30, 'unit' => 'kg'],
-        ];
+        $validatorData = $region->getPackageWeightRestrictions();
 
-        $validatorData = $validatorDataMap[$regionCode] ?? null;
-        if ($validatorData === null) {
-            return null;
-        }
-
-        if ($weight > $validatorData['max']) {
+        if ($weight > $validatorData->getMaxPackageWeight()) {
             return sprintf(
                 'The product package weight must be within %s %s.',
-                $validatorData['max'],
-                $validatorData['unit']
+                $validatorData->getMaxPackageWeight(),
+                $validatorData->getWeightUnit()
             );
         }
 

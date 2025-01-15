@@ -7,7 +7,7 @@ namespace M2E\TikTokShop\Model\Listing\InventorySync\Channel\ListingQuality;
 class RecommendationCollection
 {
     /** @var Recommendation[] */
-    private array $recommendations;
+    private array $recommendations = [];
 
     public function add(Recommendation $recommendation)
     {

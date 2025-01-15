@@ -14,28 +14,19 @@ class AddressParserFactory
     }
 
     public function create(
-        string $region,
+        \M2E\TikTokShop\Model\Shop\Region $region,
         array $serverData
-    ): \M2E\TikTokShop\Model\TikTokShop\Order\AbstractAddressParser {
+    ): \M2E\TikTokShop\Model\TikTokShop\Order\BaseAddressParser {
         $arguments = [
             'serverData' => $serverData,
         ];
 
-        if ($region === \M2E\TikTokShop\Model\Shop::REGION_GB) {
-            return $this->objectManager
-                ->create(\M2E\TikTokShop\Model\TikTokShop\Order\AddressParser\GB::class, $arguments);
-        }
-
-        if ($region === \M2E\TikTokShop\Model\Shop::REGION_US) {
+        if ($region->isRegionCodeUS()) {
             return $this->objectManager
                 ->create(\M2E\TikTokShop\Model\TikTokShop\Order\AddressParser\US::class, $arguments);
         }
 
-        if ($region === \M2E\TikTokShop\Model\Shop::REGION_ES) {
-            return $this->objectManager
-                ->create(\M2E\TikTokShop\Model\TikTokShop\Order\AddressParser\ES::class, $arguments);
-        }
-
-        throw new \M2E\TikTokShop\Model\Exception\Logic('Unknown region');
+        return $this->objectManager
+            ->create(\M2E\TikTokShop\Model\TikTokShop\Order\BaseAddressParser::class, $arguments);
     }
 }

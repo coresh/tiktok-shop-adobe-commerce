@@ -45,6 +45,10 @@ class CreateMagentoOrder extends AbstractOrder
 
             $order->createShipments();
 
+            if (!$order->getAccount()->getOrdersSettings()->isOrderStatusMappingModeDefault()) {
+                $order->updateMagentoOrderStatus();
+            }
+
             if ($order->canCreateTracks()) {
                 $order->createTracks();
             }

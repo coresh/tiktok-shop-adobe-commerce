@@ -11,23 +11,18 @@ class Shop extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public const TYPE_CROSS_BORDER = 1;
     public const TYPE_LOCAL_TO_LOCAL = 2;
 
-    public const REGION_US = 'US';
-    public const REGION_GB = 'GB';
-    public const REGION_ES = 'ES';
-
-    public const REGION_EU = [
-        self::REGION_ES,
-    ];
-
     private Account\Repository $accountRepository;
     private Warehouse\Repository $warehouseRepository;
 
     private \M2E\TikTokShop\Model\Account $account;
     /** @var \M2E\TikTokShop\Model\Warehouse[] */
     private array $warehouses;
+    /** @var \M2E\TikTokShop\Model\Shop\RegionCollection */
+    private Shop\RegionCollection $regionCollection;
 
     public function __construct(
         \M2E\TikTokShop\Model\Account\Repository $accountRepository,
+        \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection,
         Warehouse\Repository $warehouseRepository,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -45,6 +40,7 @@ class Shop extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
         $this->accountRepository = $accountRepository;
         $this->warehouseRepository = $warehouseRepository;
+        $this->regionCollection = $regionCollection;
     }
 
     public function _construct(): void
@@ -131,7 +127,7 @@ class Shop extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         \M2E\TikTokShop\Model\Account $account,
         string $shopId,
         string $shopName,
-        string $region,
+        \M2E\TikTokShop\Model\Shop\Region $region,
         int $type
     ): self {
         $this->setData(ShopResource::COLUMN_ACCOUNT_ID, $account->getId())
@@ -172,36 +168,18 @@ class Shop extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         return $this->getData(ShopResource::COLUMN_SHOP_NAME);
     }
 
-    public function isRegionUS(): bool
+    public function setRegion(\M2E\TikTokShop\Model\Shop\Region $region): self
     {
-        return $this->getRegion() === self::REGION_US;
-    }
-
-    public function isRegionGB(): bool
-    {
-        return $this->getRegion() === self::REGION_GB;
-    }
-
-    public function isRegionES(): bool
-    {
-        return $this->getRegion() === self::REGION_ES;
-    }
-
-    public function isRegionEU(): bool
-    {
-        return in_array($this->getRegion(), self::REGION_EU);
-    }
-
-    public function setRegion(string $region): self
-    {
-        $this->setData(ShopResource::COLUMN_REGION, $region);
+        $this->setData(ShopResource::COLUMN_REGION, $region->getRegionCode());
 
         return $this;
     }
 
-    public function getRegion(): string
+    public function getRegion(): \M2E\TikTokShop\Model\Shop\Region
     {
-        return $this->getData(ShopResource::COLUMN_REGION);
+        $regionCode = $this->getData(ShopResource::COLUMN_REGION);
+
+        return $this->regionCollection->getByCode($regionCode);
     }
 
     public function isTypeCrossBorder(): bool
@@ -289,34 +267,6 @@ class Shop extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     public function getCurrencyCode(): string
     {
-        return self::getCurrencyCodeByRegion($this->getRegion());
-    }
-
-    public static function getCurrencyCodeByRegion(string $region): string
-    {
-        $currencyMap = [
-            self::REGION_US => 'USD',
-            self::REGION_GB => 'GBP',
-            self::REGION_ES => 'EUR',
-        ];
-
-        return $currencyMap[$region] ?? '';
-    }
-
-    public static function getAvailableRegions(): array
-    {
-        return [
-            self::REGION_GB => __('United Kingdom'),
-            self::REGION_US => __('United States'),
-            self::REGION_ES => __('Spain'),
-        ];
-    }
-
-    public static function getRegionNameByCode(string $regionCode): string
-    {
-        $regionsNames = self::getAvailableRegions();
-        $regionCode = strtoupper($regionCode);
-
-        return $regionsNames[$regionCode] ? (string)$regionsNames[$regionCode] : $regionCode;
+        return $this->getRegion()->getCurrency();
     }
 }

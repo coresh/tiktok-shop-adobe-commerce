@@ -580,7 +580,7 @@ HTML
     {
         $shop = $this->shopRepository->get((int)$this->getListingData()['shop_id']);
 
-        return $shop->isRegionEU();
+        return $shop->getRegion()->isEU();
     }
 
     protected function getSynchronizationTemplates(): array

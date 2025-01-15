@@ -6,6 +6,19 @@ use M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm;
 
 class Content extends AbstractForm
 {
+    private \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection;
+
+    public function __construct(
+        \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection,
+        \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        array $data = []
+    ) {
+        parent::__construct($context, $registry, $formFactory, $data);
+        $this->regionCollection = $regionCollection;
+    }
+
     public function _construct()
     {
         parent::_construct();
@@ -37,6 +50,11 @@ class Content extends AbstractForm
             ],
         ]);
 
+        $regionOptions = [];
+        foreach ($this->regionCollection->getAll() as $region) {
+            $regionOptions[$region->getRegionCode()] = $region->getLabel();
+        }
+
         $fieldset = $form->addFieldset('region-fieldset', []);
         $fieldset->addField(
             'region',
@@ -45,7 +63,7 @@ class Content extends AbstractForm
                 'label' => $this->__('Select type of the Account you would like to connect:'),
                 'id' => 'region',
                 'name' => 'region',
-                'values' => \M2E\TikTokShop\Model\Shop::getAvailableRegions()
+                'values' => $regionOptions,
             ]
         );
 

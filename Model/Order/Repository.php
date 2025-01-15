@@ -178,4 +178,32 @@ class Repository
 
         return array_values($collection->getItems());
     }
+
+    public function findForAttemptMagentoCreate(
+        \M2E\TikTokShop\Model\Account $account,
+        \DateTime $borderDate,
+        int $creationAttemptsLessThan
+    ): array {
+        $collection = $this->orderCollectionFactory->create();
+        $collection->addFieldToFilter(\M2E\TikTokShop\Model\ResourceModel\Order::COLUMN_ACCOUNT_ID, $account->getId());
+        $collection->addFieldToFilter(\M2E\TikTokShop\Model\ResourceModel\Order::COLUMN_MAGENTO_ORDER_ID, ['null' => true]);
+        $collection->addFieldToFilter(
+            \M2E\TikTokShop\Model\ResourceModel\Order::COLUMN_MAGENTO_ORDER_CREATION_FAILURE,
+            \M2E\TikTokShop\Model\Order::MAGENTO_ORDER_CREATION_FAILED_YES,
+        );
+        $collection->addFieldToFilter(
+            \M2E\TikTokShop\Model\ResourceModel\Order::COLUMN_MAGENTO_ORDER_CREATION_FAILS_COUNT,
+            ['lt' => $creationAttemptsLessThan],
+        );
+        $collection->addFieldToFilter(
+            \M2E\TikTokShop\Model\ResourceModel\Order::COLUMN_MAGENTO_ORDER_CREATION_LATEST_ATTEMPT_DATE,
+            ['lt' => $borderDate->format('Y-m-d H:i:s')],
+        );
+        $collection->getSelect()->order(
+            \M2E\TikTokShop\Model\ResourceModel\Order::COLUMN_MAGENTO_ORDER_CREATION_LATEST_ATTEMPT_DATE . ' ASC'
+        );
+        $collection->setPageSize(25);
+
+        return $collection->getItems();
+    }
 }

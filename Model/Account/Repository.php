@@ -11,6 +11,7 @@ class Repository
 {
     use \M2E\TikTokShop\Model\CacheTrait;
 
+    private \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection;
     private \M2E\TikTokShop\Model\ResourceModel\Account\CollectionFactory $collectionFactory;
     private \M2E\TikTokShop\Model\AccountFactory $accountFactory;
     private \M2E\TikTokShop\Model\ResourceModel\Account $accountResource;
@@ -18,12 +19,14 @@ class Repository
     private \M2E\TikTokShop\Model\ResourceModel\Shop $shopResource;
 
     public function __construct(
+        \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection,
         \M2E\TikTokShop\Model\AccountFactory $accountFactory,
         \M2E\TikTokShop\Model\ResourceModel\Account $accountResource,
         \M2E\TikTokShop\Model\ResourceModel\Account\CollectionFactory $collectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Shop $shopResource,
         \M2E\TikTokShop\Helper\Data\Cache\Permanent $cache
     ) {
+        $this->regionCollection = $regionCollection;
         $this->collectionFactory = $collectionFactory;
         $this->accountFactory = $accountFactory;
         $this->accountResource = $accountResource;
@@ -96,10 +99,15 @@ class Repository
             [],
         );
 
-        $collection->addFieldToFilter(
-            sprintf('s.%s', ShopResource::COLUMN_REGION),
-            ['in' => \M2E\TikTokShop\Model\Shop::REGION_EU]
-        );
+        $regions = $this->regionCollection->getInEu();
+        if (!empty($regions)) {
+            $collection->addFieldToFilter(
+                sprintf('s.%s', ShopResource::COLUMN_REGION),
+                ['in' => array_map(static function (\M2E\TikTokShop\Model\Shop\Region $region) {
+                    return $region->getRegionCode();
+                }, $regions)]
+            );
+        }
 
         return array_values($collection->getItems());
     }

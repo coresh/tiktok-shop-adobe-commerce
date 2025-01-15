@@ -60,6 +60,7 @@ class Upgrader
         '1.10.4' => ['to' => '1.11.0', 'upgrade' => \M2E\TikTokShop\Setup\Upgrade\v1_11_0\Config::class],
         '1.11.0' => ['to' => '1.12.0', 'upgrade' => \M2E\TikTokShop\Setup\Upgrade\v1_12_0\Config::class],
         '1.12.0' => ['to' => '1.13.0', 'upgrade' => \M2E\TikTokShop\Setup\Upgrade\v1_13_0\Config::class],
+        '1.13.0' => ['to' => '1.14.0', 'upgrade' => null],
     ];
 
     private \Psr\Log\LoggerInterface $logger;

@@ -2,21 +2,19 @@
 
 namespace M2E\TikTokShop\Model\Cron\Task\Order;
 
-class CreateFailed extends \M2E\TikTokShop\Model\Cron\AbstractTask
+class CreateFailedTask extends \M2E\TikTokShop\Model\Cron\AbstractTask
 {
     public const NICK = 'order/create_failed';
 
-    public const MAX_TRIES_TO_CREATE_ORDER = 3;
-
     private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
-    private \M2E\TikTokShop\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory;
     /** @var \M2E\TikTokShop\Model\Cron\Task\Order\CreatorFactory */
     private CreatorFactory $orderCreatorFactory;
+    private \M2E\TikTokShop\Model\Order\Repository $orderRepository;
 
     public function __construct(
+        \M2E\TikTokShop\Model\Order\Repository $orderRepository,
         \M2E\TikTokShop\Model\Cron\Task\Order\CreatorFactory $orderCreatorFactory,
         \M2E\TikTokShop\Model\Account\Repository $accountRepository,
-        \M2E\TikTokShop\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \M2E\TikTokShop\Model\Cron\Manager $cronManager,
         \M2E\TikTokShop\Model\Synchronization\LogService $syncLogger,
         \M2E\TikTokShop\Helper\Data $helperData,
@@ -36,8 +34,8 @@ class CreateFailed extends \M2E\TikTokShop\Model\Cron\AbstractTask
             $taskRepo,
             $resource
         );
+        $this->orderRepository = $orderRepository;
         $this->accountRepository = $accountRepository;
-        $this->orderCollectionFactory = $orderCollectionFactory;
         $this->orderCreatorFactory = $orderCreatorFactory;
     }
 
@@ -59,7 +57,14 @@ class CreateFailed extends \M2E\TikTokShop\Model\Cron\AbstractTask
     {
         foreach ($this->accountRepository->getAll() as $account) {
             try {
-                $tikTokShopOrders = $this->getOrders($account);
+                $borderDate = new \DateTime('now', new \DateTimeZone('UTC'));
+                $borderDate->modify('-15 minutes');
+
+                $tikTokShopOrders = $this->orderRepository->findForAttemptMagentoCreate(
+                    $account,
+                    $borderDate,
+                    \M2E\TikTokShop\Model\Order::MAGENTO_ORDER_CREATE_MAX_TRIES
+                );
                 $this->createMagentoOrders($tikTokShopOrders);
             } catch (\Exception $exception) {
                 $message = (string)\__(
@@ -86,41 +91,15 @@ class CreateFailed extends \M2E\TikTokShop\Model\Cron\AbstractTask
 
             if (!$order->canCreateMagentoOrder()) {
                 $order->addData([
-                    'magento_order_creation_failure' => \M2E\TikTokShop\Model\Order::MAGENTO_ORDER_CREATION_FAILED_NO,
-                    'magento_order_creation_fails_count' => 0,
-                    'magento_order_creation_latest_attempt_date' => null,
+                    \M2E\TikTokShop\Model\ResourceModel\Order::COLUMN_MAGENTO_ORDER_CREATION_FAILURE => \M2E\TikTokShop\Model\Order::MAGENTO_ORDER_CREATION_FAILED_NO,
+                    \M2E\TikTokShop\Model\ResourceModel\Order::COLUMN_MAGENTO_ORDER_CREATION_FAILS_COUNT => 0,
+                    \M2E\TikTokShop\Model\ResourceModel\Order::COLUMN_MAGENTO_ORDER_CREATION_LATEST_ATTEMPT_DATE => null,
                 ]);
-                $order->save();
+                $this->orderRepository->save($order);
                 continue;
             }
 
             $ordersCreator->createMagentoOrder($order);
         }
-    }
-
-    protected function getOrders(\M2E\TikTokShop\Model\Account $account)
-    {
-        $backToDate = new \DateTime('now', new \DateTimeZone('UTC'));
-        $backToDate->modify('-15 minutes');
-
-        $collection = $this->orderCollectionFactory->create();
-        $collection->addFieldToFilter('account_id', $account->getId());
-        $collection->addFieldToFilter('magento_order_id', ['null' => true]);
-        $collection->addFieldToFilter(
-            'magento_order_creation_failure',
-            \M2E\TikTokShop\Model\Order::MAGENTO_ORDER_CREATION_FAILED_YES,
-        );
-        $collection->addFieldToFilter(
-            'magento_order_creation_fails_count',
-            ['lt' => self::MAX_TRIES_TO_CREATE_ORDER],
-        );
-        $collection->addFieldToFilter(
-            'magento_order_creation_latest_attempt_date',
-            ['lt' => $backToDate->format('Y-m-d H:i:s')],
-        );
-        $collection->getSelect()->order('magento_order_creation_latest_attempt_date ASC');
-        $collection->setPageSize(25);
-
-        return $collection->getItems();
     }
 }

@@ -93,12 +93,6 @@ class SizeFinder extends AbstractDimensionFinder
 
     private function getUnit(\M2E\TikTokShop\Model\Product $product): string
     {
-        $dimensionsUnitMap = [
-            \M2E\TikTokShop\Model\Shop::REGION_GB => 'CENTIMETER',
-            \M2E\TikTokShop\Model\Shop::REGION_US => 'INCH',
-            \M2E\TikTokShop\Model\Shop::REGION_ES => 'CENTIMETER',
-        ];
-
-        return $dimensionsUnitMap[$product->getShop()->getRegion()];
+        return $product->getShop()->getRegion()->getSizeDimension();
     }
 }

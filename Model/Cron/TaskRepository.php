@@ -18,6 +18,7 @@ class TaskRepository
             Task\Order\UploadByUser::NICK => Task\Order\UploadByUser::class,
             Task\Order\UpdateTask::NICK => Task\Order\UpdateTask::class,
             Task\Order\CancelTask::NICK => Task\Order\CancelTask::class,
+            Task\Order\CreateFailedTask::NICK => Task\Order\CreateFailedTask::class,
             Task\InventorySyncTask::NICK => Task\InventorySyncTask::class,
             Task\InstructionsProcess::NICK => Task\InstructionsProcess::class,
             Task\ProcessScheduledActionsTask::NICK => Task\ProcessScheduledActionsTask::class,

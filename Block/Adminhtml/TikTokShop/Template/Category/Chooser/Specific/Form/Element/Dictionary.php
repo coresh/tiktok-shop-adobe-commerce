@@ -364,7 +364,7 @@ HTML;
             'data' => [
                 'name' => $this->makeInputName($index, 'value_custom_attribute'),
                 'style' => 'width: 100%;' . $display,
-                'class' => 'M2ePro-custom-attribute-can-be-created collected-attribute',
+                'class' => 'TikTokShop-custom-attribute-can-be-created collected-attribute',
                 'value' => empty($specific['template_attribute']['value_custom_attribute']) ?
                     '' :
                     $specific['template_attribute']['value_custom_attribute'],

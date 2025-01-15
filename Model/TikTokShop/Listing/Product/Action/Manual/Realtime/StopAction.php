@@ -21,14 +21,14 @@ class StopAction extends AbstractRealtime
     }
 
     protected function logAboutSkipAction(
-        \M2E\TikTokShop\Model\Product $product,
+        \M2E\TikTokShop\Model\Product            $product,
         \M2E\TikTokShop\Model\Listing\LogService $logService
     ): void {
         $logService->addProduct(
             $product,
             \M2E\TikTokShop\Helper\Data::INITIATOR_USER,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_STOP_PRODUCT,
-            null,
+            $this->getLogActionId(),
             $this->createSkipStopMessage(),
             \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_INFO,
         );
