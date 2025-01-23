@@ -33,7 +33,8 @@ class Order extends ActiveRecord\AbstractModel
     public const COLUMN_PAYMENT_DATE = 'payment_date';
     public const COLUMN_PAYMENT_DETAILS = 'payment_details';
     public const COLUMN_SHIPPING_DETAILS = 'shipping_details';
-    public const COLUMN_SHIPPING_DATE_TO = 'shipping_date_to';
+    public const COLUMN_SHIP_BY_DATE = 'ship_by_date';
+    public const COLUMN_DELIVER_BY_DATE = 'deliver_by_date';
     public const COLUMN_BUYER_CANCELLATION_REQUEST = 'buyer_cancellation_request';
     public const COLUMN_BUYER_CANCELLATION_REQUEST_REASON = 'buyer_cancellation_request_reason';
     public const COLUMN_CREATE_DATE = 'create_date';

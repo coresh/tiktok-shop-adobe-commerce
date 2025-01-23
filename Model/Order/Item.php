@@ -28,10 +28,7 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     private \M2E\TikTokShop\Model\Order\Item\ProxyObjectFactory $proxyObjectFactory;
     private \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper;
-    private \M2E\TikTokShop\Model\Magento\Product\BuilderFactory $productBuilderFactory;
     private \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $magentoProductCollectionFactory;
-    private \M2E\TikTokShop\Helper\Magento\Product $magentoProductHelper;
-    private \M2E\TikTokShop\Model\TikTokShop\Order\Item\ImporterFactory $orderItemImporterFactory;
     private \M2E\TikTokShop\Model\Order\Item\OptionsFinder $optionsFinder;
     private \M2E\TikTokShop\Model\Product\Repository $listingProductRepository;
     private \M2E\TikTokShop\Model\Product\VariantSku $variantSku;
@@ -44,9 +41,6 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         \M2E\TikTokShop\Model\Order\Item\ProductAssignService $productAssignService,
         \M2E\TikTokShop\Model\Product\Repository $listingProductRepository,
         \M2E\TikTokShop\Model\Order\Item\OptionsFinder $optionsFinder,
-        \M2E\TikTokShop\Model\TikTokShop\Order\Item\ImporterFactory $orderItemImporterFactory,
-        \M2E\TikTokShop\Helper\Magento\Product $magentoProductHelper,
-        \M2E\TikTokShop\Model\Magento\Product\BuilderFactory $productBuilderFactory,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $magentoProductCollectionFactory,
         \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper,
         \M2E\TikTokShop\Model\Order\Item\ProxyObjectFactory $proxyObjectFactory,
@@ -67,10 +61,7 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->magentoProductFactory = $magentoProductFactory;
         $this->proxyObjectFactory = $proxyObjectFactory;
         $this->magentoStoreHelper = $magentoStoreHelper;
-        $this->productBuilderFactory = $productBuilderFactory;
         $this->magentoProductCollectionFactory = $magentoProductCollectionFactory;
-        $this->magentoProductHelper = $magentoProductHelper;
-        $this->orderItemImporterFactory = $orderItemImporterFactory;
         $this->optionsFinder = $optionsFinder;
         $this->listingProductRepository = $listingProductRepository;
         $this->productAssignService = $productAssignService;
@@ -728,61 +719,9 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
      */
     protected function createProduct(): \Magento\Catalog\Model\Product
     {
-        if (!$this->getAccount()->getOrdersSettings()->isUnmanagedListingCreateProductAndOrderEnabled()) {
-            throw new \M2E\TikTokShop\Model\Order\Exception\ProductCreationDisabled(
-                (string)__('Product creation is disabled in "Account > Orders > Product Not Found".'),
-            );
-        }
-
-        $order = $this->getOrder();
-
-        $itemImporter = $this->orderItemImporterFactory->create($this);
-
-        $rawItemData = $itemImporter->getDataFromChannel();
-
-        if (empty($rawItemData)) {
-            $message = 'Data obtaining for TikTok Shop Item failed. Please try again later.';
-            throw new \M2E\TikTokShop\Model\Exception($message);
-        }
-
-        $productData = $itemImporter->prepareDataForProductCreation($rawItemData);
-
-        // Try to find exist product with sku from eBay
-        // ---------------------------------------
-        $collection = $this->magentoProductCollectionFactory->create();
-        $collection->setStoreId($this->getOrder()->getAssociatedStoreId());
-        $collection->addAttributeToSelect('sku');
-        $collection->addAttributeToFilter('sku', $productData['sku']);
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = $collection->getFirstItem();
-
-        if ($product->getId()) {
-            return $product;
-        }
-
-        // ---------------------------------------
-
-        $storeId = $this->getAccount()->getOrdersSettings()->getUnmanagedListingStoreId();
-        if ($storeId == 0) {
-            $storeId = $this->magentoStoreHelper->getDefaultStoreId();
-        }
-
-        $productData['store_id'] = $storeId;
-        $productData['tax_class_id'] = $this->getAccount()->getOrdersSettings()->getUnmanagedListingProductTaxClassId();
-
-        // Create product in magento
-        // ---------------------------------------
-        $productBuilder = $this->productBuilderFactory->create();
-        $productBuilder->setData($productData);
-        $productBuilder->buildProduct();
-        // ---------------------------------------
-
-        $order->addSuccessLog(
-            'Product for TikTok Shop Item #%id% was created in Magento Catalog.',
-            ['!id' => $this->getItemId()],
+        throw new \M2E\TikTokShop\Model\Order\Exception\ProductCreationDisabled(
+            (string)__('The product associated with this order could not be found in the Magento catalog.'),
         );
-
-        return $productBuilder->getProduct();
     }
 
     protected function associateWithProductEvent(\Magento\Catalog\Model\Product $product)

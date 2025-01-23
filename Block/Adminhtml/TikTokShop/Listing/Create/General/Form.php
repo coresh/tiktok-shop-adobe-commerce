@@ -15,7 +15,7 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
     private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
     /** @var \M2E\TikTokShop\Model\Listing\Repository */
     private Listing\Repository $listingRepository;
-    private \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection;
+    private \M2E\TikTokShop\Model\Shop\Region\AddAccountButtonOptionsProvider $addAccountButtonOptionsProvider;
 
     public function __construct(
         \M2E\TikTokShop\Model\Listing\Repository $listingRepository,
@@ -27,7 +27,7 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
         \Magento\Framework\Data\FormFactory $formFactory,
         \M2E\TikTokShop\Helper\Data $dataHelper,
         \M2E\TikTokShop\Helper\Data\Session $sessionDataHelper,
-        \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection,
+        \M2E\TikTokShop\Model\Shop\Region\AddAccountButtonOptionsProvider $addAccountButtonOptionsProvider,
         array $data = []
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
@@ -38,7 +38,7 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
         $this->sessionDataHelper = $sessionDataHelper;
         $this->accountRepository = $accountRepository;
         $this->listingRepository = $listingRepository;
-        $this->regionCollection = $regionCollection;
+        $this->addAccountButtonOptionsProvider = $addAccountButtonOptionsProvider;
     }
 
     protected function _prepareForm()
@@ -123,18 +123,17 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
             );
 
         $addAnotherOptions = [];
-        foreach ($this->regionCollection->getAll() as $region) {
-            $id = mb_strtolower($region->getRegionCode());
-
-            $addAnotherOptions[$id] = [
-                'label' => $region->getLabel(),
-                'id' => $id,
-                'onclick' => 'setLocation(this.getAttribute("data-url"))',
+        foreach ($this->addAccountButtonOptionsProvider->retrieve() as $option) {
+            $addAnotherOptions[$option['id']] = [
+                'label' => $option['label'],
+                'id' => $option['id'],
                 'data_attribute' => [
-                    'url' => $this->getUrl(
-                        '*/tiktokshop_account/beforeGetToken',
-                        ['_current' => true, 'region' => $region->getRegionCode()]
-                    ),
+                    'add-account-btn' => true,
+                    'url' =>
+                        $this->getUrl(
+                            '*/tiktokshop_account/beforeGetToken',
+                            ['_current' => true, 'region' => $option['region_code']]
+                        ),
                 ],
             ];
         }

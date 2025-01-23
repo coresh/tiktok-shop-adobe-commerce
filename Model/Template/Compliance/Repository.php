@@ -69,4 +69,16 @@ class Repository
 
         return array_values($collection->getItems());
     }
+
+    public function removeByAccountId(int $accountId): void
+    {
+        $deleteCondition = sprintf(
+            '%s = ?',
+            \M2E\TikTokShop\Model\ResourceModel\Template\Compliance::COLUMN_ACCOUNT_ID
+        );
+
+        $this->resource
+            ->getConnection()
+            ->delete($this->resource->getMainTable(), [$deleteCondition => $accountId]);
+    }
 }

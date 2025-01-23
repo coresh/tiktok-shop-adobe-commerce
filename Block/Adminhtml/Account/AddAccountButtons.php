@@ -7,14 +7,14 @@ namespace M2E\TikTokShop\Block\Adminhtml\Account;
 class AddAccountButtons implements \Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface
 {
     private \Magento\Backend\Model\UrlInterface $urlBuilder;
-    private \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection;
+    private \M2E\TikTokShop\Model\Shop\Region\AddAccountButtonOptionsProvider $addAccountButtonOptionsProvider;
 
     public function __construct(
         \Magento\Backend\Model\UrlInterface $urlBuilder,
-        \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection
+        \M2E\TikTokShop\Model\Shop\Region\AddAccountButtonOptionsProvider $addAccountButtonOptionsProvider
     ) {
         $this->urlBuilder = $urlBuilder;
-        $this->regionCollection = $regionCollection;
+        $this->addAccountButtonOptionsProvider = $addAccountButtonOptionsProvider;
     }
 
     public function getButtonData()
@@ -32,17 +32,15 @@ class AddAccountButtons implements \Magento\Framework\View\Element\UiComponent\C
     private function getDropdownOptions(): array
     {
         $res = [];
-        foreach ($this->regionCollection->getAll() as $region) {
-            $id = mb_strtolower($region->getRegionCode());
-
-            $res[$id] = [
-                'label' => $region->getLabel(),
-                'id' => $id,
+        foreach ($this->addAccountButtonOptionsProvider->retrieve() as $option) {
+            $res[$option['id']] = [
+                'label' => $option['label'],
+                'id' => $option['id'],
                 'onclick' => 'setLocation(this.getAttribute("data-url"))',
                 'data_attribute' => [
                     'url' => $this->urlBuilder->getUrl(
                         '*/tiktokshop_account/beforeGetToken',
-                        ['_current' => true, 'region' => $region->getRegionCode()]
+                        ['_current' => true, 'region' => $option['region_code']]
                     ),
                 ],
             ];

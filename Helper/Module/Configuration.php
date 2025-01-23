@@ -4,7 +4,7 @@ namespace M2E\TikTokShop\Helper\Module;
 
 class Configuration
 {
-    private const CONFIG_GROUP = '/general/configuration/';
+    public const CONFIG_GROUP = '/general/configuration/';
 
     /** @var \M2E\TikTokShop\Model\Config\Manager */
     private $config;
@@ -62,6 +62,14 @@ class Configuration
     public function isEnableMagentoAttributePriceTypeConvertingMode(): bool
     {
         return $this->getMagentoAttributePriceTypeConvertingMode() === 1;
+    }
+
+    public function getProductInspectorMode(): int
+    {
+        return (int)$this->config->getGroupValue(
+            self::CONFIG_GROUP,
+            'listing_product_inspector_mode'
+        );
     }
 
     public function getSecureImageUrlInItemDescriptionMode(): int
@@ -153,6 +161,14 @@ class Configuration
                 self::CONFIG_GROUP,
                 'magento_attribute_price_type_converting_mode',
                 $values['magento_attribute_price_type_converting_mode']
+            );
+        }
+
+        if (isset($values['listing_product_inspector_mode'])) {
+            $this->config->setGroupValue(
+                self::CONFIG_GROUP,
+                'listing_product_inspector_mode',
+                $values['listing_product_inspector_mode']
             );
         }
     }

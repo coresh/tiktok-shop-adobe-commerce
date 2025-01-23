@@ -95,8 +95,6 @@ define([
                 $('magento_orders_listings_other_mode')
                         .observe('change', this.magentoOrdersListingsOtherModeChange)
                         .simulate('change');
-                $('magento_orders_listings_other_product_mode')
-                        .observe('change', this.magentoOrdersListingsOtherProductModeChange);
 
                 $('magento_orders_number_source')
                         .observe('change', this.magentoOrdersNumberChange);
@@ -213,12 +211,9 @@ define([
             var self = TikTokShopAccountObj;
 
             if ($('magento_orders_listings_other_mode').value == 1) {
-                $('magento_orders_listings_other_product_mode_container').show();
                 $('magento_orders_listings_other_store_id_container').show();
             } else {
-                $('magento_orders_listings_other_product_mode_container').hide();
                 $('magento_orders_listings_other_store_id_container').hide();
-                $('magento_orders_listings_other_product_mode').value = TikTokShop.php.constant('Account\\Settings\\Order::LISTINGS_OTHER_PRODUCT_MODE_IGNORE');
                 $('magento_orders_listings_other_store_id').value = '';
             }
 
@@ -227,15 +222,8 @@ define([
         },
 
         magentoOrdersListingsOtherProductModeChange: function () {
-            if ($('magento_orders_listings_other_product_mode').value == TikTokShop.php.constant('Account\\Settings\\Order::LISTINGS_OTHER_PRODUCT_MODE_IGNORE')) {
-                $('magento_orders_listings_other_product_mode_note').hide();
-                $('magento_orders_listings_other_product_tax_class_id_container').hide();
-                $('magento_orders_listings_other_product_mode_warning').hide();
-            } else {
-                $('magento_orders_listings_other_product_mode_note').show();
-                $('magento_orders_listings_other_product_tax_class_id_container').show();
-                $('magento_orders_listings_other_product_mode_warning').show();
-            }
+            $('magento_orders_listings_other_product_tax_class_id_container').hide();
+            $('magento_orders_listings_other_product_mode_warning').hide();
         },
 
         magentoOrdersNumberChange: function () {

@@ -235,12 +235,12 @@
                             <td class="value">
                                 <strong>
                                     <?php
-                                    if (empty($block->order->getShippingDateTo())) : ?>
+                                    if (empty($block->order->getShipByDate())) : ?>
                                         <?= __('N/A'); ?>
                                     <?php
                                     else : ?>
                                         <?= $block->formatDate(
-                                            $block->order->getShippingDateTo(),
+                                            $block->order->getShipByDate(),
                                             \IntlDateFormatter::MEDIUM,
                                             true
                                         ); ?>

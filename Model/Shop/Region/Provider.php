@@ -50,6 +50,42 @@ class Provider
                 new PackageWeightRestrictions(30, 'kg'),
                 new ProductPriceRestrictions(0.01, 6300)
             ),
+            new Region(
+                Region::REGION_MX,
+                (string)__('Mexico'),
+                Region::CURRENCY_MXN,
+                Region::SIZE_DIMENSION_CENTIMETER,
+                Region::WEIGHT_DIMENSION_KILOGRAM,
+                new PackageWeightRestrictions(30, 'kg'),
+                new ProductPriceRestrictions(0.1, 50000)
+            ),
+            new Region(
+                Region::REGION_DE,
+                (string)__('Germany'),
+                Region::CURRENCY_EUR,
+                Region::SIZE_DIMENSION_CENTIMETER,
+                Region::WEIGHT_DIMENSION_KILOGRAM,
+                new PackageWeightRestrictions(30, 'kg'),
+                new ProductPriceRestrictions(0.01, 6300)
+            ),
+            new Region(
+                Region::REGION_FR,
+                (string)__('France'),
+                Region::CURRENCY_EUR,
+                Region::SIZE_DIMENSION_CENTIMETER,
+                Region::WEIGHT_DIMENSION_KILOGRAM,
+                new PackageWeightRestrictions(30, 'kg'),
+                new ProductPriceRestrictions(0.01, 6300)
+            ),
+            new Region(
+                Region::REGION_IT,
+                (string)__('Italy'),
+                Region::CURRENCY_EUR,
+                Region::SIZE_DIMENSION_CENTIMETER,
+                Region::WEIGHT_DIMENSION_KILOGRAM,
+                new PackageWeightRestrictions(30, 'kg'),
+                new ProductPriceRestrictions(0.01, 6300)
+            ),
         ];
     }
 }

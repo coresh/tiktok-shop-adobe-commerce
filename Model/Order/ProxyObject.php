@@ -359,16 +359,15 @@ class ProxyObject
     {
         $additionalData = '';
 
-        $shippingDateTo = $this->order->getShippingDateTo();
+        $shipByDate = $this->order->getShipByDate();
         $isImportShipByDate = $this
             ->order
             ->getAccount()
             ->getOrdersSettings()
             ->isImportShipByDate();
 
-        if (!empty($shippingDateTo) && $isImportShipByDate) {
-            $shippingDate = \M2E\TikTokShop\Helper\Date::createDateGmt($shippingDateTo);
-            \M2E\TikTokShop\Helper\Date::convertToLocalFormat($shippingDate);
+        if (!empty($shipByDate) && $isImportShipByDate) {
+            $shippingDate = \M2E\TikTokShop\Helper\Date::createDateInCurrentZone($shipByDate);
             $additionalData .= sprintf('Ship By Date: %s | ', $shippingDate->format('M d, Y, H:i:s'));
         }
 

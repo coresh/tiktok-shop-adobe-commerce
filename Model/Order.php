@@ -1262,9 +1262,14 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         return $shippingDetails['date'] ?? '';
     }
 
-    public function getShippingDateTo()
+    public function getDeliverByDate()
     {
-        return $this->getData('shipping_date_to');
+        return $this->getData('deliver_by_date');
+    }
+
+    public function getShipByDate()
+    {
+        return $this->getData('ship_by_date');
     }
 
     /**

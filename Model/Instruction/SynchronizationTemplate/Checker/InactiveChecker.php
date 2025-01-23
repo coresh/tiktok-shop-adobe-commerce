@@ -24,7 +24,7 @@ class InactiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationT
         \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_PRODUCT_CHANGED,
         \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_STATUS_CHANGED,
         \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_QTY_CHANGED,
-        \M2E\TikTokShop\Model\Cron\Task\Product\InspectDirectChanges::INSTRUCTION_TYPE,
+        \M2E\TikTokShop\Model\Product\InspectDirectChanges::INSTRUCTION_TYPE,
     ];
 
     private \M2E\TikTokShop\Model\ScheduledAction\CreateService $scheduledActionCreate;

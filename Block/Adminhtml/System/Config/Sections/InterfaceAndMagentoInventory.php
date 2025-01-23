@@ -6,8 +6,10 @@ class InterfaceAndMagentoInventory extends \M2E\TikTokShop\Block\Adminhtml\Syste
 {
     /** @var \M2E\TikTokShop\Helper\Module\Configuration */
     private $configurationHelper;
+    private \M2E\TikTokShop\Model\Product\InspectDirectChanges\Config $inspectDirectChangesConfig;
 
     public function __construct(
+        \M2E\TikTokShop\Model\Product\InspectDirectChanges\Config $inspectDirectChangesConfig,
         \M2E\TikTokShop\Helper\Module\Configuration $configurationHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Framework\Registry $registry,
@@ -16,6 +18,7 @@ class InterfaceAndMagentoInventory extends \M2E\TikTokShop\Block\Adminhtml\Syste
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->configurationHelper = $configurationHelper;
+        $this->inspectDirectChangesConfig = $inspectDirectChangesConfig;
     }
 
     protected function _prepareForm()
@@ -151,39 +154,33 @@ class InterfaceAndMagentoInventory extends \M2E\TikTokShop\Block\Adminhtml\Syste
             ]
         );
 
-        //        $inspectorMode = $this->configurationHelper->isEnableListingProductInspectorMode();
-        //
-        //        $fieldset->addField(
-        //            'listing_product_inspector_mode',
-        //            self::SELECT,
-        //            [
-        //                'name' => 'groups[direct_database_changes][fields][listing_product_inspector_mode][value]',
-        //                'label' => __('Track Direct Database Changes'),
-        //                'values' => [
-        //                    ['value' => 0, 'label' => __('No')],
-        //                    ['value' => 1, 'label' => __('Yes')],
-        //                ],
-        //                'value' => $inspectorMode,
-        //                'tooltip' => __(
-        //                    <<<HTML
-        //<p>If you update Magento Product information over the Magento Core Models (e.g. direct SQL injections),
-        // use one of the options below to make M2E TikTok Shop detect these changes:</p>
-        // <ul>
-        //<li>M2E TikTok Shop Models (Object or Structural Methods). Read <a target="_blank" href="%url1%">
-        // the article</a>
-        //for more information.</li>
-        //<li>M2E TikTok Shop plug-in for the Magmi Import tool. Learn the details
-        // <a target="_blank" href="%url2%">here</a>.</li>
-        //<li>Track Direct Database Changes. Please note that this option is resource-consuming and may affect the
-        //performance of your Magento site and synchronization with Channels.</li>
-        //</ul>
-        //HTML
-        //                    ,
-        //                    'https://help.m2epro.com/support/solutions/articles/9000228224',
-        //                    'https://help.m2epro.com/support/solutions/articles/9000228276'
-        //                ),
-        //            ]
-        //        );
+        $fieldset = $form->addFieldset(
+            'direct_database_changes_field',
+            [
+                'legend' => __('Direct Database Changes'),
+                'collabsable' => false,
+            ]
+        );
+
+                $inspectorMode = $this->inspectDirectChangesConfig->isEnableProductInspectorMode();
+
+                $fieldset->addField(
+                    'listing_product_inspector_mode',
+                    self::SELECT,
+                    [
+                        'name' => 'groups[direct_database_changes][fields][listing_product_inspector_mode][value]',
+                        'label' => __('Track Direct Database Changes'),
+                        'values' => [
+                            ['value' => 0, 'label' => __('No')],
+                            ['value' => 1, 'label' => __('Yes')],
+                        ],
+                        'value' => $inspectorMode,
+                        'tooltip' => __(
+                            'Enable this option to ensure M2E detects changes when Magento Product information' .
+                            ' is updated not through Magento Core Models (e.g., direct SQL updates)'
+                        ),
+                    ]
+                );
 
         $form->setUseContainer(true);
         $this->setForm($form);

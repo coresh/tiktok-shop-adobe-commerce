@@ -10,10 +10,15 @@ class Region
     public const REGION_GB = 'GB';
     public const REGION_ES = 'ES';
     public const REGION_IE = 'IE';
+    public const REGION_MX = 'MX';
+    public const REGION_DE = 'DE';
+    public const REGION_FR = 'FR';
+    public const REGION_IT = 'IT';
 
     public const CURRENCY_EUR = 'EUR';
     public const CURRENCY_USD = 'USD';
     public const CURRENCY_GBP = 'GBP';
+    public const CURRENCY_MXN = 'MXN';
 
     public const SIZE_DIMENSION_CENTIMETER = 'CENTIMETER';
     public const SIZE_DIMENSION_INCH = 'INCH';
@@ -23,11 +28,15 @@ class Region
 
     public const EU_REGION_CODES = [
         self::REGION_ES,
-        self::REGION_IE
+        self::REGION_IE,
+        self::REGION_DE,
+        self::REGION_FR,
+        self::REGION_IT,
     ];
 
     private const US_REGION_CODES = [
-        self::REGION_US
+        self::REGION_US,
+        self::REGION_MX,
     ];
 
     private string $regionCode;

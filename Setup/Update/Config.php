@@ -57,7 +57,12 @@ class Config implements \M2E\TikTokShop\Model\Setup\Upgrade\Entity\ConfigInterfa
                 \M2E\TikTokShop\Setup\Update\y24_m11\AddProductListingQuality::class,
             ],
             'y24_m12' => [
-                \M2E\TikTokShop\Setup\Update\y24_m12\FixVariantSettingsFieldType::class
+                \M2E\TikTokShop\Setup\Update\y24_m12\FixVariantSettingsFieldType::class,
+            ],
+            'y25_m01' => [
+                \M2E\TikTokShop\Setup\Update\y25_m01\AddShipByDateAndDeliverByDateToOrder::class,
+                \M2E\TikTokShop\Setup\Update\y25_m01\DisableProductCreationForOrders::class,
+                \M2E\TikTokShop\Setup\Update\y25_m01\AddTrackDirectDatabaseChanges::class
             ],
         ];
     }

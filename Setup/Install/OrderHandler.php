@@ -206,7 +206,7 @@ class OrderHandler implements \M2E\TikTokShop\Model\Setup\InstallHandlerInterfac
                 Table::TYPE_TEXT
             )
             ->addColumn(
-                OrderResource::COLUMN_SHIPPING_DATE_TO,
+                OrderResource::COLUMN_DELIVER_BY_DATE,
                 Table::TYPE_DATETIME
             )
             ->addColumn(
@@ -219,6 +219,10 @@ class OrderHandler implements \M2E\TikTokShop\Model\Setup\InstallHandlerInterfac
                 OrderResource::COLUMN_BUYER_CANCELLATION_REQUEST_REASON,
                 Table::TYPE_TEXT,
                 255
+            )
+            ->addColumn(
+                OrderResource::COLUMN_SHIP_BY_DATE,
+                Table::TYPE_DATETIME
             )
             ->addColumn(
                 OrderResource::COLUMN_CREATE_DATE,
@@ -234,7 +238,8 @@ class OrderHandler implements \M2E\TikTokShop\Model\Setup\InstallHandlerInterfac
             ->addIndex('buyer_user_id', OrderResource::COLUMN_BUYER_USER_ID)
             ->addIndex('paid_amount', OrderResource::COLUMN_PAID_AMOUNT)
             ->addIndex('purchase_create_date', OrderResource::COLUMN_PURCHASE_CREATE_DATE)
-            ->addIndex('shipping_date_to', OrderResource::COLUMN_SHIPPING_DATE_TO)
+            ->addIndex('ship_by_date', OrderResource::COLUMN_SHIP_BY_DATE)
+            ->addIndex('deliver_by_date', OrderResource::COLUMN_DELIVER_BY_DATE)
             ->addIndex('account_id', OrderResource::COLUMN_ACCOUNT_ID)
             ->addIndex('magento_order_id', OrderResource::COLUMN_MAGENTO_ORDER_ID)
             ->addIndex(

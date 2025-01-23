@@ -7,6 +7,7 @@ namespace M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Description\Edit\Fo
 use M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm;
 use M2E\TikTokShop\Model\ResourceModel\Template\Description as DescriptionResource;
 use M2E\TikTokShop\Model\Template\Description as DescriptionTemplate;
+use M2E\TikTokShop\Model\TikTokShop\Listing\Product\Description\Renderer;
 
 class Data extends AbstractForm
 {
@@ -537,9 +538,9 @@ JS
         )->addCustomAttribute('apply_to_all_attribute_sets', 0);
 
         $TikTokShopAttributes = [
-            'title' => __('Title'),
-            'fixed_price' => __('TikTok Shop Price'),
-            'qty' => __('QTY'),
+            Renderer::TTS_ATTRIBUTE_CODE_TITLE => __('Title'),
+            Renderer::TTS_ATTRIBUTE_CODE_PRICE => __('TikTok Shop Price'),
+            Renderer::TTS_ATTRIBUTE_CODE_QTY => __('QTY'),
         ];
 
         $button->setData('onclick', 'TikTokShopTemplateDescriptionObj.insertTikTokShopAttribute()');

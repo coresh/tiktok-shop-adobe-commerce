@@ -163,30 +163,6 @@ for an item that does <b>not</b> belong to the M2E TikTok Shop Connect Listing.'
             ]
         );
 
-        $tooltip = __('Choose what should happen if an Order is received for a Product that does not ' .
-            'exist in your Magento Inventory.');
-        $fieldset->addField(
-            'magento_orders_listings_other_product_mode',
-            'select',
-            [
-                'container_id' => 'magento_orders_listings_other_product_mode_container',
-                'name' => 'magento_orders_settings[listing_other][product_mode]',
-                'label' => __('Product Not Found'),
-                'values' => [
-                    OrderSettings::LISTINGS_OTHER_PRODUCT_MODE_IGNORE => __('Do Not Create Order'),
-                    OrderSettings::LISTINGS_OTHER_PRODUCT_MODE_IMPORT => __('Create Product and Order'),
-                ],
-                'value' => $orderSettings->getUnmanagedListingProductMode(),
-                'tooltip' => $tooltip
-                    . '<span id="magento_orders_listings_other_product_mode_note">'
-                    . __('<br/><b>Note:</b> M2E TikTok Shop Connect will create only Simple Magento Products. For ' .
-                        'Channel variational items it will create a Simple Product for each variation. Please note ' .
-                        'that the Create Product and Order option is not meant for the creation of full-fledged ' .
-                        'products in your Magento catalog.')
-                    . '</span>',
-            ]
-        );
-
         $fieldset->addField(
             'magento_orders_listings_other_product_mode_warning',
             self::MESSAGES,

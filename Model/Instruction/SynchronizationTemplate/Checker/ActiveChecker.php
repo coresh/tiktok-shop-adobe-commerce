@@ -202,7 +202,7 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_PRODUCT_CHANGED,
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_STATUS_CHANGED,
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_QTY_CHANGED,
-            \M2E\TikTokShop\Model\Cron\Task\Product\InspectDirectChanges::INSTRUCTION_TYPE,
+            \M2E\TikTokShop\Model\Product\InspectDirectChanges::INSTRUCTION_TYPE,
         ];
     }
 
@@ -220,7 +220,7 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_CHANGE_LISTING_STORE_VIEW,
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_PRODUCT_CHANGED,
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_PRICE_CHANGED,
-            \M2E\TikTokShop\Model\Cron\Task\Product\InspectDirectChanges::INSTRUCTION_TYPE,
+            \M2E\TikTokShop\Model\Product\InspectDirectChanges::INSTRUCTION_TYPE,
         ];
     }
 
@@ -236,7 +236,7 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_PRODUCT_REMAP_FROM_LISTING,
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_CHANGE_LISTING_STORE_VIEW,
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_PRODUCT_CHANGED,
-            \M2E\TikTokShop\Model\Cron\Task\Product\InspectDirectChanges::INSTRUCTION_TYPE,
+            \M2E\TikTokShop\Model\Product\InspectDirectChanges::INSTRUCTION_TYPE,
         ];
     }
 
@@ -252,7 +252,7 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_PRODUCT_REMAP_FROM_LISTING,
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_CHANGE_LISTING_STORE_VIEW,
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_PRODUCT_CHANGED,
-            \M2E\TikTokShop\Model\Cron\Task\Product\InspectDirectChanges::INSTRUCTION_TYPE,
+            \M2E\TikTokShop\Model\Product\InspectDirectChanges::INSTRUCTION_TYPE,
             DescriptionPolicy::INSTRUCTION_TYPE_MAGENTO_STATIC_BLOCK_IN_DESCRIPTION_CHANGED,
         ];
     }
@@ -269,7 +269,7 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_PRODUCT_REMAP_FROM_LISTING,
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_CHANGE_LISTING_STORE_VIEW,
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_PRODUCT_CHANGED,
-            \M2E\TikTokShop\Model\Cron\Task\Product\InspectDirectChanges::INSTRUCTION_TYPE,
+            \M2E\TikTokShop\Model\Product\InspectDirectChanges::INSTRUCTION_TYPE,
         ];
     }
 
@@ -285,7 +285,7 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_PRODUCT_REMAP_FROM_LISTING,
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_CHANGE_LISTING_STORE_VIEW,
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_PRODUCT_CHANGED,
-            \M2E\TikTokShop\Model\Cron\Task\Product\InspectDirectChanges::INSTRUCTION_TYPE,
+            \M2E\TikTokShop\Model\Product\InspectDirectChanges::INSTRUCTION_TYPE,
         ];
     }
 
@@ -305,7 +305,7 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_PRODUCT_REMAP_FROM_LISTING,
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_CHANGE_LISTING_STORE_VIEW,
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_PRODUCT_CHANGED,
-            \M2E\TikTokShop\Model\Cron\Task\Product\InspectDirectChanges::INSTRUCTION_TYPE,
+            \M2E\TikTokShop\Model\Product\InspectDirectChanges::INSTRUCTION_TYPE,
         ];
     }
 
@@ -329,7 +329,7 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_PRODUCT_CHANGED,
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_STATUS_CHANGED,
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_QTY_CHANGED,
-            \M2E\TikTokShop\Model\Cron\Task\Product\InspectDirectChanges::INSTRUCTION_TYPE,
+            \M2E\TikTokShop\Model\Product\InspectDirectChanges::INSTRUCTION_TYPE,
         ];
     }
 }

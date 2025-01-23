@@ -146,7 +146,8 @@ class Builder extends \Magento\Framework\DataObject
 
         $this->setData(OrderResource::COLUMN_SHIPPING_DETAILS, json_encode($shippingDetails));
 
-        $this->setData(OrderResource::COLUMN_SHIPPING_DATE_TO, $data['delivery_sla_date']);
+        $this->setData(OrderResource::COLUMN_SHIP_BY_DATE, $data['ship_by_date']);
+        $this->setData(OrderResource::COLUMN_DELIVER_BY_DATE, $data['deliver_by_date']);
 
         // ---------------------------------------
         $this->items = $data['items'];

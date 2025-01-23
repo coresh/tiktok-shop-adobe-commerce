@@ -156,7 +156,7 @@ class Repository
         );
     }
 
-    public function getCountByInitiator(string $initiator): int
+    public function getInstructionCountByInitiator(string $initiator): int
     {
         $collection = $this->collectionFactory->create();
 

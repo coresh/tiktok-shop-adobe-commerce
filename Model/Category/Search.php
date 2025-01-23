@@ -49,19 +49,26 @@ class Search
 
     private function addLeafItem(ResultCollection $resultCollection, Tree $treeItem): void
     {
-        $categoryId = $treeItem->getCategoryId();
-        $shopId = $treeItem->getShopId();
-
-        $dictionary = $this->dictionaryRepository->findByShopAndCategoryId($shopId, $categoryId);
-
         $resultCollection->add(
             new ResultItem(
-                $categoryId,
+                $treeItem->getCategoryId(),
                 $this->pathBuilder->getPath($treeItem),
                 $treeItem->isInviteOnly(),
-                $dictionary->isCategoryValid()
+                $this->isValidCategory($treeItem)
             )
         );
+    }
+
+    private function isValidCategory(Tree $treeItem): bool
+    {
+        $dictionary = $this->dictionaryRepository
+            ->findByShopAndCategoryId($treeItem->getShopId(), $treeItem->getCategoryId());
+
+        if ($dictionary === null) {
+            return true;
+        }
+
+        return $dictionary->isCategoryValid();
     }
 
     private function addCategoryChildren(ResultCollection $resultCollection, Tree $treeItem): void

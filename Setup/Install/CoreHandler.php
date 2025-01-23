@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Setup\Install;
 
+use M2E\TikTokShop\Helper\Module\Configuration;
 use M2E\TikTokShop\Helper\Module\Database\Tables as TablesHelper;
 use M2E\TikTokShop\Model\ResourceModel\Config as ConfigResource;
 use M2E\TikTokShop\Model\ResourceModel\Lock\Item as LockItemResource;
@@ -424,21 +425,22 @@ class CoreHandler implements \M2E\TikTokShop\Model\Setup\InstallHandlerInterface
         $config->insert('/logs/listings/', 'last_action_id', '0');
         $config->insert('/logs/grouped/', 'max_records_count', '100000');
         $config->insert('/support/', 'contact_email', 'support@m2epro.com');
-        $config->insert('/general/configuration/', 'view_show_block_notices_mode', '1');
-        $config->insert('/general/configuration/', 'view_show_products_thumbnails_mode', '1');
-        $config->insert('/general/configuration/', 'view_products_grid_use_alternative_mysql_select_mode', '0');
-        $config->insert('/general/configuration/', 'other_pay_pal_url', 'paypal.com/cgi-bin/webscr/');
-        $config->insert('/general/configuration/', 'product_index_mode', '1');
-        $config->insert('/general/configuration/', 'product_force_qty_mode', '0');
-        $config->insert('/general/configuration/', 'product_force_qty_value', '10');
-        $config->insert('/general/configuration/', 'qty_percentage_rounding_greater', '0');
-        $config->insert('/general/configuration/', 'magento_attribute_price_type_converting_mode', '0');
+        $config->insert(Configuration::CONFIG_GROUP, 'listing_product_inspector_mode', '0');
+        $config->insert(Configuration::CONFIG_GROUP, 'view_show_block_notices_mode', '1');
+        $config->insert(Configuration::CONFIG_GROUP, 'view_show_products_thumbnails_mode', '1');
+        $config->insert(Configuration::CONFIG_GROUP, 'view_products_grid_use_alternative_mysql_select_mode', '0');
+        $config->insert(Configuration::CONFIG_GROUP, 'other_pay_pal_url', 'paypal.com/cgi-bin/webscr/');
+        $config->insert(Configuration::CONFIG_GROUP, 'product_index_mode', '1');
+        $config->insert(Configuration::CONFIG_GROUP, 'product_force_qty_mode', '0');
+        $config->insert(Configuration::CONFIG_GROUP, 'product_force_qty_value', '10');
+        $config->insert(Configuration::CONFIG_GROUP, 'qty_percentage_rounding_greater', '0');
+        $config->insert(Configuration::CONFIG_GROUP, 'magento_attribute_price_type_converting_mode', '0');
         $config->insert(
-            '/general/configuration/',
+            Configuration::CONFIG_GROUP,
             'create_with_first_product_options_when_variation_unavailable',
             '1'
         );
-        $config->insert('/general/configuration/', 'secure_image_url_in_item_description_mode', '0');
+        $config->insert(Configuration::CONFIG_GROUP, 'secure_image_url_in_item_description_mode', '0');
         $config->insert('/magento/product/simple_type/', 'custom_types', '');
         $config->insert('/magento/product/downloadable_type/', 'custom_types', '');
         $config->insert('/magento/product/configurable_type/', 'custom_types', '');
@@ -447,7 +449,11 @@ class CoreHandler implements \M2E\TikTokShop\Model\Setup\InstallHandlerInterface
         $config->insert('/health_status/notification/', 'mode', 1);
         $config->insert('/health_status/notification/', 'email', '');
         $config->insert('/health_status/notification/', 'level', 40);
-        $config->insert('/listing/product/inspector/', 'max_allowed_instructions_count', '2000');
+        $config->insert(
+            \M2E\TikTokShop\Model\Product\InspectDirectChanges\Config::GROUP,
+            \M2E\TikTokShop\Model\Product\InspectDirectChanges\Config::KEY_MAX_ALLOWED_PRODUCT_COUNT,
+            '2000'
+        );
         $config->insert('/listing/product/instructions/cron/', 'listings_products_per_one_time', '1000');
         $config->insert('/listing/product/scheduled_actions/', 'max_prepared_actions_count', '3000');
     }

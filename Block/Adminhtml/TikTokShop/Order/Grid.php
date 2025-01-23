@@ -132,7 +132,22 @@ class Grid extends AbstractGrid
         );
 
         $this->addColumn(
-            'shipping_date_to',
+            'deliver_by_date',
+            [
+                'header' => __('Deliver By Date'),
+                'align' => 'left',
+                'type' => 'datetime',
+                'filter' => \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\Column\Filter\Datetime::class,
+                'format' => \IntlDateFormatter::MEDIUM,
+                'filter_time' => true,
+                'index' => 'deliver_by_date',
+                'width' => '170px',
+                'frame_callback' => [$this, 'callbackDeliverByDate'],
+            ]
+        );
+
+        $this->addColumn(
+            'ship_by_date',
             [
                 'header' => __('Ship By Date'),
                 'align' => 'left',
@@ -140,9 +155,9 @@ class Grid extends AbstractGrid
                 'filter' => \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\Column\Filter\Datetime::class,
                 'format' => \IntlDateFormatter::MEDIUM,
                 'filter_time' => true,
-                'index' => 'shipping_date_to',
+                'index' => 'ship_by_date',
                 'width' => '170px',
-                'frame_callback' => [$this, 'callbackShippingDateTo'],
+                'frame_callback' => [$this, 'callbackShipByDate'],
             ]
         );
 
@@ -325,17 +340,41 @@ class Grid extends AbstractGrid
 
     public function callbackPurchaseCreateDate($value, \M2E\TikTokShop\Model\Order $row, $column, $isExport)
     {
+        $purchaseDate = $row->getPurchaseCreateDate();
+        if (empty($purchaseDate)) {
+            return '';
+        }
+
         return $this->_localeDate->formatDate(
-            $row->getPurchaseCreateDate(),
+            $purchaseDate,
             \IntlDateFormatter::MEDIUM,
             true
         );
     }
 
-    public function callbackShippingDateTo($value, \M2E\TikTokShop\Model\Order $row, $column, $isExport)
+    public function callbackShipByDate($value, \M2E\TikTokShop\Model\Order $row, $column, $isExport)
     {
+        $shippingDate = $row->getShipByDate();
+        if (empty($shippingDate)) {
+            return '';
+        }
+
         return $this->_localeDate->formatDate(
-            $row->getShippingDateTo(),
+            $shippingDate,
+            \IntlDateFormatter::MEDIUM,
+            true
+        );
+    }
+
+    public function callbackDeliverByDate($value, \M2E\TikTokShop\Model\Order $row, $column, $isExport)
+    {
+        $deliveringDate = $row->getDeliverByDate();
+        if (empty($deliveringDate)) {
+            return '';
+        }
+
+        return $this->_localeDate->formatDate(
+            $deliveringDate,
             \IntlDateFormatter::MEDIUM,
             true
         );

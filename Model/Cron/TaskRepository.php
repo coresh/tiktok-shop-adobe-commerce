@@ -24,6 +24,7 @@ class TaskRepository
             Task\ProcessScheduledActionsTask::NICK => Task\ProcessScheduledActionsTask::class,
             Task\Product\StopQueue::NICK => Task\Product\StopQueue::class,
             Task\Product\PromotionSync::NICK => Task\Product\PromotionSync::class,
+            Task\Product\InspectDirectChangesTask::NICK => Task\Product\InspectDirectChangesTask::class,
         ],
         #endregion
 
