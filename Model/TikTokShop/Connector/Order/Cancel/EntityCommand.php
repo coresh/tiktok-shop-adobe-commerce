@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Order\Cancel;
 
-class EntityCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class EntityCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $accountHash;
     private string $shopId;
@@ -47,7 +47,7 @@ class EntityCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
         ];
     }
 
-    public function parseResponse(\M2E\TikTokShop\Model\Connector\Response $response): object
+    public function parseResponse(\M2E\Core\Model\Connector\Response $response): object
     {
         return $response;
     }

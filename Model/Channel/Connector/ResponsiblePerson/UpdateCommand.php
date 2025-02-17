@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\Channel\Connector\ResponsiblePerson;
 
-class UpdateCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class UpdateCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $accountHash;
     private \M2E\TikTokShop\Model\Channel\ResponsiblePerson $responsiblePerson;
@@ -48,8 +48,8 @@ class UpdateCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
     }
 
     public function parseResponse(
-        \M2E\TikTokShop\Model\Connector\Response $response
-    ): \M2E\TikTokShop\Model\Connector\Response {
+        \M2E\Core\Model\Connector\Response $response
+    ): \M2E\Core\Model\Connector\Response {
         if ($response->getMessageCollection()->hasErrors()) {
             throw new \M2E\TikTokShop\Model\Exception\Connection\UnableUpdateData($response->getMessageCollection());
         }

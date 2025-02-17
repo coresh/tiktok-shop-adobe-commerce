@@ -214,7 +214,7 @@ class Checker
             return true;
         }
 
-        if ($metadata['online_responsible_person_id'] !== $listingProduct->getOnlineResponsiblePersonId()) {
+        if ($metadata['online_responsible_person_ids'] !== $listingProduct->getOnlineResponsiblePersonIds()) {
             return true;
         }
 

@@ -4,31 +4,22 @@ namespace M2E\TikTokShop\Block\Adminhtml\System\Config\Sections;
 
 class License extends \M2E\TikTokShop\Block\Adminhtml\System\Config\Sections
 {
-    /** @var string */
-    private $key;
-    /** @var array */
-    private $licenseData;
-    /** @var \M2E\TikTokShop\Helper\Module\License */
-    private $licenseHelper;
-    /** @var \M2E\TikTokShop\Helper\Client */
-    private $clientHelper;
-    /** @var \M2E\TikTokShop\Helper\Data */
-    private $dataHelper;
+    private string $key;
+    private array $licenseData;
+    private \M2E\Core\Model\LicenseService $licenseService;
+    private \M2E\Core\Helper\Client $clientHelper;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Module\License $licenseHelper,
-        \M2E\TikTokShop\Helper\Client $clientHelper,
-        \M2E\TikTokShop\Helper\Data $dataHelper,
+        \M2E\Core\Model\LicenseService $licenseService,
+        \M2E\Core\Helper\Client $clientHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
-
-        $this->licenseHelper = $licenseHelper;
+        $this->licenseService = $licenseService;
         $this->clientHelper = $clientHelper;
-        $this->dataHelper = $dataHelper;
     }
 
     protected function _prepareForm()
@@ -195,17 +186,21 @@ class License extends \M2E\TikTokShop\Block\Adminhtml\System\Config\Sections
 
     protected function prepareLicenseData()
     {
-        $this->key = \M2E\TikTokShop\Helper\Data::escapeHtml($this->licenseHelper->getKey());
+        $license = $this->licenseService->get();
+        $domainIdentifier = $license->getInfo()->getDomainIdentifier();
+        $ipIdentifier = $license->getInfo()->getIpIdentifier();
+
+        $this->key = \M2E\TikTokShop\Helper\Data::escapeHtml($license->getKey());
 
         $this->licenseData = [
-            'domain' => \M2E\TikTokShop\Helper\Data::escapeHtml($this->licenseHelper->getDomain()),
-            'ip' => \M2E\TikTokShop\Helper\Data::escapeHtml($this->licenseHelper->getIp()),
+            'domain' => \M2E\TikTokShop\Helper\Data::escapeHtml($domainIdentifier->getValidValue()),
+            'ip' => \M2E\TikTokShop\Helper\Data::escapeHtml($ipIdentifier->getValidValue()),
             'info' => [
-                'email' => \M2E\TikTokShop\Helper\Data::escapeHtml($this->licenseHelper->getEmail()),
+                'email' => \M2E\TikTokShop\Helper\Data::escapeHtml($license->getInfo()->getEmail()),
             ],
             'valid' => [
-                'domain' => $this->licenseHelper->isValidDomain(),
-                'ip' => $this->licenseHelper->isValidIp(),
+                'domain' => $domainIdentifier->isValid(),
+                'ip' => $ipIdentifier->isValid(),
             ],
             'connection' => [
                 'domain' => $this->clientHelper->getDomain(),
@@ -247,7 +242,7 @@ class License extends \M2E\TikTokShop\Block\Adminhtml\System\Config\Sections
         try {
             $this->clientHelper->updateLocationData(true);
             // @codingStandardsIgnoreLine
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
         }
 
         $this->jsTranslator->addTranslations(

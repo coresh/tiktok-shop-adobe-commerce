@@ -6,7 +6,7 @@ use M2E\TikTokShop\Model\TikTokShop\Connector\Warehouse\GetDeliveryOptions\Deliv
 use M2E\TikTokShop\Model\TikTokShop\Connector\Warehouse\GetDeliveryOptions\DimensionLimit;
 use M2E\TikTokShop\Model\TikTokShop\Connector\Warehouse\GetDeliveryOptions\WeightLimit;
 
-class GetDeliveryOptionsCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class GetDeliveryOptionsCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $accountHash;
     private string $shopId;
@@ -36,7 +36,7 @@ class GetDeliveryOptionsCommand implements \M2E\TikTokShop\Model\Connector\Comma
         ];
     }
 
-    public function parseResponse(\M2E\TikTokShop\Model\Connector\Response $response): object
+    public function parseResponse(\M2E\Core\Model\Connector\Response $response): object
     {
         $data = $response->getResponseData();
 

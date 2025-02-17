@@ -3,7 +3,6 @@
 namespace M2E\TikTokShop\Controller\Adminhtml;
 
 use M2E\TikTokShop\Helper\Module;
-use M2E\TikTokShop\Helper\Module\License;
 use M2E\TikTokShop\Model\HealthStatus\Task\Result;
 
 abstract class AbstractMain extends AbstractBase
@@ -222,9 +221,9 @@ abstract class AbstractMain extends AbstractBase
             return;
         }
 
-        /** @var \M2E\TikTokShop\Model\Setup\Repository $setupResource */
-        $setupResource = $this->_objectManager->get(\M2E\TikTokShop\Model\Setup\Repository::class);
-        $lastUpgrade = $setupResource->findLastUpgrade();
+        /** @var \M2E\Core\Model\Setup\Repository $setupResource */
+        $setupResource = $this->_objectManager->get(\M2E\Core\Model\Setup\Repository::class);
+        $lastUpgrade = $setupResource->findLastUpgrade(\M2E\TikTokShop\Helper\Module::IDENTIFIER);
         if ($lastUpgrade === null) {
             return;
         }
@@ -299,9 +298,9 @@ abstract class AbstractMain extends AbstractBase
             $added = $this->addLicenseActivationNotifications();
         }
 
-        /** @var \M2E\TikTokShop\Helper\Module\License $moduleLicenseHelper */
-        $moduleLicenseHelper = $this->_objectManager->get(\M2E\TikTokShop\Helper\Module\License::class);
-        if (!$added && !empty($moduleLicenseHelper->getKey())) {
+        /** @var \M2E\Core\Model\LicenseService $licenseService */
+        $licenseService = $this->_objectManager->get(\M2E\Core\Model\LicenseService::class);
+        if (!$added && $licenseService->has()) {
             $this->addLicenseValidationFailNotifications();
         }
     }
@@ -364,10 +363,10 @@ abstract class AbstractMain extends AbstractBase
     {
         /** @var \M2E\TikTokShop\Helper\Module $moduleHelper */
         $moduleHelper = $this->_objectManager->get(\M2E\TikTokShop\Helper\Module::class);
-        /** @var \M2E\TikTokShop\Helper\Module\Cron $moduleCronHelper */
-        $moduleCronHelper = $this->_objectManager->get(\M2E\TikTokShop\Helper\Module\Cron::class);
+        /** @var \M2E\TikTokShop\Model\Cron\Config $cronConfig */
+        $cronConfig = $this->_objectManager->get(\M2E\TikTokShop\Model\Cron\Config::class);
 
-        if (!$moduleCronHelper->isModeEnabled()) {
+        if (!$cronConfig->isEnabled()) {
             $this->getMessageManager()->addWarning(
                 __(
                     'Automatic Synchronization is disabled. You can enable it under ' .
@@ -380,9 +379,11 @@ abstract class AbstractMain extends AbstractBase
             return;
         }
 
+        /** @var \M2E\TikTokShop\Model\Cron\Manager $cronManager */
+        $cronManager = $this->_objectManager->get(\M2E\TikTokShop\Model\Cron\Manager::class);
         if (
             $moduleHelper->isReadyToWork()
-            && $moduleCronHelper->isLastRunMoreThan(1, true)
+            && $cronManager->isCronLastRunMoreThan(3600)
         ) {
             $message = __(
                 'Attention! AUTOMATIC Synchronization is not running at the moment.' .
@@ -403,13 +404,13 @@ abstract class AbstractMain extends AbstractBase
 
     protected function addLicenseActivationNotifications(): bool
     {
-        /** @var License $licenseHelper */
-        $licenseHelper = $this->_objectManager->get(\M2E\TikTokShop\Helper\Module\License::class);
+        /** @var \M2E\Core\Model\LicenseService $licenseService */
+        $licenseService = $this->_objectManager->get(\M2E\Core\Model\LicenseService::class);
 
         if (
-            !$licenseHelper->getKey()
-            || !$licenseHelper->getDomain()
-            || !$licenseHelper->getIp()
+            !$licenseService->get()->getKey()
+            || !$licenseService->get()->getInfo()->getDomainIdentifier()->getValidValue()
+            || !$licenseService->get()->getInfo()->getIpIdentifier()->getValidValue()
         ) {
             $params = [];
             if ($this->isContentLockedByWizard()) {
@@ -436,14 +437,14 @@ abstract class AbstractMain extends AbstractBase
 
     protected function addLicenseValidationFailNotifications(): void
     {
-        /** @var License $licenseHelper */
-        $licenseHelper = $this->_objectManager->get(\M2E\TikTokShop\Helper\Module\License::class);
+        /** @var \M2E\Core\Model\LicenseService $licenseService */
+        $licenseService = $this->_objectManager->get(\M2E\Core\Model\LicenseService::class);
 
         /** @var \M2E\TikTokShop\Helper\Module\Wizard $wizardHelper */
         $wizardHelper = $this->_objectManager->get(\M2E\TikTokShop\Helper\Module\Wizard::class);
         /** @var \M2E\TikTokShop\Helper\View\Configuration $configurationHelper */
         $configurationHelper = $this->_objectManager->get(\M2E\TikTokShop\Helper\View\Configuration::class);
-        if (!$licenseHelper->isValidDomain()) {
+        if (!$licenseService->get()->getInfo()->getDomainIdentifier()->isValid()) {
             $params = [];
             if ($wizardHelper->getActiveBlockerWizard($this->getCustomViewNick())) {
                 $params['wizard'] = '1';
@@ -462,7 +463,7 @@ abstract class AbstractMain extends AbstractBase
             return;
         }
 
-        if (!$licenseHelper->isValidIp()) {
+        if (!$licenseService->get()->getInfo()->getIpIdentifier()->isValid()) {
             $params = [];
             if ($wizardHelper->getActiveBlockerWizard($this->getCustomViewNick())) {
                 $params['wizard'] = '1';

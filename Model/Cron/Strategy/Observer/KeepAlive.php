@@ -17,9 +17,7 @@ class KeepAlive implements \Magento\Framework\Event\ObserverInterface
     /** @var int|null */
     private $circleStartTime = null;
 
-    //########################################
-
-    public function enable()
+    public function enable(): self
     {
         $this->isEnabled = true;
         $this->circleStartTime = null;
@@ -27,7 +25,7 @@ class KeepAlive implements \Magento\Framework\Event\ObserverInterface
         return $this;
     }
 
-    public function disable()
+    public function disable(): self
     {
         $this->isEnabled = false;
         $this->circleStartTime = null;
@@ -35,16 +33,16 @@ class KeepAlive implements \Magento\Framework\Event\ObserverInterface
         return $this;
     }
 
-    //########################################
+    // ----------------------------------------
 
-    public function setLockItemManager(\M2E\TikTokShop\Model\Lock\Item\Manager $lockItemManager)
+    public function setLockItemManager(\M2E\TikTokShop\Model\Lock\Item\Manager $lockItemManager): self
     {
         $this->lockItemManager = $lockItemManager;
 
         return $this;
     }
 
-    //########################################
+    // ----------------------------------------
 
     public function execute(Observer $observer)
     {
@@ -87,6 +85,4 @@ class KeepAlive implements \Magento\Framework\Event\ObserverInterface
 
         $this->circleStartTime = time();
     }
-
-    //########################################
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Model\Lock\Item;
 
 class Progress
@@ -11,13 +13,13 @@ class Progress
 
     public function __construct(
         \M2E\TikTokShop\Model\Lock\Item\Manager $lockItemManager,
-        $progressNick
+        string $progressNick
     ) {
         $this->lockItemManager = $lockItemManager;
         $this->progressNick = str_replace('/', '-', $progressNick);
     }
 
-    public function isInProgress()
+    public function isInProgress(): bool
     {
         $contentData = $this->lockItemManager->getContentData();
 
@@ -26,53 +28,39 @@ class Progress
 
     // ---------------------------------------
 
-    public function start()
+    public function start(): void
     {
         $contentData = $this->lockItemManager->getContentData();
 
         $contentData[self::CONTENT_DATA_KEY][$this->progressNick] = ['percentage' => 0];
 
         $this->lockItemManager->setContentData($contentData);
-
-        return $this;
     }
 
-    public function setPercentage($percentage)
+    public function setPercentage($percentage): void
     {
         $contentData = $this->lockItemManager->getContentData();
 
         $contentData[self::CONTENT_DATA_KEY][$this->progressNick]['percentage'] = $percentage;
 
         $this->lockItemManager->setContentData($contentData);
-
-        return $this;
     }
 
-    public function setDetails($args = [])
+    public function setDetails(array $args): void
     {
         $contentData = $this->lockItemManager->getContentData();
 
         $contentData[self::CONTENT_DATA_KEY][$this->progressNick] = $args;
 
         $this->lockItemManager->setContentData($contentData);
-
-        return $this;
     }
 
-    public function stop()
+    public function stop(): void
     {
         $contentData = $this->lockItemManager->getContentData();
-
-        if ($contentData === null) {
-            $this->lockItemManager->setContentData([]);
-
-            return $this;
-        }
 
         unset($contentData[self::CONTENT_DATA_KEY][$this->progressNick]);
 
         $this->lockItemManager->setContentData($contentData);
-
-        return $this;
     }
 }

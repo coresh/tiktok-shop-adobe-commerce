@@ -10,15 +10,14 @@ class Support
     public const WEBSITE_TERMS_URL = 'https://m2epro.com/terms-and-conditions';
     public const ACCOUNTS_URL = 'https://accounts.m2e.cloud';
     public const SUPPORT_CONTROLLER_NAME = 'support';
-    public const SUPPORT_PAGE_ROUTE = 'TikTokShop/' . self::SUPPORT_CONTROLLER_NAME . '/index';
 
     private \M2E\TikTokShop\Helper\Magento $magentoHelper;
-    private \M2E\TikTokShop\Helper\Client $clientHelper;
+    private \M2E\Core\Helper\Client $clientHelper;
     private \M2E\TikTokShop\Model\Module $module;
 
     public function __construct(
         \M2E\TikTokShop\Helper\Magento $magentoHelper,
-        \M2E\TikTokShop\Helper\Client $clientHelper,
+        \M2E\Core\Helper\Client $clientHelper,
         \M2E\TikTokShop\Model\Module $module
     ) {
         $this->magentoHelper = $magentoHelper;

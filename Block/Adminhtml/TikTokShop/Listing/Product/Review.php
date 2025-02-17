@@ -61,7 +61,7 @@ class Review extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractContainer
 
         // ---------------------------------------
         if ($this->getSource() === SourceModeBlock::MODE_OTHER) {
-            $url = $this->getUrl('*/tiktokshop_listing_unmanaged/index');
+            $url = $this->getUrl('*/product_grid/unmanaged');
             $buttonBlock = $this->getLayout()->createBlock(\M2E\TikTokShop\Block\Adminhtml\Magento\Button::class)
                                 ->setData([
                                     'label' => __('Back to Unmanaged Items'),

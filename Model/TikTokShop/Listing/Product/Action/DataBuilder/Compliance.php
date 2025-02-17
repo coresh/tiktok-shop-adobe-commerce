@@ -9,7 +9,7 @@ class Compliance extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action
     public const NICK = 'compliance';
 
     private ?string $manufacturerId = null;
-    private ?string $responsiblePersonId = null;
+    private ?array $responsiblePersonIds = [];
 
     public function getBuilderData(): array
     {
@@ -17,7 +17,7 @@ class Compliance extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action
 
         $result = [
             'manufacturer_id' => null,
-            'responsible_person_id' => null,
+            'responsible_person_ids' => null,
         ];
 
         if (!$listing->hasTemplateCompliance()) {
@@ -27,10 +27,10 @@ class Compliance extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action
         $policy = $listing->getTemplateCompliance();
 
         $this->manufacturerId = $policy->getManufacturerId();
-        $this->responsiblePersonId = $policy->getResponsiblePersonId();
+        $this->responsiblePersonIds = $policy->getResponsiblePersonIds();
 
         $result['manufacturer_id'] = $this->manufacturerId;
-        $result['responsible_person_id'] = $this->responsiblePersonId;
+        $result['responsible_person_ids'] = $this->responsiblePersonIds;
 
         return $result;
     }
@@ -40,7 +40,7 @@ class Compliance extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action
         return [
             self::NICK => [
                 'online_manufacturer_id' => $this->manufacturerId,
-                'online_responsible_person_id' => $this->responsiblePersonId,
+                'online_responsible_person_ids' => $this->responsiblePersonIds,
             ],
         ];
     }

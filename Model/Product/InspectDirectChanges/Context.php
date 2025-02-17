@@ -33,7 +33,7 @@ class Context
     {
         $this->register->setValue(
             self::REGISTRY_KEY,
-            $id
+            (string)$id
         );
     }
 }

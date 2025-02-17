@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\Channel\Connector\Manufacturer;
 
-class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class GetCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $accountHash;
 
@@ -26,7 +26,7 @@ class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
     }
 
     public function parseResponse(
-        \M2E\TikTokShop\Model\Connector\Response $response
+        \M2E\Core\Model\Connector\Response $response
     ): \M2E\TikTokShop\Model\Channel\Manufacturer\Collection {
         $collection = new \M2E\TikTokShop\Model\Channel\Manufacturer\Collection();
 

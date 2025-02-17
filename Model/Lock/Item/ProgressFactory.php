@@ -15,7 +15,7 @@ class ProgressFactory
 
     public function create(
         \M2E\TikTokShop\Model\Lock\Item\Manager $lockItemManager,
-        $progressNick
+        string $progressNick
     ): Progress {
         return $this->objectManager->create(
             Progress::class,

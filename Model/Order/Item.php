@@ -851,7 +851,13 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     public function canCreateShipments(): bool
     {
-        return $this->getItemStatus() === self::ITEM_STATUS_AWAITING_SHIPMENT;
+        $createShipmentStatuses = [
+            self::ITEM_STATUS_AWAITING_SHIPMENT,
+            self::ITEM_STATUS_AWAITING_COLLECTION,
+            self::ITEM_STATUS_IN_TRANSIT,
+        ];
+
+        return in_array($this->getItemStatus(), $createShipmentStatuses, true);
     }
 
     //region item_status column

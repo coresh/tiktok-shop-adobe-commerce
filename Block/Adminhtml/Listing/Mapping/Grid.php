@@ -173,9 +173,15 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
 
     public function callbackColumnActions($value, $row, $column, $isExport)
     {
-        $actions = '&nbsp;<a href="javascript:void(0);"';
-        $actions .= 'onclick="' . $this->getData('mapping_handler_js') . '.';
-        $actions .= $this->getData('mapping_action') . '(' . $row->getId() . ');">';
+        $url = $this->getUrl(
+            'm2e_tiktokshop/product_unmanaged_mapping/map',
+            [
+                'product_id' => $row->getId(),
+                'other_product_id' => $this->getData('other_product_id'),
+                'account_id' => $this->getData('account_id'),
+            ]
+        );
+        $actions = '<a href="javascript:void(0);" onclick="setLocation(\'' . $url . '\')">';
         $actions .= __('Link To This Product') . '</a>';
 
         return $actions;
@@ -226,7 +232,7 @@ JS
 
     public function getGridUrl()
     {
-        $params = ['_current' => true];
+        $params = ['_current' => true, 'other_product_id' => $this->getData('other_product_id')];
 
         if (!empty($this->getData('product_type'))) {
             $params = array_merge($params, ['type' => $this->getData('product_type')]);

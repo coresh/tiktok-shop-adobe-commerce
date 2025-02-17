@@ -23,7 +23,7 @@ class Initiator implements \M2E\TikTokShop\Model\Processing\PartialInitiatorInte
         $this->fromDate = $fromDate;
     }
 
-    public function getInitCommand(): \M2E\TikTokShop\Model\Connector\CommandProcessingInterface
+    public function getInitCommand(): \M2E\Core\Model\Connector\CommandProcessingInterface
     {
         if ($this->fromDate === null) {
             return new Connector\InventoryGetItemsCommand(

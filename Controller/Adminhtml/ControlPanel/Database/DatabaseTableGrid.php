@@ -8,9 +8,13 @@ class DatabaseTableGrid extends AbstractTable
 {
     public function execute()
     {
-        /** @var \M2E\TikTokShop\Block\Adminhtml\ControlPanel\Tabs\Database\Table\Grid $grid */
+        /** @var \M2E\Core\Block\Adminhtml\ControlPanel\Tab\Database\Table\Grid $grid */
         $grid = $this->getLayout()
-                     ->createBlock(\M2E\TikTokShop\Block\Adminhtml\ControlPanel\Tabs\Database\Table\Grid::class);
+                     ->createBlock(
+                         \M2E\Core\Block\Adminhtml\ControlPanel\Tab\Database\Table\Grid::class,
+                         '',
+                         ['tableName' => $this->getRequest()->getParam('table')],
+                     );
         $this->setAjaxContent($grid->toHtml());
 
         return $this->getResult();

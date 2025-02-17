@@ -55,7 +55,7 @@ class OrdersProcessor
     // ---------------------------------------
 
     private function processResponseMessages(
-        \M2E\TikTokShop\Model\Connector\Response\MessageCollection $messageCollection
+        \M2E\Core\Model\Connector\Response\MessageCollection $messageCollection
     ): void {
         foreach ($messageCollection->getMessages() as $message) {
             if (!$message->isError() && !$message->isWarning()) {

@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\ControlPanel\Inspection\Inspector;
 
-use M2E\TikTokShop\Model\ControlPanel\Inspection\InspectorInterface;
 use M2E\TikTokShop\Model\Exception\Connection;
-use M2E\TikTokShop\Model\ControlPanel\Inspection\Issue\Factory as IssueFactory;
 
-class ServerConnection implements InspectorInterface
+class ServerConnection implements \M2E\Core\Model\ControlPanel\Inspection\InspectorInterface
 {
-    private IssueFactory $issueFactory;
+    private \M2E\Core\Model\ControlPanel\Inspection\IssueFactory $issueFactory;
     private \M2E\TikTokShop\Model\Connector\Client\Single $serverClient;
 
     public function __construct(
-        IssueFactory $issueFactory,
+        \M2E\Core\Model\ControlPanel\Inspection\IssueFactory $issueFactory,
         \M2E\TikTokShop\Model\Connector\Client\Single $serverClient
     ) {
         $this->issueFactory = $issueFactory;
@@ -26,7 +24,7 @@ class ServerConnection implements InspectorInterface
         $issues = [];
 
         try {
-            $this->serverClient->process(new \M2E\TikTokShop\Model\TikTokShop\Connector\Server\CheckStateCommand());
+            $this->serverClient->process(new \M2E\Core\Model\Server\Connector\CheckStateCommand());
         } catch (Connection $exception) {
             $issues[] = $this->issueFactory->create(
                 $exception->getMessage(),

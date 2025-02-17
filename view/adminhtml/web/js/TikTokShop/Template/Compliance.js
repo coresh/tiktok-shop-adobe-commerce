@@ -1,14 +1,20 @@
 define([
+    'jquery',
     'mage/translate',
     'TikTokShop/Plugin/Messages',
-], function($t, MessagesObj) {
+], function($, $t, MessagesObj) {
 
     window.TikTokShopTemplateCompliance = Class.create({
+        wrapperSelector: '#magento_block_template_compliance_edit_form',
+        addRowButtonSelector: '.add_row',
+        removeRowButtonSelector: '.remove_row',
+        popupResponsiblePersonsSelector: '.manufacturer_details',
+        refreshResponsiblePersonsSelector: '.refresh_responsible_persons',
 
         accounts: null,
         selectedAccountId: null,
         manufacturerId: null,
-        responsiblePersonId: null,
+        responsiblePersonIds: null,
         urlGetResponsiblePersons: '',
         urlGetResponsiblePersonPopupHtml: '',
         urlGetResponsiblePersonUpdate: '',
@@ -28,18 +34,60 @@ define([
 
             this.setAccountId(config.accountId);
             this.setManufactureId(config.manufacturerId);
-            this.setResponsiblePersonId(config.responsiblePersonId);
+            this.setResponsiblePersonIds(config.responsiblePersonIds);
 
             this.initAccount();
+            this.initObservers();
         },
 
         // ----------------------------------------
 
+        initObservers: function () {
+            this.initResponsiblePersonLinks($(this.popupResponsiblePersonsSelector));
+            this.initRefreshResponsiblePersons($(this.refreshResponsiblePersonsSelector));
+
+            this.initAddPerson($(this.addRowButtonSelector));
+            this.initRemovePerson($(this.removeRowButtonSelector));
+        },
+
+        initAddPerson: function (element) {
+            const self = this;
+
+            element.on('click', function (event) {
+                self.addRow(event);
+            });
+        },
+
+        initRemovePerson: function (element) {
+            const self = this;
+
+            $(element).on('click', function (event) {
+                self.removeRow(event);
+            });
+        },
+
+        initRefreshResponsiblePersons: function (element) {
+            const self = this;
+
+            $(element).on('click', function () {
+                self.updateResponsiblePersons(true);
+            });
+        },
+
+        initResponsiblePersonLinks: function (element) {
+            const self = this;
+
+            $(element).on('click', function (event) {
+                let {index, isNew} = $(event.target).data();
+                self.loadResponsiblePersonPopup(Boolean(isNew), index);
+            });
+        },
+
         initAccount: function() {
             const self = this;
 
-            $('account_id').observe('change', function() {
-                self.setAccountId($('account_id').value || self.selectedAccountId);
+            $('#account_id').on('change', function() {
+                self.setAccountId($('#account_id').val() || self.selectedAccountId);
             });
         },
 
@@ -51,8 +99,9 @@ define([
             this.accountId = parseInt(id) || null;
 
             if (this.hasAccountId()) {
-                jQuery('#refresh_manufacturer, #refresh_responsible_person').show();
-                jQuery('.actions').show();
+                $('#refresh_manufacturer, #refresh_responsible_persons').show();
+                $('.actions').show();
+                $('.add_row_wrapper').show();
 
                 this.loadAccountData();
             }
@@ -108,7 +157,7 @@ define([
         },
 
         renderManufacturers: function(manufacturers) {
-            const select = jQuery('#manufacturer_id');
+            const select = $('#manufacturer_id');
             select.find('option').remove();
 
             manufacturers.each(function(manufacturer) {
@@ -123,15 +172,17 @@ define([
         // ----------------------------------------
 
         hasResponsiblePersonId: function() {
-            return this.responsiblePersonId !== null;
+            return this.responsiblePersonIds !== null;
         },
 
-        setResponsiblePersonId: function(id) {
-            this.responsiblePersonId = id || null;
+        setResponsiblePersonIds: function(ids) {
+            if (ids) {
+                this.responsiblePersonIds = JSON.parse(ids);
+            }
         },
 
-        getResponsiblePersonId: function() {
-            return this.responsiblePersonId;
+        getResponsiblePersonIds: function() {
+            return this.responsiblePersonIds;
         },
 
         updateResponsiblePersons: function(isForce) {
@@ -161,15 +212,30 @@ define([
         },
 
         renderResponsiblePersons: function(persons) {
-            const select = jQuery('#responsible_person_id');
-            select.find('option').remove();
+            const self = this;
 
-            persons.each(function(person) {
-                select.append(new Option(person.title, person.id));
+            let ids = self.getResponsiblePersonIds();
+            const selects = $("[id^='responsible_person_id_']");
+
+            let options = persons.map(function(person) {
+                return new Option(person.title, person.id);
             });
 
-            if (this.hasResponsiblePersonId()) {
-                select.val(this.getResponsiblePersonId());
+            if (selects.length > 1) {
+                selects.each(function(select) {
+                    let selectElement = $(select);
+                    select.find('option').remove();
+
+                    let index = selectElement.find('select')
+                            .attr('id', (i, id) => id.replace(/(\d+)/, ($0, $1) => ++$1));
+
+                    selectElement.append(options);
+
+                    selectElement.val(ids[index]);
+                });
+            } else {
+                selects.find('option').remove();
+                selects.append(options);
             }
         },
 
@@ -179,11 +245,11 @@ define([
             const self = this;
             let manufacturerId = null;
             if (!isNew) {
-                manufacturerId = jQuery('#manufacturer_id').val();
+                manufacturerId = $('#manufacturer_id').val();
                 if (manufacturerId === '') {
                     return;
                 }
-                self.currentManufacturerTitle = jQuery('#manufacturer_id option:selected').text();
+                self.currentManufacturerTitle = $('#manufacturer_id option:selected').text();
             }
 
             new Ajax.Request(this.urlGetManufacturerPopupHtml, {
@@ -208,7 +274,7 @@ define([
             const messages = Object.create(MessagesObj);
             messages.setContainer('#modal_manufacturer_popup');
 
-            const popup = jQuery(modalDialogMessage).modal({
+            const popup = $(modalDialogMessage).modal({
                 title: $t('Manufacturer Details'),
                 modalClass: 'width-550',
                 buttons: [
@@ -228,7 +294,7 @@ define([
                                 return false;
                             }
 
-                            const newTitle = jQuery('#name').val().trim();
+                            const newTitle = $('#name').val().trim();
 
                             if (isNew || newTitle !== self.currentManufacturerTitle) {
                                 self.updateManufacturers(false);
@@ -245,12 +311,15 @@ define([
             modalDialogMessage.innerHTML.evalScripts();
         },
 
-        loadResponsiblePersonPopup: function(isNew) {
+        loadResponsiblePersonPopup: function(isNew, index) {
             const self = this;
             let personId = null;
             if (!isNew) {
-                personId = jQuery('#responsible_person_id').val();
-                self.currentResponsiblePersonTitle = jQuery('#responsible_person_id option:selected').text();
+                let person = $(`#responsible_person_id_${index}`);
+
+                personId = person.val();
+                self.currentResponsiblePersonTitle = person.find('option:selected').text();
+
                 if (personId === '') {
                     return;
                 }
@@ -278,7 +347,7 @@ define([
             const messages = Object.create(MessagesObj);
             messages.setContainer('#modal_person_popup');
 
-            const popup = jQuery(modalDialogMessage).modal({
+            const popup = $(modalDialogMessage).modal({
                 title: $t('Responsible Person Details'),
                 modalClass: 'width-550',
                 buttons: [
@@ -299,8 +368,8 @@ define([
                                 return false;
                             }
 
-                            const newName = jQuery('#name').val().trim();
-                            const newEmail = jQuery('#email').val().trim();
+                            const newName = $('#name').val().trim();
+                            const newEmail = $('#email').val().trim();
 
                             const newTitle = `${newName} (${newEmail})`;
 
@@ -321,13 +390,44 @@ define([
 
         // ----------------------------------------
 
+        addRow: function (event) {
+            let clonedRow = $('.field-responsible_person_id').last().clone();
+
+            this.incrementNameAndIdsInRow(clonedRow);
+            clonedRow.find('.refresh_status ').closest('.action').remove();
+            clonedRow.find('.remove_row').show();
+
+            $(event.target).closest('.admin__field').before(clonedRow);
+
+            this.initRemovePerson(clonedRow.find(this.removeRowButtonSelector));
+            this.initResponsiblePersonLinks(clonedRow.find('.manufacturer_details'));
+        },
+
+        removeRow: function (event) {
+            $(event.target).closest('.admin__field.field').remove();
+        },
+
+        // ----------------------------------------
+
+        incrementNameAndIdsInRow: function (row) {
+            $(row).find('select, input')
+                    .attr('name', (i, name) => name.replace(/(\d+)/, ($0, $1) => ++$1))
+                    .attr('id', (i, id) => id.replace(/(\d+)/, ($0, $1) => ++$1));
+
+            $(row).find('label')
+                    .attr('for', (i, id) => id.replace(/(\d+)/, ($0, $1) => ++$1));
+
+            $(row).find('a')
+                    .attr('data-index', (i, id) => id.replace(/(\d+)/, ($0, $1) => ++$1));
+        },
+
+        // ----------------------------------------
+
         submitForm: function(formId, url, messageObj) {
-            const form = jQuery('#' + formId);
-            if (!form.validation() || !form.validation('isValid')) {
+            const form = $('#' + formId);
+            if (!form.valid()) {
                 return false;
             }
-
-            const self = this;
 
             const formData = form.serialize(true);
 

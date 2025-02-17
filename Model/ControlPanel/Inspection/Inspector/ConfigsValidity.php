@@ -4,31 +4,26 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\ControlPanel\Inspection\Inspector;
 
-use M2E\TikTokShop\Helper\Module\Database\Structure as DatabaseStructure;
-use M2E\TikTokShop\Model\ControlPanel\Inspection\InspectorInterface;
-use M2E\TikTokShop\Model\ControlPanel\Inspection\Issue\Factory as IssueFactory;
+use M2E\Core\Model\ControlPanel\Inspection\IssueFactory;
 use Magento\Backend\Model\UrlInterface;
 
-class ConfigsValidity implements InspectorInterface
+class ConfigsValidity implements \M2E\Core\Model\ControlPanel\Inspection\InspectorInterface
 {
-    private DatabaseStructure $databaseStructure;
     private UrlInterface $urlBuilder;
     private IssueFactory $issueFactory;
-    private \M2E\TikTokShop\Model\ResourceModel\Config $configResource;
     private \M2E\TikTokShop\Model\Connector\Client\Single $serverClient;
+    private \M2E\Core\Model\Config\Repository $configRepository;
 
     public function __construct(
-        \M2E\TikTokShop\Model\ResourceModel\Config $configResource,
-        DatabaseStructure $databaseStructure,
+        \M2E\Core\Model\Config\Repository $configRepository,
         UrlInterface $urlBuilder,
         IssueFactory $issueFactory,
         \M2E\TikTokShop\Model\Connector\Client\Single $serverClient
     ) {
         $this->serverClient = $serverClient;
-        $this->configResource = $configResource;
-        $this->databaseStructure = $databaseStructure;
         $this->urlBuilder = $urlBuilder;
         $this->issueFactory = $issueFactory;
+        $this->configRepository = $configRepository;
     }
 
     public function process(): array
@@ -43,15 +38,12 @@ class ConfigsValidity implements InspectorInterface
             return $issues;
         }
 
-        $configTableName = $this->databaseStructure->getTableNameWithoutPrefix(
-            $this->configResource->getMainTable()
-        );
-        if (!isset($responseData['configs_info']) || !isset($responseData['configs_info'][$configTableName])) {
+        if (!isset($responseData['configs_info']['config'])) {
             $issues[] = $this->issueFactory->create('No info for this TikTokShop version');
 
             return $issues;
         }
-        $difference = $this->getSnapshot($responseData['configs_info']);
+        $difference = $this->createDiff($responseData['configs_info']['config']);
 
         if (!empty($difference)) {
             $issues[] = $this->issueFactory->create(
@@ -65,41 +57,48 @@ class ConfigsValidity implements InspectorInterface
 
     private function getDiff(): array
     {
-        $command = new \M2E\TikTokShop\Model\TikTokShop\Connector\System\Config\GetInfoCommand();
-        /** @var \M2E\TikTokShop\Model\Connector\Response $response */
+        $command = new \M2E\Core\Model\Server\Connector\System\ConfigsGetInfoCommand();
+        /** @var \M2E\Core\Model\Connector\Response $response */
         $response = $this->serverClient->process($command);
 
         return $response->getResponseData();
     }
 
-    private function getSnapshot($data): array
+    private function createDiff(array $originalVersionData): array
     {
         $currentData = [];
 
-        foreach ($data as $tableName => $configInfo) {
-            $currentData[$tableName] = $this->databaseStructure->getConfigSnapshot($tableName);
+        foreach ($this->configRepository->getAllByExtension(\M2E\TikTokShop\Helper\Module::IDENTIFIER) as $config) {
+            $key = $this->createConfigRecordIdentifier($config->getGroup(), $config->getKey());
+            $currentData[$key] = [
+                'group' => $config->getGroup(),
+                'key' => $config->getKey(),
+                'value' => $config->getValue(),
+            ];
         }
 
         $differences = [];
 
-        foreach ($data as $tableName => $configInfo) {
-            foreach ($configInfo as $codeHash => $item) {
-                if (array_key_exists($codeHash, $currentData[$tableName])) {
-                    continue;
-                }
+        foreach ($originalVersionData as $originalVersionItem) {
+            $configIdentifier = $this->createConfigRecordIdentifier(
+                $originalVersionItem['group'],
+                $originalVersionItem['key']
+            );
 
-                $differences[] = [
-                    'table' => $tableName,
-                    'item' => $item,
-                    'solution' => 'insert',
-                ];
+            if (array_key_exists($configIdentifier, $currentData)) {
+                continue;
             }
+
+            $differences[] = [
+                'item' => $originalVersionItem,
+                'solution' => 'insert',
+            ];
         }
 
         return $differences;
     }
 
-    private function renderMetadata($data): string
+    private function renderMetadata($differenceResult): string
     {
         $html = <<<HTML
 <table style="width: 100%;">
@@ -111,18 +110,18 @@ class ConfigsValidity implements InspectorInterface
     </tr>
 HTML;
 
-        foreach ($data as $index => $row) {
+        foreach ($differenceResult as $index => $row) {
             $url = $this->urlBuilder->getUrl(
                 '*/controlPanel_database/addTableRow',
                 [
-                    'table' => $row['table'],
+                    'table' => \M2E\Core\Helper\Module\Database\Tables::TABLE_NAME_CONFIG,
                 ]
             );
 
             $actionWord = 'Insert';
             $styles = '';
             $onclickAction = <<<JS
-var elem = jQuery(this);
+const elem = jQuery(this);
 
 new jQuery.ajax({
     url: '{$url}',
@@ -162,5 +161,10 @@ HTML;
         $html .= '</table>';
 
         return $html;
+    }
+
+    private function createConfigRecordIdentifier(string $group, string $key): string
+    {
+        return sprintf('%s#%s', $group, $key);
     }
 }

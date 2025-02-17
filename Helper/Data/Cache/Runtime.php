@@ -1,24 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Helper\Data\Cache;
 
 class Runtime implements \M2E\TikTokShop\Helper\Data\Cache\BaseInterface
 {
-    /** @var array */
-    private $cacheStorage = [];
+    private array $cacheStorage = [];
 
-    /**
-     * @inheritDoc
-     */
-    public function getValue($key)
+    public function getValue(string $key)
     {
         return $this->cacheStorage[$key]['data'] ?? null;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function setValue($key, $value, array $tags = [], $lifetime = null): void
+    public function setValue(string $key, $value, array $tags = [], ?int $lifetime = null): void
     {
         $this->cacheStorage[$key] = [
             'data' => $value,
@@ -28,18 +23,12 @@ class Runtime implements \M2E\TikTokShop\Helper\Data\Cache\BaseInterface
 
     // ----------------------------------------
 
-    /**
-     * @inheritDoc
-     */
-    public function removeValue($key): void
+    public function removeValue(string $key): void
     {
         unset($this->cacheStorage[$key]);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function removeTagValues($tag): void
+    public function removeTagValues(string $tag): void
     {
         foreach ($this->cacheStorage as $key => $data) {
             if (!in_array($tag, $data['tags'])) {
@@ -50,9 +39,6 @@ class Runtime implements \M2E\TikTokShop\Helper\Data\Cache\BaseInterface
         }
     }
 
-    /**
-     * @inheritDoc
-     */
     public function removeAllValues(): void
     {
         $this->cacheStorage = [];

@@ -6,7 +6,7 @@ namespace M2E\TikTokShop\Model\Processing;
 
 interface SingleInitiatorInterface
 {
-    public function getInitCommand(): \M2E\TikTokShop\Model\Connector\CommandProcessingInterface;
+    public function getInitCommand(): \M2E\Core\Model\Connector\CommandProcessingInterface;
 
     public function generateProcessParams(): array;
 

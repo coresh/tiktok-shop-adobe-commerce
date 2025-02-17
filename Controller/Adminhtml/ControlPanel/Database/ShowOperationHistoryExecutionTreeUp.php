@@ -11,10 +11,9 @@ class ShowOperationHistoryExecutionTreeUp extends AbstractTable
     public function __construct(
         \M2E\TikTokShop\Model\OperationHistory\Repository $repository,
         \M2E\TikTokShop\Helper\Module $moduleHelper,
-        \M2E\TikTokShop\Model\ControlPanel\Database\TableModelFactory $databaseTableFactory,
-        \M2E\TikTokShop\Model\Module $module
+        \M2E\Core\Model\ControlPanel\Database\TableModelFactory $tableModelFactory
     ) {
-        parent::__construct($moduleHelper, $databaseTableFactory, $module);
+        parent::__construct($moduleHelper, $tableModelFactory);
         $this->repository = $repository;
     }
 
@@ -25,10 +24,10 @@ class ShowOperationHistoryExecutionTreeUp extends AbstractTable
             $this->getMessageManager()->addErrorMessage('Operation history ID is not presented.');
 
             $this->redirectToTablePage(
-                \M2E\TikTokShop\Helper\Module\Database\Tables::TABLE_NAME_OPERATION_HISTORY,
+                \M2E\TikTokShop\Helper\Module\Database\Tables::TABLE_NAME_OPERATION_HISTORY
             );
 
-            //exit
+            return;
         }
 
         $operationHistory = $this->repository->get((int)$operationHistoryId);

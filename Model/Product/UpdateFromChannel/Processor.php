@@ -279,7 +279,7 @@ class Processor
                 20,
             );
 
-            $this->product->setOnlineResponsiblePersonId($this->channelProduct->getResponsiblePersonId());
+            $this->product->setOnlineResponsiblePersonIds($this->channelProduct->getResponsiblePersonIds());
         }
 
         $this->updateProductListingQuality();
@@ -355,8 +355,16 @@ class Processor
 
     private function isNeedUpdateResponsiblePersonId(): bool
     {
-        return $this->channelProduct->getResponsiblePersonId() !== null
-            && $this->product->getOnlineResponsiblePersonId() !== $this->channelProduct->getResponsiblePersonId();
+        $channelResponsiblePersonIds = $this->channelProduct->getResponsiblePersonIds();
+        if (empty($channelResponsiblePersonIds)) {
+            return false;
+        }
+
+        $productResponsiblePersonIds = $this->product->getOnlineResponsiblePersonIds();
+        arsort($productResponsiblePersonIds);
+        arsort($channelResponsiblePersonIds);
+
+        return $productResponsiblePersonIds === $channelResponsiblePersonIds;
     }
 
     private function updateProductListingQuality(): void

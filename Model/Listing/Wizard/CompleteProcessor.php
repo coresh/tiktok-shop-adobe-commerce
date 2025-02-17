@@ -9,15 +9,18 @@ class CompleteProcessor
     private \M2E\TikTokShop\Model\Listing\AddProductsService $addProductsService;
     private \M2E\TikTokShop\Model\UnmanagedProduct\Repository $listingOtherRepository;
     private \M2E\TikTokShop\Model\UnmanagedProduct\DeleteService $unmanagedProductDeleteService;
+    private \M2E\TikTokShop\Model\Magento\Product\CacheFactory $magentoProductFactory;
 
     public function __construct(
         \M2E\TikTokShop\Model\Listing\AddProductsService $addProductsService,
         \M2E\TikTokShop\Model\UnmanagedProduct\Repository $listingOtherRepository,
-        \M2E\TikTokShop\Model\UnmanagedProduct\DeleteService $unmanagedProductDeleteService
+        \M2E\TikTokShop\Model\UnmanagedProduct\DeleteService $unmanagedProductDeleteService,
+        \M2E\TikTokShop\Model\Magento\Product\CacheFactory $magentoProductFactory
     ) {
         $this->addProductsService = $addProductsService;
         $this->listingOtherRepository = $listingOtherRepository;
         $this->unmanagedProductDeleteService = $unmanagedProductDeleteService;
+        $this->magentoProductFactory = $magentoProductFactory;
     }
 
     public function process(Manager $wizardManager): array
@@ -31,11 +34,16 @@ class CompleteProcessor
 
             $processedWizardProductIds[] = $wizardProduct->getId();
 
+            $magentoProduct = $this->magentoProductFactory->create()->setProductId($wizardProduct->getMagentoProductId());
+            if (!$magentoProduct->exists()) {
+                continue;
+            }
+
             if ($wizardManager->isWizardTypeGeneral()) {
                 $listingProduct = $this->addProductsService
                     ->addProduct(
                         $listing,
-                        $wizardProduct->getMagentoProductId(),
+                        $magentoProduct,
                         $wizardProduct->getCategoryDictionaryId(),
                         \M2E\TikTokShop\Helper\Data::INITIATOR_USER,
                     );

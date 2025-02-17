@@ -37,12 +37,12 @@ class Compliance extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         int $accountId,
         string $title,
         string $manufacturerId,
-        string $responsiblePersonId
+        array $responsiblePersonIds
     ): self {
         $this->setData(ComplianceResource::COLUMN_ACCOUNT_ID, $accountId)
              ->setTitle($title)
             ->setManufacturerId($manufacturerId)
-            ->setResponsiblePersonId($responsiblePersonId);
+            ->setResponsiblePersonIds($responsiblePersonIds);
 
         return $this;
     }
@@ -62,9 +62,14 @@ class Compliance extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         return (string)$this->getData(ComplianceResource::COLUMN_MANUFACTURER_ID);
     }
 
-    public function getResponsiblePersonId(): string
+    public function getResponsiblePersonIds(): array
     {
-        return (string)$this->getData(ComplianceResource::COLUMN_RESPONSIBLE_PERSON_ID);
+        $value = $this->getData(ComplianceResource::COLUMN_RESPONSIBLE_PERSON_IDS);
+        if (empty($value)) {
+            return [];
+        }
+
+        return json_decode($value, true);
     }
 
     public function setTitle(string $title): self
@@ -81,9 +86,11 @@ class Compliance extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         return $this;
     }
 
-    public function setResponsiblePersonId(string $responsiblePersonId): self
+    public function setResponsiblePersonIds(array $responsiblePersonIds): self
     {
-        $this->setData(ComplianceResource::COLUMN_RESPONSIBLE_PERSON_ID, $responsiblePersonId);
+        $responsiblePersonIds = array_values($responsiblePersonIds);
+
+        $this->setData(ComplianceResource::COLUMN_RESPONSIBLE_PERSON_IDS, json_encode($responsiblePersonIds, JSON_THROW_ON_ERROR));
 
         return $this;
     }

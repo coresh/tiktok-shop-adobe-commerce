@@ -89,8 +89,8 @@ class Dispatcher
             $requestData[$taskModel->getServerTaskName()] = $taskModel->getRequestData();
         }
 
-        $command = new \M2E\TikTokShop\Model\Connector\Command\ServicingCommand($requestData);
-        /** @var \M2E\TikTokShop\Model\Connector\Response $response */
+        $command = new \M2E\Core\Model\Server\Connector\ServicingCommand($requestData);
+        /** @var \M2E\Core\Model\Connector\Response $response */
         $response = $this->serverConnector->process($command);
 
         $responseData = $response->getResponseData();

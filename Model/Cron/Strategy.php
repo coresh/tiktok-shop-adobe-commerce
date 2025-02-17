@@ -2,109 +2,129 @@
 
 namespace M2E\TikTokShop\Model\Cron;
 
-class Strategy extends \M2E\TikTokShop\Model\AbstractModel
+class Strategy
 {
+    private const LOCK_MAX_INACTIVE_SECONDS = 900;
     public const LOCK_ITEM_NICK = 'cron_strategy_serial';
     public const INITIALIZATION_TRANSACTIONAL_LOCK_NICK = 'cron_strategy_initialization';
+
     public const PROGRESS_START_EVENT_NAME = 'm2e_tts_cron_progress_start';
     public const PROGRESS_SET_PERCENTAGE_EVENT_NAME = 'm2e_tts_cron_progress_set_percentage';
     public const PROGRESS_SET_DETAILS_EVENT_NAME = 'm2e_tts_cron_progress_set_details';
     public const PROGRESS_STOP_EVENT_NAME = 'm2e_tts_cron_progress_stop';
 
-    private TaskFactory $taskFactory;
-    private \M2E\TikTokShop\Helper\Module\Cron $cronHelper;
+    // ----------------------------------------
+
+    private bool $initialized = false;
+    private int $initiator;
+    private OperationHistory $parentOperationHistory;
+
+    // ----------------------------------------
+
+    /** @var string[] */
+    private ?array $allowedTasks = null;
     private \M2E\TikTokShop\Model\Cron\Strategy\Observer\KeepAlive $observerKeepAlive;
     private \M2E\TikTokShop\Model\Cron\Strategy\Observer\Progress $observerProgress;
-    private \M2E\TikTokShop\Model\ActiveRecord\Factory $activeRecordFactory;
-    private ?\M2E\TikTokShop\Model\Lock\Transactional\Manager $initializationLockManager = null;
-    private \M2E\TikTokShop\Model\Cron\TaskRepository $taskRepo;
+    private \M2E\TikTokShop\Model\Lock\Transactional\Manager $initializationLockManager;
+    private \M2E\TikTokShop\Model\Cron\TaskCollection $taskCollection;
     private \M2E\TikTokShop\Model\Lock\Item\ManagerFactory $lockItemManagerFactory;
-    private ?\M2E\TikTokShop\Model\Lock\Item\Manager $lockItemManager = null;
-    private ?array $allowedTasks = null;
-    private ?int $initiator = null;
-    private ?OperationHistory $operationHistory = null;
-    private ?OperationHistory $parentOperationHistory = null;
+    private \M2E\TikTokShop\Model\Lock\Item\Manager $lockItemManager;
+    private OperationHistory $operationHistory;
     private \M2E\TikTokShop\Helper\Module\Exception $exceptionHelper;
     private \M2E\TikTokShop\Model\Lock\Transactional\ManagerFactory $lockTransactionalManagerFactory;
+    private \M2E\TikTokShop\Model\Lock\Item\Repository $lockItemRepository;
+    /** @var \M2E\TikTokShop\Model\Cron\OperationHistoryFactory */
+    private OperationHistoryFactory $operationHistoryFactory;
+    /** @var \M2E\TikTokShop\Model\Cron\Manager */
+    private Manager $cronManager;
+    /** @var \M2E\TikTokShop\Model\Cron\TaskProcessorFactory */
+    private TaskProcessorFactory $taskProcessorFactory;
 
     public function __construct(
-        TaskFactory $taskFactory,
+        Manager $cronManager,
+        \M2E\TikTokShop\Model\Cron\TaskProcessorFactory $taskProcessorFactory,
         \M2E\TikTokShop\Model\Lock\Transactional\ManagerFactory $lockTransactionalManagerFactory,
         \M2E\TikTokShop\Helper\Module\Exception $exceptionHelper,
         \M2E\TikTokShop\Model\Lock\Item\ManagerFactory $lockItemManagerFactory,
-        \M2E\TikTokShop\Helper\Module\Cron $cronHelper,
         \M2E\TikTokShop\Model\Cron\Strategy\Observer\KeepAlive $observerKeepAlive,
         \M2E\TikTokShop\Model\Cron\Strategy\Observer\Progress $observerProgress,
-        \M2E\TikTokShop\Model\ActiveRecord\Factory $activeRecordFactory,
-        \M2E\TikTokShop\Model\Cron\TaskRepository $taskRepo
+        \M2E\TikTokShop\Model\Cron\TaskCollection $taskRepo,
+        \M2E\TikTokShop\Model\Lock\Item\Repository $lockItemRepository,
+        \M2E\TikTokShop\Model\Cron\OperationHistoryFactory $operationHistoryFactory
     ) {
-        parent::__construct();
-
-        $this->taskFactory = $taskFactory;
         $this->lockItemManagerFactory = $lockItemManagerFactory;
-        $this->cronHelper = $cronHelper;
         $this->observerKeepAlive = $observerKeepAlive;
         $this->observerProgress = $observerProgress;
-        $this->activeRecordFactory = $activeRecordFactory;
-        $this->taskRepo = $taskRepo;
+        $this->taskCollection = $taskRepo;
         $this->exceptionHelper = $exceptionHelper;
         $this->lockTransactionalManagerFactory = $lockTransactionalManagerFactory;
+        $this->lockItemRepository = $lockItemRepository;
+        $this->operationHistoryFactory = $operationHistoryFactory;
+        $this->cronManager = $cronManager;
+        $this->taskProcessorFactory = $taskProcessorFactory;
     }
 
     // ----------------------------------------
 
-    public function setAllowedTasks(array $tasks): self
-    {
-        $this->allowedTasks = $tasks;
-
-        return $this;
-    }
-
-    public function setInitiator(int $initiator): self
-    {
+    public function initialize(
+        int $initiator,
+        \M2E\TikTokShop\Model\Cron\OperationHistory $parentOperationHistory
+    ): void {
         $this->initiator = $initiator;
+        $this->parentOperationHistory = $parentOperationHistory;
+
+        $this->initialized = true;
+    }
+
+    /**
+     * @param string[] $tasksNicks
+     *
+     * @return $this
+     */
+    public function setAllowedTasks(array $tasksNicks): self
+    {
+        $this->allowedTasks = $tasksNicks;
 
         return $this;
     }
 
-    public function setParentOperationHistory(\M2E\TikTokShop\Model\Cron\OperationHistory $operationHistory): self
+    private function getInitiator(): int
     {
-        $this->parentOperationHistory = $operationHistory;
-
-        return $this;
+        return $this->initiator;
     }
 
     // ----------------------------------------
-
-    private function beforeStart(): void
-    {
-        $parentId = $this->getParentOperationHistory()
-            ? $this->getParentOperationHistory()->getObject()->getId() : null;
-        $this->getOperationHistory()->start('cron_strategy_serial', $parentId, $this->getInitiator());
-        $this->getOperationHistory()->makeShutdownFunction();
-    }
 
     public function process(): void
     {
+        if (!$this->initialized) {
+            throw new \LogicException('Can not process the strategy without being initialized.');
+        }
+
         $this->beforeStart();
 
         try {
             $this->processTasks();
         } catch (\Throwable $exception) {
             $this->processException($exception);
+        } finally {
+            $this->afterEnd();
         }
-
-        $this->afterEnd();
     }
 
-    private function afterEnd(): void
+    private function beforeStart(): void
     {
-        $this->getOperationHistory()->stop();
+        $parentId = $this->parentOperationHistory->getObject() !== null
+            ? (int)$this->parentOperationHistory->getObject()->getId() : null;
+
+        $this->getOperationHistory()->start('cron_strategy_serial', $parentId, $this->getInitiator());
+
+        $this->getOperationHistory()->makeShutdownFunction();
     }
 
     private function processTasks(): void
     {
-        if ($this->getLockItemManager() === null) {
+        if (!$this->tryRetrieveLockManager()) {
             return;
         }
 
@@ -117,57 +137,78 @@ class Strategy extends \M2E\TikTokShop\Model\AbstractModel
 
             $this->getInitializationLockManager()->unlock();
 
+            // ----------------------------------------
+
             $this->keepAliveStart($this->getLockItemManager());
             $this->startListenProgressEvents($this->getLockItemManager());
 
+            // ----------------------------------------
+
             $this->processAllTasks();
+
+            // ----------------------------------------
 
             $this->keepAliveStop();
             $this->stopListenProgressEvents();
         } catch (\Throwable $exception) {
             $this->processException($exception);
+        } finally {
+            $this->getLockItemManager()->remove();
         }
-
-        $this->getLockItemManager()->remove();
     }
 
     private function processAllTasks(): void
     {
-        $taskGroup = null;
-
-        /**
-         * Developer cron runner
-         */
         if ($this->allowedTasks === null) {
-            $taskGroup = $this->getNextTaskGroup();
-            $this->cronHelper->setLastExecutedTaskGroup($taskGroup);
+            $taskGroup = $this->cronManager->getNextTaskGroup();
+            $this->cronManager->setLastExecutedTaskGroup($taskGroup);
+
+            $tasks = $this->taskCollection->getGroupTasks($taskGroup);
+        } else {
+            /**
+             * Developer cron runner
+             */
+            $tasks = [];
+            foreach ($this->allowedTasks as $taskNick) {
+                $tasks[] = $this->taskCollection->getTaskByNick($taskNick);
+            }
         }
 
-        foreach ($this->getAllowedTasks($taskGroup) as $taskClassName) {
+        foreach ($tasks as $taskDefinition) {
             try {
-                $task = $this->taskFactory->createByClassName(
-                    $taskClassName,
+                $taskProcessor = $this->taskProcessorFactory->create(
+                    $taskDefinition,
                     $this->getInitiator(),
                     $this->getOperationHistory(),
-                    $this->getLockItemManager()
                 );
 
-                $task->process();
+                $taskProcessor->process();
             } catch (\Throwable $exception) {
                 $this->processException($exception);
             }
         }
     }
 
-    private function getAllowedTasks($taskGroup): array
+    private function afterEnd(): void
     {
-        return $this->allowedTasks
-            ?? $this->allowedTasks = $this->taskRepo->getGroupTasks($taskGroup);
+        $this->getOperationHistory()->stop();
     }
 
-    private function getLockItemManager(): ?\M2E\TikTokShop\Model\Lock\Item\Manager
+    private function tryRetrieveLockManager(): bool
     {
-        if ($this->lockItemManager !== null) {
+        try {
+            $this->getLockItemManager();
+
+            return true;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    private function getLockItemManager(): \M2E\TikTokShop\Model\Lock\Item\Manager
+    {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
+        if (isset($this->lockItemManager)) {
             return $this->lockItemManager;
         }
 
@@ -176,48 +217,30 @@ class Strategy extends \M2E\TikTokShop\Model\AbstractModel
             return $this->lockItemManager = $lockItemManager;
         }
 
-        if (
-            $lockItemManager->isInactiveMoreThanSeconds(
-                \M2E\TikTokShop\Model\Lock\Item\Manager::DEFAULT_MAX_INACTIVE_TIME
-            )
-        ) {
+        if ($lockItemManager->isInactiveMoreThanSeconds(self::LOCK_MAX_INACTIVE_SECONDS)) {
             $lockItemManager->remove();
 
             return $this->lockItemManager = $lockItemManager;
         }
 
-        return null;
+        throw new \LogicException('Lock Item Manager unable to retrieve lock.');
     }
 
-    private function getInitiator(): ?int
+    private function getInitializationLockManager(): \M2E\TikTokShop\Model\Lock\Transactional\Manager
     {
-        return $this->initiator;
-    }
-
-    // ---------------------------------------
-
-    /**
-     * @return \M2E\TikTokShop\Model\Cron\OperationHistory
-     */
-    private function getParentOperationHistory(): ?OperationHistory
-    {
-        return $this->parentOperationHistory;
-    }
-
-    // ---------------------------------------
-
-    private function getNextTaskGroup()
-    {
-        $lastExecuted = $this->cronHelper->getLastExecutedTaskGroup();
-        $allowed = $this->taskRepo->getRegisteredGroups();
-        $lastExecutedIndex = array_search($lastExecuted, $allowed, true);
-
-        if (empty($lastExecuted) || $lastExecutedIndex === false || end($allowed) === $lastExecuted) {
-            return reset($allowed);
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
+        if (isset($this->initializationLockManager)) {
+            return $this->initializationLockManager;
         }
 
-        return $allowed[$lastExecutedIndex + 1];
+        $lockTransactionalManager = $this->lockTransactionalManagerFactory->create(
+            self::INITIALIZATION_TRANSACTIONAL_LOCK_NICK,
+        );
+
+        return $this->initializationLockManager = $lockTransactionalManager;
     }
+
+    // ---------------------------------------
 
     private function keepAliveStart(\M2E\TikTokShop\Model\Lock\Item\Manager $lockItemManager): void
     {
@@ -243,24 +266,23 @@ class Strategy extends \M2E\TikTokShop\Model\AbstractModel
 
     private function getOperationHistory(): \M2E\TikTokShop\Model\Cron\OperationHistory
     {
-        if ($this->operationHistory !== null) {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
+        if (isset($this->operationHistory)) {
             return $this->operationHistory;
         }
 
-        return $this->operationHistory = $this->activeRecordFactory->getObject('Cron_OperationHistory');
+        return $this->operationHistory = $this->operationHistoryFactory->create();
     }
 
     private function makeLockItemShutdownFunction(\M2E\TikTokShop\Model\Lock\Item\Manager $lockItemManager): void
     {
-        /** @var \M2E\TikTokShop\Model\Lock\Item $lockItem */
-        $lockItem = $this->activeRecordFactory->getObjectLoaded('Lock\Item', $lockItemManager->getNick(), 'nick');
-        if (!$lockItem->getId()) {
+        $lockItem = $this->lockItemRepository->findByNick($lockItemManager->getNick());
+        if ($lockItem === null) {
             return;
         }
 
-        $id = $lockItem->getId();
+        $id = (int)$lockItem->getId();
 
-        // @codingStandardsIgnoreLine
         register_shutdown_function(
             function () use ($id) {
                 $error = error_get_last();
@@ -268,26 +290,12 @@ class Strategy extends \M2E\TikTokShop\Model\AbstractModel
                     return;
                 }
 
-                /** @var \M2E\TikTokShop\Model\Lock\Item $lockItem */
-                $lockItem = $this->activeRecordFactory->getObjectLoaded('Lock_Item', $id);
-                if ($lockItem->getId()) {
-                    $lockItem->delete();
+                $lockItem = $this->lockItemRepository->findById($id);
+                if ($lockItem !== null) {
+                    $this->lockItemRepository->remove($lockItem);
                 }
             }
         );
-    }
-
-    private function getInitializationLockManager(): \M2E\TikTokShop\Model\Lock\Transactional\Manager
-    {
-        if ($this->initializationLockManager !== null) {
-            return $this->initializationLockManager;
-        }
-
-        $lockTransactionalManager = $this->lockTransactionalManagerFactory->create(
-            self::INITIALIZATION_TRANSACTIONAL_LOCK_NICK,
-        );
-
-        return $this->initializationLockManager = $lockTransactionalManager;
     }
 
     private function processException(\Throwable $exception): void

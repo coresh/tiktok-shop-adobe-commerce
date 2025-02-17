@@ -425,6 +425,17 @@ class MappingService
         return $this->mapProduct($unmanagedProduct, $magentoProduct->getProduct());
     }
 
+    public function unMap(array $otherListings): void
+    {
+        foreach ($otherListings as $otherListing) {
+            if ($otherListing->getMagentoProductId() === null) {
+                continue;
+            }
+
+            $this->unmapProduct($otherListing);
+        }
+    }
+
     public function unmapProduct(\M2E\TikTokShop\Model\UnmanagedProduct $product): void
     {
         $product->unmapProduct();

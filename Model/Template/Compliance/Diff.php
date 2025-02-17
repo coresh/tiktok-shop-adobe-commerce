@@ -15,7 +15,7 @@ class Diff extends \M2E\TikTokShop\Model\ActiveRecord\Diff
     {
         $keys = [
             \M2E\TikTokShop\Model\ResourceModel\Template\Compliance::COLUMN_MANUFACTURER_ID,
-            \M2E\TikTokShop\Model\ResourceModel\Template\Compliance::COLUMN_RESPONSIBLE_PERSON_ID
+            \M2E\TikTokShop\Model\ResourceModel\Template\Compliance::COLUMN_RESPONSIBLE_PERSON_IDS
         ];
 
         return $this->isSettingsDifferent($keys);

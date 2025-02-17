@@ -8,24 +8,21 @@ use M2E\TikTokShop\Controller\Adminhtml\ControlPanel\AbstractMain;
 
 abstract class AbstractTable extends AbstractMain
 {
-    private \M2E\TikTokShop\Model\ControlPanel\Database\TableModelFactory $databaseTableFactory;
+    private \M2E\Core\Model\ControlPanel\Database\TableModelFactory $tableModelFactory;
     private \M2E\TikTokShop\Helper\Module $moduleHelper;
 
     public function __construct(
         \M2E\TikTokShop\Helper\Module $moduleHelper,
-        \M2E\TikTokShop\Model\ControlPanel\Database\TableModelFactory $databaseTableFactory,
-        \M2E\TikTokShop\Model\Module $module
+        \M2E\Core\Model\ControlPanel\Database\TableModelFactory $tableModelFactory
     ) {
-        parent::__construct($module);
-        $this->databaseTableFactory = $databaseTableFactory;
+        parent::__construct();
+        $this->tableModelFactory = $tableModelFactory;
         $this->moduleHelper = $moduleHelper;
     }
 
-    protected function getTableModel(): \M2E\TikTokShop\Model\ControlPanel\Database\TableModel
+    protected function getTableModel(): \M2E\Core\Model\ControlPanel\Database\TableModel
     {
-        $tableName = $this->getRequest()->getParam('table');
-
-        return $this->databaseTableFactory->create($tableName);
+        return $this->tableModelFactory->createFromRequest();
     }
 
     protected function prepareCellsValuesArray(): array

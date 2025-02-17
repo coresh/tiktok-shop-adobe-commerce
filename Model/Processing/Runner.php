@@ -30,7 +30,7 @@ class Runner
         $this->validateHandler($initiator);
 
         $command = $initiator->getInitCommand();
-        /** @var \M2E\TikTokShop\Model\Connector\Response\Processing $response */
+        /** @var \M2E\Core\Model\Connector\Response\Processing $response */
         $response = $this->connector->process($command);
 
         $processing = $this->createProcessing($response->getHash(), $initiator);

@@ -279,13 +279,13 @@ abstract class AbstractRequest extends \M2E\TikTokShop\Model\TikTokShop\Listing\
 
         if (
             $builderData['manufacturer_id'] === null
-            || $builderData['responsible_person_id'] === null
+            || $builderData['responsible_person_ids'] === null
         ) {
             return $request;
         }
 
         $request['product_data']['manufacturer_ids'] = [$builderData['manufacturer_id']];
-        $request['product_data']['responsible_person_ids'] = [$builderData['responsible_person_id']];
+        $request['product_data']['responsible_person_ids'] = $builderData['responsible_person_ids'];
 
         return $request;
     }

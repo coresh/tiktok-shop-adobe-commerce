@@ -8,7 +8,7 @@ use M2E\TikTokShop\Helper\Module\Database\Tables as TablesHelper;
 use M2E\TikTokShop\Model\ResourceModel\Order as OrderResource;
 use Magento\Framework\DB\Ddl\Table;
 
-class AddShipByDateAndDeliverByDateToOrder extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class AddShipByDateAndDeliverByDateToOrder extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
     public function execute(): void
     {

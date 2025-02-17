@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Setup\Update\y24_m12;
 
-class FixVariantSettingsFieldType extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class FixVariantSettingsFieldType extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
     public function execute(): void
     {

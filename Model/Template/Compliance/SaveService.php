@@ -75,7 +75,7 @@ class SaveService
             $account,
             $data['title'],
             $data['manufacturer_id'],
-            $data['responsible_person_id']
+            array_unique($data['responsible_person_ids'])
         );
         $this->complianceRepository->create($compliance);
 
@@ -88,7 +88,7 @@ class SaveService
 
         $compliance->setTitle($data['title'])
                    ->setManufacturerId($data['manufacturer_id'])
-                   ->setResponsiblePersonId($data['responsible_person_id']);
+                   ->setResponsiblePersonIds(array_unique($data['responsible_person_ids']));
 
         $this->complianceRepository->save($compliance);
 

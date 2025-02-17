@@ -1,14 +1,13 @@
 <?php
 
-namespace M2E\TikTokShop\Controller\Adminhtml\Wizard\InstallationTikTokShop;
+declare(strict_types=1);
 
-use M2E\TikTokShop\Controller\Adminhtml\Context;
+namespace M2E\TikTokShop\Controller\Adminhtml\Wizard\InstallationTikTokShop;
 
 class SettingsContinue extends Installation
 {
     private \M2E\TikTokShop\Helper\Component\TikTokShop\Configuration $configuration;
     private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
-    private \M2E\TikTokShop\Model\Account\Update $accountUpdate;
     private \M2E\TikTokShop\Model\Warehouse\ShippingMappingUpdater $shippingMappingUpdater;
 
     public function __construct(
@@ -18,13 +17,13 @@ class SettingsContinue extends Installation
         \M2E\TikTokShop\Helper\Magento $magentoHelper,
         \M2E\TikTokShop\Helper\Module\Wizard $wizardHelper,
         \Magento\Framework\Code\NameBuilder $nameBuilder,
-        \M2E\TikTokShop\Helper\Module\License $licenseHelper
+        \M2E\Core\Model\LicenseService $licenseService
     ) {
         parent::__construct(
             $magentoHelper,
             $wizardHelper,
             $nameBuilder,
-            $licenseHelper,
+            $licenseService,
         );
         $this->configuration = $configuration;
         $this->accountRepository = $accountRepository;

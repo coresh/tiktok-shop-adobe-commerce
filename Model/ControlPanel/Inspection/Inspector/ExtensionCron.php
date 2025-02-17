@@ -1,50 +1,52 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Model\ControlPanel\Inspection\Inspector;
 
-use M2E\TikTokShop\Helper\Module\Cron;
-
-class ExtensionCron implements \M2E\TikTokShop\Model\ControlPanel\Inspection\InspectorInterface
+class ExtensionCron implements \M2E\Core\Model\ControlPanel\Inspection\InspectorInterface
 {
-    private \M2E\TikTokShop\Helper\Module\Cron $moduleCron;
-    private \M2E\TikTokShop\Model\ControlPanel\Inspection\Issue\Factory $issueFactory;
-    private \M2E\TikTokShop\Model\Config\Manager $config;
+    private \M2E\Core\Model\ControlPanel\Inspection\IssueFactory $issueFactory;
+    private \M2E\TikTokShop\Model\Cron\Manager $cronManager;
+    private \M2E\TikTokShop\Model\Cron\Config $cronConfig;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Config\Manager $config,
-        \M2E\TikTokShop\Helper\Module\Cron $moduleCron,
-        \M2E\TikTokShop\Model\ControlPanel\Inspection\Issue\Factory $issueFactory
+        \M2E\TikTokShop\Model\Cron\Manager $cronManager,
+        \M2E\TikTokShop\Model\Cron\Config $cronConfig,
+        \M2E\Core\Model\ControlPanel\Inspection\IssueFactory $issueFactory
     ) {
-        $this->config = $config;
-        $this->moduleCron = $moduleCron;
         $this->issueFactory = $issueFactory;
+        $this->cronManager = $cronManager;
+        $this->cronConfig = $cronConfig;
     }
 
-    public function process()
+    public function process(): array
     {
         $issues = [];
-        $helper = $this->moduleCron;
 
-        if ($helper->getLastRun() === null) {
+        if ($this->cronManager->getCronLastRun() === null) {
             $issues[] = $this->issueFactory->create(
-                "Cron [{$helper->getRunner()}] does not work"
+                "Cron [{$this->cronConfig->getActiveRunner()}] does not work"
             );
-        } elseif ($helper->isLastRunMoreThan(1800)) {
-            $now = new \DateTime('now', new \DateTimeZone('UTC'));
-            $cron = $helper->getLastRun();
-            $diff = round(($now->getTimestamp() - $cron->getTimestamp()) / 60, 0);
+        } elseif ($this->cronManager->isCronLastRunMoreThan(1800)) {
+            $now = \M2E\Core\Helper\Date::createCurrentGmt();
+
+            /** @var \DateTime $cronLastRun */
+            $cronLastRun = $this->cronManager->getCronLastRun();
+
+            $diff = round(($now->getTimestamp() - $cronLastRun->getTimestamp()) / 60, 0);
 
             $issues[] = $this->issueFactory->create(
-                "Cron [{$helper->getRunner()}] is not working for {$diff} min",
+                "Cron [{$this->cronConfig->getActiveRunner()}] is not working for {$diff} min",
                 <<<HTML
-Last run: {$helper->getLastRun()->format('Y-m-d H:i:s')}
+Last run: {$cronLastRun->format('Y-m-d H:i:s')}
 Now:      {$now->format('Y-m-d H:i:s')}
 HTML
             );
         }
 
-        if ($this->config->getGroupValue(sprintf('/cron/%s/', Cron::RUNNER), 'disabled')) {
-            $message = sprintf('Cron [%s] is disabled by developer', Cron::RUNNER);
+        if ($this->cronConfig->isRunnerDisabled(\M2E\TikTokShop\Model\Cron\Config::RUNNER_MAGENTO)) {
+            $message = sprintf('Cron [%s] is disabled by developer', \M2E\TikTokShop\Model\Cron\Config::RUNNER_MAGENTO);
             $issues[] = $this->issueFactory->create($message);
         }
 

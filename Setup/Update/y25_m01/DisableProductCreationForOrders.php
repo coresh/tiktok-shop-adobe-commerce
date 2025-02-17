@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Setup\Update\y25_m01;
 
-class DisableProductCreationForOrders extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class DisableProductCreationForOrders extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
     public function execute(): void
     {

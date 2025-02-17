@@ -6,15 +6,6 @@ namespace M2E\TikTokShop\Helper\View;
 
 class ControlPanel
 {
-    public const NICK = 'control_panel';
-
-    public const TAB_OVERVIEW = 'overview';
-    public const TAB_INSPECTION = 'inspection';
-    public const TAB_DATABASE = 'database';
-    public const TAB_TOOLS_MODULE = 'tools_module';
-    public const TAB_CRON = 'cron';
-    public const TAB_DEBUG = 'debug';
-
     private \Magento\Backend\Model\Url $backendUrlBuilder;
 
     public function __construct(
@@ -33,23 +24,31 @@ class ControlPanel
         return '*/controlPanel/index';
     }
 
-    public function getPageOwerviewTabUrl(array $params = []): string
+    public function getPageOverviewTabUrl(array $params = []): string
     {
-        return $this->getPageUrl(array_merge($params, ['tab' => self::TAB_OVERVIEW]));
+        return $this->getPageUrl(
+            array_merge($params, ['tab' => \M2E\Core\Block\Adminhtml\ControlPanel\Tab\Overview::TAB_ID])
+        );
     }
 
     public function getPageInspectionTabUrl(array $params = []): string
     {
-        return $this->getPageUrl(array_merge($params, ['tab' => self::TAB_INSPECTION]));
+        return $this->getPageUrl(
+            array_merge($params, ['tab' => \M2E\Core\Block\Adminhtml\ControlPanel\Tab\Inspection::TAB_ID])
+        );
     }
 
     public function getPageDatabaseTabUrl(array $params = []): string
     {
-        return $this->getPageUrl(array_merge($params, ['tab' => self::TAB_DATABASE]));
+        return $this->getPageUrl(
+            array_merge($params, ['tab' => \M2E\Core\Block\Adminhtml\ControlPanel\Tab\Database::TAB_ID])
+        );
     }
 
     public function getPageModuleTabUrl(array $params = []): string
     {
-        return $this->getPageUrl(array_merge($params, ['tab' => self::TAB_TOOLS_MODULE]));
+        return $this->getPageUrl(
+            array_merge($params, ['tab' => \M2E\Core\Block\Adminhtml\ControlPanel\Tab\ModuleTools::TAB_ID])
+        );
     }
 }

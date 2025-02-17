@@ -7,20 +7,21 @@ class Manager
     public const DEFAULT_MAX_INACTIVE_TIME = 900;
 
     private string $nick;
-    private \M2E\TikTokShop\Model\ResourceModel\Lock\Item\CollectionFactory $lockItemCollectionFactory;
     private \M2E\TikTokShop\Model\Lock\ItemFactory $lockItemFactory;
     private ManagerFactory $lockItemManagerFactory;
+    /** @var \M2E\TikTokShop\Model\Lock\Item\Repository */
+    private Repository $repository;
 
     public function __construct(
+        string $nick,
         \M2E\TikTokShop\Model\Lock\Item\ManagerFactory $lockItemManagerFactory,
         \M2E\TikTokShop\Model\Lock\ItemFactory $lockItemFactory,
-        \M2E\TikTokShop\Model\ResourceModel\Lock\Item\CollectionFactory $lockItemCollectionFactory,
-        string $nick
+        \M2E\TikTokShop\Model\Lock\Item\Repository $repository
     ) {
-        $this->lockItemCollectionFactory = $lockItemCollectionFactory;
         $this->nick = $nick;
         $this->lockItemFactory = $lockItemFactory;
         $this->lockItemManagerFactory = $lockItemManagerFactory;
+        $this->repository = $repository;
     }
 
     // ----------------------------------------
@@ -32,18 +33,24 @@ class Manager
 
     // ----------------------------------------
 
-    public function create($parentNick = null): self
+    public function isExist(): bool
     {
-        $parentLockItem = $this->lockItemFactory->create();
+        return $this->getLockItemObject() !== null;
+    }
+
+    public function create(?string $parentNick = null): self
+    {
+        $parentLockItem = null;
         if ($parentNick !== null) {
-            $parentLockItem->load($parentNick, 'nick');
+            $parentLockItem = $this->repository->findByNick($parentNick);
         }
 
-        $lockModel = $this->lockItemFactory->create();
-        $lockModel->setNick($this->nick)
-                  ->setParentId($parentLockItem->getId());
+        $lockModel = $this->lockItemFactory->create(
+            $this->nick,
+            $parentLockItem !== null ? $parentLockItem->getId() : null
+        );
 
-        $lockModel->save();
+        $this->repository->create($lockModel);
 
         return $this;
     }
@@ -55,42 +62,30 @@ class Manager
             return false;
         }
 
-        $childLockItemCollection = $this->lockItemCollectionFactory->create();
-        $childLockItemCollection->addFieldToFilter('parent_id', $lockItem->getId());
-
-        /** @var \M2E\TikTokShop\Model\Lock\Item[] $childLockItems */
-        $childLockItems = $childLockItemCollection->getItems();
-
-        foreach ($childLockItems as $childLockItem) {
+        foreach ($this->repository->findByParentId((int)$lockItem->getId()) as $childLockItem) {
             $childManager = $this->lockItemManagerFactory->create(
                 $childLockItem->getNick()
             );
             $childManager->remove();
         }
 
-        $lockItem->delete();
+        $this->repository->remove($lockItem);
 
         return true;
     }
 
     // ---------------------------------------
 
-    public function isExist(): bool
-    {
-        return $this->getLockItemObject() !== null;
-    }
-
-    public function isInactiveMoreThanSeconds($maxInactiveInterval): bool
+    public function isInactiveMoreThanSeconds(int $maxInactiveInterval): bool
     {
         $lockItem = $this->getLockItemObject();
         if ($lockItem === null) {
             return true;
         }
 
-        $currentDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
-        $updateDate = \M2E\TikTokShop\Helper\Date::createDateGmt($lockItem->getUpdateDate());
+        $currentDate = \M2E\Core\Helper\Date::createCurrentGmt();
 
-        return $updateDate->getTimestamp() < ($currentDate->getTimestamp() - $maxInactiveInterval);
+        return $lockItem->getUpdateDate()->getTimestamp() < ($currentDate->getTimestamp() - $maxInactiveInterval);
     }
 
     public function activate(): void
@@ -103,9 +98,9 @@ class Manager
         }
 
         if ($lockItem->getParentId() !== null) {
-            $parentLockItem = $this->lockItemFactory->create()->load($lockItem->getParentId());
+            $parentLockItem = $this->repository->findById($lockItem->getParentId());
 
-            if ($parentLockItem->getId()) {
+            if ($parentLockItem !== null) {
                 $parentManager = $this->lockItemManagerFactory->create(
                     $parentLockItem->getNick()
                 );
@@ -113,13 +108,14 @@ class Manager
             }
         }
 
-        $lockItem->setDataChanges(true);
-        $lockItem->save();
+        $lockItem->actualize();
+
+        $this->repository->save($lockItem);
     }
 
     // ----------------------------------------
 
-    public function addContentData($key, $value): bool
+    public function setContentData(array $data): void
     {
         $lockItem = $this->getLockItemObject();
         if ($lockItem === null) {
@@ -128,22 +124,12 @@ class Manager
             );
         }
 
-        $data = $lockItem->getContentData();
-        if (!empty($data)) {
-            $data = \M2E\TikTokShop\Helper\Json::decode($data);
-        } else {
-            $data = [];
-        }
+        $lockItem->setContentData($data);
 
-        $data[$key] = $value;
-
-        $lockItem->setData('data', \M2E\TikTokShop\Helper\Json::encode($data));
-        $lockItem->save();
-
-        return true;
+        $this->repository->save($lockItem);
     }
 
-    public function setContentData(array $data): bool
+    public function getContentData(): array
     {
         $lockItem = $this->getLockItemObject();
         if ($lockItem === null) {
@@ -152,45 +138,13 @@ class Manager
             );
         }
 
-        $lockItem->setData('data', \M2E\TikTokShop\Helper\Json::encode($data));
-        $lockItem->save();
-
-        return true;
-    }
-
-    // ---------------------------------------
-
-    public function getContentData($key = null)
-    {
-        $lockItem = $this->getLockItemObject();
-        if ($lockItem === null) {
-            throw new \M2E\TikTokShop\Model\Exception(
-                sprintf('Lock Item with nick "%s" does not exist.', $this->nick)
-            );
-        }
-
-        if ($lockItem->getData('data') == '') {
-            return null;
-        }
-
-        $data = \M2E\TikTokShop\Helper\Json::decode($lockItem->getContentData());
-        if ($key === null) {
-            return $data;
-        }
-
-        return $data[$key] ?? null;
+        return $lockItem->getContentData();
     }
 
     // ----------------------------------------
 
     private function getLockItemObject(): ?\M2E\TikTokShop\Model\Lock\Item
     {
-        $lockItemCollection = $this->lockItemCollectionFactory->create();
-        $lockItemCollection->addFieldToFilter('nick', $this->nick);
-
-        /** @var \M2E\TikTokShop\Model\Lock\Item $lockItem */
-        $lockItem = $lockItemCollection->getFirstItem();
-
-        return $lockItem->getId() ? $lockItem : null;
+        return $this->repository->findByNick($this->nick);
     }
 }

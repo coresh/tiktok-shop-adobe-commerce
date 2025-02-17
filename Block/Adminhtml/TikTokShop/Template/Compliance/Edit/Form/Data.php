@@ -84,32 +84,14 @@ class Data extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
             ]
         );
 
-        $style = empty($formData['responsible_person_id']) ? 'display: none;' : '';
-
         $fieldset->addField(
-            'responsible_person_id',
-            self::SELECT,
+            'responsible_person_ids',
+            ComplianceResponsiblePerson\FormElement::class,
             [
-                'name' => 'compliance[responsible_person_id]',
-                'label' => __('Responsible Person'),
-                'title' => __('Responsible Person'),
-                'class' => 'admin__control-select',
-                'required' => true,
-                'style' => 'max-width: 30%;',
-                'after_element_html' => $this->createButtonsBlock(
-                    [
-                        $this->getResponsiblePersonLinksHtml(true),
-                        $this->getResponsiblePersonLinksHtml(false),
-                        $this->getRefreshButtonHtml(
-                            'refresh_responsible_person',
-                            'TikTokShopTemplateComplianceObj.updateResponsiblePersons(true);',
-                            $style
-                        ),
-                    ],
-                    $style
-                ),
+                'account_id' => $formData['account_id'] ?? null,
+                'saved_responsible_person_ids' => $formData['responsible_person_ids'],
             ]
-        );
+        )->setRenderer($this->getLayout()->createBlock(ComplianceResponsiblePerson\FormElementRender::class));
 
         $this->setForm($form);
 
@@ -142,7 +124,7 @@ class Data extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
     {
         return [
             'manufacturer_id' => '',
-            'responsible_person_id' => '',
+            'responsible_person_ids' => '',
         ];
     }
 
@@ -151,7 +133,7 @@ class Data extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
         $formData = $this->getFormData();
         $currentAccountId = $formData['account_id'] ?? null;
         $currentManufacturerId = $formData['manufacturer_id'] ?? null;
-        $currentResponsiblePersonId = $formData['responsible_person_id'] ?? null;
+        $responsiblePersonIds = $formData['responsible_person_ids'] ?? null;
 
         $urlGetManufacturers = $this->getUrl('*/tiktokshop_template_compliance/manufacturerList');
         $urlGetManufacturerPopupHtml = $this->getUrl('*/tiktokshop_template_compliance/getManufacturerPopupHtml');
@@ -170,7 +152,7 @@ class Data extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
     window.TikTokShopTemplateComplianceObj = new TikTokShopTemplateCompliance({
             accountId: '$currentAccountId',
             manufacturerId: '$currentManufacturerId',
-            responsiblePersonId: '$currentResponsiblePersonId',
+            responsiblePersonIds: '$responsiblePersonIds',
             urlGetResponsiblePersons: '$urlGetResponsiblePersons',
             urlGetResponsiblePersonPopupHtml: '$urlGetResponsiblePersonPopupHtml',
             urlGetResponsiblePersonUpdate: '$urlGetResponsiblePersonUpdate',
@@ -228,18 +210,6 @@ JS
 
         return sprintf(
             '<a href="#" id="manufacturer_details" onclick="TikTokShopTemplateComplianceObj.loadManufacturerPopup(%s);">%s</a>',
-            $param,
-            $label
-        );
-    }
-
-    private function getResponsiblePersonLinksHtml(bool $isNew): string
-    {
-        $label = $isNew ? (string)__('Add New') : __('View / Edit');
-        $param = $isNew ? 'true' : 'false';
-
-        return sprintf(
-            '<a href="#" id="manufacturer_details" onclick="TikTokShopTemplateComplianceObj.loadResponsiblePersonPopup(%s);">%s</a>',
             $param,
             $label
         );

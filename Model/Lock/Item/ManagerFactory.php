@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Model\Lock\Item;
 
 class ManagerFactory
 {
-    /** @var \Magento\Framework\ObjectManagerInterface */
-    private $objectManager;
+    private \Magento\Framework\ObjectManagerInterface $objectManager;
 
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {

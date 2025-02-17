@@ -46,7 +46,7 @@ class Processor
             $reason,
         );
 
-        /** @var \M2E\TikTokShop\Model\Connector\Response $response */
+        /** @var \M2E\Core\Model\Connector\Response $response */
         $response = $this->singleClient->process($command);
 
         return array_merge(

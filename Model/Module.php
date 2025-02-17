@@ -4,73 +4,131 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model;
 
-class Module
-{
-    private const IDENTIFIER = 'M2E_TikTokShop';
+use M2E\TikTokShop\Helper\Module\Database\Tables as ModuleTablesHelper;
 
-    private \Magento\Framework\Module\PackageInfo $packageInfo;
-    private \Magento\Framework\Module\ModuleListInterface $moduleList;
-    private \Magento\Framework\Module\ModuleResource $moduleResource;
+class Module implements \M2E\Core\Model\ModuleInterface
+{
+    private \M2E\Core\Model\Module\Adapter $adapter;
+    private bool $areImportantTablesExist;
+
+    private \M2E\Core\Model\Module $coreModule;
+    private \M2E\Core\Model\Module\AdapterFactory $moduleAdapterFactory;
+    private \M2E\Core\Helper\Module\Database\Structure $moduleDatabaseHelper;
+    private \M2E\TikTokShop\Helper\View\TikTokShop $viewHelper;
+    private \M2E\TikTokShop\Model\Config\Manager $configManager;
     private \M2E\TikTokShop\Model\Registry\Manager $registryManager;
+    private \Magento\Framework\App\ResourceConnection $resourceConnection;
 
     public function __construct(
-        \Magento\Framework\Module\PackageInfo $packageInfo,
-        \Magento\Framework\Module\ModuleListInterface $moduleList,
-        \Magento\Framework\Module\ModuleResource $moduleResource,
-        \M2E\TikTokShop\Model\Registry\Manager $registryManager
+        \M2E\Core\Model\Module $coreModule,
+        \M2E\Core\Model\Module\AdapterFactory $moduleAdapterFactory,
+        \M2E\Core\Helper\Module\Database\Structure $moduleDatabaseHelper,
+        \M2E\TikTokShop\Helper\View\TikTokShop $viewHelper,
+        \M2E\TikTokShop\Model\Config\Manager $configManager,
+        \M2E\TikTokShop\Model\Registry\Manager $registryManager,
+        \Magento\Framework\App\ResourceConnection $resourceConnection
     ) {
-        $this->packageInfo = $packageInfo;
-        $this->moduleList = $moduleList;
-        $this->moduleResource = $moduleResource;
+        $this->coreModule = $coreModule;
+        $this->moduleAdapterFactory = $moduleAdapterFactory;
+        $this->moduleDatabaseHelper = $moduleDatabaseHelper;
+        $this->viewHelper = $viewHelper;
+        $this->configManager = $configManager;
         $this->registryManager = $registryManager;
+        $this->resourceConnection = $resourceConnection;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'TikTokShop-m2';
     }
 
-    /**
-     * @return string
-     */
     public function getPublicVersion(): string
     {
-        return $this->packageInfo->getVersion(self::IDENTIFIER);
+        return $this->getAdapter()->getPublicVersion();
     }
 
-    public function getSetupVersion()
+    public function getSetupVersion(): string
     {
-        return $this->moduleList->getOne(self::IDENTIFIER)['setup_version'];
+        return $this->getAdapter()->getSetupVersion();
     }
 
-    public function getSchemaVersion()
+    public function getSchemaVersion(): string
     {
-        return $this->moduleResource->getDbVersion(self::IDENTIFIER);
+        return $this->getAdapter()->getSchemaVersion();
     }
 
-    public function getDataVersion()
+    public function getDataVersion(): string
     {
-        return $this->moduleResource->getDataVersion(self::IDENTIFIER);
+        return $this->getAdapter()->getDataVersion();
     }
 
     public function hasLatestVersion(): bool
     {
-        return (bool)$this->getLatestVersion();
+        return $this->getAdapter()->hasLatestVersion();
     }
 
     public function setLatestVersion(string $version): void
     {
-        $this->registryManager->setValue(
-            '/module/latest_version/',
-            $version
-        );
+        $this->getAdapter()->setLatestVersion($version);
     }
 
     public function getLatestVersion(): ?string
     {
-        return $this->registryManager->getValue('/module/latest_version/');
+        return $this->getAdapter()->getLatestVersion();
+    }
+
+    public function isDisabled(): bool
+    {
+        return $this->getAdapter()->isDisabled();
+    }
+
+    public function disable(): void
+    {
+        $this->getAdapter()->disable();
+    }
+
+    public function enable(): void
+    {
+        $this->getAdapter()->enable();
+    }
+
+    public function isReadyToWork(): bool
+    {
+        return $this->coreModule->isReadyToWork()
+            && $this->areImportantTablesExist()
+            && $this->viewHelper->isInstallationWizardFinished();
+    }
+
+    public function areImportantTablesExist(): bool
+    {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
+        if (isset($this->areImportantTablesExist)) {
+            return $this->areImportantTablesExist;
+        }
+
+        $result = true;
+        foreach ([ModuleTablesHelper::TABLE_NAME_WIZARD] as $table) {
+            $tableName = $this->moduleDatabaseHelper->getTableNameWithPrefix($table);
+            if (!$this->resourceConnection->getConnection()->isTableExists($tableName)) {
+                $result = false;
+                break;
+            }
+        }
+
+        return $this->areImportantTablesExist = $result;
+    }
+
+    public function getAdapter(): \M2E\Core\Model\Module\Adapter
+    {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
+        if (!isset($this->adapter)) {
+            $this->adapter = $this->moduleAdapterFactory->create(
+                \M2E\TikTokShop\Helper\Module::IDENTIFIER,
+                $this->registryManager->getAdapter(),
+                $this->configManager->getAdapter()
+            );
+        }
+
+        return $this->adapter;
     }
 }

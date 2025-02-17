@@ -1,34 +1,33 @@
 <?php
 
-namespace M2E\TikTokShop\Controller\Adminhtml\Wizard\InstallationTikTokShop;
+declare(strict_types=1);
 
-use M2E\TikTokShop\Controller\Adminhtml\Context;
+namespace M2E\TikTokShop\Controller\Adminhtml\Wizard\InstallationTikTokShop;
 
 class Registration extends Installation
 {
-    /** @var \M2E\TikTokShop\Model\Registration\UserInfo\Repository */
-    private $manager;
+    private \M2E\Core\Model\RegistrationService $registrationService;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Registration\UserInfo\Repository $manager,
+        \M2E\Core\Model\RegistrationService $registrationService,
         \M2E\TikTokShop\Helper\Magento $magentoHelper,
         \M2E\TikTokShop\Helper\Module\Wizard $wizardHelper,
         \Magento\Framework\Code\NameBuilder $nameBuilder,
-        \M2E\TikTokShop\Helper\Module\License $licenseHelper
+        \M2E\Core\Model\LicenseService $licenseService
     ) {
         parent::__construct(
             $magentoHelper,
             $wizardHelper,
             $nameBuilder,
-            $licenseHelper,
+            $licenseService,
         );
-        $this->manager = $manager;
+        $this->registrationService = $registrationService;
     }
 
     public function execute()
     {
         $this->init();
 
-        return $this->registrationAction($this->manager);
+        return $this->registrationAction($this->registrationService);
     }
 }

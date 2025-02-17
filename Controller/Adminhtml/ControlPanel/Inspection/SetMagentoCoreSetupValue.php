@@ -8,15 +8,17 @@ class SetMagentoCoreSetupValue extends AbstractMain
 {
     private \Magento\Framework\Module\ModuleResource $moduleResource;
     private \M2E\TikTokShop\Helper\View\ControlPanel $controlPanelHelper;
+    private \M2E\TikTokShop\Setup\UpgradeCollection $upgradeCollection;
 
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $dbContext,
         \M2E\TikTokShop\Helper\View\ControlPanel $controlPanelHelper,
-        \M2E\TikTokShop\Model\Module $module
+        \M2E\TikTokShop\Setup\UpgradeCollection $upgradeCollection
     ) {
-        parent::__construct($module);
+        parent::__construct();
         $this->moduleResource = new \Magento\Framework\Module\ModuleResource($dbContext);
         $this->controlPanelHelper = $controlPanelHelper;
+        $this->upgradeCollection = $upgradeCollection;
     }
 
     public function execute()
@@ -29,11 +31,11 @@ class SetMagentoCoreSetupValue extends AbstractMain
         }
 
         $version = str_replace(',', '.', $version);
-        if (!version_compare(\M2E\TikTokShop\Model\Setup\Upgrader::MIN_SUPPORTED_VERSION_FOR_UPGRADE, $version, '<=')) {
+        if (!version_compare($this->upgradeCollection->getMinAllowedVersion(), $version, '<=')) {
             $this->messageManager->addError(
                 sprintf(
                     'Extension upgrade can work only from %s version.',
-                    \M2E\TikTokShop\Model\Setup\Upgrader::MIN_SUPPORTED_VERSION_FOR_UPGRADE
+                    $this->upgradeCollection->getMinAllowedVersion()
                 )
             );
 

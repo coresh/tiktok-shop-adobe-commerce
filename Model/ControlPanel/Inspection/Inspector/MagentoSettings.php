@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\ControlPanel\Inspection\Inspector;
 
-use M2E\TikTokShop\Model\ControlPanel\Inspection\InspectorInterface;
-
-class MagentoSettings implements InspectorInterface
+class MagentoSettings implements \M2E\Core\Model\ControlPanel\Inspection\InspectorInterface
 {
-    private \M2E\TikTokShop\Model\ControlPanel\Inspection\Issue\Factory $issueFactory;
+    private \M2E\Core\Model\ControlPanel\Inspection\IssueFactory $issueFactory;
 
     public function __construct(
-        \M2E\TikTokShop\Model\ControlPanel\Inspection\Issue\Factory $issueFactory
+        \M2E\Core\Model\ControlPanel\Inspection\IssueFactory $issueFactory
     ) {
         $this->issueFactory = $issueFactory;
     }

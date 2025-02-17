@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Order\CancellationRequest\Decline;
 
-class Command implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class Command implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $account;
     private string $shopId;
@@ -35,7 +35,7 @@ class Command implements \M2E\TikTokShop\Model\Connector\CommandInterface
     }
 
     public function parseResponse(
-        \M2E\TikTokShop\Model\Connector\Response $response
+        \M2E\Core\Model\Connector\Response $response
     ): \M2E\TikTokShop\Model\TikTokShop\Connector\Order\CancellationRequest\Response {
         $orderData = $response->getResponseData()['order'] ?? null;
 

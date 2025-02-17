@@ -4,7 +4,7 @@ namespace M2E\TikTokShop\Model\TikTokShop\Connector\Shipping;
 
 use M2E\TikTokShop\Model\TikTokShop\Connector\Shipping\GetProviders\ShippingProvider;
 
-class GetProviders implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class GetProviders implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $deliveryOptionId;
     private string $accountHash;
@@ -34,7 +34,7 @@ class GetProviders implements \M2E\TikTokShop\Model\Connector\CommandInterface
         ];
     }
 
-    public function parseResponse(\M2E\TikTokShop\Model\Connector\Response $response): object
+    public function parseResponse(\M2E\Core\Model\Connector\Response $response): object
     {
         $data = $response->getResponseData();
 

@@ -9,7 +9,7 @@ use M2E\TikTokShop\Model\ResourceModel\Promotion as PromotionResource;
 use M2E\TikTokShop\Model\ResourceModel\Promotion\Product as ProductPromotion;
 use Magento\Framework\DB\Ddl\Table;
 
-class AddPromotion extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class AddPromotion extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
     public function execute(): void
     {

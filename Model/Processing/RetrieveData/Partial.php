@@ -98,9 +98,9 @@ class Partial
         }
     }
 
-    private function getFailedMessage(): \M2E\TikTokShop\Model\Connector\Response\Message
+    private function getFailedMessage(): \M2E\Core\Model\Connector\Response\Message
     {
-        $message = new \M2E\TikTokShop\Model\Connector\Response\Message();
+        $message = new \M2E\Core\Model\Connector\Response\Message();
         $message->initFromPreparedData(
             'Request wait timeout exceeded.',
             \M2E\TikTokShop\Model\Response\Message::TYPE_ERROR,

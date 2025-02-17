@@ -4,27 +4,24 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\ControlPanel\Inspection\Inspector;
 
-class FilesValidity implements \M2E\TikTokShop\Model\ControlPanel\Inspection\InspectorInterface
+class FilesValidity implements \M2E\Core\Model\ControlPanel\Inspection\InspectorInterface
 {
-    private \M2E\TikTokShop\Helper\Data $helperData;
     private \Magento\Backend\Model\UrlInterface $urlBuilder;
     private \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar;
     private \Magento\Framework\Filesystem\Driver\File $fileDriver;
     private \Magento\Framework\Filesystem\File\ReadFactory $readFactory;
-    private \M2E\TikTokShop\Model\ControlPanel\Inspection\Issue\Factory $issueFactory;
+    private \M2E\Core\Model\ControlPanel\Inspection\IssueFactory $issueFactory;
     private \M2E\TikTokShop\Model\Connector\Client\Single $serverClient;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Data $helperData,
         \Magento\Backend\Model\UrlInterface $urlBuilder,
         \Magento\Framework\Filesystem\File\ReadFactory $readFactory,
         \Magento\Framework\Filesystem\Driver\File $fileDriver,
         \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar,
-        \M2E\TikTokShop\Model\ControlPanel\Inspection\Issue\Factory $issueFactory,
+        \M2E\Core\Model\ControlPanel\Inspection\IssueFactory $issueFactory,
         \M2E\TikTokShop\Model\Connector\Client\Single $serverClient
     ) {
         $this->serverClient = $serverClient;
-        $this->helperData = $helperData;
         $this->urlBuilder = $urlBuilder;
         $this->readFactory = $readFactory;
         $this->fileDriver = $fileDriver;
@@ -33,7 +30,7 @@ class FilesValidity implements \M2E\TikTokShop\Model\ControlPanel\Inspection\Ins
     }
 
     /**
-     * @return array|\M2E\TikTokShop\Model\ControlPanel\Inspection\Issue[]
+     * @return array|\M2E\Core\Model\ControlPanel\Inspection\Issue[]
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function process(): array
@@ -100,8 +97,8 @@ class FilesValidity implements \M2E\TikTokShop\Model\ControlPanel\Inspection\Ins
 
     private function receiveFilesFromServer(): array
     {
-        $command = new \M2E\TikTokShop\Model\TikTokShop\Connector\System\Files\GetInfoCommand();
-        /** @var \M2E\TikTokShop\Model\TikTokShop\Connector\System\Files\GetInfo\Response $response */
+        $command = new \M2E\Core\Model\Server\Connector\System\FilesGetInfoCommand();
+        /** @var \M2E\Core\Model\Server\Connector\System\FilesGetInfo\Response $response */
         $response = $this->serverClient->process($command);
 
         return $response->getFilesOptions();
@@ -122,7 +119,7 @@ class FilesValidity implements \M2E\TikTokShop\Model\ControlPanel\Inspection\Ins
                 $fileContent = trim($fileReader->readAll());
                 $fileContent = str_replace(["\r\n", "\n\r", PHP_EOL], chr(10), $fileContent);
 
-                $clientFiles[$path] = $this->helperData->md5String($fileContent);
+                $clientFiles[$path] = \M2E\Core\Helper\Data::md5String($fileContent);
             }
         }
 

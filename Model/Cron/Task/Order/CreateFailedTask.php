@@ -2,7 +2,7 @@
 
 namespace M2E\TikTokShop\Model\Cron\Task\Order;
 
-class CreateFailedTask extends \M2E\TikTokShop\Model\Cron\AbstractTask
+class CreateFailedTask implements \M2E\Core\Model\Cron\TaskHandlerInterface
 {
     public const NICK = 'order/create_failed';
 
@@ -10,51 +10,28 @@ class CreateFailedTask extends \M2E\TikTokShop\Model\Cron\AbstractTask
     /** @var \M2E\TikTokShop\Model\Cron\Task\Order\CreatorFactory */
     private CreatorFactory $orderCreatorFactory;
     private \M2E\TikTokShop\Model\Order\Repository $orderRepository;
+    private \M2E\TikTokShop\Model\Synchronization\LogService $syncLog;
 
     public function __construct(
         \M2E\TikTokShop\Model\Order\Repository $orderRepository,
         \M2E\TikTokShop\Model\Cron\Task\Order\CreatorFactory $orderCreatorFactory,
-        \M2E\TikTokShop\Model\Account\Repository $accountRepository,
-        \M2E\TikTokShop\Model\Cron\Manager $cronManager,
-        \M2E\TikTokShop\Model\Synchronization\LogService $syncLogger,
-        \M2E\TikTokShop\Helper\Data $helperData,
-        \Magento\Framework\Event\Manager $eventManager,
-        \M2E\TikTokShop\Model\ActiveRecord\Factory $activeRecordFactory,
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
-        \M2E\TikTokShop\Model\Cron\TaskRepository $taskRepo,
-        \Magento\Framework\App\ResourceConnection $resource
+        \M2E\TikTokShop\Model\Account\Repository $accountRepository
     ) {
-        parent::__construct(
-            $cronManager,
-            $syncLogger,
-            $helperData,
-            $eventManager,
-            $activeRecordFactory,
-            $helperFactory,
-            $taskRepo,
-            $resource
-        );
         $this->orderRepository = $orderRepository;
         $this->accountRepository = $accountRepository;
         $this->orderCreatorFactory = $orderCreatorFactory;
     }
 
-    protected function getNick(): string
+    /**
+     * @param \M2E\TikTokShop\Model\Cron\TaskContext $context
+     *
+     * @return void
+     */
+    public function process($context): void
     {
-        return self::NICK;
-    }
+        $this->syncLog = $context->getSynchronizationLog();
+        $this->syncLog->setTask(\M2E\TikTokShop\Model\Synchronization\Log::TASK_ORDERS);
 
-    protected function getSynchronizationLog(): \M2E\TikTokShop\Model\Synchronization\LogService
-    {
-        $synchronizationLog = parent::getSynchronizationLog();
-
-        $synchronizationLog->setTask(\M2E\TikTokShop\Model\Synchronization\Log::TASK_ORDERS);
-
-        return $synchronizationLog;
-    }
-
-    protected function performActions()
-    {
         foreach ($this->accountRepository->getAll() as $account) {
             try {
                 $borderDate = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -66,21 +43,21 @@ class CreateFailedTask extends \M2E\TikTokShop\Model\Cron\AbstractTask
                     \M2E\TikTokShop\Model\Order::MAGENTO_ORDER_CREATE_MAX_TRIES
                 );
                 $this->createMagentoOrders($tikTokShopOrders);
-            } catch (\Exception $exception) {
-                $message = (string)\__(
+            } catch (\Throwable $exception) {
+                $message = (string)__(
                     'The "Create Failed Orders" Action for Account "%1" was completed with error.',
                     $account->getTitle(),
                 );
 
-                $this->processTaskAccountException($message, __FILE__, __LINE__);
-                $this->processTaskException($exception);
+                $context->getExceptionHandler()->processTaskAccountException($message, __FILE__, __LINE__);
+                $context->getExceptionHandler()->processTaskException($exception);
             }
         }
     }
 
-    protected function createMagentoOrders($tikTokShopOrders)
+    private function createMagentoOrders(array $tikTokShopOrders): void
     {
-        $ordersCreator = $this->orderCreatorFactory->create($this->getSynchronizationLog());
+        $ordersCreator = $this->orderCreatorFactory->create($this->syncLog);
 
         foreach ($tikTokShopOrders as $order) {
             /** @var \M2E\TikTokShop\Model\Order $order */

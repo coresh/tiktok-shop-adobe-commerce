@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Account;
 
-class GetGrantAccessUrlCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class GetGrantAccessUrlCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $backUrl;
     private ?string $region;
@@ -42,7 +42,7 @@ class GetGrantAccessUrlCommand implements \M2E\TikTokShop\Model\Connector\Comman
         return $requestParams;
     }
 
-    public function parseResponse(\M2E\TikTokShop\Model\Connector\Response $response): object
+    public function parseResponse(\M2E\Core\Model\Connector\Response $response): object
     {
         return new GetGrantAccessUrl\Response($response->getResponseData()['url']);
     }

@@ -33,7 +33,7 @@ class Result
             $messagesRawData = $this->messages;
             $this->messages = [];
             foreach ($messagesRawData as $messageData) {
-                $message = new \M2E\TikTokShop\Model\Connector\Response\Message();
+                $message = new \M2E\Core\Model\Connector\Response\Message();
                 $message->initFromPreparedData(
                     $messageData['text'],
                     $messageData['type'],

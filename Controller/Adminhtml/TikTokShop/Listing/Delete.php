@@ -37,7 +37,9 @@ class Delete extends AbstractListing
         ];
         foreach ($ids as $id) {
             $listing = $this->listingRepository->get((int)$id);
-            if ($this->deleteService->isExistListedProducts($listing)) {
+            if (
+                !$this->deleteService->isAllowed($listing)
+            ) {
                 $result['locked']++;
             } else {
                 $this->deleteService->process($listing);

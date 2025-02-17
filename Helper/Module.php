@@ -2,7 +2,6 @@
 
 namespace M2E\TikTokShop\Helper;
 
-use M2E\TikTokShop\Helper\Module\Database\Tables as TablesHelper;
 use Magento\Framework\Component\ComponentRegistrar;
 
 class Module
@@ -23,21 +22,22 @@ class Module
     protected ComponentRegistrar $componentRegistrar;
     protected \Magento\Backend\Model\UrlInterface $urlBuilder;
     protected View\TikTokShop $viewHelper;
-    protected ?bool $areImportantTablesExist = null;
-    private Module\Database\Structure $databaseHelper;
     private Data\Cache\Runtime $runtimeCache;
     private Data\Cache\Permanent $permanentCache;
     private Magento $magentoHelper;
     private Client $clientHelper;
+    private \M2E\TikTokShop\Model\Module $module;
+    private \M2E\TikTokShop\Model\Module\Environment $moduleEnv;
 
     public function __construct(
+        \M2E\TikTokShop\Model\Module $module,
+        \M2E\TikTokShop\Model\Module\Environment $moduleEnv,
         \M2E\TikTokShop\Model\Config\Manager $config,
         \M2E\TikTokShop\Model\Registry\Manager $registry,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \Magento\Framework\Component\ComponentRegistrar $componentRegistrar,
         \Magento\Backend\Model\UrlInterface $urlBuilder,
         \M2E\TikTokShop\Helper\View\TikTokShop $viewHelper,
-        \M2E\TikTokShop\Helper\Module\Database\Structure $databaseHelper,
         \M2E\TikTokShop\Helper\Data\Cache\Runtime $runtimeCache,
         \M2E\TikTokShop\Helper\Data\Cache\Permanent $permanentCache,
         \M2E\TikTokShop\Helper\Magento $magentoHelper,
@@ -49,11 +49,12 @@ class Module
         $this->componentRegistrar = $componentRegistrar;
         $this->urlBuilder = $urlBuilder;
         $this->viewHelper = $viewHelper;
-        $this->databaseHelper = $databaseHelper;
         $this->runtimeCache = $runtimeCache;
         $this->permanentCache = $permanentCache;
         $this->magentoHelper = $magentoHelper;
         $this->clientHelper = $clientHelper;
+        $this->module = $module;
+        $this->moduleEnv = $moduleEnv;
     }
 
     // ----------------------------------------
@@ -71,53 +72,47 @@ class Module
 
     public function isDisabled(): bool
     {
-        return (bool)$this->config->getGroupValue('/', 'is_disabled');
+        return $this->module->isDisabled();
     }
 
     public function isReadyToWork(): bool
     {
-        return $this->areImportantTablesExist()
-            && $this->viewHelper->isInstallationWizardFinished();
+        return $this->module->isReadyToWork();
     }
 
     public function areImportantTablesExist(): bool
     {
-        if ($this->areImportantTablesExist !== null) {
-            return $this->areImportantTablesExist;
+        return $this->module->areImportantTablesExist();
+    }
+
+    public function getEnvironment(): string
+    {
+        if ($this->moduleEnv->isProductionEnvironment()) {
+            return self::ENVIRONMENT_PRODUCTION;
         }
 
-        foreach ([TablesHelper::TABLE_NAME_CONFIG, TablesHelper::TABLE_NAME_SETUP] as $table) {
-            $tableName = $this->databaseHelper->getTableNameWithPrefix($table);
-            if (!$this->resourceConnection->getConnection()->isTableExists($tableName)) {
-                return $this->areImportantTablesExist = false;
-            }
-        }
-
-        return $this->areImportantTablesExist = true;
-    }
-
-    /**
-     * @return mixed|null
-     */
-    public function getEnvironment()
-    {
-        return $this->config->getGroupValue('/', 'environment');
-    }
-
-    public function isProductionEnvironment(): bool
-    {
-        return $this->getEnvironment() === null
-            || $this->getEnvironment() === self::ENVIRONMENT_PRODUCTION;
-    }
-
-    public function isDevelopmentEnvironment(): bool
-    {
-        return $this->getEnvironment() === self::ENVIRONMENT_DEVELOPMENT;
+        return self::ENVIRONMENT_DEVELOPMENT;
     }
 
     public function setEnvironment(string $env): void
     {
-        $this->config->setGroupValue('/', 'environment', $env);
+        if ($env === self::ENVIRONMENT_PRODUCTION) {
+            $this->moduleEnv->enableProductionEnvironment();
+
+            return;
+        }
+
+        $this->moduleEnv->enableDevelopmentEnvironment();
+    }
+
+    public function isProductionEnvironment(): bool
+    {
+        return $this->moduleEnv->isProductionEnvironment();
+    }
+
+    public function isDevelopmentEnvironment(): bool
+    {
+        return $this->moduleEnv->isDevelopmentEnvironment();
     }
 
     /**

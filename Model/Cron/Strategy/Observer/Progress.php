@@ -20,21 +20,21 @@ class Progress implements \Magento\Framework\Event\ObserverInterface
         $this->lockItemProgressFactory = $lockItemProgressFactory;
     }
 
-    public function enable()
+    public function enable(): self
     {
         $this->isEnabled = true;
 
         return $this;
     }
 
-    public function disable()
+    public function disable(): self
     {
         $this->isEnabled = false;
 
         return $this;
     }
 
-    public function setLockItemManager(\M2E\TikTokShop\Model\Lock\Item\Manager $lockItemManager)
+    public function setLockItemManager(\M2E\TikTokShop\Model\Lock\Item\Manager $lockItemManager): self
     {
         $this->lockItemManager = $lockItemManager;
 
@@ -59,20 +59,20 @@ class Progress implements \Magento\Framework\Event\ObserverInterface
             $progressNick
         );
 
-        if ($eventName == \M2E\TikTokShop\Model\Cron\Strategy::PROGRESS_START_EVENT_NAME) {
+        if ($eventName === \M2E\TikTokShop\Model\Cron\Strategy::PROGRESS_START_EVENT_NAME) {
             $progress->start();
 
             return;
         }
 
-        if ($eventName == \M2E\TikTokShop\Model\Cron\Strategy::PROGRESS_SET_PERCENTAGE_EVENT_NAME) {
+        if ($eventName === \M2E\TikTokShop\Model\Cron\Strategy::PROGRESS_SET_PERCENTAGE_EVENT_NAME) {
             $percentage = $observer->getEvent()->getData('percentage');
             $progress->setPercentage($percentage);
 
             return;
         }
 
-        if ($eventName == \M2E\TikTokShop\Model\Cron\Strategy::PROGRESS_SET_DETAILS_EVENT_NAME) {
+        if ($eventName === \M2E\TikTokShop\Model\Cron\Strategy::PROGRESS_SET_DETAILS_EVENT_NAME) {
             $args = [
                 'percentage' => $observer->getEvent()->getData('percentage'),
                 'total' => $observer->getEvent()->getData('total'),
@@ -82,7 +82,7 @@ class Progress implements \Magento\Framework\Event\ObserverInterface
             return;
         }
 
-        if ($eventName == \M2E\TikTokShop\Model\Cron\Strategy::PROGRESS_STOP_EVENT_NAME) {
+        if ($eventName === \M2E\TikTokShop\Model\Cron\Strategy::PROGRESS_STOP_EVENT_NAME) {
             $progress->stop();
         }
     }

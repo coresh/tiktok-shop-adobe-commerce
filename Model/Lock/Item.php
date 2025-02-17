@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Model\Lock;
 
 class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
@@ -10,44 +12,67 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->_init(\M2E\TikTokShop\Model\ResourceModel\Lock\Item::class);
     }
 
-    public function setNick(string $nick): self
+    public function create(string $nick, ?int $parentId): self
     {
-        $this->setData('nick', $nick);
+        $this->setData(\M2E\TikTokShop\Model\ResourceModel\Lock\Item::COLUMN_NICK, $nick);
+        if ($parentId !== null) {
+            $this->setData(\M2E\TikTokShop\Model\ResourceModel\Lock\Item::COLUMN_PARENT_ID, $parentId);
+        }
 
         return $this;
     }
 
-    public function getNick()
+    public function getNick(): string
     {
-        return $this->getData('nick');
+        return (string)$this->getData(\M2E\TikTokShop\Model\ResourceModel\Lock\Item::COLUMN_NICK);
     }
 
-    public function setParentId($id): self
+    public function getParentId(): ?int
     {
-        $this->setData('parent_id', $id);
+        $value = $this->getData(\M2E\TikTokShop\Model\ResourceModel\Lock\Item::COLUMN_PARENT_ID);
+        if (empty($value)) {
+            return null;
+        }
 
-        return $this;
+        return (int)$value;
     }
 
-    public function getParentId()
+    public function setContentData(array $data): void
     {
-        return $this->getData('parent_id');
+        $this->setData(\M2E\TikTokShop\Model\ResourceModel\Lock\Item::COLUMN_DATA, json_encode($data));
     }
 
-    public function getContentData()
+    public function getContentData(): array
     {
-        return $this->getData('data');
+        $value = $this->getData(\M2E\TikTokShop\Model\ResourceModel\Lock\Item::COLUMN_DATA);
+        if (empty($value)) {
+            return [];
+        }
+
+        return (array)json_decode($value, true);
     }
 
     //----------------------------------------
 
-    public function getUpdateDate()
+    public function actualize(): void
     {
-        return $this->getData('update_date');
+        $this->setData(
+            \M2E\TikTokShop\Model\ResourceModel\Lock\Item::COLUMN_UPDATE_DATE,
+            \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')
+        );
     }
 
-    public function getCreateDate()
+    public function getUpdateDate(): \DateTime
     {
-        return $this->getData('create_date');
+        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+            $this->getData(\M2E\TikTokShop\Model\ResourceModel\Lock\Item::COLUMN_UPDATE_DATE)
+        );
+    }
+
+    public function getCreateDate(): \DateTime
+    {
+        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+            $this->getData(\M2E\TikTokShop\Model\ResourceModel\Lock\Item::COLUMN_CREATE_DATE)
+        );
     }
 }

@@ -2,7 +2,7 @@
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Brands;
 
-class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class GetCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $accountHash;
     private string $shopId;
@@ -58,7 +58,7 @@ class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
         return $requestParams;
     }
 
-    public function parseResponse(\M2E\TikTokShop\Model\Connector\Response $response): object
+    public function parseResponse(\M2E\Core\Model\Connector\Response $response): object
     {
         $this->processError($response);
 
@@ -71,7 +71,7 @@ class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
         );
     }
 
-    private function processError(\M2E\TikTokShop\Model\Connector\Response $response): void
+    private function processError(\M2E\Core\Model\Connector\Response $response): void
     {
         if (!$response->isResultError()) {
             return;

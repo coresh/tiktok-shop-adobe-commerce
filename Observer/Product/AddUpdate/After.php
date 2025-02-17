@@ -12,19 +12,23 @@ class After extends AbstractAddUpdate
     private \M2E\TikTokShop\Model\Magento\Product\ChangeAttributeTrackerFactory $changeAttributeTrackerFactory;
     private \M2E\TikTokShop\Model\Listing\LogService $listingLogService;
     private \M2E\TikTokShop\Model\Listing\Log\Repository $listingLogRepository;
+    private \M2E\TikTokShop\Helper\Magento\Product $magentoProductHelper;
+    private \M2E\TikTokShop\Model\Product\RecalculateVariantProduct $recalculateProduct;
     private array $listingsProductsChangedAttributes = [];
     private array $attributeAffectOnStoreIdCache = [];
 
     public function __construct(
-        \M2E\TikTokShop\Model\Product\Repository $listingProductRepository,
-        \M2E\TikTokShop\Model\Listing\Log\Repository $listingLogRepository,
-        \M2E\TikTokShop\Model\Listing\LogService $listingLogService,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Store\Model\StoreManager $storeManager,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \M2E\TikTokShop\Model\Magento\ProductFactory $ourMagentoProductFactory,
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \M2E\TikTokShop\Model\Product\Repository                            $listingProductRepository,
+        \M2E\TikTokShop\Model\Listing\Log\Repository                        $listingLogRepository,
+        \M2E\TikTokShop\Helper\Magento\Product                              $magentoProductHelper,
+        \M2E\TikTokShop\Model\Product\RecalculateVariantProduct             $recalculateProduct,
+        \M2E\TikTokShop\Model\Listing\LogService                            $listingLogService,
+        \Magento\Eav\Model\Config                                           $eavConfig,
+        \Magento\Store\Model\StoreManager                                   $storeManager,
+        \Magento\Catalog\Model\ProductFactory                               $productFactory,
+        \M2E\TikTokShop\Model\Magento\ProductFactory                        $ourMagentoProductFactory,
+        \M2E\TikTokShop\Helper\Factory                                      $helperFactory,
+        \Magento\Framework\ObjectManagerInterface                           $objectManager,
         \M2E\TikTokShop\Model\Magento\Product\ChangeAttributeTrackerFactory $changeAttributeTrackerFactory
     ) {
         parent::__construct(
@@ -40,6 +44,8 @@ class After extends AbstractAddUpdate
         $this->changeAttributeTrackerFactory = $changeAttributeTrackerFactory;
         $this->listingLogService = $listingLogService;
         $this->listingLogRepository = $listingLogRepository;
+        $this->recalculateProduct = $recalculateProduct;
+        $this->magentoProductHelper = $magentoProductHelper;
     }
 
     public function beforeProcess(): void
@@ -81,6 +87,7 @@ class After extends AbstractAddUpdate
         $this->performTierPriceChanges();
         $this->performTrackingAttributesChanges();
         $this->performDefaultQtyChanges();
+        $this->performRecalculateProduct();
 
         $this->addListingProductInstructions();
     }
@@ -332,6 +339,22 @@ class After extends AbstractAddUpdate
 
     // ---------------------------------------
 
+    private function performRecalculateProduct()
+    {
+        $magentoProduct = $this->getProduct();
+
+        if ($this->magentoProductHelper->isSimpleType($magentoProduct->getTypeId())) {
+            return;
+        }
+
+        $this->recalculateProduct->process(
+            $magentoProduct,
+            $this->getAffectedProductCollection()->getProducts()
+        );
+    }
+
+    // ---------------------------------------
+
     /**
      * @throws \M2E\TikTokShop\Model\Exception\Logic
      */
@@ -343,8 +366,7 @@ class After extends AbstractAddUpdate
                 $affectedProduct->getProduct()->getDescriptionTemplate()
             );
             if (
-                $changedAttributes = $this->listingsProductsChangedAttributes[$affectedProduct->getProduct()->getId(
-                )] ?? null
+                $changedAttributes = $this->listingsProductsChangedAttributes[$affectedProduct->getProduct()->getId()] ?? null
             ) {
                 $changeAttributeTracker->addInstructionsByChangedAttributes($changedAttributes);
             }

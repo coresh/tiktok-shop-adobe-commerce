@@ -42,7 +42,7 @@ class ButtonsBlock extends \Magento\Backend\Block\Widget
     public function getUrlForResetUnmanaged(): string
     {
         return $this->getUrl(
-            '*/tiktokshop_listing_unmanaged/reset',
+            '*/product_unmanaged/reset',
             ['account_id' => $this->getAccount()->getId()]
         );
     }

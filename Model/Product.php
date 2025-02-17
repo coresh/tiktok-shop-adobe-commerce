@@ -33,6 +33,7 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public const INSTRUCTION_TYPE_CHANNEL_MANUFACTURER_CHANGED = 'channel_manufacturer_changed';
     public const INSTRUCTION_TYPE_CHANNEL_RESPONSIBLE_PERSON_CHANGED = 'channel_responsible_person_changed';
     public const INSTRUCTION_TYPE_VARIANT_SKU_REMOVED = 'variant_sku_removed';
+    public const INSTRUCTION_TYPE_VARIANT_SKU_ADDED = 'variant_sku_added';
 
     private \M2E\TikTokShop\Model\Listing $listing;
 
@@ -657,16 +658,21 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         return $this->getData(ListingProductResource::COLUMN_ONLINE_MANUFACTURER_ID);
     }
 
-    public function setOnlineResponsiblePersonId(?string $value): self
+    public function setOnlineResponsiblePersonIds(array $values): self
     {
-        $this->setData(ListingProductResource::COLUMN_ONLINE_RESPONSIBLE_PERSON_ID, $value);
+        $this->setData(ListingProductResource::COLUMN_ONLINE_RESPONSIBLE_PERSON_IDS, json_encode($values, JSON_THROW_ON_ERROR));
 
         return $this;
     }
 
-    public function getOnlineResponsiblePersonId(): ?string
+    public function getOnlineResponsiblePersonIds(): array
     {
-        return $this->getData(ListingProductResource::COLUMN_ONLINE_RESPONSIBLE_PERSON_ID);
+        $value = $this->getData(ListingProductResource::COLUMN_ONLINE_RESPONSIBLE_PERSON_IDS);
+        if (empty($value)) {
+            return [];
+        }
+
+        return json_decode($value, true);
     }
 
     // ----------------------------------------

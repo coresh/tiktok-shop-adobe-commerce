@@ -2,6 +2,8 @@
 
 namespace M2E\TikTokShop\Controller\Adminhtml\ControlPanel\Tools\TikTokShop;
 
+use M2E\Core\Model\ControlPanel\Inspection\FixerInterface;
+use M2E\Core\Model\ControlPanel\Inspection\InspectorInterface;
 use M2E\TikTokShop\Controller\Adminhtml\Context;
 use M2E\TikTokShop\Controller\Adminhtml\ControlPanel\AbstractCommand;
 use Magento\Framework\Component\ComponentRegistrar;
@@ -13,9 +15,10 @@ class Install extends AbstractCommand
     protected \Magento\Framework\Filesystem $fileSystem;
     protected \Magento\Framework\Filesystem\File\ReadFactory $fileReaderFactory;
     protected ComponentRegistrar $componentRegistrar;
-    protected \M2E\TikTokShop\Model\ControlPanel\Inspection\Repository $repository;
-    protected \M2E\TikTokShop\Model\ControlPanel\Inspection\HandlerFactory $handlerFactory;
+    protected \M2E\Core\Model\ControlPanel\Inspection\HandlerFactory $handlerFactory;
     private \M2E\TikTokShop\Model\Connector\Client\Single $serverClient;
+    private \M2E\Core\Model\ControlPanel\InspectionTaskCollection $taskCollection;
+    private \M2E\Core\Model\ControlPanel\CurrentExtensionResolver $currentExtensionResolver;
 
     public function __construct(
         \Magento\Framework\Filesystem\Driver\File $filesystemDriver,
@@ -24,9 +27,10 @@ class Install extends AbstractCommand
         ComponentRegistrar $componentRegistrar,
         \M2E\TikTokShop\Helper\View\ControlPanel $controlPanelHelper,
         Context $context,
-        \M2E\TikTokShop\Model\ControlPanel\Inspection\Repository $repository,
-        \M2E\TikTokShop\Model\ControlPanel\Inspection\HandlerFactory $handlerFactory,
-        \M2E\TikTokShop\Model\Connector\Client\Single $serverClient
+        \M2E\Core\Model\ControlPanel\Inspection\HandlerFactory $handlerFactory,
+        \M2E\TikTokShop\Model\Connector\Client\Single $serverClient,
+        \M2E\Core\Model\ControlPanel\InspectionTaskCollection $taskCollection,
+        \M2E\Core\Model\ControlPanel\CurrentExtensionResolver $currentExtensionResolver
     ) {
         parent::__construct($controlPanelHelper, $context);
 
@@ -34,9 +38,10 @@ class Install extends AbstractCommand
         $this->fileSystem = $filesystem;
         $this->fileReaderFactory = $fileReaderFactory;
         $this->componentRegistrar = $componentRegistrar;
-        $this->repository = $repository;
         $this->handlerFactory = $handlerFactory;
         $this->serverClient = $serverClient;
+        $this->taskCollection = $taskCollection;
+        $this->currentExtensionResolver = $currentExtensionResolver;
     }
 
     public function fixColumnAction()
@@ -48,12 +53,19 @@ class Install extends AbstractCommand
         }
 
         foreach ($repairInfo as $item) {
-            $columnsInfo[] = (array)\M2E\TikTokShop\Helper\Json::decode($item);
+            $columnsInfo[] = (array)\M2E\Core\Helper\Json::decode($item);
         }
 
-        $definition = $this->repository->getDefinition('TablesStructureValidity');
+        $currentExtension = $this->currentExtensionResolver->get();
+        $definition = $this->taskCollection->findTaskForExtension(
+            $currentExtension->getModuleName(),
+            'TablesStructureValidity'
+        );
+        if ($definition === null) {
+            return;
+        }
 
-        /** @var  \M2E\TikTokShop\Model\ControlPanel\Inspection\Inspector\TablesStructureValidity $inspector */
+        /** @var FixerInterface&InspectorInterface $inspector */
         $inspector = $this->handlerFactory->create($definition);
 
         foreach ($columnsInfo as $columnInfo) {
@@ -80,11 +92,11 @@ class Install extends AbstractCommand
             $params['content'] = $fileReader->readAll();
         }
 
-        $command = new \M2E\TikTokShop\Model\TikTokShop\Connector\System\Files\GetDiffCommand(
+        $command = new \M2E\Core\Model\Server\Connector\System\FilesGetDiffCommand(
             $params['content'],
             $params['path']
         );
-        /** @var \M2E\TikTokShop\Model\Connector\Response $response */
+        /** @var \M2E\Core\Model\Connector\Response $response */
         $response = $this->serverClient->process($command);
 
         $responseData = $response->getResponseData();
@@ -139,7 +151,7 @@ HTML;
 
     private function getEmptyResultsHtml($messageText): string
     {
-        $backUrl = $this->controlPanelHelper->getPageOwerviewTabUrl();
+        $backUrl = $this->controlPanelHelper->getPageOverviewTabUrl();
 
         return <<<HTML
 <h2 style="margin: 20px 0 0 10px">

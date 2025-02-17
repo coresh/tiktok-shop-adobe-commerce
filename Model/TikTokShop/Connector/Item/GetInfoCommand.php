@@ -2,7 +2,7 @@
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Item;
 
-class GetInfoCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class GetInfoCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $ttsProductId;
     private string $accountHash;
@@ -27,8 +27,8 @@ class GetInfoCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
     }
 
     public function parseResponse(
-        \M2E\TikTokShop\Model\Connector\Response $response
-    ): \M2E\TikTokShop\Model\Connector\Response {
+        \M2E\Core\Model\Connector\Response $response
+    ): \M2E\Core\Model\Connector\Response {
         return $response;
     }
 }

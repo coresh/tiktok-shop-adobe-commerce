@@ -96,9 +96,9 @@ class Product
         return !empty($this->manufacturersIds) ? reset($this->manufacturersIds) : null;
     }
 
-    public function getResponsiblePersonId(): ?string
+    public function getResponsiblePersonIds(): array
     {
-        return !empty($this->responsiblePersonIds) ? reset($this->responsiblePersonIds) : null;
+        return $this->responsiblePersonIds;
     }
 
     public function getListingQuality(): ListingQuality

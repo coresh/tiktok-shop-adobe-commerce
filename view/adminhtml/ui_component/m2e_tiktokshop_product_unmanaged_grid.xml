@@ -1,0 +1,230 @@
+<?xml version="1.0" ?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">
+                m2e_tiktokshop_product_unmanaged_grid.m2e_tiktokshop_product_unmanaged_grid_data_source
+            </item>
+            <item name="deps" xsi:type="string">
+                m2e_tiktokshop_product_unmanaged_grid.m2e_tiktokshop_product_unmanaged_grid_data_source
+            </item>
+        </item>
+        <item name="spinner" xsi:type="string">m2e_tiktokshop_product_unmanaged_grid_columns</item>
+    </argument>
+
+    <dataSource name="m2e_tiktokshop_product_unmanaged_grid_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">M2E\TikTokShop\Ui\DataProvider</argument>
+            <argument name="name" xsi:type="string">m2e_tiktokshop_product_unmanaged_grid_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="update_url" path="mui/index/render" xsi:type="url"/>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">id</item>
+                    </item>
+                    <item name="filter_url_params" xsi:type="array">
+                        <item name="account" xsi:type="string">*</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="sticky" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+
+        <filters name="listing_filters">
+
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="templates" xsi:type="array">
+                        <item name="filters" xsi:type="array">
+                            <item name="select" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                                <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+
+            <filterSelect name="shop_id"
+                          provider="${ $.parentName }"
+                          template="ui/grid/filters/elements/ui-select"
+                          component="Magento_Ui/js/form/element/ui-select">
+                <settings>
+                    <label>Shop</label>
+                    <dataScope>shop_id</dataScope>
+                    <options class="M2E\TikTokShop\Ui\Select\Shop"/>
+                </settings>
+            </filterSelect>
+
+            <filterInput name="title"
+                         provider="${ $.parentName }"
+                         template="ui/grid/filters/field">
+                <settings>
+                    <label>Product Title</label>
+                    <dataScope>title</dataScope>
+                    <dataType>textRange</dataType>
+                </settings>
+            </filterInput>
+
+            <filterInput name="tts_product_id"
+                         provider="${ $.parentName }"
+                         template="ui/grid/filters/field">
+                <settings>
+                    <label>TikTok Shop Product ID</label>
+                    <dataScope>tts_product_id</dataScope>
+                    <dataType>text</dataType>
+                </settings>
+            </filterInput>
+
+        </filters>
+
+        <massaction name="listing_massaction" component="M2E_TikTokShop/js/Product/Unmanaged/Magento/Ui/Grid/massactions">
+            <action name="link" class="M2E\TikTokShop\Ui\Product\Component\Unmanaged\MassAction\UpdateUrl">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">link</item>
+                        <item name="label" xsi:type="string" translate="true">Link Item(s) Automatically</item>
+                        <item name="url" xsi:type="string">m2e_tiktokshop/product_unmanaged_mapping/autoMap</item>
+                    </item>
+                </argument>
+            </action>
+            <action name="unlink" class="M2E\TikTokShop\Ui\Product\Component\Unmanaged\MassAction\UpdateUrl">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">unlink</item>
+                        <item name="label" xsi:type="string" translate="true">Unlink Item(s)</item>
+                        <item name="url" xsi:type="string">m2e_tiktokshop/product_unmanaged_mapping/unmapping</item>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Confirmation</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+            <action name="move">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">move</item>
+                        <item name="label" xsi:type="string" translate="true">Move Item(s) to Listing</item>
+                        <item name="url_prepare_move" xsi:type="url" path="m2e_tiktokshop/product_unmanaged_moving/prepareMoveToListing"/>
+                        <item name="url_grid" xsi:type="url" path="m2e_tiktokshop/product_unmanaged_moving/moveToListingGrid"/>
+                        <item name="url_get_selected_products" xsi:type="url" path="m2e_tiktokshop/product_unmanaged_moving/getSelectedProducts"/>
+                        <item name="url_listing_create" xsi:type="url" path="m2e_tiktokshop/tiktokshop_listing_create/index"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Confirmation</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+        </massaction>
+
+        <paging name="listing_paging"/>
+
+    </listingToolbar>
+
+    <columns name="m2e_tiktokshop_product_unmanaged_grid_columns">
+
+        <settings>
+            <childDefaults>
+                <param name="draggable" xsi:type="boolean">false</param>
+            </childDefaults>
+        </settings>
+
+        <selectionsColumn name="ids">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">id</item>
+                </item>
+            </argument>
+        </selectionsColumn>
+
+        <!--  column name from provider  -->
+        <column name="id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" translate="true" xsi:type="string">ID</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+        <column name="magento_product_id" class="M2E\TikTokShop\Ui\Product\Component\Unmanaged\Column\MagentoProductId">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" translate="true" xsi:type="string">Product ID</item>
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+        </column>
+        <column name="title" class="M2E\TikTokShop\Ui\Product\Component\Unmanaged\Column\Title">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" translate="true" xsi:type="string">Product Title / Product SKU / TikTokShop Category</item>
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
+                </item>
+            </argument>
+        </column>
+        <column name="tiktokshop_product_id" class="M2E\TikTokShop\Ui\Product\Component\Unmanaged\Column\TikTokShopProductId">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="label" translate="true" xsi:type="string">TikTok Shop Product ID</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                </item>
+            </argument>
+        </column>
+        <column name="sku_id" class="M2E\TikTokShop\Ui\Product\Component\Unmanaged\Column\SkuId">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" translate="true" xsi:type="string">SKU ID</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
+                </item>
+            </argument>
+        </column>
+        <column name="qty">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" translate="true" xsi:type="string">Available QTY</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
+                </item>
+            </argument>
+        </column>
+        <column name="price" class="M2E\TikTokShop\Ui\Product\Component\Unmanaged\Column\Price">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" translate="true" xsi:type="string">Price</item>
+                    <item name="sortOrder" xsi:type="number">70</item>
+                </item>
+            </argument>
+        </column>
+        <column name="status" class="M2E\TikTokShop\Ui\Product\Component\Unmanaged\Column\Status">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" translate="true" xsi:type="string">Status</item>
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="sortOrder" xsi:type="number">80</item>
+                </item>
+            </argument>
+        </column>
+    </columns>
+</listing>

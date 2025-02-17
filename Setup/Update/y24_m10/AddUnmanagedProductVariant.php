@@ -9,7 +9,7 @@ use M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct as UnmanagedProductResou
 use M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct\VariantSku as UnmanagedProductVariantResource;
 use Magento\Framework\DB\Ddl\Table;
 
-class AddUnmanagedProductVariant extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class AddUnmanagedProductVariant extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
     public function execute(): void
     {
@@ -107,7 +107,7 @@ class AddUnmanagedProductVariant extends \M2E\TikTokShop\Model\Setup\Upgrade\Ent
             ->addColumn(
                 UnmanagedProductResource::COLUMN_CATEGORIES_DATA,
                 Table::TYPE_TEXT,
-                \M2E\TikTokShop\Model\Setup\Installer::LONG_COLUMN_SIZE,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
                 ['default' => null]
             )
             ->addColumn(
@@ -225,7 +225,7 @@ class AddUnmanagedProductVariant extends \M2E\TikTokShop\Model\Setup\Upgrade\Ent
             ->addColumn(
                 UnmanagedProductVariantResource::COLUMN_SALES_ATTRIBUTES,
                 Table::TYPE_TEXT,
-                \M2E\TikTokShop\Model\Setup\Installer::LONG_COLUMN_SIZE,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
                 ['default' => null]
             )
             ->addColumn(

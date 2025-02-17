@@ -6,7 +6,7 @@ namespace M2E\TikTokShop\Setup\Update\y24_m04;
 
 use M2E\TikTokShop\Helper\Module\Database\Tables;
 
-class FixScheduledAction extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class FixScheduledAction extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
 
     public function execute(): void

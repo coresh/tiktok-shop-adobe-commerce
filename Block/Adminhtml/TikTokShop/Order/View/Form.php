@@ -74,7 +74,7 @@ class Form extends AbstractContainer
         $this->setChild('edit_shipping_info', $buttonBlock);
 
         // ---------------------------------------
-        if ($magentoOrder !== null && $magentoOrder->hasShipments()) {
+        if ($magentoOrder !== null && $magentoOrder->hasShipments() && $this->order->canUpdateShippingStatus()) {
             $url = $this->getUrl('*/order/resubmitShippingInfo', ['id' => $this->order->getId()]);
             $data = [
                 'class' => 'primary',

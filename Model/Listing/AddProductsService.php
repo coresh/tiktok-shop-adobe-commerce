@@ -11,7 +11,6 @@ class AddProductsService
     private Product\Repository $listingProductRepository;
     private \M2E\TikTokShop\Model\InstructionService $instructionService;
     private \M2E\TikTokShop\Model\Listing\LogService $listingLogService;
-    private \M2E\TikTokShop\Model\Magento\ProductFactory $magentoProductFactory;
     private \M2E\TikTokShop\Model\UnmanagedProduct\Repository $unmanagedProductRepository;
     /** @var \M2E\TikTokShop\Model\Product\CreateService */
     private Product\CreateService $createProductService;
@@ -21,25 +20,30 @@ class AddProductsService
         Product\Repository $listingProductRepository,
         \M2E\TikTokShop\Model\UnmanagedProduct\Repository $unmanagedProductRepository,
         \M2E\TikTokShop\Model\InstructionService $instructionService,
-        \M2E\TikTokShop\Model\Listing\LogService $listingLogService,
-        \M2E\TikTokShop\Model\Magento\ProductFactory $magentoProductFactory
+        \M2E\TikTokShop\Model\Listing\LogService $listingLogService
     ) {
         $this->listingProductRepository = $listingProductRepository;
         $this->instructionService = $instructionService;
         $this->listingLogService = $listingLogService;
-        $this->magentoProductFactory = $magentoProductFactory;
         $this->unmanagedProductRepository = $unmanagedProductRepository;
         $this->createProductService = $createProductService;
     }
 
     public function addProduct(
         \M2E\TikTokShop\Model\Listing $listing,
-        int $magentoProductId,
+        \M2E\TikTokShop\Model\Magento\Product $ourMagentoProduct,
         int $categoryDictionaryId,
         int $initiator,
         ?\M2E\TikTokShop\Model\UnmanagedProduct $unmanagedProduct = null
     ): ?Product {
-        $listingProduct = $this->findExistProduct($listing, $magentoProductId);
+        if (!$ourMagentoProduct->exists()) {
+            throw new \M2E\TikTokShop\Model\Listing\Exception\MagentoProductNotFoundException(
+                'Magento product not found.',
+                ['magento_product_id' => $ourMagentoProduct->getProductId()]
+            );
+        }
+
+        $listingProduct = $this->findExistProduct($listing, $ourMagentoProduct->getProductId());
         if ($listingProduct !== null) {
             return null;
         }
@@ -47,11 +51,10 @@ class AddProductsService
         if (!$listing->getShop()->hasDefaultWarehouse()) {
             throw new \M2E\TikTokShop\Model\Exception\Logic('Product cannot be added because the default warehouse was not found.');
         }
-        $m2eMagentoProduct = $this->magentoProductFactory->createByProductId($magentoProductId);
 
         $listingProduct = $this->createProductService->create(
             $listing,
-            $m2eMagentoProduct,
+            $ourMagentoProduct,
             $categoryDictionaryId,
             $listing->getShop()->getDefaultWarehouse()->getId(),
             $unmanagedProduct,
@@ -112,11 +115,11 @@ class AddProductsService
             return null;
         }
 
-        $magentoProductId = $unmanagedProduct->getMagentoProductId();
+        $magentoProduct = $unmanagedProduct->getMagentoProduct();
 
         $listingProduct = $this->addProduct(
             $listing,
-            $magentoProductId,
+            $magentoProduct,
             $categoryDictionaryId,
             $initiator,
             $unmanagedProduct,

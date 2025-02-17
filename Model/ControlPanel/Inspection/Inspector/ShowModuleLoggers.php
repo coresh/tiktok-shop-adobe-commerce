@@ -2,19 +2,15 @@
 
 namespace M2E\TikTokShop\Model\ControlPanel\Inspection\Inspector;
 
-use M2E\TikTokShop\Model\ControlPanel\Inspection\InspectorInterface;
-use M2E\TikTokShop\Helper\Factory as HelperFactory;
-use M2E\TikTokShop\Model\ControlPanel\Inspection\Issue\Factory as IssueFactory;
-
-class ShowModuleLoggers implements InspectorInterface
+class ShowModuleLoggers implements \M2E\Core\Model\ControlPanel\Inspection\InspectorInterface
 {
     private array $loggers = [];
 
-    private IssueFactory $issueFactory;
+    private \M2E\Core\Model\ControlPanel\Inspection\IssueFactory $issueFactory;
     private \M2E\TikTokShop\Helper\Client $clientHelper;
 
     public function __construct(
-        IssueFactory $issueFactory,
+        \M2E\Core\Model\ControlPanel\Inspection\IssueFactory $issueFactory,
         \M2E\TikTokShop\Helper\Client $clientHelper
     ) {
         $this->issueFactory = $issueFactory;

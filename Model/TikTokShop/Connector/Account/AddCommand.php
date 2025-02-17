@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Account;
 
-class AddCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class AddCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $authCode;
     private string $region;
@@ -28,7 +28,7 @@ class AddCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
         ];
     }
 
-    public function parseResponse(\M2E\TikTokShop\Model\Connector\Response $response): Add\Response
+    public function parseResponse(\M2E\Core\Model\Connector\Response $response): Add\Response
     {
         $responseData = $response->getResponseData();
 

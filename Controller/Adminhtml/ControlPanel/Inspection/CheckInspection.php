@@ -1,34 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Controller\Adminhtml\ControlPanel\Inspection;
 
 use M2E\TikTokShop\Controller\Adminhtml\ControlPanel\AbstractMain;
-use M2E\TikTokShop\Model\ControlPanel\Inspection\Repository;
-use M2E\TikTokShop\Model\ControlPanel\Inspection\Processor;
 
 class CheckInspection extends AbstractMain
 {
-    private Processor $processor;
-    private Repository $repository;
-
-    //########################################
+    private \M2E\Core\Model\ControlPanel\Inspection\Processor $processor;
+    private \M2E\Core\Model\ControlPanel\CurrentExtensionResolver $currentExtensionResolver;
 
     public function __construct(
-        Repository $repository,
-        Processor $processor,
-        \M2E\TikTokShop\Model\Module $module
+        \M2E\Core\Model\ControlPanel\CurrentExtensionResolver $currentExtensionResolver,
+        \M2E\Core\Model\ControlPanel\Inspection\Processor $processor
     ) {
-        parent::__construct($module);
-        $this->repository = $repository;
+        parent::__construct();
         $this->processor = $processor;
+        $this->currentExtensionResolver = $currentExtensionResolver;
     }
 
     public function execute()
     {
-        $inspectionTitle = $this->getRequest()->getParam('title');
-
-        $definition = $this->repository->getDefinition($inspectionTitle);
-        $result = $this->processor->process($definition);
+        $currentExtension = $this->currentExtensionResolver->get();
+        $result = $this->processor->process($currentExtension, $this->getRequest()->getParam('title'));
 
         $isSuccess = true;
         $metadata = '';

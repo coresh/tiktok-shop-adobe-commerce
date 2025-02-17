@@ -111,20 +111,20 @@
 
     <!-- Install -->
 
-    <type name="M2E\TikTokShop\Model\Setup\InstallHandlerRepository">
+    <type name="M2E\TikTokShop\Setup\InstallHandlerCollection">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="core" xsi:type="object">M2E\TikTokShop\Setup\Install\CoreHandler</item>
-                <item name="account" xsi:type="object">M2E\TikTokShop\Setup\Install\AccountHandler</item>
-                <item name="listing" xsi:type="object">M2E\TikTokShop\Setup\Install\ListingHandler</item>
-                <item name="log" xsi:type="object">M2E\TikTokShop\Setup\Install\LogHandler</item>
-                <item name="order" xsi:type="object">M2E\TikTokShop\Setup\Install\OrderHandler</item>
-                <item name="product" xsi:type="object">M2E\TikTokShop\Setup\Install\ProductHandler</item>
-                <item name="policy" xsi:type="object">M2E\TikTokShop\Setup\Install\PolicyHandler</item>
-                <item name="category" xsi:type="object">M2E\TikTokShop\Setup\Install\CategoryHandler</item>
-                <item name="tag" xsi:type="object">M2E\TikTokShop\Setup\Install\TagHandler</item>
-                <item name="processing" xsi:type="object">M2E\TikTokShop\Setup\Install\ProcessingHandler</item>
-                <item name="promotion" xsi:type="object">M2E\TikTokShop\Setup\Install\PromotionHandler</item>
+                <item name="core" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\CoreHandler</item>
+                <item name="account" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\AccountHandler</item>
+                <item name="listing" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\ListingHandler</item>
+                <item name="log" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\LogHandler</item>
+                <item name="order" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\OrderHandler</item>
+                <item name="product" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\ProductHandler</item>
+                <item name="policy" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\PolicyHandler</item>
+                <item name="category" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\CategoryHandler</item>
+                <item name="tag" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\TagHandler</item>
+                <item name="processing" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\ProcessingHandler</item>
+                <item name="promotion" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\PromotionHandler</item>
             </argument>
         </arguments>
     </type>
@@ -141,6 +141,9 @@
                 </item>
                 <item name="m2e_tiktokshop_product_by_issues_grid_source" xsi:type="string">
                     M2E\TikTokShop\Model\ResourceModel\Product\Grid\ByIssues\Collection
+                </item>
+                <item name="m2e_tiktokshop_product_unmanaged_grid_data_source" xsi:type="string">
+                    M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct\Grid\Collection
                 </item>
             </argument>
         </arguments>

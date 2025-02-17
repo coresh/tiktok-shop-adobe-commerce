@@ -10,24 +10,24 @@ class Magento extends AbstractCommand
     private \Magento\Framework\Module\FullModuleList $fullModuleList;
     private \Magento\Framework\Module\ModuleList $moduleList;
     private \Magento\Framework\Module\PackageInfo $packageInfo;
-    private \M2E\TikTokShop\Helper\Magento\Plugin $magentoPluginHelper;
-    private \M2E\TikTokShop\Helper\Magento $magentoHelper;
+    private \M2E\Core\Helper\Magento\Plugin $magentoPluginHelper;
+    private \M2E\Core\Helper\Magento $coreMagentoHelper;
 
     public function __construct(
         \M2E\TikTokShop\Helper\View\ControlPanel $controlPanelHelper,
-        \M2E\TikTokShop\Helper\Magento $magentoHelper,
         Context $context,
         \Magento\Framework\Module\FullModuleList $fullModuleList,
         \Magento\Framework\Module\ModuleList $moduleList,
         \Magento\Framework\Module\PackageInfo $packageInfo,
-        \M2E\TikTokShop\Helper\Magento\Plugin $magentoPluginHelper
+        \M2E\Core\Helper\Magento\Plugin $magentoPluginHelper,
+        \M2E\Core\Helper\Magento $coreMagentoHelper
     ) {
         parent::__construct($controlPanelHelper, $context);
         $this->fullModuleList = $fullModuleList;
         $this->moduleList = $moduleList;
         $this->packageInfo = $packageInfo;
         $this->magentoPluginHelper = $magentoPluginHelper;
-        $this->magentoHelper = $magentoHelper;
+        $this->coreMagentoHelper = $coreMagentoHelper;
     }
 
     /**
@@ -36,7 +36,7 @@ class Magento extends AbstractCommand
      */
     public function showEventObserversAction()
     {
-        $eventObservers = $this->magentoHelper->getAllEventObservers();
+        $eventObservers = $this->coreMagentoHelper->getAllEventObservers();
 
         $html = $this->getStyleHtml();
 
@@ -207,7 +207,7 @@ HTML;
      */
     public function clearMagentoCacheAction()
     {
-        $this->magentoHelper->clearCache();
+        $this->coreMagentoHelper->clearCache();
         $this->getMessageManager()->addSuccess('Magento cache was cleared.');
         $this->_redirect($this->controlPanelHelper->getPageModuleTabUrl());
     }
@@ -221,20 +221,20 @@ HTML;
         $messages = [];
 
         if (
-            !\M2E\TikTokShop\Helper\Client\Cache::isApcAvailable()
-            && !\M2E\TikTokShop\Helper\Client\Cache::isZendOpcacheAvailable()
+            !\M2E\Core\Helper\Client\Cache::isApcAvailable()
+            && !\M2E\Core\Helper\Client\Cache::isZendOpcacheAvailable()
         ) {
             $this->getMessageManager()->addError('Opcode extensions are not installed.');
 
             return $this->_redirect($this->controlPanelHelper->getPageModuleTabUrl());
         }
 
-        if (\M2E\TikTokShop\Helper\Client\Cache::isApcAvailable()) {
+        if (\M2E\Core\Helper\Client\Cache::isApcAvailable()) {
             $messages[] = 'APC opcode';
             apc_clear_cache('system');
         }
 
-        if (\M2E\TikTokShop\Helper\Client\Cache::isZendOpcacheAvailable()) {
+        if (\M2E\Core\Helper\Client\Cache::isZendOpcacheAvailable()) {
             $messages[] = 'Zend Optcache';
             opcache_reset();
         }

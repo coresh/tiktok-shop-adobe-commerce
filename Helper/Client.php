@@ -35,38 +35,6 @@ class Client
 
     /**
      * @return string
-     * @throws \M2E\TikTokShop\Model\Exception
-     */
-    public function getDomain(): string
-    {
-        $domain = $this->config->getGroupValue('/location/', 'domain');
-        if (empty($domain)) {
-            $domain = $this->getServerDomain();
-        }
-
-        if (empty($domain)) {
-            throw new \M2E\TikTokShop\Model\Exception('Server Domain is not defined');
-        }
-
-        return $domain;
-    }
-
-    public function getIp()
-    {
-        $ip = $this->config->getGroupValue('/location/', 'ip');
-        if (empty($ip)) {
-            $ip = $this->getServerIp();
-        }
-
-        if (empty($ip)) {
-            throw new \M2E\TikTokShop\Model\Exception('Server IP is not defined');
-        }
-
-        return $ip;
-    }
-
-    /**
-     * @return string
      */
     public function getBaseDirectory(): string
     {

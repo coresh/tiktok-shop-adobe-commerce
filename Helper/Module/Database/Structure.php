@@ -84,7 +84,17 @@ class Structure
      */
     public function isModuleTable(string $tableName): bool
     {
-        return strpos($tableName, 'tts_') !== false;
+        $coreTables = [
+            \M2E\Core\Helper\Module\Database\Tables::TABLE_NAME_SETUP,
+            \M2E\Core\Helper\Module\Database\Tables::TABLE_NAME_CONFIG,
+            \M2E\Core\Helper\Module\Database\Tables::TABLE_NAME_REGISTRY,
+        ];
+
+        if (in_array($tableName, $coreTables, true)) {
+            return true;
+        }
+
+        return strpos($tableName, \M2E\TikTokShop\Helper\Module\Database\Tables::PREFIX) !== false;
     }
 
     /**
@@ -362,6 +372,16 @@ class Structure
             $tableName = str_replace($this->magentoHelper->getDatabaseTablesPrefix(), '', $tableName);
 
             $tablesModels[$tableName] = $className;
+        }
+
+        $coreTables = [
+            \M2E\Core\Helper\Module\Database\Tables::TABLE_NAME_SETUP => \M2E\Core\Model\ResourceModel\Setup::class,
+            \M2E\Core\Helper\Module\Database\Tables::TABLE_NAME_CONFIG => \M2E\Core\Model\ResourceModel\Config::class,
+            \M2E\Core\Helper\Module\Database\Tables::TABLE_NAME_REGISTRY => \M2E\Core\Model\ResourceModel\Registry::class,
+        ];
+
+        foreach ($coreTables as $coreTableName => $modelName) {
+            $tablesModels[$coreTableName] = $modelName;
         }
 
         $this->runtimeCacheHelper->setValue(__METHOD__, $tablesModels);

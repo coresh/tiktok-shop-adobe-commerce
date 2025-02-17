@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Attribute;
 
-class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class GetCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $accountHash;
     private string $shopId;
@@ -31,7 +31,7 @@ class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
         ];
     }
 
-    public function parseResponse(\M2E\TikTokShop\Model\Connector\Response $response): Get\Response
+    public function parseResponse(\M2E\Core\Model\Connector\Response $response): Get\Response
     {
         $this->processError($response);
 
@@ -92,7 +92,7 @@ class GetCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
         );
     }
 
-    private function processError(\M2E\TikTokShop\Model\Connector\Response $response): void
+    private function processError(\M2E\Core\Model\Connector\Response $response): void
     {
         if (!$response->isResultError()) {
             return;

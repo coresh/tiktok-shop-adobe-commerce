@@ -5,7 +5,7 @@ namespace M2E\TikTokShop\Setup\Update\y24_m02;
 use M2E\TikTokShop\Helper\Module\Database\Tables;
 use M2E\TikTokShop\Model\ResourceModel\Account as AccountResource;
 
-class AddSellerNameAccountTable extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class AddSellerNameAccountTable extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
     public function execute(): void
     {

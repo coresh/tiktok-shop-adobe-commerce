@@ -1,94 +1,49 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Helper\Data\Cache;
 
 class Permanent implements \M2E\TikTokShop\Helper\Data\Cache\BaseInterface
 {
-    private \Magento\Framework\App\CacheInterface $cache;
+    private \M2E\Core\Model\Cache\Adapter $adapter;
 
-    public function __construct(
-        \Magento\Framework\App\CacheInterface $cache
-    ) {
-        $this->cache = $cache;
+    public function __construct(\M2E\Core\Model\Cache\AdapterFactory $cacheAdapterFactory)
+    {
+        $this->adapter = $cacheAdapterFactory->create(\M2E\TikTokShop\Helper\Module::IDENTIFIER);
     }
 
-    // ----------------------------------------
-
-    /**
-     * @inheritDoc
-     */
-    public function getValue($key)
+    public function getValue(string $key)
     {
-        $cacheKey = \M2E\TikTokShop\Helper\Data::CUSTOM_IDENTIFIER . '_' . $key;
-        $value = $this->cache->load($cacheKey);
-
-        $saveValue = (array)json_decode((string)$value, true);
-        if (!isset($saveValue['value'])) {
-            return null;
-        }
-
-        return $saveValue['value'];
+        return $this->adapter->get($key);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function setValue($key, $value, array $tags = [], $lifetime = null): void
+    public function setValue(string $key, $value, array $tags = [], ?int $lifetime = null): void
     {
-        if ($value === null) {
-            throw new \M2E\TikTokShop\Model\Exception('Can\'t store NULL value');
-        }
-
-        if (is_object($value)) {
-            throw new \M2E\TikTokShop\Model\Exception('Can\'t store a php object');
-        }
-
-        if ($lifetime === null || (int)$lifetime <= 0) {
+        if ($lifetime === null || $lifetime <= 0) {
             $lifetime = 60 * 60 * 24;
         }
 
-        $cacheKey = \M2E\TikTokShop\Helper\Data::CUSTOM_IDENTIFIER . '_' . $key;
-
-        $preparedTags = [\M2E\TikTokShop\Helper\Data::CUSTOM_IDENTIFIER . '_main'];
-        foreach ($tags as $tag) {
-            $preparedTags[] = \M2E\TikTokShop\Helper\Data::CUSTOM_IDENTIFIER . '_' . $tag;
-        }
-
-        $saveValue = ['value' => $value];
-
-        $this->cache->save(
-            json_encode($saveValue, JSON_THROW_ON_ERROR),
-            $cacheKey,
-            $preparedTags,
-            (int)$lifetime,
-        );
+        $this->adapter->set($key, $value, $lifetime, $tags);
     }
 
-    // ----------------------------------------
-
-    /**
-     * @inheritDoc
-     */
-    public function removeValue($key): void
+    public function removeValue(string $key): void
     {
-        $cacheKey = \M2E\TikTokShop\Helper\Data::CUSTOM_IDENTIFIER . '_' . $key;
-        $this->cache->remove($cacheKey);
+        $this->adapter->remove($key);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function removeTagValues($tag): void
+    public function removeTagValues(string $tag): void
     {
-        $tags = [\M2E\TikTokShop\Helper\Data::CUSTOM_IDENTIFIER . '_' . $tag];
-        $this->cache->clean($tags);
+        $this->adapter->removeByTag($tag);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function removeAllValues(): void
     {
-        $this->removeTagValues('main');
+        $this->adapter->removeAllValues();
+    }
+
+    public function getAdapter(): \M2E\Core\Model\Cache\Adapter
+    {
+        return $this->adapter;
     }
 }

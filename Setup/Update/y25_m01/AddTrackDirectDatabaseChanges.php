@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Setup\Update\y25_m01;
 
-class AddTrackDirectDatabaseChanges extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class AddTrackDirectDatabaseChanges extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
     public function execute(): void
     {
-        $config = $this->getConfigModifier();
+        $config = $this->getConfigModifier(\M2E\TikTokShop\Helper\Module::IDENTIFIER);
 
         $config->delete('/listing/product/inspector/', 'max_allowed_instructions_count');
 

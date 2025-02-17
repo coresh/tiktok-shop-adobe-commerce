@@ -162,11 +162,7 @@ abstract class AbstractBase extends Action
                 'error' => 'true',
             ];
 
-            if ($this->getViewHelper()->getCurrentView() !== null) {
-                $params['referrer'] = $this->getViewHelper()->getCurrentView();
-            }
-
-            return $this->_redirect(\M2E\TikTokShop\Helper\Module\Support::SUPPORT_PAGE_ROUTE, $params);
+            return $this->_redirect('*/support/index', $params);
         }
 
         $this->postDispatch($request);

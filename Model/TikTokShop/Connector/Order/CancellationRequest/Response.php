@@ -6,11 +6,11 @@ namespace M2E\TikTokShop\Model\TikTokShop\Connector\Order\CancellationRequest;
 
 class Response
 {
-    private \M2E\TikTokShop\Model\Connector\Response\MessageCollection $messageCollection;
+    private \M2E\Core\Model\Connector\Response\MessageCollection $messageCollection;
     private ?Order $order;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Connector\Response\MessageCollection $messageCollection,
+        \M2E\Core\Model\Connector\Response\MessageCollection $messageCollection,
         ?Order $order
     ) {
         $this->messageCollection = $messageCollection;

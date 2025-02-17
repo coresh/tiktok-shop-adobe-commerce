@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Shop;
 
-class GetShopStatus implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class GetShopStatus implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $shopId;
     private string $accountHash;
@@ -29,7 +29,7 @@ class GetShopStatus implements \M2E\TikTokShop\Model\Connector\CommandInterface
     }
 
     public function parseResponse(
-        \M2E\TikTokShop\Model\Connector\Response $response
+        \M2E\Core\Model\Connector\Response $response
     ): object {
         $data = $response->getResponseData();
 

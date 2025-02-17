@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Setup\Update;
 
-class Config implements \M2E\TikTokShop\Model\Setup\Upgrade\Entity\ConfigInterface
+class Config implements \M2E\Core\Model\Setup\Upgrade\Entity\ConfigInterface
 {
     public function getFeaturesList(): array
     {
@@ -62,8 +62,16 @@ class Config implements \M2E\TikTokShop\Model\Setup\Upgrade\Entity\ConfigInterfa
             'y25_m01' => [
                 \M2E\TikTokShop\Setup\Update\y25_m01\AddShipByDateAndDeliverByDateToOrder::class,
                 \M2E\TikTokShop\Setup\Update\y25_m01\DisableProductCreationForOrders::class,
-                \M2E\TikTokShop\Setup\Update\y25_m01\AddTrackDirectDatabaseChanges::class
+                \M2E\TikTokShop\Setup\Update\y25_m01\AddTrackDirectDatabaseChanges::class,
+                \M2E\TikTokShop\Setup\Update\y25_m01\ChangeComplianceAndProductTables::class,
             ],
+            'y25_m02' => [
+                \M2E\TikTokShop\Setup\Update\y25_m02\MigrateLicenseAndRegistrationUserToCore::class,
+                \M2E\TikTokShop\Setup\Update\y25_m02\MigrateConfigToCore::class,
+                \M2E\TikTokShop\Setup\Update\y25_m02\MigrateRegistryToCore::class,
+                \M2E\TikTokShop\Setup\Update\y25_m02\RemoveServerHost::class,
+                \M2E\TikTokShop\Setup\Update\y25_m02\RemoveOldCronValues::class,
+            ]
         ];
     }
 }

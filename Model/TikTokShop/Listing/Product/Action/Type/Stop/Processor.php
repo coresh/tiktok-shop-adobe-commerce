@@ -36,7 +36,7 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
         return $this->actionValidator = $this->actionValidatorFactory->create();
     }
 
-    protected function makeCall(): \M2E\TikTokShop\Model\Connector\Response
+    protected function makeCall(): \M2E\Core\Model\Connector\Response
     {
         $request = $this->requestFactory->create(
             $this->getProduct(),
@@ -55,11 +55,11 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
             $this->requestData->getData(),
         );
 
-        /** @var \M2E\TikTokShop\Model\Connector\Response */
+        /** @var \M2E\Core\Model\Connector\Response */
         return $this->serverClient->process($command);
     }
 
-    protected function processSuccess(\M2E\TikTokShop\Model\Connector\Response $response): string
+    protected function processSuccess(\M2E\Core\Model\Connector\Response $response): string
     {
         /** @var Response $responseObj */
         $responseObj = $this->responseFactory->create(
@@ -76,7 +76,7 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
         return 'Item was Stopped';
     }
 
-    protected function processFail(\M2E\TikTokShop\Model\Connector\Response $response): void
+    protected function processFail(\M2E\Core\Model\Connector\Response $response): void
     {
     }
 }

@@ -97,7 +97,7 @@ class DeleteService
     private function removeListings(\M2E\TikTokShop\Model\Account $account): void
     {
         foreach ($account->getListings() as $listing) {
-            $this->listingDeleteService->process($listing);
+            $this->listingDeleteService->process($listing, true);
         }
     }
 

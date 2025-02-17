@@ -4,156 +4,61 @@ namespace M2E\TikTokShop\Model;
 
 class VariablesDir
 {
-    public const BASE_NAME = 'TikTokShop';
-
-    private $_fileDriver = null;
-    private $_childFolder = null;
-    private $_pathVariablesDirBase = null;
-    private $_pathVariablesDirChildFolder = null;
+    private \M2E\Core\Model\VariablesDir\Adapter $adapter;
 
     public function __construct(
-        \Magento\Framework\Filesystem\DriverPool $driverPool,
-        \Magento\Framework\Filesystem $filesystem,
-        array $data = []
+        \M2E\Core\Model\VariablesDir\AdapterFactory $adapterFactory
     ) {
-        $this->_fileDriver = $driverPool->getDriver(\Magento\Framework\Filesystem\DriverPool::FILE);
-
-        !isset($data['child_folder']) && $data['child_folder'] = null;
-        $data['child_folder'] === '' && $data['child_folder'] = null;
-
-        $varDir = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
-        $this->_pathVariablesDirBase = $varDir->getAbsolutePath() . self::BASE_NAME;
-
-        if ($data['child_folder'] !== null) {
-            if ($data['child_folder'][0] != DIRECTORY_SEPARATOR) {
-                $data['child_folder'] = DIRECTORY_SEPARATOR . $data['child_folder'];
-            }
-            if ($data['child_folder'][strlen($data['child_folder']) - 1] != DIRECTORY_SEPARATOR) {
-                $data['child_folder'] .= DIRECTORY_SEPARATOR;
-            }
-
-            $this->_pathVariablesDirChildFolder = $this->_pathVariablesDirBase . $data['child_folder'];
-            $this->_pathVariablesDirBase .= DIRECTORY_SEPARATOR;
-            $this->_childFolder = $data['child_folder'];
-        } else {
-            $this->_pathVariablesDirBase .= DIRECTORY_SEPARATOR;
-            $this->_pathVariablesDirChildFolder = $this->_pathVariablesDirBase;
-            $this->_childFolder = '';
-        }
-
-        $this->_pathVariablesDirBase = str_replace(
-            ['/', '\\'],
-            DIRECTORY_SEPARATOR,
-            $this->_pathVariablesDirBase
-        );
-        $this->_pathVariablesDirChildFolder = str_replace(
-            ['/', '\\'],
-            DIRECTORY_SEPARATOR,
-            $this->_pathVariablesDirChildFolder
-        );
-        $this->_childFolder = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $this->_childFolder);
+        $this->adapter = $adapterFactory->create(\M2E\TikTokShop\Helper\Module::IDENTIFIER);
     }
 
-    public function getBasePath()
+    public function getBasePath(): string
     {
-        return $this->_pathVariablesDirBase;
+        return $this->adapter->getBasePath();
     }
 
-    public function getPath()
+    public function getPath(): string
     {
-        return $this->_pathVariablesDirChildFolder;
+        return $this->adapter->getPath();
     }
 
-    // ---------------------------------------
-
-    /**
-     * @return bool
-     */
-    public function isBaseExist()
+    public function isBaseExist(): bool
     {
-        return $this->_fileDriver->isDirectory($this->getBasePath());
+        return $this->adapter->isBaseExist();
     }
 
-    /**
-     * @return bool
-     */
-    public function isExist()
+    public function isExist(): bool
     {
-        return $this->_fileDriver->isDirectory($this->getPath());
+        return $this->adapter->isExist();
     }
 
-    // ---------------------------------------
-
-    public function createBase()
+    public function createBase(): void
     {
-        if ($this->isBaseExist()) {
-            return;
-        }
-
-        $this->_fileDriver->createDirectory($this->getBasePath(), 0777);
+        $this->adapter->createBase();
     }
 
     public function create()
     {
-        if ($this->isExist()) {
-            return;
-        }
-
-        $this->createBase();
-
-        if ($this->_childFolder != '') {
-            $tempPath = $this->getBasePath();
-            $tempChildFolders = explode(
-                DIRECTORY_SEPARATOR,
-                substr($this->_childFolder, 1, strlen($this->_childFolder) - 2)
-            );
-
-            foreach ($tempChildFolders as $key => $value) {
-                if (!$this->_fileDriver->isDirectory($tempPath . $value . DIRECTORY_SEPARATOR)) {
-                    $this->_fileDriver->createDirectory($tempPath . $value . DIRECTORY_SEPARATOR, 0777);
-                }
-                $tempPath = $tempPath . $value . DIRECTORY_SEPARATOR;
-            }
-        } else {
-            $this->_fileDriver->createDirectory($this->getPath(), 0777);
-        }
+        $this->adapter->create();
     }
-
-    // ---------------------------------------
 
     public function removeBase()
     {
-        if (!$this->isBaseExist()) {
-            return;
-        }
-
-        $this->_fileDriver->deleteDirectory($this->getBasePath());
+        $this->adapter->removeBase();
     }
 
     public function removeBaseForce()
     {
-        if (!$this->isBaseExist()) {
-            return;
-        }
-
-        $directoryIterator = new \RecursiveDirectoryIterator($this->getBasePath(), \FilesystemIterator::SKIP_DOTS);
-        $iterator = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::CHILD_FIRST);
-
-        foreach ($iterator as $path) {
-            $path->isFile()
-                ? $this->_fileDriver->deleteFile($path->getPathname())
-                : $this->_fileDriver->deleteDirectory($path->getPathname());
-        }
-
-        $this->_fileDriver->deleteDirectory($this->getBasePath());
+        $this->adapter->removeBaseForce();
     }
 
-    public function remove()
+    public function remove(): void
     {
-        if (!$this->isExist()) {
-            return;
-        }
+        $this->adapter->remove();
+    }
 
-        $this->_fileDriver->deleteDirectory($this->getPath());
+    public function getAdapter(): \M2E\Core\Model\VariablesDir\Adapter
+    {
+        return $this->adapter;
     }
 }

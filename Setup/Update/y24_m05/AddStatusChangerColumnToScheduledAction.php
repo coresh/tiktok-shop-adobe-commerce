@@ -7,7 +7,7 @@ namespace M2E\TikTokShop\Setup\Update\y24_m05;
 use M2E\TikTokShop\Helper\Module\Database\Tables;
 use M2E\TikTokShop\Model\ResourceModel\ScheduledAction as ScheduledActionResource;
 
-class AddStatusChangerColumnToScheduledAction extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class AddStatusChangerColumnToScheduledAction extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
     public function execute(): void
     {

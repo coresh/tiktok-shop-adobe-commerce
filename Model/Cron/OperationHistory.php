@@ -11,7 +11,7 @@ class OperationHistory extends \M2E\TikTokShop\Model\OperationHistory
     /** @var string */
     private $bufferString = '';
 
-    //########################################
+    // ----------------------------------------
 
     public function addEol()
     {
@@ -26,13 +26,13 @@ class OperationHistory extends \M2E\TikTokShop\Model\OperationHistory
 
     // ---------------------------------------
 
-    public function addLine($char = '-')
+    public function addLine($char = '-'): void
     {
         $this->appendLine($char);
         $this->saveBufferString();
     }
 
-    public function appendLine($char = '-')
+    public function appendLine($char = '-'): void
     {
         $this->appendText(str_repeat($char, 30));
     }

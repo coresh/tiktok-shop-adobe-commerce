@@ -7,7 +7,7 @@ namespace M2E\TikTokShop\Setup\Update\y24_m02;
 use M2E\TikTokShop\Helper\Module\Database\Tables as TablesHelper;
 use M2E\TikTokShop\Model\ResourceModel\Product as ListingProductResource;
 
-class AddSimplePropertyInProduct extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class AddSimplePropertyInProduct extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
     public function execute(): void
     {

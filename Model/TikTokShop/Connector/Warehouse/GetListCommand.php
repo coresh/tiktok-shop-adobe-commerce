@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Warehouse;
 
-class GetListCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class GetListCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $accountHash;
     private string $shopId;
@@ -28,7 +28,7 @@ class GetListCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
         ];
     }
 
-    public function parseResponse(\M2E\TikTokShop\Model\Connector\Response $response): GetList\Response
+    public function parseResponse(\M2E\Core\Model\Connector\Response $response): GetList\Response
     {
         $result = new GetList\Response();
         foreach ($response->getResponseData() as $warehouseData) {

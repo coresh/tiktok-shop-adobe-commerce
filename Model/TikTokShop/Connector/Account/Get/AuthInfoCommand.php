@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Account\Get;
 
-class AuthInfoCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class AuthInfoCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     /** @var string[] */
     private array $accountsServerHashes;
@@ -25,7 +25,7 @@ class AuthInfoCommand implements \M2E\TikTokShop\Model\Connector\CommandInterfac
         return ['account', 'get', 'authInfo'];
     }
 
-    public function parseResponse(\M2E\TikTokShop\Model\Connector\Response $response): object
+    public function parseResponse(\M2E\Core\Model\Connector\Response $response): object
     {
         $accountsInfo = $response->getResponseData()['accounts'];
 

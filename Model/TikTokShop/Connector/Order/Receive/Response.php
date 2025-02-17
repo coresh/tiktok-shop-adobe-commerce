@@ -5,7 +5,7 @@ namespace M2E\TikTokShop\Model\TikTokShop\Connector\Order\Receive;
 class Response
 {
     private array $orders;
-    private \M2E\TikTokShop\Model\Connector\Response\MessageCollection $messageCollection;
+    private \M2E\Core\Model\Connector\Response\MessageCollection $messageCollection;
     private string $maxDateInResult;
     private bool $hasMore;
 
@@ -13,7 +13,7 @@ class Response
         array $orders,
         string $maxDateInResult,
         bool $hasMore,
-        \M2E\TikTokShop\Model\Connector\Response\MessageCollection $messageCollection
+        \M2E\Core\Model\Connector\Response\MessageCollection $messageCollection
     ) {
         $this->orders = $orders;
         $this->messageCollection = $messageCollection;
@@ -26,7 +26,7 @@ class Response
         return $this->orders;
     }
 
-    public function getMessageCollection(): \M2E\TikTokShop\Model\Connector\Response\MessageCollection
+    public function getMessageCollection(): \M2E\Core\Model\Connector\Response\MessageCollection
     {
         return $this->messageCollection;
     }

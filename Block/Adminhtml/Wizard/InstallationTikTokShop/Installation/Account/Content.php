@@ -6,17 +6,17 @@ use M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm;
 
 class Content extends AbstractForm
 {
-    private \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection;
+    private \M2E\TikTokShop\Model\Shop\Region\AddAccountButtonOptionsProvider $accountButtonOptionsProvider;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection,
+        \M2E\TikTokShop\Model\Shop\Region\AddAccountButtonOptionsProvider $accountButtonOptionsProvider,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
-        $this->regionCollection = $regionCollection;
+        $this->accountButtonOptionsProvider = $accountButtonOptionsProvider;
     }
 
     public function _construct()
@@ -51,8 +51,8 @@ class Content extends AbstractForm
         ]);
 
         $regionOptions = [];
-        foreach ($this->regionCollection->getAll() as $region) {
-            $regionOptions[$region->getRegionCode()] = $region->getLabel();
+        foreach ($this->accountButtonOptionsProvider->retrieve() as $region) {
+            $regionOptions[$region['region_code']] = $region['label'];
         }
 
         $fieldset = $form->addFieldset('region-fieldset', []);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Order\Receive;
 
-class ItemsByUpdateDateCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class ItemsByUpdateDateCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $shopId;
     private \DateTimeInterface $updateFrom;
@@ -39,7 +39,7 @@ class ItemsByUpdateDateCommand implements \M2E\TikTokShop\Model\Connector\Comman
     }
 
     public function parseResponse(
-        \M2E\TikTokShop\Model\Connector\Response $response
+        \M2E\Core\Model\Connector\Response $response
     ): \M2E\TikTokShop\Model\TikTokShop\Connector\Order\Receive\Response {
         $responseData = $response->getResponseData();
 

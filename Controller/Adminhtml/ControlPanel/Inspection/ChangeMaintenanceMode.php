@@ -11,10 +11,9 @@ class ChangeMaintenanceMode extends AbstractMain
 
     public function __construct(
         \M2E\TikTokShop\Helper\View\ControlPanel $controlPanelHelper,
-        \M2E\TikTokShop\Helper\Module\Maintenance $maintenanceHelper,
-        \M2E\TikTokShop\Model\Module $module
+        \M2E\TikTokShop\Helper\Module\Maintenance $maintenanceHelper
     ) {
-        parent::__construct($module);
+        parent::__construct();
         $this->controlPanelHelper = $controlPanelHelper;
         $this->maintenanceHelper = $maintenanceHelper;
     }

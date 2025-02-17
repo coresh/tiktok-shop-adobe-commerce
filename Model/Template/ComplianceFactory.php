@@ -22,14 +22,14 @@ class ComplianceFactory
         \M2E\TikTokShop\Model\Account $account,
         string $title,
         string $manufacturerId,
-        string $responsiblePersonId
+        array $responsiblePersonIds
     ): Compliance {
         $model = $this->createEmpty();
         $model->create(
             $account->getId(),
             $title,
             $manufacturerId,
-            $responsiblePersonId
+            $responsiblePersonIds
         );
 
         return $model;

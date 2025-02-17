@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Item;
 
-class ListCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class ListCommand implements \M2E\Core\Model\Connector\CommandInterface
 {
     private string $accountHash;
     private array $requestData;
@@ -26,8 +26,8 @@ class ListCommand implements \M2E\TikTokShop\Model\Connector\CommandInterface
     }
 
     public function parseResponse(
-        \M2E\TikTokShop\Model\Connector\Response $response
-    ): \M2E\TikTokShop\Model\Connector\Response {
+        \M2E\Core\Model\Connector\Response $response
+    ): \M2E\Core\Model\Connector\Response {
         return $response;
     }
 }

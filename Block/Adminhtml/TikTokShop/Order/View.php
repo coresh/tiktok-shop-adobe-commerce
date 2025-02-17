@@ -46,15 +46,6 @@ class View extends AbstractContainer
             'class' => 'back',
         ]);
 
-        if ($order->canUpdateShippingStatus()) {
-            $url = $this->getUrl('*/*/updateShippingStatus', ['id' => $order->getId()]);
-            $this->addButton('ship', [
-                'label' => __('Mark as Shipped'),
-                'onclick' => "setLocation('" . $url . "');",
-                'class' => 'primary',
-            ]);
-        }
-
         if ($order->getReserve()->isPlaced()) {
             $url = $this->getUrl('*/order/reservationCancel', ['ids' => $order->getId()]);
             $this->addButton('reservation_cancel', [

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Connector\Order\Send\Entity;
 
-class Command implements \M2E\TikTokShop\Model\Connector\CommandInterface
+class Command implements \M2E\Core\Model\Connector\CommandInterface
 {
     private \M2E\TikTokShop\Model\TikTokShop\Connector\Order\Send\Entity\Order $order;
     private string $accountHash;
@@ -46,7 +46,7 @@ class Command implements \M2E\TikTokShop\Model\Connector\CommandInterface
     }
 
     public function parseResponse(
-        \M2E\TikTokShop\Model\Connector\Response $response
+        \M2E\Core\Model\Connector\Response $response
     ): \M2E\TikTokShop\Model\TikTokShop\Connector\Order\Send\Entity\Response {
         $errorMessages = [];
         $warningMessages = [];

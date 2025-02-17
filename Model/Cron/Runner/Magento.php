@@ -11,11 +11,11 @@ class Magento extends AbstractRunner
     private static bool $isRunning = false;
 
     public const MIN_DISTRIBUTION_EXECUTION_TIME = 300;
-    public const MAX_DISTRIBUTION_WAIT_INTERVAL = 59;
+    public const MAX_DISTRIBUTION_WAIT_INTERVAL = 10;
 
-    public function getNick(): ?string
+    public function getNick(): string
     {
-        return \M2E\TikTokShop\Helper\Module\Cron::RUNNER;
+        return \M2E\TikTokShop\Model\Cron\Config::RUNNER_MAGENTO;
     }
 
     public function getInitiator(): int
@@ -51,7 +51,10 @@ class Magento extends AbstractRunner
     {
         $maxExecutionTime = (int)ini_get('max_execution_time');
 
-        if ($maxExecutionTime <= 0 || $maxExecutionTime < self::MIN_DISTRIBUTION_EXECUTION_TIME) {
+        if (
+            $maxExecutionTime <= 0
+            || $maxExecutionTime < self::MIN_DISTRIBUTION_EXECUTION_TIME
+        ) {
             return;
         }
 

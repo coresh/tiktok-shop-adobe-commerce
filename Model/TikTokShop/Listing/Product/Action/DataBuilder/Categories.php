@@ -12,13 +12,16 @@ class Categories extends AbstractDataBuilder
 
     private string $onlineCategoryId = '';
     private string $onlineCategoriesData = '';
+    private \M2E\TikTokShop\Helper\Module\Renderer\Description $descriptionRender;
 
     public function __construct(
+        \M2E\TikTokShop\Helper\Module\Renderer\Description $descriptionRender,
         \M2E\TikTokShop\Model\Category\Attribute\Repository $attributeRepository,
         \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper
     ) {
         parent::__construct($magentoAttributeHelper);
         $this->attributeRepository = $attributeRepository;
+        $this->descriptionRender = $descriptionRender;
     }
 
     /**
@@ -82,7 +85,9 @@ class Categories extends AbstractDataBuilder
             if ($attribute->isValueModeCustomValue()) {
                 $attributeVal = $attribute->getCustomValue();
                 if (!empty($attributeVal)) {
-                    $result[$attribute->getAttributeId()][] = ['name' => $attributeVal];
+                    $result[$attribute->getAttributeId()][] = [
+                        'name' => $this->descriptionRender->parseWithoutMagentoTemplate($attributeVal, $magentoProduct),
+                    ];
                 }
             }
 

@@ -17,7 +17,7 @@ class ImageResponseHandler
     public function handleResponse(
         int $listingProductId,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\RequestData $requestData,
-        \M2E\TikTokShop\Model\Connector\Response $response
+        \M2E\Core\Model\Connector\Response $response
     ): void {
         $this->handleProductImages($listingProductId, $requestData, $response);
         $this->handleSizeChartImages($listingProductId, $requestData, $response);
@@ -28,7 +28,7 @@ class ImageResponseHandler
     private function handleProductImages(
         int $productId,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\RequestData $requestData,
-        \M2E\TikTokShop\Model\Connector\Response $response
+        \M2E\Core\Model\Connector\Response $response
     ): void {
         $uploadedImages = $response->getResponseData()['uploaded_images'] ?? null;
         $requestImages = $requestData->getData('product_data')['main_images'] ?? null;
@@ -80,7 +80,7 @@ class ImageResponseHandler
     private function handleSizeChartImages(
         int $productId,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\RequestData $requestData,
-        \M2E\TikTokShop\Model\Connector\Response $response
+        \M2E\Core\Model\Connector\Response $response
     ): void {
         $uploadedImage = $response->getResponseData()['upload_size_chart_image'] ?? [];
         $requestImage = $requestData->getData('product_data')['size_chart']['image'] ?? [];
@@ -112,7 +112,7 @@ class ImageResponseHandler
     private function handleCertificationImages(
         int $productId,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\RequestData $requestData,
-        \M2E\TikTokShop\Model\Connector\Response $response
+        \M2E\Core\Model\Connector\Response $response
     ): void {
         $uploadedImages = $response->getResponseData()['upload_certifications_images'] ?? [];
         $requestImages = $requestData->getData('certifications') ?? [];
@@ -160,7 +160,7 @@ class ImageResponseHandler
     private function handleVariantImages(
         int $listingProductId,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\RequestData $requestData,
-        \M2E\TikTokShop\Model\Connector\Response $response
+        \M2E\Core\Model\Connector\Response $response
     ) {
         $uploadedImages = $response->getResponseData()['upload_attributes_images'] ?? [];
         if ($uploadedImages === []) {

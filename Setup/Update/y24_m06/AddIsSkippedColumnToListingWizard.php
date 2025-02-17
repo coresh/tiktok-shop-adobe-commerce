@@ -7,7 +7,7 @@ namespace M2E\TikTokShop\Setup\Update\y24_m06;
 use M2E\TikTokShop\Helper\Module\Database\Tables;
 use M2E\TikTokShop\Model\ResourceModel\Listing\Wizard\Step as StepResource;
 
-class AddIsSkippedColumnToListingWizard extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class AddIsSkippedColumnToListingWizard extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
     public function execute(): void
     {

@@ -31,7 +31,7 @@ class Cancel extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
         }
 
         if ($wizardManager->isWizardTypeUnmanaged()) {
-            return $this->_redirect('*/tiktokshop_listing_unmanaged/index');
+            return $this->_redirect('*/product_grid/unmanaged');
         }
 
         return $this->_redirect('*/*/index');

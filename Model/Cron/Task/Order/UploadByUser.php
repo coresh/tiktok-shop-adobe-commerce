@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\Cron\Task\Order;
 
-class UploadByUser extends \M2E\TikTokShop\Model\Cron\AbstractTask
+class UploadByUser implements \M2E\Core\Model\Cron\TaskHandlerInterface
 {
     public const NICK = 'order/upload_by_user';
 
@@ -12,53 +12,31 @@ class UploadByUser extends \M2E\TikTokShop\Model\Cron\AbstractTask
     private \M2E\TikTokShop\Model\Cron\Task\Order\UploadByUser\ManagerFactory $uploadByUserManagerFactory;
     private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
     private \M2E\TikTokShop\Model\TikTokShop\Connector\Order\Receive\ItemsByCreateDate\Processor $receiveOrderProcessor;
+    private \M2E\TikTokShop\Model\Synchronization\LogService $syncLog;
 
     public function __construct(
         \M2E\TikTokShop\Model\Account\Repository $accountRepository,
         \M2E\TikTokShop\Model\TikTokShop\Connector\Order\Receive\ItemsByCreateDate\Processor $receiveOrderProcessor,
         \M2E\TikTokShop\Model\Cron\Task\Order\UploadByUser\ManagerFactory $uploadByUserManagerFactory,
-        \M2E\TikTokShop\Model\Cron\Task\Order\CreatorFactory $orderCreatorFactory,
-        \M2E\TikTokShop\Model\Cron\Manager $cronManager,
-        \M2E\TikTokShop\Model\Synchronization\LogService $syncLogger,
-        \M2E\TikTokShop\Helper\Data $helperData,
-        \Magento\Framework\Event\Manager $eventManager,
-        \M2E\TikTokShop\Model\ActiveRecord\Factory $activeRecordFactory,
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
-        \M2E\TikTokShop\Model\Cron\TaskRepository $taskRepo,
-        \Magento\Framework\App\ResourceConnection $resource
+        \M2E\TikTokShop\Model\Cron\Task\Order\CreatorFactory $orderCreatorFactory
     ) {
-        parent::__construct(
-            $cronManager,
-            $syncLogger,
-            $helperData,
-            $eventManager,
-            $activeRecordFactory,
-            $helperFactory,
-            $taskRepo,
-            $resource,
-        );
         $this->orderCreatorFactory = $orderCreatorFactory;
         $this->uploadByUserManagerFactory = $uploadByUserManagerFactory;
         $this->accountRepository = $accountRepository;
         $this->receiveOrderProcessor = $receiveOrderProcessor;
     }
 
-    protected function getNick(): string
+    /**
+     * @param \M2E\TikTokShop\Model\Cron\TaskContext $context
+     *
+     * @return void
+     */
+    public function process($context): void
     {
-        return self::NICK;
-    }
+        $this->syncLog = $context->getSynchronizationLog();
+        $this->syncLog->setTask(\M2E\TikTokShop\Model\Synchronization\Log::TASK_ORDERS);
 
-    protected function getSynchronizationLog(): \M2E\TikTokShop\Model\Synchronization\LogService
-    {
-        $synchronizationLog = parent::getSynchronizationLog();
-        $synchronizationLog->setTask(\M2E\TikTokShop\Model\Synchronization\Log::TASK_ORDERS);
-
-        return $synchronizationLog;
-    }
-
-    protected function performActions()
-    {
-        $ordersCreator = $this->orderCreatorFactory->create($this->getSynchronizationLog());
+        $ordersCreator = $this->orderCreatorFactory->create($context->getSynchronizationLog());
         $ordersCreator->setValidateAccountCreateDate(false);
 
         foreach ($this->accountRepository->getAll() as $account) {
@@ -122,14 +100,14 @@ class UploadByUser extends \M2E\TikTokShop\Model\Cron\AbstractTask
                     ['account' => $account->getTitle()],
                 );
 
-                $this->processTaskAccountException($message, __FILE__, __LINE__);
-                $this->processTaskException($exception);
+                $context->getExceptionHandler()->processTaskAccountException($message, __FILE__, __LINE__);
+                $context->getExceptionHandler()->processTaskException($exception);
             }
         }
     }
 
     private function processResponseMessages(
-        \M2E\TikTokShop\Model\Connector\Response\MessageCollection $messageCollection
+        \M2E\Core\Model\Connector\Response\MessageCollection $messageCollection
     ): void {
         foreach ($messageCollection->getMessages() as $message) {
             if (!$message->isError() && !$message->isWarning()) {
@@ -140,8 +118,7 @@ class UploadByUser extends \M2E\TikTokShop\Model\Cron\AbstractTask
                 ? \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_ERROR
                 : \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_WARNING;
 
-            $this
-                ->getSynchronizationLog()
+            $this->syncLog
                 ->add((string)__($message->getText()), $logType);
         }
     }

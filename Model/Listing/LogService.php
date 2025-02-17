@@ -92,7 +92,7 @@ class LogService
 
         $nextId = $lastValue + 1;
 
-        $this->registry->setValue($registryKey, $nextId);
+        $this->registry->setValue($registryKey, (string)$nextId);
 
         return $nextId;
     }

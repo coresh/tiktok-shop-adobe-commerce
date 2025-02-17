@@ -4,35 +4,36 @@ namespace M2E\TikTokShop\Controller\Adminhtml\Wizard\Registration;
 
 class CreateLicense extends \M2E\TikTokShop\Controller\Adminhtml\Wizard\AbstractRegistration
 {
+    private \M2E\Core\Model\RegistrationService $registrationService;
     private \M2E\TikTokShop\Model\TikTokShop\Connector\License\Add\Processor $connectionProcessor;
-    private \M2E\TikTokShop\Helper\Client $clientHelper;
-    private \M2E\TikTokShop\Model\Registration\UserInfo\Repository $registrationUserInfo;
-    private \M2E\TikTokShop\Helper\Module\License $licenseHelper;
-    private \M2E\TikTokShop\Helper\Data $dataHelper;
+    private \M2E\Core\Helper\Client $clientHelper;
     private \M2E\TikTokShop\Helper\Module\Exception $exceptionHelper;
     private \M2E\TikTokShop\Model\Servicing\Dispatcher $servicing;
+    private \M2E\Core\Model\LicenseService $licenseService;
 
     public function __construct(
+        \M2E\Core\Model\RegistrationService $registrationService,
         \M2E\TikTokShop\Model\TikTokShop\Connector\License\Add\Processor $connectionProcessor,
-        \M2E\TikTokShop\Helper\Client $clientHelper,
-        \M2E\TikTokShop\Helper\Module\License $licenseHelper,
-        \M2E\TikTokShop\Helper\Data $dataHelper,
-        \M2E\TikTokShop\Model\Registration\UserInfo\Repository $manager,
+        \M2E\Core\Helper\Client $clientHelper,
         \M2E\TikTokShop\Helper\Module\Exception $exceptionHelper,
         \M2E\TikTokShop\Model\Servicing\Dispatcher $servicing,
         \M2E\TikTokShop\Helper\Magento $magentoHelper,
         \M2E\TikTokShop\Helper\Module\Wizard $wizardHelper,
-        \Magento\Framework\Code\NameBuilder $nameBuilder
+        \Magento\Framework\Code\NameBuilder $nameBuilder,
+        \M2E\Core\Model\LicenseService $licenseService
     ) {
-        parent::__construct($magentoHelper, $wizardHelper, $nameBuilder, $licenseHelper);
-
+        parent::__construct(
+            $magentoHelper,
+            $wizardHelper,
+            $nameBuilder,
+            $licenseService
+        );
+        $this->registrationService = $registrationService;
         $this->connectionProcessor = $connectionProcessor;
-        $this->registrationUserInfo = $manager;
-        $this->licenseHelper = $licenseHelper;
-        $this->dataHelper = $dataHelper;
         $this->clientHelper = $clientHelper;
         $this->exceptionHelper = $exceptionHelper;
         $this->servicing = $servicing;
+        $this->licenseService = $licenseService;
     }
 
     public function execute()
@@ -65,7 +66,7 @@ class CreateLicense extends \M2E\TikTokShop\Controller\Adminhtml\Wizard\Abstract
             return $this->getResult();
         }
 
-        $userInfo = new \M2E\TikTokShop\Model\Registration\UserInfo(
+        $userInfo = new \M2E\Core\Model\Registration\User(
             $licenseData['email'],
             $licenseData['firstname'],
             $licenseData['lastname'],
@@ -75,9 +76,9 @@ class CreateLicense extends \M2E\TikTokShop\Controller\Adminhtml\Wizard\Abstract
             $licenseData['postal_code'],
         );
 
-        $this->registrationUserInfo->save($userInfo);
+        $this->registrationService->saveUser($userInfo);
 
-        if ($this->licenseHelper->getKey()) {
+        if ($this->licenseService->has()) {
             $this->setJsonContent(['status' => true]);
 
             return $this->getResult();
@@ -96,7 +97,7 @@ class CreateLicense extends \M2E\TikTokShop\Controller\Adminhtml\Wizard\Abstract
                 $userInfo->getPostalCode()
             );
             $response = $this->connectionProcessor->process($request);
-            $this->licenseHelper->setLicenseKey($response->getKey());
+            $this->licenseService->create($response->getKey());
         } catch (\Throwable $e) {
             $this->exceptionHelper->process($e);
 

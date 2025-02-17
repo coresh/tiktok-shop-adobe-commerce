@@ -142,7 +142,7 @@ abstract class AbstractDataBuilder
                 '%1: Attribute(s) %2 were not found' .
                 ' in this Product and its value was not sent.',
                 $title,
-                implode(',', $attributesTitles),
+                implode(', ', $attributesTitles),
             ),
         );
     }

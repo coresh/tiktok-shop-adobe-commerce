@@ -6,12 +6,13 @@ namespace M2E\TikTokShop\Model\UnmanagedProduct;
 
 use M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct as UnmanagedProductResource;
 use M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct\VariantSku as VariantSkuResource;
+use Magento\Ui\Component\MassAction\Filter as MassActionFilter;
 
 class Repository
 {
     private \M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct\CollectionFactory $collectionUnmanagedFactory;
     private \M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct\VariantSku\CollectionFactory $productVariantCollectionFactory;
-    private \M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct $unmanagedResource;
+    private UnmanagedProductResource $unmanagedResource;
     private \M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct\VariantSku $variantResource;
     private \M2E\TikTokShop\Model\UnmanagedProductFactory $objectFactory;
     private \M2E\TikTokShop\Helper\Module\Database\Structure $dbStructureHelper;
@@ -19,7 +20,7 @@ class Repository
     public function __construct(
         \M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct\VariantSku\CollectionFactory $productVariantCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct\CollectionFactory $collectionFactory,
-        \M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct $unmanagedResource,
+        UnmanagedProductResource $unmanagedResource,
         \M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct\VariantSku $variantResource,
         \M2E\TikTokShop\Model\UnmanagedProductFactory $unmanagedProductFactory,
         \M2E\TikTokShop\Helper\Module\Database\Structure $dbStructureHelper
@@ -241,5 +242,115 @@ class Repository
         $collection->addFieldToFilter(UnmanagedProductResource::COLUMN_ACCOUNT_ID, $accountId);
 
         return (int)$collection->getSize() > 0;
+    }
+
+    /**
+     * @param \Magento\Ui\Component\MassAction\Filter $filter
+     * @param int $accountId
+     *
+     * @return \M2E\TikTokShop\Model\UnmanagedProduct[]
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function findForUnmappingByMassActionSelectedProducts(MassActionFilter $filter, int $accountId): array
+    {
+        $collection = $this->collectionUnmanagedFactory->create();
+        $filter->getCollection($collection);
+
+        $collection->addFieldToFilter(
+            UnmanagedProductResource::COLUMN_MAGENTO_PRODUCT_ID,
+            ['notnull' => true]
+        );
+
+        $collection->addFieldToFilter(
+            UnmanagedProductResource::COLUMN_ACCOUNT_ID,
+            $accountId
+        );
+
+        return array_values($collection->getItems());
+    }
+
+    /**
+     * @param \Magento\Ui\Component\MassAction\Filter $filter
+     * @param int $accountId
+     *
+     * @return \M2E\TikTokShop\Model\UnmanagedProduct[]
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function findForAutoMappingByMassActionSelectedProducts(MassActionFilter $filter, int $accountId): array
+    {
+        $collection = $this->collectionUnmanagedFactory->create();
+        $filter->getCollection($collection);
+
+        $collection->addFieldToFilter(
+            UnmanagedProductResource::COLUMN_MAGENTO_PRODUCT_ID,
+            ['null' => true]
+        );
+
+        $collection->addFieldToFilter(
+            UnmanagedProductResource::COLUMN_ACCOUNT_ID,
+            $accountId
+        );
+
+        return array_values($collection->getItems());
+    }
+
+    /**
+     * @param \Magento\Ui\Component\MassAction\Filter $filter
+     * @param int $accountId
+     *
+     * @return \M2E\TikTokShop\Model\UnmanagedProduct[]
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function findForMovingByMassActionSelectedProducts(MassActionFilter $filter, int $accountId): array
+    {
+        $collection = $this->collectionUnmanagedFactory->create();
+        $filter->getCollection($collection);
+
+        $collection->addFieldToFilter(
+            UnmanagedProductResource::COLUMN_MAGENTO_PRODUCT_ID,
+            ['notnull' => true]
+        );
+
+        $collection->addFieldToFilter(
+            UnmanagedProductResource::COLUMN_ACCOUNT_ID,
+            $accountId
+        );
+
+        return array_values($collection->getItems());
+    }
+
+    /**
+     * @param array $ids
+     * @param int $accountId
+     *
+     * @return array|bool
+     * @throws \Zend_Db_Statement_Exception
+     */
+    public function findShopIdByUnmanagedIdsAndAccount(array $ids, int $accountId)
+    {
+        $listingOtherCollection = $this->collectionUnmanagedFactory->create();
+        $listingOtherCollection->addFieldToFilter('id', ['in' => $ids]);
+        $listingOtherCollection->addFieldToFilter(
+            UnmanagedProductResource::COLUMN_MAGENTO_PRODUCT_ID,
+            ['notnull' => true]
+        );
+
+        $listingOtherCollection->getSelect()->join(
+            ['cpe' => $this->dbStructureHelper->getTableNameWithPrefix('catalog_product_entity')],
+            'magento_product_id = cpe.entity_id'
+        );
+
+        $listingOtherCollection->addFieldToFilter(
+            UnmanagedProductResource::COLUMN_ACCOUNT_ID,
+            $accountId
+        );
+
+        return $listingOtherCollection
+            ->getSelect()
+            ->reset(\Magento\Framework\DB\Select::COLUMNS)
+            ->group(['shop_id'])
+            ->columns(['shop_id'])
+            ->query()
+            ->fetch();
     }
 }

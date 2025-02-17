@@ -10,7 +10,7 @@ use M2E\TikTokShop\Model\ResourceModel\Template\Compliance as ComplianceResource
 use M2E\TikTokShop\Model\ResourceModel\Listing as ListingResource;
 use M2E\TikTokShop\Model\ResourceModel\Template\Synchronization as SyncResource;
 
-class AddCompliancePolicy extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class AddCompliancePolicy extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
     public function execute(): void
     {
@@ -57,7 +57,7 @@ class AddCompliancePolicy extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\Abs
                 ['nullable' => false]
             )
             ->addColumn(
-                ComplianceResource::COLUMN_RESPONSIBLE_PERSON_ID,
+                'responsible_person_id',
                 Table::TYPE_TEXT,
                 255,
                 ['nullable' => false]
@@ -124,7 +124,7 @@ class AddCompliancePolicy extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\Abs
                 false
             )
             ->addColumn(
-                \M2E\TikTokShop\Model\ResourceModel\Product::COLUMN_ONLINE_RESPONSIBLE_PERSON_ID,
+                'online_responsible_person_id',
                 'VARCHAR(255)',
                 'NULL',
                 null,

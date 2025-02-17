@@ -6,25 +6,18 @@ namespace M2E\TikTokShop\Model\Registry;
 
 class Manager
 {
-    private \M2E\TikTokShop\Model\RegistryFactory $registryFactory;
-    private \M2E\TikTokShop\Model\ResourceModel\Registry $registryResource;
+    private \M2E\Core\Model\Registry\Adapter $adapter;
+    private \M2E\Core\Model\Registry\AdapterFactory $adapterFactory;
 
     public function __construct(
-        \M2E\TikTokShop\Model\RegistryFactory $registryFactory,
-        \M2E\TikTokShop\Model\ResourceModel\Registry $registryResource
+        \M2E\Core\Model\Registry\AdapterFactory $adapterFactory
     ) {
-        $this->registryFactory = $registryFactory;
-        $this->registryResource = $registryResource;
+        $this->adapterFactory = $adapterFactory;
     }
-
-    // ----------------------------------------
 
     /**
      * @param string $key
-     * @param $value
-     *
-     * @return void
-     * @throws \JsonException
+     * @param string|array $value
      */
     public function setValue(string $key, $value): void
     {
@@ -32,69 +25,38 @@ class Manager
             $value = json_encode($value, JSON_THROW_ON_ERROR);
         }
 
-        $registryModel = $this->loadByKey($key);
-        $registryModel->setValue($value);
-        $registryModel->save();
+        $this->getAdapter()->set($key, $value);
     }
 
-    /**
-     * @param string $key
-     *
-     * @return array|mixed|null
-     */
-    public function getValue(string $key)
+    public function getValue(string $key): ?string
     {
-        return $this->loadByKey($key)->getValue();
+        return $this->getAdapter()->get($key);
     }
 
-    /**
-     * @param $key
-     *
-     * @return array|bool|null
-     */
-    public function getValueFromJson($key)
+    public function getValueFromJson(string $key): array
     {
-        $registryModel = $this->loadByKey($key);
-        if (!$registryModel->getId()) {
+        $value = $this->getValue($key);
+        if ($value === null) {
             return [];
         }
 
-        return json_decode($registryModel->getValue(), true);
+        return json_decode($value, true);
     }
 
-    /**
-     * @param $key
-     *
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
     public function deleteValue($key): void
     {
-        $this->registryResource->deleteByKey($key);
+        $this->getAdapter()->delete($key);
     }
 
-    // ----------------------------------------
-
-    /**
-     * @param string $key
-     *
-     * @return \M2E\TikTokShop\Model\Registry
-     */
-    private function loadByKey(string $key): \M2E\TikTokShop\Model\Registry
+    public function getAdapter(): \M2E\Core\Model\Registry\Adapter
     {
-        $registryModel = $this->registryFactory->create();
-        $this->registryResource->load(
-            $registryModel,
-            $key,
-            \M2E\TikTokShop\Model\ResourceModel\Registry::COLUMN_KEY
-        );
-
-        if (!$registryModel->getId()) {
-            $registryModel->setKey($key);
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
+        if (!isset($this->adapter)) {
+            $this->adapter = $this->adapterFactory->create(
+                \M2E\TikTokShop\Helper\Module::IDENTIFIER
+            );
         }
 
-        return $registryModel;
+        return $this->adapter;
     }
-
-    // ----------------------------------------
 }

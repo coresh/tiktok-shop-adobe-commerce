@@ -2,27 +2,32 @@
 
 namespace M2E\TikTokShop\Block\Adminhtml\Listing\Moving;
 
+use M2E\TikTokShop\Model\ResourceModel\Listing as ListingResource;
+
 class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
 {
     private \Magento\Store\Model\StoreFactory $storeFactory;
     private \M2E\TikTokShop\Helper\View $viewHelper;
-    private \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper;
     private \M2E\TikTokShop\Model\ResourceModel\Listing\CollectionFactory $listingCollectionFactory;
+    private int $accountId;
+    private int $shopId;
 
     public function __construct(
+        int $accountId,
+        int $shopId,
         \M2E\TikTokShop\Model\ResourceModel\Listing\CollectionFactory $listingCollectionFactory,
         \Magento\Store\Model\StoreFactory $storeFactory,
         \M2E\TikTokShop\Helper\View $viewHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper,
         array $data = []
     ) {
         $this->storeFactory = $storeFactory;
         $this->viewHelper = $viewHelper;
-        $this->globalDataHelper = $globalDataHelper;
-        parent::__construct($context, $backendHelper, $data);
+        $this->accountId = $accountId;
+        $this->shopId = $shopId;
         $this->listingCollectionFactory = $listingCollectionFactory;
+        parent::__construct($context, $backendHelper, $data);
     }
 
     public function _construct()
@@ -47,15 +52,10 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
 
     protected function _prepareCollection()
     {
-        $ignoreListings = (array)$this->globalDataHelper->getValue('ignoreListings');
-
         $collection = $this->listingCollectionFactory->create();
 
-        foreach ($ignoreListings as $listingId) {
-            $collection->addFieldToFilter('main_table.id', ['neq' => $listingId]);
-        }
-
-        $this->addAccountAndShopFilter($collection);
+        $collection->addFieldToFilter(ListingResource::COLUMN_SHOP_ID, $this->shopId);
+        $collection->addFieldToFilter(ListingResource::COLUMN_ACCOUNT_ID, $this->accountId);
 
         $collection->addProductsTotalCount();
 
@@ -157,18 +157,12 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
 
     public function callbackColumnActions($value, $row, $column, $isExport)
     {
+        $listingId = $row->getData('id');
         $moveText = __('Move To This Listing');
+        $url = $this->getUrl('m2e_tiktokshop/listing_wizard/createUnmanaged', ['listing_id' => $listingId]);
+
         return <<<HTML
-&nbsp;<a href="javascript:void(0);" onclick="CommonObj.confirm({
-        actions: {
-            confirm: function () {
-                {$this->getMovingHandlerJs()}.gridHandler.tryToMove({$row->getData('id')});
-            }.bind(this),
-            cancel: function () {
-                return false;
-            }
-        }
-    });">$moveText</a>
+&nbsp;<a href="javascript:void(0);" onclick="window.location.href='{$url}';">$moveText</a>
 HTML;
     }
 
@@ -197,8 +191,8 @@ HTML;
             [
                 'step' => 1,
                 'clear' => 1,
-                'account_id' => $this->globalDataHelper->getValue('accountId'),
-                'shop_id' => $this->globalDataHelper->getValue('shopId'),
+                'account_id' => $this->accountId,
+                'shop_id' => $this->shopId,
                 'creation_mode' => \M2E\TikTokShop\Helper\View::LISTING_CREATION_MODE_LISTING_ONLY,
             ]
         );
@@ -234,14 +228,5 @@ JS
     public function getRowUrl($item)
     {
         return false;
-    }
-
-    protected function addAccountAndShopFilter($collection)
-    {
-        $accountId = $this->globalDataHelper->getValue('accountId');
-        $shopId = $this->globalDataHelper->getValue('shopId');
-
-        $collection->addFieldToFilter('shop_id', $shopId);
-        $collection->addFieldToFilter('account_id', $accountId);
     }
 }

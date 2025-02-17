@@ -53,10 +53,6 @@ class View
             return \M2E\TikTokShop\Helper\View\TikTokShop::NICK;
         }
 
-        if (stripos($controllerName, \M2E\TikTokShop\Helper\View\ControlPanel::NICK) !== false) {
-            return \M2E\TikTokShop\Helper\View\ControlPanel::NICK;
-        }
-
         if (stripos($controllerName, 'system_config') !== false) {
             return \M2E\TikTokShop\Helper\View\Configuration::NICK;
         }
@@ -69,11 +65,6 @@ class View
     public function isCurrentViewTikTokShop(): bool
     {
         return $this->getCurrentView() == \M2E\TikTokShop\Helper\View\TikTokShop::NICK;
-    }
-
-    public function isCurrentViewControlPanel(): bool
-    {
-        return $this->getCurrentView() == \M2E\TikTokShop\Helper\View\ControlPanel::NICK;
     }
 
     public function isCurrentViewConfiguration(): bool

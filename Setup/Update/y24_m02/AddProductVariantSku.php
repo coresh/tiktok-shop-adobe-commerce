@@ -9,7 +9,7 @@ use M2E\TikTokShop\Model\ResourceModel\Product as ListingProductResource;
 use M2E\TikTokShop\Model\ResourceModel\Product\VariantSku as ListingProductVariantResource;
 use Magento\Framework\DB\Ddl\Table;
 
-class AddProductVariantSku extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\AbstractFeature
+class AddProductVariantSku extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
     public function execute(): void
     {
@@ -121,7 +121,7 @@ class AddProductVariantSku extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\Ab
             ->addColumn(
                 ListingProductResource::COLUMN_ONLINE_CATEGORIES_DATA,
                 Table::TYPE_TEXT,
-                \M2E\TikTokShop\Model\Setup\Installer::LONG_COLUMN_SIZE,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
                 ['default' => null],
             )
             ->addColumn(
@@ -175,7 +175,7 @@ class AddProductVariantSku extends \M2E\TikTokShop\Model\Setup\Upgrade\Entity\Ab
             ->addColumn(
                 ListingProductResource::COLUMN_ADDITIONAL_DATA,
                 Table::TYPE_TEXT,
-                \M2E\TikTokShop\Model\Setup\Installer::LONG_COLUMN_SIZE,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
                 ['default' => null],
             )
             ->addColumn(

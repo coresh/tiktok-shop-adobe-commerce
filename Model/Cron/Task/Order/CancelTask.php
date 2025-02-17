@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\Cron\Task\Order;
 
-class CancelTask extends \M2E\TikTokShop\Model\Cron\AbstractTask
+class CancelTask implements \M2E\Core\Model\Cron\TaskHandlerInterface
 {
     public const NICK = 'order/cancel';
 
@@ -13,38 +13,20 @@ class CancelTask extends \M2E\TikTokShop\Model\Cron\AbstractTask
 
     public function __construct(
         \M2E\TikTokShop\Model\Order\Change\CancelProcessor $cancelProcessor,
-        \M2E\TikTokShop\Model\Account\Repository $accountRepository,
-        \M2E\TikTokShop\Model\Cron\Manager $cronManager,
-        \M2E\TikTokShop\Model\Synchronization\LogService $syncLogger,
-        \M2E\TikTokShop\Helper\Data $helperData,
-        \Magento\Framework\Event\Manager $eventManager,
-        \M2E\TikTokShop\Model\ActiveRecord\Factory $activeRecordFactory,
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
-        \M2E\TikTokShop\Model\Cron\TaskRepository $taskRepo,
-        \Magento\Framework\App\ResourceConnection $resource
+        \M2E\TikTokShop\Model\Account\Repository $accountRepository
     ) {
-        parent::__construct(
-            $cronManager,
-            $syncLogger,
-            $helperData,
-            $eventManager,
-            $activeRecordFactory,
-            $helperFactory,
-            $taskRepo,
-            $resource,
-        );
         $this->cancelProcessor = $cancelProcessor;
         $this->accountRepository = $accountRepository;
     }
 
-    protected function getNick(): string
+    /**
+     * @param \M2E\TikTokShop\Model\Cron\TaskContext $context
+     *
+     * @return void
+     */
+    public function process($context): void
     {
-        return self::NICK;
-    }
-
-    protected function performActions(): void
-    {
-        $synchronizationLog = $this->getSynchronizationLog();
+        $synchronizationLog = $context->getSynchronizationLog();
         $synchronizationLog->setTask(\M2E\TikTokShop\Model\Synchronization\Log::TASK_ORDERS);
 
         foreach ($this->accountRepository->getAll() as $account) {

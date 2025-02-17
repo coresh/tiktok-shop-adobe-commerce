@@ -8,12 +8,12 @@ class License implements \M2E\TikTokShop\Model\Servicing\TaskInterface
 {
     public const NAME = 'license';
 
-    private \M2E\TikTokShop\Model\Config\Manager $configManager;
+    private \M2E\Core\Model\LicenseService $licenseService;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Config\Manager $configManager
+        \M2E\Core\Model\LicenseService $licenseService
     ) {
-        $this->configManager = $configManager;
+        $this->licenseService = $licenseService;
     }
 
     // ----------------------------------------
@@ -41,62 +41,94 @@ class License implements \M2E\TikTokShop\Model\Servicing\TaskInterface
 
     public function processResponseData(array $data): void
     {
+        $license = $this->licenseService->get();
+
         if (isset($data['info']) && is_array($data['info'])) {
-            $this->updateInfoData($data['info']);
+            $license = $this->updateInfoData($license, $data['info']);
         }
 
         if (isset($data['validation']) && is_array($data['validation'])) {
-            $this->updateValidationMainData($data['validation']);
+            $license = $this->updateValidationMainData($license, $data['validation']);
 
             if (isset($data['validation']['validation']) && is_array($data['validation']['validation'])) {
-                $this->updateValidationValidData($data['validation']['validation']);
+                $license = $this->updateValidationValidData($license, $data['validation']['validation']);
             }
         }
 
         if (isset($data['connection']) && is_array($data['connection'])) {
-            $this->updateConnectionData($data['connection']);
+            $license = $this->updateConnectionData($license, $data['connection']);
         }
+
+        $this->licenseService->update($license);
     }
 
     // ----------------------------------------
 
-    private function updateInfoData(array $infoData): void
-    {
-        if (array_key_exists('email', $infoData)) {
-            $this->configManager->setGroupValue('/license/info/', 'email', $infoData['email']);
+    private function updateInfoData(
+        \M2E\Core\Model\License $license,
+        array $infoData
+    ): \M2E\Core\Model\License {
+        if (isset($infoData['email'])) {
+            $info = $license->getInfo()->withEmail($infoData['email']);
+
+            return $license->withInfo($info);
         }
+
+        return $license;
     }
 
-    private function updateValidationMainData(array $validationData): void
-    {
-        if (array_key_exists('domain', $validationData)) {
-            $this->configManager->setGroupValue('/license/domain/', 'valid', $validationData['domain']);
+    private function updateValidationMainData(
+        \M2E\Core\Model\License $license,
+        array $validationData
+    ): \M2E\Core\Model\License {
+        if (isset($validationData['domain'])) {
+            $domain = $license->getInfo()->getDomainIdentifier()->withValidValue($validationData['domain']);
+            $info = $license->getInfo()->withDomainIdentifier($domain);
+            $license = $license->withInfo($info);
         }
 
-        if (array_key_exists('ip', $validationData)) {
-            $this->configManager->setGroupValue('/license/ip/', 'valid', $validationData['ip']);
+        if (isset($validationData['ip'])) {
+            $ip = $license->getInfo()->getIpIdentifier()->withValidValue($validationData['ip']);
+            $info = $license->getInfo()->withIpIdentifier($ip);
+            $license = $license->withInfo($info);
         }
+
+        return $license;
     }
 
-    private function updateValidationValidData(array $isValidData): void
-    {
+    private function updateValidationValidData(
+        \M2E\Core\Model\License $license,
+        array $isValidData
+    ): \M2E\Core\Model\License {
         if (isset($isValidData['domain'])) {
-            $this->configManager->setGroupValue('/license/domain/', 'is_valid', (int)$isValidData['domain']);
+            $domain = $license->getInfo()->getDomainIdentifier()->withValid((bool)$isValidData['domain']);
+            $info = $license->getInfo()->withDomainIdentifier($domain);
+            $license = $license->withInfo($info);
         }
 
         if (isset($isValidData['ip'])) {
-            $this->configManager->setGroupValue('/license/ip/', 'is_valid', (int)$isValidData['ip']);
+            $ip = $license->getInfo()->getIpIdentifier()->withValid((bool)$isValidData['ip']);
+            $info = $license->getInfo()->withIpIdentifier($ip);
+            $license = $license->withInfo($info);
         }
+
+        return $license;
     }
 
-    private function updateConnectionData(array $data): void
+    private function updateConnectionData(\M2E\Core\Model\License $license, array $data): \M2E\Core\Model\License
     {
-        if (array_key_exists('domain', $data)) {
-            $this->configManager->setGroupValue('/license/domain/', 'real', $data['domain']);
+        if (isset($data['domain'])) {
+            $domain = $license->getInfo()->getDomainIdentifier()->withRealValue($data['domain']);
+            $info = $license->getInfo()->withDomainIdentifier($domain);
+            $license = $license->withInfo($info);
         }
 
-        if (array_key_exists('ip', $data)) {
-            $this->configManager->setGroupValue('/license/ip/', 'real', $data['ip']);
+        if (isset($data['ip'])) {
+            $ip = $license->getInfo()->getIpIdentifier()->withRealValue($data['ip']);
+            $info = $license->getInfo()->withIpIdentifier($ip);
+            $license = $license->withInfo($info);
         }
+
+        return $license;
     }
 }
