@@ -19,7 +19,7 @@ class CronInfo implements \M2E\Core\Model\ControlPanel\Widget\CronInfoInterface
 
     public function isCronWorking(): bool
     {
-        return $this->cronManager->isCronLastRunMoreThan(3600);
+        return !$this->cronManager->isCronLastRunMoreThan(3600);
     }
 
     public function getCronLastRunTime(): ?\DateTimeInterface
