@@ -64,7 +64,7 @@ class OnlinePrice extends \Magento\Ui\Component\Listing\Columns\Column
 
             if ($product->isStatusInactive()) {
                 $row['product_online_price'] =  sprintf(
-                    '<span style="color: gray; text-decoration: line-through;">%s</span>',
+                    '<span style="color: gray;">%s</span>',
                     $onlinePrice . $promotionHtml
                 );
             } else {

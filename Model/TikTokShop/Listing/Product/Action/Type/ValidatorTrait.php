@@ -6,11 +6,11 @@ namespace M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type;
 
 trait ValidatorTrait
 {
-    /** @var \M2E\TikTokShop\Model\Response\Message[] */
+    /** @var \M2E\Core\Model\Response\Message[] */
     private array $messages = [];
 
     /**
-     * @return \M2E\TikTokShop\Model\Response\Message[]
+     * @return \M2E\Core\Model\Response\Message[]
      */
     public function getMessages(): array
     {
@@ -54,6 +54,6 @@ trait ValidatorTrait
 
     private function addErrorMessage(string $message): void
     {
-        $this->messages[] = \M2E\TikTokShop\Model\Response\Message::createError($message);
+        $this->messages[] = \M2E\Core\Model\Response\Message::createError($message);
     }
 }

@@ -77,7 +77,7 @@ class Logger
 
     public function logListingProductMessage(
         \M2E\TikTokShop\Model\Product $listingProduct,
-        \M2E\TikTokShop\Model\Response\Message $message
+        \M2E\Core\Model\Response\Message $message
     ): void {
         $this->listingLogService->addProduct(
             $listingProduct,
@@ -89,7 +89,7 @@ class Logger
         );
     }
 
-    protected function initLogType(\M2E\TikTokShop\Model\Response\Message $message): int
+    protected function initLogType(\M2E\Core\Model\Response\Message $message): int
     {
         if ($message->isError()) {
             $this->setStatus(\M2E\TikTokShop\Helper\Data::STATUS_ERROR);

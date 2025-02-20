@@ -164,7 +164,7 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
                 'Brand "%s" was assigned to the Product on TikTok Shop',
                 $newBrandName
             );
-            $this->addActionLogMessage(\M2E\TikTokShop\Model\Response\Message::createSuccess($message));
+            $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createSuccess($message));
         }
     }
 

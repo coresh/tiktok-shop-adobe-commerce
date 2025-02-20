@@ -7,7 +7,7 @@ namespace M2E\TikTokShop\Block\Adminhtml\Grid\Column\Renderer;
 class OnlineQty extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     protected string $dataKeyQtySource = 'online_qty';
-    protected string $dataKeyStatus = 'online_qty';
+    protected string $dataKeyStatus = 'status';
 
     public function render(\Magento\Framework\DataObject $row)
     {
@@ -21,9 +21,11 @@ class OnlineQty extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstr
         }
 
         $qty = $this->getQty($row);
+        $style = $qty > 0 ? 'text-decoration: line-through;' : '';
         if ($productStatus === \M2E\TikTokShop\Model\Product::STATUS_INACTIVE) {
             return sprintf(
-                '<span style="color: gray; text-decoration: line-through;">%s</span>',
+                '<span style="color: gray; %s">%s</span>',
+                $style,
                 $qty
             );
         }

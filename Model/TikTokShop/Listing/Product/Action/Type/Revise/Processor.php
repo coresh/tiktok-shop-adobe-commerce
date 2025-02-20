@@ -137,7 +137,7 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
     }
 
     /**
-     * @param \M2E\TikTokShop\Model\Connector\Response\Message[] $messages
+     * @param \M2E\Core\Model\Connector\Response\Message[] $messages
      *
      * @return void
      */
@@ -225,7 +225,7 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
                 );
             }
 
-            $this->addActionLogMessage(\M2E\TikTokShop\Model\Response\Message::createSuccess($message));
+            $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createSuccess($message));
         }
     }
 
@@ -271,7 +271,7 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
                 );
             }
 
-            $this->addActionLogMessage(\M2E\TikTokShop\Model\Response\Message::createSuccess($message));
+            $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createSuccess($message));
         }
     }
 
@@ -287,12 +287,12 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
                 'Brand "%s" was assigned to the Product on TikTok Shop',
                 $newBrandName
             );
-            $this->addActionLogMessage(\M2E\TikTokShop\Model\Response\Message::createSuccess($message));
+            $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createSuccess($message));
         }
 
         if (!empty($beforeBrandId) && !empty($newBrandId) && $beforeBrandId !== $newBrandId) {
             $message = sprintf('Brand was changed from "%s" to "%s"', $beforeBrandName, $newBrandName);
-            $this->addActionLogMessage(\M2E\TikTokShop\Model\Response\Message::createSuccess($message));
+            $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createSuccess($message));
         }
     }
 }

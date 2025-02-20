@@ -103,7 +103,7 @@ class Partial
         $message = new \M2E\Core\Model\Connector\Response\Message();
         $message->initFromPreparedData(
             'Request wait timeout exceeded.',
-            \M2E\TikTokShop\Model\Response\Message::TYPE_ERROR,
+            \M2E\Core\Model\Response\Message::TYPE_ERROR,
         );
 
         return $message;

@@ -87,6 +87,7 @@ class Repository
     public function findWithEUShop(): array
     {
         $collection = $this->collectionFactory->create();
+        $collection->distinct(true);
         $collection->addFieldToFilter(AccountResource::COLUMN_IS_ACTIVE, 1);
 
         $collection->join(

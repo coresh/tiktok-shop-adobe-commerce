@@ -31,6 +31,7 @@ class OnlineQty extends \Magento\Ui\Component\Listing\Columns\Column
                 continue;
             }
 
+            $style = $product->getOnlineQty() > 0 ? 'text-decoration: line-through;' : '';
             if ($product->isStatusNotListed()) {
                 $row['product_online_qty'] = sprintf(
                     '<span style="color: gray">%s</span>',
@@ -38,7 +39,8 @@ class OnlineQty extends \Magento\Ui\Component\Listing\Columns\Column
                 );
             } elseif ($product->isStatusInactive()) {
                 $row['product_online_qty'] = sprintf(
-                    '<span style="color: gray; text-decoration: line-through;">%s</span>',
+                    '<span style="color: gray; %s">%s</span>',
+                    $style,
                     $product->getOnlineQty()
                 );
             } else {

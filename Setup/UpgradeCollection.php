@@ -55,6 +55,7 @@ class UpgradeCollection extends \M2E\Core\Model\Setup\AbstractUpgradeCollection
             '1.14.0' => ['to' => '1.15.0', 'upgrade' => \M2E\TikTokShop\Setup\Upgrade\v1_15_0\Config::class],
             '1.15.0' => ['to' => '2.0.0', 'upgrade' => \M2E\TikTokShop\Setup\Upgrade\v2_0_0\Config::class],
             '2.0.0' => ['to' => '2.0.1', 'upgrade' => null],
+            '2.0.1' => ['to' => '2.0.2', 'upgrade' => null],
         ];
     }
 }

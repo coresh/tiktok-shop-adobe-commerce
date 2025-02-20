@@ -6,7 +6,7 @@ namespace M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action;
 
 abstract class AbstractProcessor
 {
-    /** @var \M2E\TikTokShop\Model\Response\Message[] */
+    /** @var \M2E\Core\Model\Response\Message[] */
     private array $storedActionLogMessages = [];
 
     private Logger $actionLogger;
@@ -28,7 +28,7 @@ abstract class AbstractProcessor
         if ($this->isListingProductLocked()) {
             $this->actionLogger->logListingProductMessage(
                 $this->product,
-                \M2E\TikTokShop\Model\Response\Message::createError(
+                \M2E\Core\Model\Response\Message::createError(
                     'Another Action is being processed. Try again when the Action is completed.',
                 ),
             );
@@ -56,7 +56,7 @@ abstract class AbstractProcessor
                 $successfulMessage = $this->processSuccess($apiResponse);
                 if (!empty($successfulMessage)) {
                     $this->addActionLogMessage(
-                        \M2E\TikTokShop\Model\Response\Message::createSuccess($successfulMessage)
+                        \M2E\Core\Model\Response\Message::createSuccess($successfulMessage)
                     );
                 }
             }
@@ -202,25 +202,25 @@ abstract class AbstractProcessor
 
     protected function addActionErrorLog(string $message): void
     {
-        $this->addActionLogMessage(\M2E\TikTokShop\Model\Response\Message::createError($message));
+        $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createError($message));
     }
 
     protected function addActionWarningLog(string $message): void
     {
-        $this->addActionLogMessage(\M2E\TikTokShop\Model\Response\Message::createWarning($message));
+        $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createWarning($message));
     }
 
     protected function addActionNoticeLog(string $message): void
     {
-        $this->addActionLogMessage(\M2E\TikTokShop\Model\Response\Message::createNotice($message));
+        $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createNotice($message));
     }
 
     protected function addActionSuccessLog(string $message): void
     {
-        $this->addActionLogMessage(\M2E\TikTokShop\Model\Response\Message::createSuccess($message));
+        $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createSuccess($message));
     }
 
-    protected function addActionLogMessage(\M2E\TikTokShop\Model\Response\Message $message): void
+    protected function addActionLogMessage(\M2E\Core\Model\Response\Message $message): void
     {
         $this->storedActionLogMessages[] = $message;
     }
