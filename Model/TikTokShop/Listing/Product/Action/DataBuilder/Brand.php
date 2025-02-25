@@ -88,6 +88,24 @@ class Brand extends AbstractDataBuilder
             return $response;
         }
 
+        if ($brandAttribute->isValueModeCustomValue()) {
+            $attributeVal = $brandAttribute->getCustomValue();
+
+            if (!$attributeVal) {
+                return $response;
+            }
+
+            $response['brand_name'] = $attributeVal;
+            $this->brandName = $response['brand_name'];
+
+            $currentBrandName = $this->getListingProduct()->getOnlineBrandName();
+            if (!empty($currentBrandName) && $attributeVal !== $currentBrandName) {
+                $response['brand_id'] = null;
+            }
+
+            return $response;
+        }
+
         return $response;
     }
 

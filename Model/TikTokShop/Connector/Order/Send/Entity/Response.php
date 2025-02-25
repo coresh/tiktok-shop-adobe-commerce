@@ -39,7 +39,7 @@ class Response
     }
 
     /**
-     * @return \M2E\TikTokShop\Model\Response\Message[]
+     * @return \M2E\Core\Model\Response\Message[]
      */
     public function getErrorMessages(): array
     {
@@ -47,7 +47,7 @@ class Response
     }
 
     /**
-     * @return \M2E\TikTokShop\Model\Response\Message[]
+     * @return \M2E\Core\Model\Response\Message[]
      */
     public function getWarningMessages(): array
     {

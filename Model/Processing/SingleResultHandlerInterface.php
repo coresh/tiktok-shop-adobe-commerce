@@ -10,7 +10,7 @@ interface SingleResultHandlerInterface
 
     /**
      * @param array $resultData
-     * @param \M2E\TikTokShop\Model\Response\Message[] $messages
+     * @param \M2E\Core\Model\Response\Message[] $messages
      *
      * @return void
      */

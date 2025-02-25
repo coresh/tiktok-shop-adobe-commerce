@@ -218,7 +218,7 @@ class Processing extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     }
 
     /**
-     * @return \M2E\TikTokShop\Model\Response\Message[]
+     * @return \M2E\Core\Model\Response\Message[]
      * @throws \JsonException
      */
     public function getResultMessages(): array

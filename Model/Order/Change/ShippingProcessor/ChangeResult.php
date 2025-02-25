@@ -11,7 +11,7 @@ class ChangeResult
 
     public string $trackingNumber;
     public string $shippingProviderName;
-    /** @var \M2E\TikTokShop\Model\Response\Message[] */
+    /** @var \M2E\Core\Model\Response\Message[] */
     public array $messages;
     /** @var \M2E\TikTokShop\Model\Order\Item[] */
     public array $orderItems;
