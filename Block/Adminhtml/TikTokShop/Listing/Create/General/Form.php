@@ -179,6 +179,7 @@ HTML
                 'tooltip' => __('Choose the Shop you want to list on using this M2E TikTok Shop Connect ' .
                     'Listing. Currency will be set automatically based on the Shop you choose.'),
                 'field_extra_attributes' => 'style="margin-bottom: 0px"',
+                'required' => $shopData['is_required']
             ]
         );
 
@@ -190,7 +191,9 @@ HTML
             ]
         );
 
-        $storeId = $this->getSessionData('store_id') ?? $this->storeHelper->getDefaultStoreId();
+        $storeId = $this->getSessionData('store_id')
+            ?? $this->getRequest()->getParam('store_id')
+            ?? $this->storeHelper->getDefaultStoreId();
         $fieldset->addField(
             'store_id',
             self::STORE_SWITCHER,
@@ -286,18 +289,20 @@ HTML
 
         if ($shops === []) {
             return [
+                'is_required' => 0,
                 'active_shop_id' => 0,
-                'shops' => [],
+                'shops' => []
             ];
         }
 
         $data = [
+            'is_required' => count($shops) > 1,
             'active_shop_id' => reset($shops)['value'],
             'shops' => $shops,
         ];
 
-        if ($sessionShopId = $this->getSessionData('shop_id')) {
-            $data['active_shop_id'] = $sessionShopId;
+        if ($requestShopId = $this->getRequest()->getParam('shop_id')) {
+            $data['active_shop_id'] = (int)$requestShopId;
         }
 
         return $data;
@@ -309,7 +314,7 @@ HTML
         $entities = $this->shopRepository->findForAccount($accountId);
         foreach ($entities as $entity) {
             $shops[$entity->getId()] = [
-                'label' => $entity->getShopName(),
+                'label' => $entity->getShopNameWithRegion(),
                 'value' => $entity->getId(),
             ];
         }

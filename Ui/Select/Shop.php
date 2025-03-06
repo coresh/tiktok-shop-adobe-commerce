@@ -22,7 +22,7 @@ class Shop implements OptionSourceInterface
 
         foreach ($this->repository->getAll() as $shop) {
             $options[] = [
-                'label' => $shop->getShopName(),
+                'label' => $shop->getShopNameWithRegion(),
                 'value' => $shop->getId(),
             ];
         }

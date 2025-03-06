@@ -10,6 +10,8 @@ use M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct as UnmanagedProductResou
 use M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct\VariantSku as UnmanagedProductVariantResource;
 use M2E\TikTokShop\Model\ResourceModel\Product as ListingProductResource;
 use M2E\TikTokShop\Model\ResourceModel\Product\VariantSku as ListingProductVariantResource;
+use M2E\TikTokShop\Model\ResourceModel\GlobalProduct as GlobalProductResource;
+use M2E\TikTokShop\Model\ResourceModel\GlobalProduct\VariantSku as GlobalProductVariantSkuResource;
 use M2E\TikTokShop\Model\ResourceModel\ScheduledAction as ScheduledActionResource;
 use M2E\TikTokShop\Model\ResourceModel\StopQueue as StopQueueResource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -23,6 +25,8 @@ class ProductHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
     {
         $this->installProductTable($setup);
         $this->installProductVariantSkuTable($setup);
+        $this->installGlobalProductTable($setup);
+        $this->installGlobalProductVariantSkuTable($setup);
         $this->installProductInstructionTable($setup);
         $this->installProductScheduledActionTable($setup);
         $this->installImageTable($setup);
@@ -82,6 +86,12 @@ class ProductHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 Table::TYPE_SMALLINT,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => 0]
+            )
+            ->addColumn(
+                ListingProductResource::COLUMN_GLOBAL_PRODUCT_ID,
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => true]
             )
             ->addColumn(
                 ListingProductResource::COLUMN_STATUS_CHANGER,
@@ -862,6 +872,226 @@ class ProductHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
             ->addIndex('price', UnmanagedProductVariantResource::COLUMN_PRICE)
             ->addIndex('identifier_id', UnmanagedProductVariantResource::COLUMN_IDENTIFIER_ID)
             ->addIndex('identifier_type', UnmanagedProductVariantResource::COLUMN_IDENTIFIER_TYPE)
+            ->setOption('type', 'INNODB')
+            ->setOption('charset', 'utf8')
+            ->setOption('collate', 'utf8_general_ci')
+            ->setOption('row_format', 'dynamic');
+
+        $setup->getConnection()->createTable($table);
+    }
+
+    private function installGlobalProductTable(\Magento\Framework\Setup\SetupInterface $setup)
+    {
+        $table = $setup
+            ->getConnection()
+            ->newTable($this->getFullTableName(TablesHelper::TABLE_NAME_GLOBAL_PRODUCT));
+
+        $table
+            ->addColumn(
+                GlobalProductResource::COLUMN_ID,
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'unsigned' => true,
+                    'primary' => true,
+                    'nullable' => false,
+                    'auto_increment' => true,
+                ]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_ACCOUNT_ID,
+                Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false, 'unsigned' => true]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_MAGENTO_PRODUCT_ID,
+                Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false, 'unsigned' => true]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_SOURCE_PRODUCT_ID,
+                Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false, 'unsigned' => true]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_GLOBAL_ID,
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => true,]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_TITLE,
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => false]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_DESCRIPTION,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => false]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_CATEGORY_ID,
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => false]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_BRAND_ID,
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => true]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_PACKAGE_DIMENSIONS,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => false]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_PACKAGE_WEIGHT,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => false]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_MAIN_IMAGES,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => false]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_CERTIFICATIONS,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => true]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_PRODUCT_ATTRIBUTES,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => true]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_SIZE_CHART,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => true]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_MANUFACTURER_IDS,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => true]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_RESPONSIBLE_PERSON_IDS,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => true]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_SOURCE_LOCALE,
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => true]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_CREATE_DATE,
+                Table::TYPE_DATETIME,
+                null,
+                ['nullable' => false]
+            )
+            ->addColumn(
+                GlobalProductResource::COLUMN_UPDATE_DATE,
+                Table::TYPE_DATETIME,
+                null,
+                ['nullable' => true]
+            )
+            ->setOption('type', 'INNODB')
+            ->setOption('charset', 'utf8')
+            ->setOption('collate', 'utf8_general_ci')
+            ->setOption('row_format', 'dynamic');
+
+        $setup->getConnection()->createTable($table);
+    }
+
+    private function installGlobalProductVariantSkuTable(\Magento\Framework\Setup\SetupInterface $setup)
+    {
+        $table = $setup
+            ->getConnection()
+            ->newTable($this->getFullTableName(TablesHelper::TABLE_NAME_GLOBAL_PRODUCT_VARIANT_SKU));
+
+        $table
+            ->addColumn(
+                GlobalProductVariantSkuResource::COLUMN_ID,
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'unsigned' => true,
+                    'primary' => true,
+                    'nullable' => false,
+                    'auto_increment' => true,
+                ]
+            )
+            ->addColumn(
+                GlobalProductVariantSkuResource::COLUMN_GLOBAL_PRODUCT_ID,
+                Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false, 'unsigned' => true]
+            )
+            ->addColumn(
+                GlobalProductVariantSkuResource::COLUMN_MAGENTO_PRODUCT_ID,
+                Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false, 'unsigned' => true]
+            )
+            ->addColumn(
+                GlobalProductVariantSkuResource::COLUMN_GLOBAL_ID,
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => true,]
+            )
+            ->addColumn(
+                GlobalProductVariantSkuResource::COLUMN_SALES_ATTRIBUTES,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => true]
+            )
+            ->addColumn(
+                GlobalProductVariantSkuResource::COLUMN_SELLER_SKU,
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => false]
+            )
+            ->addColumn(
+                GlobalProductVariantSkuResource::COLUMN_PRICE,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => true]
+            )
+            ->addColumn(
+                GlobalProductVariantSkuResource::COLUMN_IDENTIFIER_CODE,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => true]
+            )
+            ->addColumn(
+                GlobalProductVariantSkuResource::COLUMN_CREATE_DATE,
+                Table::TYPE_DATETIME,
+                null,
+                ['nullable' => false]
+            )
+            ->addColumn(
+                GlobalProductVariantSkuResource::COLUMN_UPDATE_DATE,
+                Table::TYPE_DATETIME,
+                null,
+                ['nullable' => true]
+            )
             ->setOption('type', 'INNODB')
             ->setOption('charset', 'utf8')
             ->setOption('collate', 'utf8_general_ci')

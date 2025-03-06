@@ -67,7 +67,7 @@ class Dispatcher
     /**
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      */
     public function processTask(string $taskCode): void
     {
@@ -77,7 +77,7 @@ class Dispatcher
     /**
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      */
     private function processTasks(array $taskCodes): void
     {

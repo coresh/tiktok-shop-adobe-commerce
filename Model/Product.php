@@ -53,6 +53,8 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     private TikTokShop\Listing\Product\Description\RendererFactory $descriptionRendererFactory;
     /** @var \M2E\TikTokShop\Model\ProductPromotionService */
     private ProductPromotionService $productPromotionService;
+    /** @var \M2E\TikTokShop\Model\GlobalProduct\Repository */
+    private GlobalProduct\Repository $globalProductRepository;
 
     public function __construct(
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Description\RendererFactory $descriptionRendererFactory,
@@ -61,6 +63,7 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         \M2E\TikTokShop\Model\Category\Dictionary\Repository $categoryDictionaryRepository,
         \M2E\TikTokShop\Model\Product\Repository $productRepository,
         \M2E\TikTokShop\Model\ProductPromotionService $productPromotionService,
+        \M2E\TikTokShop\Model\GlobalProduct\Repository $globalProductRepository,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry
     ) {
@@ -72,6 +75,7 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->productRepository = $productRepository;
         $this->descriptionRendererFactory = $descriptionRendererFactory;
         $this->productPromotionService = $productPromotionService;
+        $this->globalProductRepository = $globalProductRepository;
     }
 
     protected function _construct(): void
@@ -344,7 +348,36 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         return (int)$this->getData(ListingProductResource::COLUMN_STATUS_CHANGER);
     }
 
-    // ---------------------------------------
+    // ----------------------------------------
+
+    public function setGlobalProductId(int $globalProductId): self
+    {
+        $this->setData(ListingProductResource::COLUMN_GLOBAL_PRODUCT_ID, $globalProductId);
+
+        return $this;
+    }
+
+    public function getGlobalProductId(): ?int
+    {
+        $globalProductId = $this->getData(ListingProductResource::COLUMN_GLOBAL_PRODUCT_ID);
+        if (empty($globalProductId)) {
+            return null;
+        }
+
+        return (int)$globalProductId;
+    }
+
+    public function isGlobalProduct(): bool
+    {
+        return $this->getGlobalProductId() !== null;
+    }
+
+    public function getGlobalProduct(): \M2E\TikTokShop\Model\GlobalProduct
+    {
+        return $this->globalProductRepository->get($this->getGlobalProductId());
+    }
+
+    // ----------------------------------------
 
     public function setAdditionalData(array $value): self
     {
@@ -367,11 +400,19 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     public function isListable(): bool
     {
-        return (
-                $this->isStatusNotListed()
-                || $this->isStatusInactive()
-            ) && !$this->isStatusBlocked()
-            && $this->hasCategoryTemplate();
+        if (
+            !$this->hasCategoryTemplate()
+            && !$this->isGlobalProduct()
+        ) {
+            return false;
+        }
+
+        if ($this->isStatusBlocked()) {
+            return false;
+        }
+
+        return $this->isStatusNotListed()
+            || $this->isStatusInactive();
     }
 
     public function isRelistable(): bool
@@ -412,7 +453,7 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             return $this->categoryDictionary;
         }
 
-        if (!$this->hasCategoryTemplate()) {
+        if (!$this->hasCategoryTemplate() && !$this->isGlobalProduct()) {
             throw new \M2E\TikTokShop\Model\Exception\Logic('Category was not selected.');
         }
 
@@ -479,6 +520,13 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     {
         // or set value from \M2E\TikTokShop\Model\Product\Repository::setCategoryTemplate
         $this->setData(ListingProductResource::COLUMN_TEMPLATE_CATEGORY_ID, $id);
+
+        return $this;
+    }
+
+    public function removeTemplateCategoryId(): self
+    {
+        $this->setData(ListingProductResource::COLUMN_TEMPLATE_CATEGORY_ID, null);
 
         return $this;
     }

@@ -14,6 +14,7 @@ class Prepare extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractBlock
         array $data = []
     ) {
         parent::__construct($context, $data);
+
         $this->uiListingRuntimeStorage = $uiListingRuntimeStorage;
     }
 
@@ -78,6 +79,11 @@ class Prepare extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractBlock
         ]);
     }
 
+    public function getSearchUrl(): string
+    {
+        return $this->getUrl('*/category/search');
+    }
+
     public function getAccountId(): int
     {
         return $this->uiListingRuntimeStorage->getListing()->getAccountId();
@@ -86,10 +92,5 @@ class Prepare extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractBlock
     public function getShopId(): int
     {
         return $this->uiListingRuntimeStorage->getListing()->getShopId();
-    }
-
-    public function getSearchUrl(): string
-    {
-        return $this->getUrl('*/category/search');
     }
 }

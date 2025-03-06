@@ -19,6 +19,8 @@ class CategoryAttribute extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public const ATTRIBUTE_TYPE_PRODUCT = 'product';
     public const ATTRIBUTE_TYPE_SIZE_CHART = 'size-chart';
 
+    private const ATTRIBUTE_MULTI_VALUE_DELIMITER = '~';
+
     public function _construct()
     {
         parent::_construct();
@@ -155,5 +157,19 @@ class CategoryAttribute extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public function isValueModeCustomValue(): bool
     {
         return $this->getValueMode() === self::VALUE_MODE_CUSTOM_VALUE;
+    }
+
+    // ----------------------------------------
+
+    public static function getCleanAttributeId(string $id): string
+    {
+        $parts = explode(self::ATTRIBUTE_MULTI_VALUE_DELIMITER, $id);
+
+        return $parts[0] ?? $id;
+    }
+
+    public static function isAdditionalAttributeId(string $id): bool
+    {
+        return $id !== self::getCleanAttributeId($id);
     }
 }

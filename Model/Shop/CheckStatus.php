@@ -70,7 +70,7 @@ class CheckStatus
 
     private function createCacheKey(\M2E\TikTokShop\Model\Shop $shop): string
     {
-        return sprintf('%s.%s.issues', $shop->getShopName(), $shop->getShopId());
+        return sprintf('%s.%s.issues', $shop->getShopNameWithRegion(), $shop->getShopId());
     }
 
     /**
@@ -79,7 +79,7 @@ class CheckStatus
      *
      * @return \M2E\TikTokShop\Model\TikTokShop\Connector\Shop\Issue[]
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      */
     private function retrieveIssues(\M2E\TikTokShop\Model\Listing $listing, \M2E\TikTokShop\Model\Shop $shop): array
     {

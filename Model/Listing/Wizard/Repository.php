@@ -349,6 +349,37 @@ class Repository
         return $product;
     }
 
+    public function getMagentoProductIdByWizardId(
+        int $wizardId
+    ): int {
+        $productCollection = $this->productCollectionFactory->create();
+        $productCollection
+            ->addFieldToFilter(\M2E\TikTokShop\Model\ResourceModel\Listing\Wizard\Product::COLUMN_WIZARD_ID, $wizardId);
+
+        $product = $productCollection->getFirstItem();
+
+        return $product->getMagentoProductId();
+    }
+
+    public function getMagentoProductIdByWizardIdAndProductId(
+        int $wizardId,
+        int $productId
+    ): int {
+        $productCollection = $this->productCollectionFactory->create();
+        $productCollection
+            ->addFieldToFilter(
+                \M2E\TikTokShop\Model\ResourceModel\Listing\Wizard\Product::COLUMN_WIZARD_ID,
+                $wizardId
+            )->addFieldToFilter(
+                \M2E\TikTokShop\Model\ResourceModel\Listing\Wizard\Product::COLUMN_ID,
+                ['eq' => $productId]
+            );
+
+        $product = $productCollection->getFirstItem();
+
+        return $product->getMagentoProductId();
+    }
+
     /**
      * @param \DateTime $borderDate
      *

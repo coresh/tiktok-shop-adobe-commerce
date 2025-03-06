@@ -3,12 +3,15 @@
 namespace M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Category\Chooser\Specific\Form\Element;
 
 use M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Category\Chooser\Specific\Form\Element\Dictionary\Multiselect;
+use M2E\TikTokShop\Model\Category\CategoryAttribute;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Escaper;
 
 class Dictionary extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
+    use \M2E\TikTokShop\Block\Adminhtml\Traits\BlockTrait;
+
     public \Magento\Framework\View\LayoutInterface $layout;
     private \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper;
 
@@ -82,6 +85,20 @@ class Dictionary extends \Magento\Framework\Data\Form\Element\AbstractElement
         return $element->getElementHtml();
     }
 
+    public function getAdditionalClass($specific): string
+    {
+        $result = '';
+        if ($specific['attribute_type'] === CategoryAttribute::ATTRIBUTE_TYPE_CERTIFICATE) {
+            if (CategoryAttribute::getCleanAttributeId($specific['id']) !== $specific['id']) {
+                $result = ' M2E-certificate-variant ';
+            } else {
+                $result = ' M2E-certificate-add-more ';
+            }
+        }
+
+        return $result;
+    }
+
     public function getAttributeNameHiddenHtml($index, $specific): string
     {
         $element = $this->_factoryElement->create('hidden', [
@@ -141,6 +158,17 @@ class Dictionary extends \Magento\Framework\Data\Form\Element\AbstractElement
         );
     }
 
+    public function getTitleTooltip($specific): string
+    {
+        if (!$specific['sample_image_url']) {
+            return '';
+        }
+
+        $imgHtml = sprintf('<img src="%s" alt="Sample Image"/>', $specific['sample_image_url']);
+
+        return $this->getTooltipHtml($imgHtml, true);
+    }
+
     public function getValueModeSelectHtml($index, $specific): string
     {
         $values = [
@@ -159,7 +187,7 @@ class Dictionary extends \Magento\Framework\Data\Form\Element\AbstractElement
         ];
 
         if ($specific['is_customized']) {
-            $values[\M2E\TikTokShop\Model\TikTokShop\Template\Category::VALUE_MODE_CUSTOM_VALUE ] = [
+            $values[\M2E\TikTokShop\Model\TikTokShop\Template\Category::VALUE_MODE_CUSTOM_VALUE] = [
                 'value' => \M2E\TikTokShop\Model\TikTokShop\Template\Category::VALUE_MODE_CUSTOM_VALUE,
                 'label' => __('Custom Value'),
             ];

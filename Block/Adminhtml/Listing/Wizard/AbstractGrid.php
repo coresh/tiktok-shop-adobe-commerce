@@ -7,6 +7,7 @@ namespace M2E\TikTokShop\Block\Adminhtml\Listing\Wizard;
 use M2E\TikTokShop\Model\ResourceModel\Listing\Wizard as WizardResource;
 use M2E\TikTokShop\Model\ResourceModel\Listing\Wizard\Product as WiardProductResource;
 use M2E\TikTokShop\Model\ResourceModel\Product as ProductResource;
+use M2E\TikTokShop\Model\ResourceModel\Listing as ListingResource;
 
 abstract class AbstractGrid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Product\Grid
 {
@@ -18,8 +19,10 @@ abstract class AbstractGrid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Prod
     private \M2E\TikTokShop\Model\Listing\Ui\RuntimeStorage $uiListingRuntimeStorage;
     private \M2E\TikTokShop\Model\Listing\Wizard\Ui\RuntimeStorage $uiWizardRuntimeStorage;
     private \M2E\TikTokShop\Model\ResourceModel\Product $productResource;
+    private \M2E\TikTokShop\Model\ResourceModel\Listing $listingResource;
 
     public function __construct(
+        \M2E\TikTokShop\Model\ResourceModel\Listing $listingResource,
         \M2E\TikTokShop\Model\ResourceModel\Product $productResource,
         \M2E\TikTokShop\Model\Listing\Wizard\Ui\RuntimeStorage $uiWizardRuntimeStorage,
         \M2E\TikTokShop\Model\Listing\Ui\RuntimeStorage $uiListingRuntimeStorage,
@@ -43,6 +46,8 @@ abstract class AbstractGrid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Prod
         $this->uiListingRuntimeStorage = $uiListingRuntimeStorage;
         $this->uiWizardRuntimeStorage = $uiWizardRuntimeStorage;
         $this->productResource = $productResource;
+        $this->listingResource = $listingResource;
+
         parent::__construct(
             $globalDataHelper,
             $sessionHelper,
@@ -124,8 +129,18 @@ abstract class AbstractGrid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Prod
             $collection->addAttributeToSelect('thumbnail');
         }
 
+        // ---------------------------------------
+        $hideProductsFromOthersListings = true;
+        if ($this->getRequest()->has('show_products_others_listings')) {
+            $hideProductsFromOthersListings = false;
+        }
+
         $collection = $this->skipAddedProductsInWizard($collection);
         $collection = $this->skipProductsInListing($collection);
+
+        if ($hideProductsFromOthersListings) {
+            $collection = $this->skipProductsFromOthersListings($collection);
+        }
 
         $collection->addFieldToFilter(
             [
@@ -418,6 +433,37 @@ JS,
         );
 
         $collection->getSelect()->where('e.entity_id NOT IN (?)', $productIdsInListingQuery);
+
+        return $collection;
+    }
+
+    private function skipProductsFromOthersListings(
+        \M2E\TikTokShop\Model\ResourceModel\Magento\Product\Collection $collection
+    ): \M2E\TikTokShop\Model\ResourceModel\Magento\Product\Collection {
+        $productsInListingQuery = $collection->getConnection()->select();
+        $productsInListingQuery->from(
+            $this->productResource->getMainTable(),
+            [ProductResource::COLUMN_MAGENTO_PRODUCT_ID]
+        );
+        $productsInListingQuery->distinct();
+        $productsInListingQuery->join(
+            ['listing' => $this->listingResource->getMainTable()],
+            sprintf(
+                '`listing`.`%s` = `%s`',
+                ListingResource::COLUMN_ID,
+                ProductResource::COLUMN_LISTING_ID
+            ),
+            null,
+        );
+
+        $productsInListingQuery->where('`listing`.`account_id` = ?', $this->getListing()->getAccountId());
+        $productsInListingQuery->where('`listing`.`shop_id` = ?', $this->getListing()->getShopId());
+
+        $collection->getSelect()
+                   ->joinLeft(['sq' => $productsInListingQuery], 'sq.magento_product_id = e.entity_id', [])
+                   ->where('sq.magento_product_id IS NULL');
+
+        $collection->getSelect()->where('sq.magento_product_id IS NULL', $productsInListingQuery);
 
         return $collection;
     }

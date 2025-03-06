@@ -116,4 +116,17 @@ class Region
     {
         return $this->regionCode === self::REGION_US;
     }
+
+    public function getLocale(): string
+    {
+        $locales = [
+            \M2E\TikTokShop\Model\Shop\Region::REGION_DE => 'de-DE',
+            \M2E\TikTokShop\Model\Shop\Region::REGION_IE => 'en-IE',
+            \M2E\TikTokShop\Model\Shop\Region::REGION_ES => 'es-ES',
+            \M2E\TikTokShop\Model\Shop\Region::REGION_FR => 'fr-FR',
+            \M2E\TikTokShop\Model\Shop\Region::REGION_IT => 'it-IT',
+        ];
+
+        return $locales[$this->getRegionCode()] ?? 'en-US';
+    }
 }

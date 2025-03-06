@@ -65,7 +65,7 @@ abstract class AbstractGrid extends \M2E\TikTokShop\Block\Adminhtml\Log\Listing\
         }
         // ---------------------------------------
 
-        if ($accountId = $this->getRequest()->getParam('account_id')) {
+        if ($accountId = $this->getRequest()->getParam('account')) {
             $collection->addFieldToFilter('main_table.account_id', $accountId);
         } else {
             $collection->getSelect()->joinLeft(

@@ -66,7 +66,7 @@ class Title extends \Magento\Ui\Component\Listing\Columns\Column
 
     private function getShopName(int $shopId): string
     {
-        return $this->shopRepository->get($shopId)->getShopName();
+        return $this->shopRepository->get($shopId)->getShopNameWithRegion();
     }
 
     private function getUnmanagedProduct(int $id): \M2E\TikTokShop\Model\UnmanagedProduct

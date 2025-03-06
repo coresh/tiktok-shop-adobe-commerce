@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\Exception\Connection;
 
-class UnableUpdateData extends \M2E\TikTokShop\Model\Exception\Connection
+class UnableUpdateData extends \M2E\Core\Model\Exception\Connection
 {
     private \M2E\Core\Model\Connector\Response\MessageCollection $messageCollection;
 

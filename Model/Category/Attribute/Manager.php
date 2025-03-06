@@ -37,7 +37,7 @@ class Manager
      * @param \M2E\TikTokShop\Model\Category\Dictionary $dictionary
      *
      * @return void
-     * @throws \Exception
+     * @throws \Exception|\Throwable
      */
     public function createOrUpdateAttributes(
         array $attributes,
@@ -48,11 +48,7 @@ class Manager
 
         foreach ($attributes as $attribute) {
             $attributesSortedById[$attribute->getAttributeId()] = $attribute;
-            if (
-                !empty($attribute->getCustomValue())
-                || !empty($attribute->getCustomAttributeValue())
-                || !empty($attribute->getRecommendedValue())
-            ) {
+            if (!$this->isEmptyValues($attribute)) {
                 $countOfUsedAttributes++;
             }
         }
@@ -70,11 +66,20 @@ class Manager
                     continue;
                 }
 
-                $this->updateAttribute($existedAttribute, $inputAttribute);
-                unset($attributesSortedById[$existedAttribute->getAttributeId()]);
+                $existedAttributeId = $inputAttribute->getAttributeId();
+                if ($this->isEmptyAdditionalAttribute($inputAttribute)) {
+                    $this->categoryAttributeRepository->delete($existedAttribute);
+                    unset($attributesSortedById[$existedAttributeId]);
+                } else {
+                    $this->updateAttribute($existedAttribute, $inputAttribute);
+                    unset($attributesSortedById[$existedAttribute->getAttributeId()]);
+                }
             }
 
             foreach ($attributesSortedById as $attribute) {
+                if ($this->isEmptyAdditionalAttribute($attribute)) {
+                    continue;
+                }
                 $this->createAttribute($attribute);
             }
 
@@ -139,5 +144,18 @@ class Manager
             $diff,
             $affectedListingsProducts->getObjectsData(['id', 'status'])
         );
+    }
+
+    private function isEmptyValues(\M2E\TikTokShop\Model\Category\CategoryAttribute $attribute): bool
+    {
+        return empty($attribute->getCustomValue())
+            && empty($attribute->getCustomAttributeValue())
+            && empty($attribute->getRecommendedValue());
+    }
+
+    private function isEmptyAdditionalAttribute(\M2E\TikTokShop\Model\Category\CategoryAttribute $attribute): bool
+    {
+        return \M2E\TikTokShop\Model\Category\CategoryAttribute::isAdditionalAttributeId($attribute->getAttributeId())
+            && $this->isEmptyValues($attribute);
     }
 }

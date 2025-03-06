@@ -201,7 +201,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         $options = [];
         /** @var \M2E\TikTokShop\Model\Shop $item */
         foreach ($collection as $item) {
-            $options[$item->getId()] = $item->getShopName();
+            $options[$item->getId()] = $item->getShopNameWithRegion();
         }
 
         return $options;

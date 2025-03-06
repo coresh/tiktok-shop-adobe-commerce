@@ -3,7 +3,8 @@ define([
     'Magento_Ui/js/modal/modal',
     'TikTokShop/Plugin/Messages',
     'mage/translate',
-    'TikTokShop/Grid'
+    'TikTokShop/Grid',
+    'TikTokShop/Category/Chooser/SelectedProductsData'
 ], function (jQuery, modal, MessageObj, $t) {
 
     window.ListingWizardCategoryModeManuallyGrid = Class.create(Grid, {
@@ -49,17 +50,19 @@ define([
         editCategories: function () {
             const self = this;
 
-            this.selectedMagentoCategoryIds = this.getSelectedProductsString();
             const wizard_id = self.extractIdFromUrl();
+            const productsIds = self.getSelectedProductsString();
 
             new Ajax.Request(TikTokShop.url.get('listing_wizard_category/chooserBlockModeManually'), {
                 method: 'post',
                 asynchronous: true,
                 parameters: {
-                    products_ids: this.selectedMagentoCategoryIds,
+                    products_ids: productsIds,
                     id: wizard_id
                 },
                 onSuccess: function (transport) {
+                    window.SelectedProductsDataObj.setProductId(productsIds);
+
                     this.openPopUp(
                             $t('Category Settings'),
                             transport.responseText

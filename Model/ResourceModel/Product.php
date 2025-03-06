@@ -10,6 +10,7 @@ class Product extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\AbstractM
     public const COLUMN_TTS_PRODUCT_ID = 'tts_product_id';
     public const COLUMN_IS_SIMPLE = 'is_simple';
     public const COLUMN_STATUS = 'status';
+    public const COLUMN_GLOBAL_PRODUCT_ID = 'global_product_id';
     public const COLUMN_STATUS_CHANGER = 'status_changer';
     public const COLUMN_ONLINE_TITLE = 'online_title';
     public const COLUMN_ONLINE_DESCRIPTION = 'online_description';

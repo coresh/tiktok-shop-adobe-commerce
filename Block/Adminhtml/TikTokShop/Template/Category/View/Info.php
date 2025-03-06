@@ -23,7 +23,7 @@ class Info extends \M2E\TikTokShop\Block\Adminhtml\Widget\Info
             [
                 [
                     'label' => __('Shop'),
-                    'value' => $this->dictionary->getShop()->getShopName(),
+                    'value' => $this->dictionary->getShop()->getShopNameWithRegion(),
                 ],
                 [
                     'label' => __('Category'),

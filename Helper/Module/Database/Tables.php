@@ -66,6 +66,9 @@ class Tables
     public const TABLE_NAME_PROMOTION = self::PREFIX . 'promotion';
     public const TABLE_NAME_PROMOTION_PRODUCT = self::PREFIX . 'promotion_product';
 
+    public const TABLE_NAME_GLOBAL_PRODUCT = self::PREFIX . 'global_product';
+    public const TABLE_NAME_GLOBAL_PRODUCT_VARIANT_SKU = self::PREFIX . 'global_product_variant_sku';
+
     private \Magento\Framework\App\ResourceConnection $resourceConnection;
     private Structure $databaseHelper;
     private \M2E\TikTokShop\Helper\Magento\Staging $stagingHelper;
@@ -225,6 +228,8 @@ class Tables
             self::TABLE_NAME_UNMANAGED_PRODUCT_VARIANT_SKU => \M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct\VariantSku::class,
             self::TABLE_NAME_PROMOTION => \M2E\TikTokShop\Model\ResourceModel\Promotion::class,
             self::TABLE_NAME_PROMOTION_PRODUCT => \M2E\TikTokShop\Model\ResourceModel\Promotion\Product::class,
+            self::TABLE_NAME_GLOBAL_PRODUCT => \M2E\TikTokShop\Model\ResourceModel\GlobalProduct::class,
+            self::TABLE_NAME_GLOBAL_PRODUCT_VARIANT_SKU => \M2E\TikTokShop\Model\ResourceModel\GlobalProduct\VariantSku::class,
         ];
     }
 
@@ -274,6 +279,8 @@ class Tables
             self::TABLE_NAME_UNMANAGED_PRODUCT_VARIANT_SKU => \M2E\TikTokShop\Model\UnmanagedProduct\VariantSku::class,
             self::TABLE_NAME_PROMOTION => \M2E\TikTokShop\Model\Promotion::class,
             self::TABLE_NAME_PROMOTION_PRODUCT => \M2E\TikTokShop\Model\Promotion\Product::class,
+            self::TABLE_NAME_GLOBAL_PRODUCT => \M2E\TikTokShop\Model\GlobalProduct::class,
+            self::TABLE_NAME_GLOBAL_PRODUCT_VARIANT_SKU => \M2E\TikTokShop\Model\GlobalProduct\VariantSku::class,
         ];
     }
 

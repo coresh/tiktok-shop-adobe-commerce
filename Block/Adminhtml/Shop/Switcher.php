@@ -36,7 +36,7 @@ class Switcher extends \M2E\TikTokShop\Block\Adminhtml\Switcher
         foreach ($shops as $shop) {
             $items['tiktokshop']['value'][] = [
                 'value' => $shop->getId(),
-                'label' => $shop->getShopName(),
+                'label' => $shop->getShopNameWithRegion(),
             ];
         }
 

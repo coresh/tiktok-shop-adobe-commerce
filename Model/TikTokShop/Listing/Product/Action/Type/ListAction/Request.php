@@ -20,7 +20,15 @@ class Request extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Ty
                     ->getSellingFormatTemplateSource()
                     ->isCashOnDeliveryEnabled(),
             ],
+            'is_global' => false,
         ];
+
+        if ($this->getListingProduct()->isGlobalProduct()) {
+            $request['is_global'] = true;
+            $request = $this->appendGlobalProductData($request);
+
+            return $request;
+        }
 
         $request = $this->appendTitle($request);
         $request = $this->appendSkuItems($request);

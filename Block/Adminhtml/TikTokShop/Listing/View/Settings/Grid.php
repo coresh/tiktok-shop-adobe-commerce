@@ -186,11 +186,6 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             'url' => '',
         ], 'edit_categories_settings');
 
-        $this->getMassactionBlock()->addItem('moving', [
-            'label' => $this->__('Move Item(s) to Another Listing'),
-            'url' => '',
-        ], 'other');
-
         return $this;
     }
 
@@ -215,6 +210,12 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
     {
         $categoryId = $row->getData('category_id') ?? '';
         $path = $row->getData('path') ?? '';
+        if (empty($categoryId) && empty($path)) {
+            return sprintf(
+                '<span style="color: #e22626;">%s</span>',
+                __('Not Set')
+            );
+        }
 
         $view = sprintf('%s (%s)', $path, $categoryId);
 
@@ -301,6 +302,22 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         return $actions;
     }
 
+    protected function _beforeToHtml()
+    {
+        $this->js->add(
+            <<<JS
+ require([
+     'TikTokShop/Category/Chooser/SelectedProductsData'
+], function() {
+     window.SelectedProductsDataObj = new SelectedProductsData();
+     SelectedProductsDataObj.setShopId('{$this->getListing()->getShopId()}');
+});
+JS,
+        );
+
+        return parent::_beforeToHtml();
+    }
+
     protected function _toHtml(): string
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -313,11 +330,6 @@ JS
             return parent::_toHtml();
         }
 
-        $this->jsUrl->add($this->getUrl('*/listing/getErrorsSummary'), 'getErrorsSummary');
-
-        $this->jsUrl->add($this->getUrl('*/listing_moving/moveToListingGrid'), 'moveToListingGridHtml');
-        $this->jsUrl->add($this->getUrl('*/listing_moving/prepareMoveToListing'), 'prepareData');
-        $this->jsUrl->add($this->getUrl('*/listing_moving/moveToListing'), 'moveToListing');
         $this->jsUrl->add(
             $this->getUrl('*/listing_product_category_settings/edit', ['_current' => true]),
             'listing_product_category_settings/edit'
@@ -356,8 +368,6 @@ JS
             '{$this->getListing()->getShopId()}'
         );
         TikTokShopListingViewSettingsGridObj.afterInitPage();
-        TikTokShopListingViewSettingsGridObj.movingHandler.setProgressBar('listing_view_progress_bar');
-        TikTokShopListingViewSettingsGridObj.movingHandler.setGridWrapper('listing_view_content_container');
     });
 JS
         );

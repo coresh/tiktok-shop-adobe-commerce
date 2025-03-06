@@ -36,7 +36,7 @@ class Repository
         $collection
             ->addFieldToFilter(
                 LogSystemResource::COLUMN_TYPE,
-                ['neq' => '\\' . \M2E\TikTokShop\Model\Exception\Connection::class],
+                ['neq' => '\\' . \M2E\Core\Model\Exception\Connection::class],
             )
             ->addFieldToFilter(LogSystemResource::COLUMN_TYPE, ['nlike' => '%Logging%'])
             ->addFieldToFilter(

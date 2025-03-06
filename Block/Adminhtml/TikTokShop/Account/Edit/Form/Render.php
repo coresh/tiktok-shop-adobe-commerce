@@ -113,7 +113,7 @@ class Render extends \Magento\Backend\Block\Template implements RendererInterfac
         }
 
         $tableColumns = [
-            sprintf('<td>%s</td>', $shop->getShopName()),
+            sprintf('<td>%s</td>', $shop->getShopNameWithRegion()),
             sprintf('<td>%s</td>', $warehouse->getName()),
         ];
 

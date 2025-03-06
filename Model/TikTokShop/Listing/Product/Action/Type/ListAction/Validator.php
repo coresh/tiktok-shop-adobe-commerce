@@ -39,11 +39,13 @@ class Validator implements \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Acti
             return false;
         }
 
-        $this->validateProductBy(
-            $product,
-            $actionConfigurator,
-            $this->validators
-        );
+        if (!$product->isGlobalProduct()) {
+            $this->validateProductBy(
+                $product,
+                $actionConfigurator,
+                $this->validators
+            );
+        }
 
         $variantErrors = $this->variantValidator->validate($product, $variantSettings);
         foreach ($variantErrors as $variantError) {

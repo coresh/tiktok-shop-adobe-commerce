@@ -1,0 +1,20 @@
+<?php
+
+/** @var \M2E\TikTokShop\Block\Adminhtml\Category\Chooser\Tab\Recommended $block */
+
+?>
+
+<div id="category_recommended">
+    <div id="recommended_results_container">
+        <table id="recommended_results_table" class="recommended_results_table">
+        </table>
+    </div>
+</div>
+
+<script>
+    require([
+        'TikTokShop/Category/Chooser/Tabs/Recommended'
+    ], () => {
+        window.TikTokShopCategoryRecommendedObj = new TikTokShopCategoryRecommended();
+    });
+</script>

@@ -21,7 +21,7 @@ $element = $this->getElement();
     <tbody>
     <?php
     foreach ($element->getSpecifics() as $index => $specific) { ?>
-        <tr style="height: 25px;">
+        <tr style="height: 25px;" class="<?= $element->getAdditionalClass($specific); ?>">
             <td style="vertical-align:top;">
                 <?php
                 echo $element->getAttributeIdHiddenHtml($index, $specific); ?>
@@ -33,6 +33,8 @@ $element = $this->getElement();
                 echo $element->getModeHtml($index); ?>
                 <?php
                 echo $element->getAttributeTitleLabelHtml($index, $specific); ?>
+                <?php
+                echo $element->getTitleTooltip($specific); ?>
             </td>
             <td style="vertical-align:top;">
                 <?php

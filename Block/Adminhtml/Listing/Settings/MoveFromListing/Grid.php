@@ -156,7 +156,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
 &nbsp;<a href="javascript:void(0);" onclick="CommonObj.confirm({
         actions: {
             confirm: function () {
-                TikTokShopListingViewSettingsGridObj.movingHandler.gridHandler.tryToMove({$row->getData('id')});
+                TikTokShopListingViewTikTokShopGridObj.movingHandler.gridHandler.tryToMove({$row->getData('id')});
             }.bind(this),
             cancel: function () {
                 return false;

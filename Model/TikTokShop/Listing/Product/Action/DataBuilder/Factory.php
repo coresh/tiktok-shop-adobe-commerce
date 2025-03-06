@@ -17,6 +17,7 @@ class Factory
         SizeChart::NICK => SizeChart::class,
         Title::NICK => Title::class,
         Compliance::NICK => Compliance::class,
+        GlobalProduct::NICK => GlobalProduct::class,
     ];
 
     private \Magento\Framework\ObjectManagerInterface $objectManager;

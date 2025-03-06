@@ -17,9 +17,9 @@ class Processor
      * @param \M2E\TikTokShop\Model\Order $order
      * @param string $reason
      *
-     * @return \M2E\TikTokShop\Model\Connector\Response\Message[] not success messages
+     * @return \M2E\Core\Model\Connector\Response\Message[] not success messages
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      * @throws \M2E\TikTokShop\Model\Order\Exception\UnableCancel
      */
     public function process(\M2E\TikTokShop\Model\Order $order, string $reason): array

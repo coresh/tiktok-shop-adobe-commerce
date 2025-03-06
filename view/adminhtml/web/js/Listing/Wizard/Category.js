@@ -2,6 +2,7 @@ define([
     'TikTokShop/Plugin/Messages',
     'mage/translate',
     'TikTokShop/Common',
+    'TikTokShop/Category/Chooser/SelectedProductsData'
 ], function (MessagesObj, $t) {
 
     window.TikTokShopListingCategory = Class.create(Common, {
@@ -28,17 +29,23 @@ define([
         },
 
         editCategorySettings: function (id) {
+            const self = this;
             this.selectedProductsIds = id ? [id] : this.gridObj.getSelectedProductsArray();
+
+            let productsIds = this.selectedProductsIds.join(',');
+            let shopId = this.gridObj.shopId;
 
             const url = TikTokShop.url.get('listing_product_category_settings/edit');
             new Ajax.Request(url, {
                 method: 'post',
                 asynchronous: true,
                 parameters: {
-                    products_ids: this.selectedProductsIds.join(','),
-                    shop_id: this.gridObj.shopId
+                    products_ids: productsIds,
+                    shop_id: shopId
                 },
                 onSuccess: function (transport) {
+                    window.SelectedProductsDataObj.setProductId(self.selectedProductsIds);
+
                     this.openPopUp($t('Category Settings'), transport.responseText);
                 }.bind(this)
             });

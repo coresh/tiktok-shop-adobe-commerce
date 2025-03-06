@@ -75,19 +75,24 @@ class Shop extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     public function hasDefaultWarehouse(): bool
     {
-        foreach ($this->getWarehouses() as $warehouse) {
-            if ($warehouse->isDefault()) {
-                return true;
-            }
+        try {
+            $this->getDefaultWarehouse();
+            return true;
+        } catch (\M2E\TikTokShop\Model\Exception\Logic $exception) {
+            return false;
         }
-
-        return false;
     }
 
     public function getDefaultWarehouse(): \M2E\TikTokShop\Model\Warehouse
     {
         foreach ($this->getWarehouses() as $warehouse) {
             if ($warehouse->isDefault()) {
+                return $warehouse;
+            }
+        }
+
+        foreach ($this->getWarehouses() as $warehouse) {
+            if ($warehouse->isTypeSales()) {
                 return $warehouse;
             }
         }
@@ -166,6 +171,15 @@ class Shop extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public function getShopName(): string
     {
         return $this->getData(ShopResource::COLUMN_SHOP_NAME);
+    }
+
+    public function getShopNameWithRegion(): string
+    {
+        return sprintf(
+            '%s (%s)',
+            $this->getRegion()->getLabel(),
+            $this->getShopName()
+        );
     }
 
     public function setRegion(\M2E\TikTokShop\Model\Shop\Region $region): self

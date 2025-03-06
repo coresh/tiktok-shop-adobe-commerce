@@ -62,9 +62,9 @@ class CertificatesImageUrlValidator implements ValidatorInterface
 
     private function isCertificateValid(\M2E\TikTokShop\Model\Product $product, string $certificateId): bool
     {
-        $attribute = $this->getCertificateAttributeById($product->getTemplateCategoryId(), $certificateId);
-        if ($attribute !== null) {
-            $value = $this->getAttributeValue($attribute, $product->getMagentoProduct());
+        $attributes = $this->getCertificateAttributeById($product->getTemplateCategoryId(), $certificateId);
+        foreach ($attributes as $item) {
+            $value = $this->getAttributeValue($item, $product->getMagentoProduct());
             if (
                 !empty($value)
                 && !\M2E\TikTokShop\Helper\Data::isValidUrl($value)
@@ -76,13 +76,34 @@ class CertificatesImageUrlValidator implements ValidatorInterface
         return true;
     }
 
-    private function getCertificateAttributeById(int $categoryId, string $attributeId): ?CategoryAttribute
+    /**
+     * @param int $categoryId
+     * @param string $attributeId
+     *
+     * @return CategoryAttribute[]
+     */
+    private function getCertificateAttributeById(int $categoryId, string $attributeId): array
     {
         $attributes = $this->getCertificateAttributes($categoryId);
 
-        return isset($attributes[$attributeId]) ? $attributes[$attributeId] : null;
+        $result = [];
+        foreach ($attributes as $attributeItem) {
+            if (
+                $attributeId === $attributeItem->getAttributeId()
+                || $attributeId === CategoryAttribute::getCleanAttributeId($attributeItem->getAttributeId())
+            ) {
+                $result[] = $attributeItem;
+            }
+        }
+
+        return $result;
     }
 
+    /**
+     * @param int $categoryId
+     *
+     * @return CategoryAttribute[]
+     */
     private function getCertificateAttributes(int $categoryId): array
     {
         if (!isset($this->certificateAttributes[$categoryId])) {

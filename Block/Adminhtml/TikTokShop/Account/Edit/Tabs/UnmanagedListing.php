@@ -311,7 +311,7 @@ HTML
                     'related_store_id_' . $shop->getId(),
                     self::STORE_SWITCHER,
                     [
-                        'label' => $shop->getShopName(),
+                        'label' => $shop->getShopNameWithRegion(),
                         'value' => $unmanagedListingSettings->getRelatedStoreForShopId($shop->getId()),
                     ]
                 );

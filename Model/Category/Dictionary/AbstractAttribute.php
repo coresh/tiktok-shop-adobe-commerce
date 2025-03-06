@@ -6,13 +6,14 @@ namespace M2E\TikTokShop\Model\Category\Dictionary;
 
 abstract class AbstractAttribute
 {
-    private string $id;
+    protected string $id;
     private string $name;
     private bool $isRequired;
     private bool $isCustomised;
     private bool $isMultipleSelected;
     /** @var \M2E\TikTokShop\Model\Category\Dictionary\Attribute\Value[] */
     private array $recommendedValuers;
+    private string $sampleImageUrl;
 
     public function __construct(
         string $id,
@@ -20,7 +21,8 @@ abstract class AbstractAttribute
         bool $isRequired,
         bool $isCustomised,
         bool $isMultipleSelected,
-        array $recommendedValuers = []
+        array $recommendedValuers = [],
+        string $sampleImageUrl = ''
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -28,6 +30,7 @@ abstract class AbstractAttribute
         $this->isCustomised = $isCustomised;
         $this->isMultipleSelected = $isMultipleSelected;
         $this->recommendedValuers = $recommendedValuers;
+        $this->sampleImageUrl = $sampleImageUrl;
     }
 
     abstract public function getType(): string;
@@ -63,5 +66,10 @@ abstract class AbstractAttribute
     public function getValues(): array
     {
         return $this->recommendedValuers;
+    }
+
+    public function getSampleImageUrl(): string
+    {
+        return $this->sampleImageUrl;
     }
 }

@@ -116,6 +116,10 @@ class ChangeAttributeTracker
             return [];
         }
 
+        if (!$this->listingProduct->hasCategoryTemplate()) {
+            return [];
+        }
+
         return array_unique($this->listingProduct->getCategoryDictionary()->getTrackedAttributes());
     }
 }

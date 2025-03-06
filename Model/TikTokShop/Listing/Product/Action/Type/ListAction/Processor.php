@@ -19,6 +19,7 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
     private array $requestMetadata;
     private \M2E\TikTokShop\Model\Product\Repository $productRepository;
     private \Magento\Framework\Locale\CurrencyInterface $localeCurrency;
+    private \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type\GlobalProductHandler $globalProductHandler;
 
     public function __construct(
         ValidatorFactory $actionValidatorFactory,
@@ -29,7 +30,8 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
         \M2E\TikTokShop\Model\TikTokShop\TagFactory $tagFactory,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type\ImageResponseHandler $imageResponseHandler,
         \M2E\TikTokShop\Model\Product\Repository $productRepository,
-        \Magento\Framework\Locale\CurrencyInterface $localeCurrency
+        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
+        \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type\GlobalProductHandler $globalProductHandler
     ) {
         $this->serverClient = $serverClient;
         $this->tagBuffer = $tagBuffer;
@@ -40,6 +42,7 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
         $this->imageResponseHandler = $imageResponseHandler;
         $this->productRepository = $productRepository;
         $this->localeCurrency = $localeCurrency;
+        $this->globalProductHandler = $globalProductHandler;
     }
 
     protected function getActionValidator(): Validator
@@ -150,6 +153,8 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
             $this->requestData,
             $response
         );
+
+        $this->globalProductHandler->handle($this->getProduct(), $response);
     }
 
     private function processSuccessFoundBrand(): void

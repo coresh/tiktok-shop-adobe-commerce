@@ -30,6 +30,11 @@ class Repository
         $this->attributeResource->save($attrEntity);
     }
 
+    public function delete(CategoryAttribute $attrEntity): void
+    {
+        $this->attributeResource->delete($attrEntity);
+    }
+
     /**
      * @return CategoryAttribute[]
      */

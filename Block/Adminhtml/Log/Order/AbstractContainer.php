@@ -78,7 +78,7 @@ HTML;
                 )
                 . $this->getStaticFilterHtml(
                     $switcherBlock->getLabel(),
-                    $order->getShop()->getShopName()
+                    $order->getShop()->getShopNameWithRegion()
                 );
         }
 

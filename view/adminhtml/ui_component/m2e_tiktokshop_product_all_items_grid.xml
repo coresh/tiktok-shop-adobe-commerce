@@ -180,7 +180,7 @@
                           component="Magento_Ui/js/form/element/select"
             >
                 <settings>
-                    <options class="M2E\TikTokShop\Ui\Select\Promotion"/>
+                    <options class="M2E\TikTokShop\Ui\Select\YesNoAnyOption"/>
                     <label translate="true">On Promotion</label>
                     <dataScope>on_promotion</dataScope>
                 </settings>

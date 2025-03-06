@@ -224,3 +224,19 @@ div.TikTokShop-field-tooltip-right .admin__field-tooltip-content:after {
 #globalMessages .messages .message:last-child {
     margin: 0 !important;
 }
+
+/* Category attribute Product Certificates */
+#certifications_attributes_fieldset .data-grid .TikTokShop-field-tooltip{
+    top: -8px;
+}
+#certifications_attributes_fieldset .TikTokShop-field-tooltip .admin__field-tooltip-content{
+    width: 370px;
+}
+#certifications_attributes_fieldset  div.TikTokShop-field-tooltip-right .admin__field-tooltip-content{
+    right: -360px;
+}
+#certifications_attributes_fieldset  div.TikTokShop-field-tooltip-right .admin__field-tooltip-content:before,
+#certifications_attributes_fieldset  div.TikTokShop-field-tooltip-right .admin__field-tooltip-content:after{
+    right: 310px;
+}
+/* ------------------- */

@@ -235,7 +235,7 @@ class CategoryHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
             ->addColumn(
                 CategoryAttributeResource::COLUMN_ATTRIBUTE_ID,
                 Table::TYPE_TEXT,
-                30,
+                50,
             )
             ->addColumn(
                 CategoryAttributeResource::COLUMN_ATTRIBUTE_NAME,

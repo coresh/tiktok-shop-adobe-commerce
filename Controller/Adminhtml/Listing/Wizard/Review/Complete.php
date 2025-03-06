@@ -49,6 +49,14 @@ class Complete extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
             $this->sessionHelper->setValue('added_products_ids', $ids);
         }
 
+        if (($wizardManager->isCompleted()) && ($wizardManager->isWizardTypeUnmanaged())) {
+            $this->getMessageManager()->addSuccessMessage(
+                __(
+                    'Product(s) was Moved.',
+                ),
+            );
+        }
+
         return $this->_redirect($backUrl);
     }
 }

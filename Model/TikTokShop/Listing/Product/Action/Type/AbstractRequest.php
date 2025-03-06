@@ -289,4 +289,16 @@ abstract class AbstractRequest extends \M2E\TikTokShop\Model\TikTokShop\Listing\
 
         return $request;
     }
+
+    protected function appendGlobalProductData(array $request): array
+    {
+        /** @var DataBuilder\GlobalProduct $dataBuilder */
+        $dataBuilder = $this->getDataBuilder(DataBuilder\GlobalProduct::NICK);
+
+        $builderData = $dataBuilder->getBuilderData();
+        $request['product_data'] = $builderData['product_data'];
+        $request['publish_product_data'] = $builderData['publish_product_data'];
+
+        return $request;
+    }
 }

@@ -41,6 +41,24 @@ class Manually extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractCont
         );
     }
 
+    protected function _beforeToHtml()
+    {
+        $this->js->add(
+            <<<JS
+ require([
+    'TikTokShop/Category/Chooser/SelectedProductsData'
+], function() {
+     window.SelectedProductsDataObj = new SelectedProductsData();
+
+     SelectedProductsDataObj.setWizardId('{$this->getWizardId()}');
+     SelectedProductsDataObj.setShopId('{$this->getShopId()}');
+});
+JS,
+        );
+
+        return parent::_beforeToHtml();
+    }
+
     protected function _prepareLayout()
     {
         $gridBlock = $this
@@ -56,5 +74,15 @@ class Manually extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractCont
         $this->setChild('grid', $gridBlock);
 
         return parent::_prepareLayout();
+    }
+
+    private function getWizardId(): int
+    {
+        return $this->uiWizardRuntimeStorage->getManager()->getWizardId();
+    }
+
+    public function getShopId(): int
+    {
+        return $this->uiWizardRuntimeStorage->getManager()->getListing()->getShopId();
     }
 }

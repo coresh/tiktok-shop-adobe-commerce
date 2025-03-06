@@ -74,6 +74,10 @@ class CertificateImage extends AbstractDataBuilder
 
             $certificateId = $certificate->getData('attribute_id');
 
+            if (CategoryAttribute::isAdditionalAttributeId($certificateId)) {
+                $certificateId = CategoryAttribute::getCleanAttributeId($certificateId);
+            }
+
             $imagesData[$certificateId]['id'] = $certificateId;
             $imagesData[$certificateId]['images'][] = [
                 'uri' => $image !== null ? $image->getUri() : null,

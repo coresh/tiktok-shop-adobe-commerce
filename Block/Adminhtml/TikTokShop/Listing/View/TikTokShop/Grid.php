@@ -382,6 +382,16 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             'url' => '',
         ], 'actions');
 
+        $this->getMassactionBlock()->addItem('sellOnAnotherMarket', [
+            'label' => __('Sell on Another Market'),
+            'url' => '',
+        ], 'other');
+
+        $this->getMassactionBlock()->addItem('moving', [
+            'label' => $this->__('Move Item(s) to Another Listing'),
+            'url' => '',
+        ], 'other');
+
         // ---------------------------------------
 
         return parent::_prepareMassaction();
@@ -752,6 +762,22 @@ HTML;
             ),
         ]);
 
+        $this->jsUrl->add($this->getUrl('*/listing/getErrorsSummary'), 'getErrorsSummary');
+
+        $this->jsUrl->add($this->getUrl('*/listing_moving/moveToListingGrid'), 'moveToListingGridHtml');
+        $this->jsUrl->add($this->getUrl('*/listing_moving/prepareMoveToListing'), 'prepareData');
+        $this->jsUrl->add($this->getUrl('*/listing_moving/moveToListing'), 'moveToListing');
+
+        $this->jsUrl->addUrls([
+            'runSellOnAnotherMarker' => $this->getUrl('*/tiktokshop_listing/runSellOnAnotherMarker'),
+            'sellOnAnotherMarker/selectListing' => $this->getUrl(
+                '*/listing_sellOnAnotherMarket/selectListing',
+                [
+                    'listing_id' => $this->getListing()->getId()
+                ]
+            ),
+        ]);
+
         $this->jsUrl->add(
             $this->getUrl('*/tiktokshop_log_listing_product/index'),
             'tiktokshop_log_listing_product/index'
@@ -851,6 +877,9 @@ JS;
 
         TikTokShopListingViewTikTokShopGridObj.actionHandler.setProgressBar('listing_view_progress_bar');
         TikTokShopListingViewTikTokShopGridObj.actionHandler.setGridWrapper('listing_view_content_container');
+
+        TikTokShopListingViewTikTokShopGridObj.movingHandler.setProgressBar('listing_view_progress_bar');
+        TikTokShopListingViewTikTokShopGridObj.movingHandler.setGridWrapper('listing_view_content_container');
 
         if (TikTokShop.productsIdsForList) {
             TikTokShopListingViewTikTokShopGridObj.getGridMassActionObj().checkedString = TikTokShop.productsIdsForList;

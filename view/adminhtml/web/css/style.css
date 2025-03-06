@@ -606,3 +606,16 @@ button.action * {
 .on-promotion .admin__field-tooltip .admin__field-tooltip-action:before {
     content: '';
 }
+
+/* Add more certificates  */
+.M2E-certificate-add-more {
+    position: relative;
+}
+.M2E-certificate-add-more .has_more{
+    position: absolute;
+}
+.M2E-certificate-variant td:first-child span,
+.M2E-certificate-variant td:first-child div {
+    display: none;
+}
+/* ================================================ */

@@ -448,7 +448,7 @@ HTML;
         foreach ($items as $item) {
             try {
                 $product = $item->getProduct();
-            } catch (\M2E\TikTokShop\Model\Exception $e) {
+            } catch (\M2E\Core\Model\Exception $e) {
                 $product = null;
                 $logService = $this->orderLogServiceFactory->create();
 

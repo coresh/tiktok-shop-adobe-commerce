@@ -105,6 +105,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             return $this;
         }
 
+        if ($field === 'linked') {
+            $this->buildFilterByLinked($condition);
+
+            return $this;
+        }
+
         parent::addFieldToFilter($field, $condition);
 
         return $this;
@@ -200,5 +206,17 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 implode(',', array_map([$this->getConnection(), 'quote'], $condition['in']))
             )
         );
+    }
+
+    private function buildFilterByLinked($condition): void
+    {
+        $conditionValue = (int)$condition['eq'];
+        $column = \M2E\TikTokShop\Model\ResourceModel\UnmanagedProduct::COLUMN_MAGENTO_PRODUCT_ID;
+
+        if ($conditionValue === \M2E\TikTokShop\Ui\Select\YesNoAnyOption::OPTION_YES) {
+            $this->getSelect()->where(sprintf('main_table.%s IS NOT NULL', $column));
+        } elseif ($conditionValue === \M2E\TikTokShop\Ui\Select\YesNoAnyOption::OPTION_NO) {
+            $this->getSelect()->where(sprintf('main_table.%s IS NULL', $column));
+        }
     }
 }

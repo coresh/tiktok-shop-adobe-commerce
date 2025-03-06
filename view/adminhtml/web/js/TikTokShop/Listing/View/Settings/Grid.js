@@ -1,7 +1,6 @@
 define([
     'jquery',
     'TikTokShop/TikTokShop/Listing/View/Grid',
-    'TikTokShop/Listing/MovingFromListing',
     'TikTokShop/Listing/Wizard/Category',
     'Magento_Ui/js/modal/modal'
 ], function (jQuery) {
@@ -27,23 +26,11 @@ define([
         prepareActions: function ($super) {
             $super();
 
-            this.movingHandler = new MovingFromListing(this);
             this.categoryHandler = new TikTokShopListingCategory(this);
 
             this.actions = Object.extend(this.actions, {
                 editCategorySettingsAction: this.categoryHandler.editCategorySettings.bind(this.categoryHandler),
-                movingAction: this.movingHandler.run.bind(this.movingHandler),
             });
-        },
-
-        // ---------------------------------------
-
-        tryToMove: function (listingId) {
-            this.movingHandler.submit(listingId, this.onSuccess)
-        },
-
-        onSuccess: function () {
-            this.unselectAllAndReload();
         },
 
         // ---------------------------------------

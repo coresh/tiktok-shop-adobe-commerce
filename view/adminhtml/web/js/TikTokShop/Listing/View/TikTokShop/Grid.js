@@ -1,8 +1,9 @@
 define([
     'Magento_Ui/js/modal/modal',
-    'TikTokShop/Plugin/Messages',
+    'TikTokShop/Listing/MovingFromListing',
+    'TikTokShop/Listing/SellOnAnotherMarket',
     'TikTokShop/TikTokShop/Listing/View/Grid'
-], function (modal, MessageObj) {
+], function (modal) {
 
     window.TikTokShopListingViewTikTokShopGrid = Class.create(TikTokShopListingViewGrid, {
 
@@ -22,6 +23,30 @@ define([
                     $('get-estimated-fee').hide();
                 }
             });
+        },
+
+        // ---------------------------------------
+
+        prepareActions: function ($super) {
+            $super();
+
+            this.movingHandler = new MovingFromListing(this);
+            const sellOnAnotherMarketActionHandler = new SellOnAnotherMarketAction(this)
+
+            this.actions = Object.extend(this.actions, {
+                movingAction: this.movingHandler.run.bind(this.movingHandler),
+                sellOnAnotherMarketAction: sellOnAnotherMarketActionHandler.handle.bind(sellOnAnotherMarketActionHandler)
+            });
+        },
+
+        // ---------------------------------------
+
+        tryToMove: function (listingId) {
+            this.movingHandler.submit(listingId, this.onSuccess)
+        },
+
+        onSuccess: function () {
+            this.unselectAllAndReload();
         },
 
         // ---------------------------------------

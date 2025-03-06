@@ -30,7 +30,7 @@ class ComplianceService
      *
      * @return \M2E\TikTokShop\Model\Channel\Manufacturer
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      * @throws \M2E\TikTokShop\Model\Exception\Connection\UnableUpdateData
      */
     public function createManufacturer(
@@ -50,7 +50,7 @@ class ComplianceService
      *
      * @return void
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      * @throws \M2E\TikTokShop\Model\Exception\Connection\UnableUpdateData
      */
     public function updateManufacturer(
@@ -106,7 +106,7 @@ class ComplianceService
      *
      * @return \M2E\TikTokShop\Model\Channel\ResponsiblePerson
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      * @throws \M2E\TikTokShop\Model\Exception\Connection\UnableUpdateData
      */
     public function createResponsiblePerson(
@@ -125,7 +125,7 @@ class ComplianceService
      *
      * @return void
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      * @throws \M2E\TikTokShop\Model\Exception\Connection\UnableUpdateData
      */
     public function updateResponsiblePerson(

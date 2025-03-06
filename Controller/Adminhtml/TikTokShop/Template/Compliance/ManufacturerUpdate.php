@@ -57,7 +57,7 @@ class ManufacturerUpdate extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop
             foreach ($e->getMessageCollection()->getErrors() as $error) {
                 $errors[] = $error->getText();
             }
-        } catch (\M2E\TikTokShop\Model\Exception $e) {
+        } catch (\M2E\Core\Model\Exception $e) {
             $errors = [$e->getMessage()];
         }
 

@@ -38,7 +38,7 @@ class Header extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractBlock
 
     public function getShopName(): string
     {
-        return $this->cutLongLines($this->getListing()->getShop()->getShopName());
+        return $this->cutLongLines($this->getListing()->getShop()->getShopNameWithRegion());
     }
 
     public function getStoreViewBreadcrumb(bool $cutLongValues = true): string

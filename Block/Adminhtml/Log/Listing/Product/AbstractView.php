@@ -39,7 +39,7 @@ abstract class AbstractView extends \M2E\TikTokShop\Block\Adminhtml\Log\Listing\
             );
             $html .= $this->getStaticFilterHtml(
                 $this->switcherBlock->getLabel(),
-                $this->getListing()->getShop()->getShopName()
+                $this->getListing()->getShop()->getShopNameWithRegion()
             );
             $html .= $uniqueMessageFilterBlockHtml;
 
@@ -53,7 +53,7 @@ abstract class AbstractView extends \M2E\TikTokShop\Block\Adminhtml\Log\Listing\
             );
             $html .= $this->getStaticFilterHtml(
                 $this->switcherBlock->getLabel(),
-                $this->getListingProduct()->getListing()->getShop()->getShopName()
+                $this->getListingProduct()->getListing()->getShop()->getShopNameWithRegion()
             );
 
             return $this->getSwitcherHtml($html);

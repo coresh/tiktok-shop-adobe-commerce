@@ -20,7 +20,7 @@ class ResponsiblePersonService
      *
      * @return \M2E\TikTokShop\Model\Channel\ResponsiblePerson
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      * @throws \M2E\TikTokShop\Model\Exception\Connection\UnableUpdateData
      */
     public function create(
@@ -42,7 +42,7 @@ class ResponsiblePersonService
      *
      * @return \M2E\TikTokShop\Model\Channel\ResponsiblePerson\Collection
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      */
     public function retrieve(
         \M2E\TikTokShop\Model\Account $account
@@ -62,7 +62,7 @@ class ResponsiblePersonService
      *
      * @return void
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      * @throws \M2E\TikTokShop\Model\Exception\Connection\UnableUpdateData
      */
     public function update(

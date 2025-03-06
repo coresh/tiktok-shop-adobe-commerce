@@ -49,9 +49,14 @@ class Same extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractContainer
         $this->js->add(
             <<<JS
  require([
-    'TikTokShop/Listing/Wizard/Category'
+     'TikTokShop/Category/Chooser/SelectedProductsData',
+     'TikTokShop/Listing/Wizard/Category'
 ], function() {
-    window.TikTokShopListingCategoryObj = new TikTokShopListingCategory(null);
+     window.SelectedProductsDataObj = new SelectedProductsData();
+     SelectedProductsDataObj.setWizardId('{$this->getWizardId()}');
+     SelectedProductsDataObj.setShopId('{$this->getShopId()}');
+
+     window.TikTokShopListingCategoryObj = new TikTokShopListingCategory(null);
 });
 JS,
         );
@@ -72,5 +77,15 @@ JS,
 
         return parent::_toHtml()
             . $chooserBlock->toHtml();
+    }
+
+    private function getWizardId(): int
+    {
+        return $this->uiWizardRuntimeStorage->getManager()->getWizardId();
+    }
+
+    public function getShopId(): int
+    {
+        return $this->uiWizardRuntimeStorage->getManager()->getListing()->getShopId();
     }
 }

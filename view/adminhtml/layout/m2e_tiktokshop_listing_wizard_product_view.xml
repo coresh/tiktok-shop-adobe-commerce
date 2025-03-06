@@ -3,4 +3,11 @@
       layout="admin-1column"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="m2e_tiktokshop_listing_header_handler"/>
+    <body>
+        <referenceContainer name="content">
+            <container name="m2e.tiktokshop.listing.header">
+                <block class="M2E\TikTokShop\Block\Adminhtml\Listing\Product\ShowOthersListingsProductsFilter" />
+            </container>
+        </referenceContainer>
+    </body>
 </page>

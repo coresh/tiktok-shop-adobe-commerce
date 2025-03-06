@@ -31,7 +31,7 @@ class GetShopsForAccount extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop
         $shops = array_map(static function (\M2E\TikTokShop\Model\Shop $entity) {
             return [
                 'id' => $entity->getId(),
-                'shop_name' => $entity->getShopName(),
+                'shop_name' => $entity->getShopNameWithRegion(),
             ];
         }, $shops);
 

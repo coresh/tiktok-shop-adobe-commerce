@@ -71,19 +71,21 @@ class DictionaryMapper
             CategoryAttribute::ATTRIBUTE_TYPE_CERTIFICATE,
         ]);
 
-        $attributes = [];
-        foreach ($dictionary->getCertificationsAttributes() as $attribute) {
-            $item = $this->map($attribute, $savedAttributes);
+        $certificationAttributes = [];
+        foreach ($dictionary->getCertificationsAttributes() as $certificationAttribute) {
+            $item = $this->map($certificationAttribute, $savedAttributes);
+            $attributeVariants = $this->getCertificateAttributeVariants($certificationAttribute, $savedAttributes);
 
             if ($item['required']) {
-                array_unshift($attributes, $item);
+                array_unshift($certificationAttributes, $item, ...$attributeVariants);
                 continue;
             }
 
-            $attributes[] = $item;
+            array_unshift($attributeVariants, $item);
+            $certificationAttributes = array_merge($certificationAttributes, $attributeVariants);
         }
 
-        return $this->sortAttributesByTitle($attributes);
+        return $this->sortAttributesByTitle($certificationAttributes);
     }
 
     private function map(
@@ -101,6 +103,7 @@ class DictionaryMapper
             'is_customized' => $attribute->isCustomised(),
             'values' => [],
             'template_attribute' => [],
+            'sample_image_url' => $attribute->getSampleImageUrl()
         ];
 
         $existsAttribute = $savedAttributes[$attribute->getId()] ?? null;
@@ -159,5 +162,36 @@ class DictionaryMapper
         }
 
         return array_merge($requiredAttributes, $attributes);
+    }
+
+    private function getCertificateAttributeVariants(
+        \M2E\TikTokShop\Model\Category\Dictionary\Attribute\CertificateAttribute $attribute,
+        array $savedAttributes
+    ): array {
+        $variants = [];
+
+        foreach ($savedAttributes as $savedAttribute) {
+            if ($this->isMatchingAttribute($attribute, $savedAttribute)) {
+                $modifiedAttribute = clone $attribute;
+                $modifiedAttribute->setId($savedAttribute->getAttributeId());
+                $variants[] = $this->map(
+                    $modifiedAttribute,
+                    [$savedAttribute->getAttributeId() => $savedAttribute]
+                );
+            }
+        }
+
+        return $variants;
+    }
+
+    private function isMatchingAttribute(
+        \M2E\TikTokShop\Model\Category\Dictionary\Attribute\CertificateAttribute $attribute,
+        \M2E\TikTokShop\Model\Category\CategoryAttribute $savedAttribute
+    ): bool {
+        $savedId = $savedAttribute->getAttributeId();
+        $cleanedId = \M2E\TikTokShop\Model\Category\CategoryAttribute::getCleanAttributeId($savedId);
+
+        return $savedId !== $attribute->getId()
+            && $cleanedId === $attribute->getId();
     }
 }

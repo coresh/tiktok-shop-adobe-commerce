@@ -62,7 +62,7 @@
                           template="ui/grid/filters/elements/ui-select"
                           component="Magento_Ui/js/form/element/ui-select">
                 <settings>
-                    <label>Shop</label>
+                    <label translate="true">Shop</label>
                     <dataScope>shop_id</dataScope>
                     <options class="M2E\TikTokShop\Ui\Select\Shop"/>
                 </settings>
@@ -72,7 +72,7 @@
                          provider="${ $.parentName }"
                          template="ui/grid/filters/field">
                 <settings>
-                    <label>Product Title</label>
+                    <label translate="true">Product Title</label>
                     <dataScope>title</dataScope>
                     <dataType>textRange</dataType>
                 </settings>
@@ -82,11 +82,21 @@
                          provider="${ $.parentName }"
                          template="ui/grid/filters/field">
                 <settings>
-                    <label>TikTok Shop Product ID</label>
+                    <label translate="true">TikTok Shop Product ID</label>
                     <dataScope>tts_product_id</dataScope>
                     <dataType>text</dataType>
                 </settings>
             </filterInput>
+
+            <filterSelect name="linked"
+                          provider="${ $.parentName }"
+                          component="Magento_Ui/js/form/element/select">
+                <settings>
+                    <label translate="true">Linked</label>
+                    <dataScope>linked</dataScope>
+                    <options class="M2E\TikTokShop\Ui\Select\YesNoAnyOption"/>
+                </settings>
+            </filterSelect>
 
         </filters>
 

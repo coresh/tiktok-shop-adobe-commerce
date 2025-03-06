@@ -428,7 +428,9 @@ class Dictionary extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
                 $certificate['name'],
                 (bool)$certificate['is_required'],
                 true,
-                false
+                false,
+                [],
+                $certificate['sample_image_url'] ?? ''
             );
         }
 

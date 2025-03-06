@@ -22,7 +22,7 @@ class SynchronizeService
 
     /**
      * @throws \M2E\TikTokShop\Model\Exception\Logic
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      * @throws \M2E\TikTokShop\Model\Exception
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
@@ -94,7 +94,7 @@ class SynchronizeService
 
     /**
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      */
     private function receiveDeliveryOptions(
         \M2E\TikTokShop\Model\Account $account,
@@ -114,7 +114,7 @@ class SynchronizeService
     }
 
     /**
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      * @throws \M2E\TikTokShop\Model\Exception
      */
     private function receiveShippingProviders(

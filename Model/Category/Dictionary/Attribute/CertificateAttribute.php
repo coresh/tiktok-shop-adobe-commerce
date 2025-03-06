@@ -10,4 +10,9 @@ class CertificateAttribute extends \M2E\TikTokShop\Model\Category\Dictionary\Abs
     {
         return \M2E\TikTokShop\Model\Category\CategoryAttribute::ATTRIBUTE_TYPE_CERTIFICATE;
     }
+
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
 }

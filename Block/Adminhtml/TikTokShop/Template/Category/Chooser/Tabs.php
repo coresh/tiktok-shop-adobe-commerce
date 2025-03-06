@@ -7,6 +7,7 @@ class Tabs extends \M2E\TikTokShop\Block\Adminhtml\Magento\Tabs\AbstractHorizont
     private const TAB_ID_RECENT = 'recent';
     private const TAB_ID_BROWSE = 'browse';
     private const TAB_ID_SEARCH = 'search';
+    private const TAB_ID_RECOMMENDED = 'recommended';
 
     public function _construct()
     {
@@ -25,6 +26,16 @@ class Tabs extends \M2E\TikTokShop\Block\Adminhtml\Magento\Tabs\AbstractHorizont
             'title' => __('Saved Categories'),
             'content' => $recentContent,
             'active' => true,
+        ]);
+
+        $recommendedContent = $this->getLayout()->createBlock(
+            \M2E\TikTokShop\Block\Adminhtml\Category\Chooser\Tab\Recommended::class,
+        )->toHtml();
+        $this->addTab(self::TAB_ID_RECOMMENDED, [
+            'label' => __('Recommended Categories'),
+            'title' => __('Recommended Categories'),
+            'content' => $recommendedContent,
+            'active' => false,
         ]);
 
         $browseContent = $this->getLayout()->createBlock(

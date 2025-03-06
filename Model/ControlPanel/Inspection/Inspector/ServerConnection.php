@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\ControlPanel\Inspection\Inspector;
 
-use M2E\TikTokShop\Model\Exception\Connection;
+use M2E\Core\Model\Exception\Connection;
 
 class ServerConnection implements \M2E\Core\Model\ControlPanel\Inspection\InspectorInterface
 {

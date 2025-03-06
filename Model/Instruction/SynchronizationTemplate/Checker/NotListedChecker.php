@@ -34,7 +34,10 @@ class NotListedChecker extends \M2E\TikTokShop\Model\Instruction\Synchronization
             return false;
         }
 
-        if (!$listingProduct->hasCategoryTemplate()) {
+        if (
+            !$listingProduct->hasCategoryTemplate()
+            && !$listingProduct->isGlobalProduct()
+        ) {
             return false;
         }
 

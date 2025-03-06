@@ -28,7 +28,7 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractList
 
         try {
             $listingProduct = $this->listingProductRepository->get((int)$productId);
-        } catch (\M2E\TikTokShop\Model\Exception $exception) {
+        } catch (\M2E\Core\Model\Exception $exception) {
             $this->setAjaxContent($exception->getMessage());
 
             return $this->getResult();

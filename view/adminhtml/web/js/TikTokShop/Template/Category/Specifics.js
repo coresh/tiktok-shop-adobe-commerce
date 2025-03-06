@@ -1,8 +1,9 @@
 define([
     'jquery',
     'mage/translate',
+    'TikTokShop/TikTokShop/Template/Category/Specifics/CertificateRowsHandler',
     'TikTokShop/Common'
-], function (jQuery, $t) {
+], function (jQuery, $t, CertificateRowsHandler) {
     window.TikTokShopTemplateCategorySpecifics = Class.create(Common, {
 
         maxSelectedSpecifics: 45,
@@ -43,6 +44,8 @@ define([
             );
 
             this.createSpecificsSnapshot();
+
+            new CertificateRowsHandler(this);
         },
 
         getElementScope: function (element) {
@@ -148,7 +151,7 @@ define([
 
             let recommended = $(`${scope}_dictionary_value_tiktokshop_recommended_${index}`),
                     customValueTable = $(`${scope}_dictionary_custom_value_table_${index}`),
-                    customValueInputs = $$(`[id^=${scope}_dictionary_value_custom_value_${index}]`),
+                    customValueInputs = $$(`[id=${scope}_dictionary_value_custom_value_${index}]`),
                     attribute = $(`${scope}_dictionary_value_custom_attribute_${index}`);
 
             recommended.hide().disable();

@@ -623,4 +623,15 @@ class Repository
 
         return array_map('intval', $collection->getColumnValues('id'));
     }
+
+    /**
+     * @return \M2E\TikTokShop\Model\Product[]
+     */
+    public function getByIds(array $productIds): array
+    {
+        $collection = $this->listingProductCollectionFactory->create();
+        $collection->addFieldToFilter('id', ['in' => $productIds]);
+
+        return array_values($collection->getItems());
+    }
 }

@@ -175,4 +175,9 @@ class Warehouse extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             $this->getData(WarehouseResource::COLUMN_CREATE_DATE),
         );
     }
+
+    public function isTypeSales(): bool
+    {
+        return (int)$this->getData(WarehouseResource::COLUMN_TYPE) === self::TYPE_SALES_WAREHOUSE;
+    }
 }

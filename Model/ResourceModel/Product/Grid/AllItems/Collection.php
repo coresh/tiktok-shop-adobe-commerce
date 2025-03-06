@@ -241,7 +241,7 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
         $conditionValue = (int)$condition['eq'];
         $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
 
-        if ($conditionValue === 1) {
+        if ($conditionValue === \M2E\TikTokShop\Ui\Select\YesNoAnyOption::OPTION_YES) {
             $this->wrappedCollection->getSelect()->where(
                 'promotion_product.promotion_product_id IS NOT NULL
             AND promotion.start_date <= ?

@@ -20,7 +20,7 @@ class ManufacturerService
      *
      * @return \M2E\TikTokShop\Model\Channel\Manufacturer
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      * @throws \M2E\TikTokShop\Model\Exception\Connection\UnableUpdateData
      */
     public function create(\M2E\TikTokShop\Model\Account $account, Manufacturer $manufacturer): Manufacturer
@@ -40,7 +40,7 @@ class ManufacturerService
      *
      * @return \M2E\TikTokShop\Model\Channel\Manufacturer\Collection
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      */
     public function retrieve(
         \M2E\TikTokShop\Model\Account $account
@@ -60,7 +60,7 @@ class ManufacturerService
      *
      * @return void
      * @throws \M2E\TikTokShop\Model\Exception
-     * @throws \M2E\TikTokShop\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection
      * @throws \M2E\TikTokShop\Model\Exception\Connection\UnableUpdateData
      */
     public function update(\M2E\TikTokShop\Model\Account $account, Manufacturer $manufacturer): void

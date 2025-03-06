@@ -49,9 +49,6 @@ class Edit extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractListi
             ->getTemplateCategoryIds($listingProductIds, 'template_category_id', true);
 
         $categories = $this->categoryRepository->getItems($ids);
-        if (empty($categories)) {
-            return $this->getFailAjaxResult('Categories not found');
-        }
 
         /** @var ?\M2E\TikTokShop\Model\Category\Dictionary $entity */
         $category = count($categories) === 1 ? reset($categories) : null;

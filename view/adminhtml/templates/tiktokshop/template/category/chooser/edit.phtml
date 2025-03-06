@@ -82,6 +82,12 @@ $selectedCategory = $block->getSelectedCategory();
         overflow: auto;
     }
 
+    #recommended_results_container {
+        max-height: 240px;
+        border: 1px solid #e3e3e3;
+        overflow: auto;
+    }
+
     #search_results_container {
         border: 1px solid #e3e3e3;
     }
@@ -101,13 +107,27 @@ $selectedCategory = $block->getSelectedCategory();
         width: 100%;
     }
 
+    #recommended_results_table {
+        width: 100%;
+    }
+
     #chooser_recent_table td {
         padding: 1em 1.8rem !important;
         border-bottom: 1px solid #e3e3e3;
         background-color: #f8f8f8;
     }
 
+    #recommended_results_table td {
+        padding: 1em 1.8rem !important;
+        border-bottom: 1px solid #e3e3e3;
+        background-color: #f8f8f8;
+    }
+
     #chooser_recent_table tr:last-child td {
+        border-bottom: 1px solid #f8f8f8;
+    }
+
+    #recommended_results_table tr:last-child td {
         border-bottom: 1px solid #f8f8f8;
     }
 
