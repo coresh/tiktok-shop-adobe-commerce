@@ -48,6 +48,8 @@ class MigrateLicenseAndRegistrationUserToCore extends \M2E\Core\Model\Setup\Upgr
             ['/license/ip/', 'valid'],
             ['/license/ip/', 'is_valid'],
             ['/license/info/', 'email'],
+            ['/location/', 'domain'],
+            ['/location/', 'ip'],
         ];
 
         foreach ($configPaths as [$group, $key]) {

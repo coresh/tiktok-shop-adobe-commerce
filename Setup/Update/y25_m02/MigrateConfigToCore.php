@@ -10,7 +10,7 @@ class MigrateConfigToCore extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractF
     {
         $connection = $this->getConnection();
         $oldTable = $this->getFullTableName('m2e_tts_config');
-        $coreConfig = $this->getConfigModifier(\M2E\Core\Helper\Module::IDENTIFIER);
+        $coreConfig = $this->getConfigModifier(\M2E\TikTokShop\Helper\Module::IDENTIFIER);
 
         if (!$connection->isTableExists($oldTable)) {
             return;
