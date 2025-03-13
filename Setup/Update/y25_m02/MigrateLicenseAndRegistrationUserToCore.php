@@ -66,7 +66,7 @@ class MigrateLicenseAndRegistrationUserToCore extends \M2E\Core\Model\Setup\Upgr
 
             $newConfig = $coreConfig->getEntity($group, $key);
 
-            if ($newConfig->getValue() !== null) {
+            if (!empty($newConfig->getValue())) {
                 $connection->delete(
                     $oldConfigTable,
                     [

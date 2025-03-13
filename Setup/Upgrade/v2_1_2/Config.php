@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace M2E\TikTokShop\Setup\Upgrade\v2_1_1;
+namespace M2E\TikTokShop\Setup\Upgrade\v2_1_2;
 
 class Config implements \M2E\Core\Model\Setup\Upgrade\Entity\ConfigInterface
 {
