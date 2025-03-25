@@ -31,7 +31,7 @@ class GetSelectedCategoryDetails extends \M2E\TikTokShop\Controller\Adminhtml\Ti
             throw new \M2E\TikTokShop\Model\Exception\Logic('Invalid input');
         }
 
-        $category = $this->treeRepository->getCategoryByShopIdAndCategoryId((int)$shopId, $categoryId);
+        $category = $this->treeRepository->findCategoryByShopIdAndCategoryId((int)$shopId, $categoryId);
         if ($category === null) {
             throw new \M2E\TikTokShop\Model\Exception\Logic('Category invalid');
         }

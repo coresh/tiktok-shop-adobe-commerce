@@ -269,4 +269,15 @@ class Account extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
         return \M2E\TikTokShop\Helper\Date::createDateGmt($value);
     }
+
+    public function hasAnyEuShop(): bool
+    {
+        foreach ($this->getShops() as $shop) {
+            if ($shop->getRegion()->isEU()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -42,7 +42,6 @@ class Tables
     public const TABLE_NAME_TEMPLATE_SELLING_FORMAT = self::PREFIX . 'template_selling_format';
     public const TABLE_NAME_TEMPLATE_SYNCHRONIZATION = self::PREFIX . 'template_synchronization';
     public const TABLE_NAME_TEMPLATE_DESCRIPTION = self::PREFIX . 'template_description';
-    public const TABLE_NAME_TEMPLATE_COMPLIANCE = self::PREFIX . 'template_compliance';
 
     public const TABLE_NAME_TAG = self::PREFIX . 'tag';
     public const TABLE_NAME_PRODUCT_TAG_RELATION = self::PREFIX . 'product_tag_relation';
@@ -68,6 +67,8 @@ class Tables
 
     public const TABLE_NAME_GLOBAL_PRODUCT = self::PREFIX . 'global_product';
     public const TABLE_NAME_GLOBAL_PRODUCT_VARIANT_SKU = self::PREFIX . 'global_product_variant_sku';
+
+    public const TABLE_NAME_MANUFACTURER_CONFIGURATION = self::PREFIX . 'manufacturer_configuration';
 
     private \Magento\Framework\App\ResourceConnection $resourceConnection;
     private Structure $databaseHelper;
@@ -211,7 +212,6 @@ class Tables
             self::TABLE_NAME_TEMPLATE_SELLING_FORMAT => \M2E\TikTokShop\Model\ResourceModel\Template\SellingFormat::class,
             self::TABLE_NAME_TEMPLATE_SYNCHRONIZATION => \M2E\TikTokShop\Model\ResourceModel\Template\Synchronization::class,
             self::TABLE_NAME_TEMPLATE_DESCRIPTION => \M2E\TikTokShop\Model\ResourceModel\Template\Description::class,
-            self::TABLE_NAME_TEMPLATE_COMPLIANCE => \M2E\TikTokShop\Model\ResourceModel\Template\Compliance::class,
             self::TABLE_NAME_TAG => \M2E\TikTokShop\Model\ResourceModel\Tag::class,
             self::TABLE_NAME_PRODUCT_TAG_RELATION => \M2E\TikTokShop\Model\ResourceModel\Tag\ListingProduct\Relation::class,
             self::TABLE_NAME_CATEGORY_TREE => \M2E\TikTokShop\Model\ResourceModel\Category\Tree::class,
@@ -230,6 +230,7 @@ class Tables
             self::TABLE_NAME_PROMOTION_PRODUCT => \M2E\TikTokShop\Model\ResourceModel\Promotion\Product::class,
             self::TABLE_NAME_GLOBAL_PRODUCT => \M2E\TikTokShop\Model\ResourceModel\GlobalProduct::class,
             self::TABLE_NAME_GLOBAL_PRODUCT_VARIANT_SKU => \M2E\TikTokShop\Model\ResourceModel\GlobalProduct\VariantSku::class,
+            self::TABLE_NAME_MANUFACTURER_CONFIGURATION => \M2E\TikTokShop\Model\ResourceModel\ManufacturerConfiguration::class,
         ];
     }
 
@@ -262,7 +263,6 @@ class Tables
             self::TABLE_NAME_TEMPLATE_SELLING_FORMAT => \M2E\TikTokShop\Model\Template\SellingFormat::class,
             self::TABLE_NAME_TEMPLATE_SYNCHRONIZATION => \M2E\TikTokShop\Model\Template\Synchronization::class,
             self::TABLE_NAME_TEMPLATE_DESCRIPTION => \M2E\TikTokShop\Model\Template\Description::class,
-            self::TABLE_NAME_TEMPLATE_COMPLIANCE => \M2E\TikTokShop\Model\Template\Compliance::class,
             self::TABLE_NAME_TAG => \M2E\TikTokShop\Model\Tag\Entity::class,
             self::TABLE_NAME_PRODUCT_TAG_RELATION => \M2E\TikTokShop\Model\Tag\ListingProduct\Relation::class,
             self::TABLE_NAME_CATEGORY_TREE => \M2E\TikTokShop\Model\Category\Tree::class,
@@ -281,6 +281,7 @@ class Tables
             self::TABLE_NAME_PROMOTION_PRODUCT => \M2E\TikTokShop\Model\Promotion\Product::class,
             self::TABLE_NAME_GLOBAL_PRODUCT => \M2E\TikTokShop\Model\GlobalProduct::class,
             self::TABLE_NAME_GLOBAL_PRODUCT_VARIANT_SKU => \M2E\TikTokShop\Model\GlobalProduct\VariantSku::class,
+            self::TABLE_NAME_MANUFACTURER_CONFIGURATION => \M2E\TikTokShop\Model\ManufacturerConfiguration::class,
         ];
     }
 

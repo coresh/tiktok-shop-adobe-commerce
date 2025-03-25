@@ -19,6 +19,7 @@ class Product extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\AbstractM
     public const COLUMN_ONLINE_CATEGORY = 'online_category';
     public const COLUMN_ONLINE_CATEGORIES_DATA = 'online_categories_data';
     public const COLUMN_ONLINE_QTY = 'online_qty';
+    public const COLUMN_IS_GIFT = 'is_gift';
     public const COLUMN_ONLINE_MIN_PRICE = 'online_min_price';
     public const COLUMN_ONLINE_MAX_PRICE = 'online_max_price';
     public const COLUMN_ONLINE_MANUFACTURER_ID = 'online_manufacturer_id';
@@ -28,6 +29,7 @@ class Product extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\AbstractM
     public const COLUMN_ADDITIONAL_DATA = 'additional_data';
     public const COLUMN_LISTING_QUALITY_TIER = 'listing_quality_tier';
     public const COLUMN_LISTING_QUALITY_RECOMMENDATIONS = 'listing_quality_recommendations';
+    public const COLUMN_MANUFACTURER_CONFIG_ID = 'manufacturer_config_id';
     public const COLUMN_UPDATE_DATE = 'update_date';
     public const COLUMN_CREATE_DATE = 'create_date';
 

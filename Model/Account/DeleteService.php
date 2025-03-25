@@ -22,7 +22,8 @@ class DeleteService
     private \M2E\TikTokShop\Model\Processing\DeleteService $processingDeleteService;
     private \M2E\TikTokShop\Model\Category\Tree\DeleteService $categoryTreeDeleteService;
     private \M2E\TikTokShop\Model\Category\Dictionary\DeleteService $categoryDeleteService;
-    private \M2E\TikTokShop\Model\Template\Compliance\Repository $templateComplianceRepository;
+    private \M2E\TikTokShop\Model\GlobalProduct\DeleteService $globalProductDeleteService;
+    private \M2E\TikTokShop\Model\ManufacturerConfiguration\DeleteService $manufacturerConfigurationDeleteService;
 
     public function __construct(
         Repository $accountRepository,
@@ -39,7 +40,8 @@ class DeleteService
         \M2E\TikTokShop\Helper\Data\Cache\Permanent $cache,
         \M2E\TikTokShop\Model\Category\Tree\DeleteService $categoryTreeDeleteService,
         \M2E\TikTokShop\Model\Category\Dictionary\DeleteService $categoryDeleteService,
-        \M2E\TikTokShop\Model\Template\Compliance\Repository $templateComplianceRepository
+        \M2E\TikTokShop\Model\GlobalProduct\DeleteService $globalProductDeleteService,
+        \M2E\TikTokShop\Model\ManufacturerConfiguration\DeleteService $manufacturerConfigurationDeleteService
     ) {
         $this->shopRepository = $shopRepository;
         $this->warehouseRepository = $warehouseRepository;
@@ -55,7 +57,8 @@ class DeleteService
         $this->processingDeleteService = $processingDeleteService;
         $this->categoryTreeDeleteService = $categoryTreeDeleteService;
         $this->categoryDeleteService = $categoryDeleteService;
-        $this->templateComplianceRepository = $templateComplianceRepository;
+        $this->globalProductDeleteService = $globalProductDeleteService;
+        $this->manufacturerConfigurationDeleteService = $manufacturerConfigurationDeleteService;
     }
 
     /**
@@ -85,7 +88,8 @@ class DeleteService
 
             $this->deleteShops($account);
 
-            $this->templateComplianceRepository->removeByAccountId($accountId);
+            $this->globalProductDeleteService->byAccount($accountId);
+            $this->manufacturerConfigurationDeleteService->byAccount($accountId);
 
             $this->deleteAccount($account);
         } catch (\Throwable $e) {

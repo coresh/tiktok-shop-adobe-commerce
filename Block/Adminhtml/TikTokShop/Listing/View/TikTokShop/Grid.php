@@ -534,6 +534,13 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             );
         }
 
+        if ($row->getListingProduct()->isGift()) {
+            return sprintf(
+                '0 <span class="price-not-for-sale">%s</span>',
+                __('Not for sale')
+            );
+        }
+
         $promotionHtml = '';
         if ($row['has_promotion']) {
             $promotionHtml =

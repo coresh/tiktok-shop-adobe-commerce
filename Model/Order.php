@@ -1328,6 +1328,10 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
      */
     public function getSubtotalPrice()
     {
+        if ($this->isSample()) {
+            return 0;
+        }
+
         if ($this->subTotalPrice === null) {
             $subtotal = 0;
 
@@ -1343,6 +1347,10 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     public function getShippingPrice(): float
     {
+        if ($this->isSample()) {
+            return 0;
+        }
+
         $shippingPrice = $this->getPaymentDetails()['shipping_fee'] ?? 0.0;
         $shippingPrice += $this->getPaymentDetails()['shipping_fee_platform_discount'] ?? 0.0;
 
@@ -1523,5 +1531,10 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public function getStatusUpdateRequired(): bool
     {
         return $this->statusUpdateRequired;
+    }
+
+    public function isSample(): bool
+    {
+        return (bool)$this->getData(OrderResource::COLUMN_IS_SAMPLE);
     }
 }

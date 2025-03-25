@@ -49,7 +49,11 @@ class Checker
         }
 
         /** @var ActionBuilder\Brand $actionDataBuilder */
-        $actionDataBuilder = $this->dataBuilderFactory->create(ActionBuilder\Brand::NICK, $listingProduct);
+        $actionDataBuilder = $this->dataBuilderFactory->create(
+            ActionBuilder\Brand::NICK,
+            $listingProduct,
+            \M2E\TikTokShop\Model\Product::ACTION_REVISE
+        );
 
         $actionDataBuilder->getBuilderData();
 
@@ -68,6 +72,7 @@ class Checker
         $actionDataBuilder = $this->dataBuilderFactory->create(
             ActionBuilder\SizeChart::NICK,
             $listingProduct,
+            \M2E\TikTokShop\Model\Product::ACTION_REVISE
         );
 
         $actionDataBuilder->getBuilderData();
@@ -103,6 +108,7 @@ class Checker
         $actionDataBuilder = $this->dataBuilderFactory->create(
             \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder\CertificateImage::NICK,
             $listingProduct,
+            \M2E\TikTokShop\Model\Product::ACTION_REVISE
         );
 
         $actionDataBuilder->getBuilderData();
@@ -141,7 +147,11 @@ class Checker
         }
 
         /** @var ActionBuilder\Images $imagesDataBuilder */
-        $imagesDataBuilder = $this->dataBuilderFactory->create(ActionBuilder\Images::NICK, $listingProduct);
+        $imagesDataBuilder = $this->dataBuilderFactory->create(
+            ActionBuilder\Images::NICK,
+            $listingProduct,
+            \M2E\TikTokShop\Model\Product::ACTION_REVISE
+        );
 
         $imagesDataBuilder->getBuilderData();
 
@@ -182,7 +192,11 @@ class Checker
         }
 
         /** @var ActionBuilder\Categories $actionDataBuilder */
-        $actionDataBuilder = $this->dataBuilderFactory->create(ActionBuilder\Categories::NICK, $listingProduct);
+        $actionDataBuilder = $this->dataBuilderFactory->create(
+            ActionBuilder\Categories::NICK,
+            $listingProduct,
+            \M2E\TikTokShop\Model\Product::ACTION_REVISE
+        );
 
         $actionDataBuilder->getBuilderData();
 
@@ -205,16 +219,26 @@ class Checker
         }
 
         /** @var ActionBuilder\Compliance $actionDataBuilder */
-        $actionDataBuilder = $this->dataBuilderFactory->create(ActionBuilder\Compliance::NICK, $listingProduct);
+        $actionDataBuilder = $this->dataBuilderFactory->create(
+            ActionBuilder\Compliance::NICK,
+            $listingProduct,
+            \M2E\TikTokShop\Model\Product::ACTION_REVISE
+        );
 
         $actionDataBuilder->getBuilderData();
 
         $metadata = $actionDataBuilder->getMetaData()[ActionBuilder\Compliance::NICK];
-        if ($metadata['online_manufacturer_id'] !== $listingProduct->getOnlineManufacturerId()) {
+        if (
+            $listingProduct->getManufacturerConfigId() !== null
+            && ($metadata['online_manufacturer_id'] !== $listingProduct->getOnlineManufacturerId())
+        ) {
             return true;
         }
 
-        if ($metadata['online_responsible_person_ids'] !== $listingProduct->getOnlineResponsiblePersonIds()) {
+        if (
+            $listingProduct->getManufacturerConfigId() !== null
+            && ($metadata['online_responsible_person_ids'] !== $listingProduct->getOnlineResponsiblePersonIds())
+        ) {
             return true;
         }
 

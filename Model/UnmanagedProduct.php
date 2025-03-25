@@ -57,7 +57,8 @@ class UnmanagedProduct extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         int $status,
         string $title,
         string $categoryId,
-        array $categoriesData
+        array $categoriesData,
+        bool $isNotForSale
     ): self {
         $this
             ->setData(UnmanagedProductResource::COLUMN_ACCOUNT_ID, $accountId)
@@ -66,7 +67,8 @@ class UnmanagedProduct extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             ->setData(UnmanagedProductResource::COLUMN_TTS_PRODUCT_ID, $ttsProductId)
             ->setData(UnmanagedProductResource::COLUMN_TITLE, $title)
             ->setData(UnmanagedProductResource::COLUMN_CATEGORY_ID, $categoryId)
-            ->setData(UnmanagedProductResource::COLUMN_CATEGORIES_DATA, json_encode($categoriesData, JSON_THROW_ON_ERROR));
+            ->setData(UnmanagedProductResource::COLUMN_CATEGORIES_DATA, json_encode($categoriesData, JSON_THROW_ON_ERROR))
+            ->setData(UnmanagedProductResource::COLUMN_IS_GIFT, $isNotForSale);
 
         return $this;
     }
@@ -390,6 +392,18 @@ class UnmanagedProduct extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         }
 
         return (float)$maxPrice;
+    }
+
+    public function isGift(): bool
+    {
+        return (bool)$this->getData(UnmanagedProductResource::COLUMN_IS_GIFT);
+    }
+
+    public function setIsGift(bool $value): self
+    {
+        $this->setData(UnmanagedProductResource::COLUMN_IS_GIFT, $value);
+
+        return $this;
     }
 
     private function getVariantsQtySum(): int

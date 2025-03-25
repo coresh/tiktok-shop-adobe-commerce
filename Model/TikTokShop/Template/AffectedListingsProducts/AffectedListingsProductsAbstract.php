@@ -56,10 +56,6 @@ abstract class AffectedListingsProductsAbstract extends \M2E\TikTokShop\Model\Te
             return \M2E\TikTokShop\Model\ResourceModel\Listing::COLUMN_TEMPLATE_SYNCHRONIZATION_ID;
         }
 
-        if ($this->getTemplateNick() === \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE) {
-            return \M2E\TikTokShop\Model\ResourceModel\Listing::COLUMN_TEMPLATE_COMPLIANCE_ID;
-        }
-
         throw new \M2E\TikTokShop\Model\Exception\Logic('Unknown template ' . $this->getTemplateNick());
     }
 }

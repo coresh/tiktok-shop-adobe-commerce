@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Category;
 
 use M2E\TikTokShop\Model\Category\Dictionary;
@@ -7,19 +9,16 @@ use M2E\TikTokShop\Model\ResourceModel\Category\Dictionary\CollectionFactory as 
 
 class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
 {
-    private \M2E\TikTokShop\Model\ResourceModel\Shop $shopResource;
     private DictionaryCollectionFactory $categoryDictionaryCollectionFactory;
     private \M2E\TikTokShop\Model\ResourceModel\Shop\CollectionFactory $shopCollectionFactory;
 
     public function __construct(
-        \M2E\TikTokShop\Model\ResourceModel\Shop $shopResource,
         DictionaryCollectionFactory $categoryDictionaryCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Shop\CollectionFactory $shopCollectionFactory,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Backend\Helper\Data $backendHelper,
         array $data = []
     ) {
-        $this->shopResource = $shopResource;
         $this->categoryDictionaryCollectionFactory = $categoryDictionaryCollectionFactory;
         $this->shopCollectionFactory = $shopCollectionFactory;
 
@@ -37,23 +36,25 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         $this->setDefaultDir('asc');
     }
 
+    public function getGridUrl()
+    {
+        return $this->getUrl('*/*/grid', ['_current' => true]);
+    }
+
+    public function getRowUrl($item)
+    {
+        return false;
+    }
+
     protected function _prepareCollection()
     {
         $collection = $this->categoryDictionaryCollectionFactory->create();
-        $collection->join(
-            ['shop' => $this->shopResource->getMainTable()],
-            'main_table.shop_id=shop.id',
-            [
-                'shop_id' => 'shop.shop_id',
-            ]
+
+        $collection->addFieldToFilter(
+            \M2E\TikTokShop\Model\ResourceModel\Category\Dictionary::COLUMN_STATE,
+            ['neq' => Dictionary::DRAFT_STATE]
         );
 
-        $collection->getSelect()->where(
-            'main_table.state != ?',
-            Dictionary::DRAFT_STATE
-        );
-
-        $collection->getSelect()->columns('shop.shop_name');
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -91,8 +92,9 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
                 'align' => 'left',
                 'type' => 'options',
                 'width' => '100px',
-                'index' => 'shop_name',
+                'index' => 'shop_id',
                 'filter_condition_callback' => [$this, 'callbackFilterShop'],
+                'frame_callback' => [$this, 'callbackColumnShop'],
                 'options' => $this->getShopIdOptions(),
             ]
         );
@@ -195,16 +197,12 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         $collection->getSelect()->where('main_table.path LIKE ?', '%' . $value . '%');
     }
 
-    private function getShopIdOptions(): array
+    /**
+     * @param \M2E\TikTokShop\Model\Category\Dictionary $row
+     */
+    public function callbackColumnShop($value, $row, $column, $isExport)
     {
-        $collection = $this->shopCollectionFactory->create();
-        $options = [];
-        /** @var \M2E\TikTokShop\Model\Shop $item */
-        foreach ($collection as $item) {
-            $options[$item->getId()] = $item->getShopNameWithRegion();
-        }
-
-        return $options;
+        return $row->getShop()->getShopNameWithRegion();
     }
 
     protected function callbackFilterShop($collection, $column): void
@@ -217,13 +215,15 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         $collection->getSelect()->where('main_table.shop_id = ?', $value);
     }
 
-    public function getGridUrl()
+    private function getShopIdOptions(): array
     {
-        return $this->getUrl('*/*/grid', ['_current' => true]);
-    }
+        $collection = $this->shopCollectionFactory->create();
+        $options = [];
+        /** @var \M2E\TikTokShop\Model\Shop $item */
+        foreach ($collection as $item) {
+            $options[$item->getId()] = $item->getShopNameWithRegion();
+        }
 
-    public function getRowUrl($item)
-    {
-        return false;
+        return $options;
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace M2E\TikTokShop\Model\Template\SellingFormat;
 
 use M2E\TikTokShop\Model\Template\SellingFormat as SellingFormat;
+use M2E\TikTokShop\Model\ResourceModel\Template\SellingFormat as ResourceSellingFormat;
 
 class Builder extends \M2E\TikTokShop\Model\TikTokShop\Template\AbstractBuilder
 {
@@ -228,6 +229,11 @@ class Builder extends \M2E\TikTokShop\Model\TikTokShop\Template\AbstractBuilder
             $data['cash_on_delivery'] = $this->rawData['cash_on_delivery'];
         }
 
+        if (isset($this->rawData[ResourceSellingFormat::COLUMN_IS_NOT_FOR_SALE])) {
+            $data[ResourceSellingFormat::COLUMN_IS_NOT_FOR_SALE]
+                = $this->rawData[ResourceSellingFormat::COLUMN_IS_NOT_FOR_SALE];
+        }
+
         return $data;
     }
 
@@ -277,6 +283,8 @@ class Builder extends \M2E\TikTokShop\Model\TikTokShop\Template\AbstractBuilder
             'fixed_price_custom_attribute' => '',
 
             'cash_on_delivery' => SellingFormat::CASH_ON_DELIVERY_OFF,
+
+            ResourceSellingFormat::COLUMN_IS_NOT_FOR_SALE => SellingFormat::IS_NOT_FOR_SALE_OFF,
         ];
     }
 

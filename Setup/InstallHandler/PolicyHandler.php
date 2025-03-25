@@ -8,7 +8,7 @@ use M2E\TikTokShop\Helper\Module\Database\Tables as TablesHelper;
 use M2E\TikTokShop\Model\ResourceModel\Template\Description as DescriptionResource;
 use M2E\TikTokShop\Model\ResourceModel\Template\SellingFormat as SellingFormatResource;
 use M2E\TikTokShop\Model\ResourceModel\Template\Synchronization as SynchronizationResource;
-use M2E\TikTokShop\Model\ResourceModel\Template\Compliance as ComplianceResource;
+use M2E\TikTokShop\Model\Template\SellingFormat;
 use Magento\Framework\DB\Ddl\Table;
 
 class PolicyHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
@@ -20,7 +20,6 @@ class PolicyHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
         $this->installTemplateSellingFormatTable($setup);
         $this->installTemplateSynchronizationTable($setup);
         $this->installTemplateDescriptionTable($setup);
-        $this->installTemplateComplianceTable($setup);
     }
 
     public function installData(\Magento\Framework\Setup\SetupInterface $setup): void
@@ -98,6 +97,12 @@ class PolicyHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'default' => null]
+            )
+            ->addColumn(
+                SellingFormatResource::COLUMN_IS_NOT_FOR_SALE,
+                Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => SellingFormat::IS_NOT_FOR_SALE_OFF]
             )
             ->addColumn(
                 SellingFormatResource::COLUMN_FIXED_PRICE_MODE,
@@ -495,68 +500,6 @@ class PolicyHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
             )
             ->addIndex('is_custom_template', DescriptionResource::COLUMN_IS_CUSTOM_TEMPLATE)
             ->addIndex('title', DescriptionResource::COLUMN_TITLE)
-            ->setOption('type', 'INNODB')
-            ->setOption('charset', 'utf8')
-            ->setOption('collate', 'utf8_general_ci')
-            ->setOption('row_format', 'dynamic');
-
-        $setup->getConnection()->createTable($table);
-    }
-
-    private function installTemplateComplianceTable(\Magento\Framework\Setup\SetupInterface $setup): void
-    {
-        $tableName = $this->getFullTableName(TablesHelper::TABLE_NAME_TEMPLATE_COMPLIANCE);
-
-        $table = $setup->getConnection()->newTable($tableName);
-
-        $table
-            ->addColumn(
-                ComplianceResource::COLUMN_ID,
-                Table::TYPE_INTEGER,
-                null,
-                [
-                    'unsigned' => true,
-                    'primary' => true,
-                    'nullable' => false,
-                    'auto_increment' => true,
-                ]
-            )
-            ->addColumn(
-                ComplianceResource::COLUMN_ACCOUNT_ID,
-                Table::TYPE_INTEGER,
-                null,
-                ['unsigned' => true, 'nullable' => false]
-            )
-            ->addColumn(
-                ComplianceResource::COLUMN_TITLE,
-                Table::TYPE_TEXT,
-                255,
-                ['nullable' => false]
-            )
-            ->addColumn(
-                ComplianceResource::COLUMN_MANUFACTURER_ID,
-                Table::TYPE_TEXT,
-                255,
-                ['nullable' => false]
-            )
-            ->addColumn(
-                ComplianceResource::COLUMN_RESPONSIBLE_PERSON_IDS,
-                Table::TYPE_TEXT,
-                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
-                ['nullable' => false]
-            )
-            ->addColumn(
-                ComplianceResource::COLUMN_UPDATE_DATE,
-                Table::TYPE_DATETIME,
-                null,
-                ['default' => null],
-            )
-            ->addColumn(
-                ComplianceResource::COLUMN_CREATE_DATE,
-                Table::TYPE_DATETIME,
-                null,
-                ['default' => null],
-            )
             ->setOption('type', 'INNODB')
             ->setOption('charset', 'utf8')
             ->setOption('collate', 'utf8_general_ci')

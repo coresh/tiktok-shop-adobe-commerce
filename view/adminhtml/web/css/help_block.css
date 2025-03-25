@@ -190,13 +190,13 @@ div.TikTokShop-field-tooltip-right .admin__field-tooltip-content:after {
 }
 
 .data-grid-th .TikTokShop-field-tooltip {
-    position: relative;
     margin-bottom: -10px;
-    bottom: 8px;
 }
 
 .data-grid-th .admin__field-tooltip-action:before {
     color: #ffffff;
+    position: relative;
+    top: -5px;
 }
 
 .TikTokShop-page-help-link {

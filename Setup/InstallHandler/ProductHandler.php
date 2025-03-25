@@ -100,6 +100,12 @@ class ProductHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 ['unsigned' => true, 'nullable' => false, 'default' => 0]
             )
             ->addColumn(
+                ListingProductResource::COLUMN_IS_GIFT,
+                Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => \M2E\TikTokShop\Model\Product::IS_GIFT_OFF]
+            )
+            ->addColumn(
                 ListingProductResource::COLUMN_ONLINE_TITLE,
                 Table::TYPE_TEXT,
                 255,
@@ -192,6 +198,12 @@ class ProductHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 Table::TYPE_TEXT,
                 \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
                 ['default' => null]
+            )
+            ->addColumn(
+                ListingProductResource::COLUMN_MANUFACTURER_CONFIG_ID,
+                Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => true]
             )
             ->addColumn(
                 ListingProductResource::COLUMN_UPDATE_DATE,
@@ -704,6 +716,12 @@ class ProductHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'default' => null]
+            )
+            ->addColumn(
+                UnmanagedProductResource::COLUMN_IS_GIFT,
+                Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => \M2E\TikTokShop\Model\Product::IS_GIFT_OFF]
             )
             ->addColumn(
                 UnmanagedProductResource::COLUMN_CATEGORY_ID,

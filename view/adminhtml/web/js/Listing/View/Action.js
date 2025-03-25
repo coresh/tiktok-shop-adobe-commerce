@@ -99,21 +99,22 @@ define([
                         self.messageObj.addError(message);
                     }
 
-                    var actionIds = '';
+                    var actionIds = [];
                     for (var i = 0; i < self.sendPartsResponses.length; i++) {
-                        if (actionIds != '') {
-                            actionIds += ',';
+                        if (self.sendPartsResponses[i].action_id) {
+                            actionIds.push(self.sendPartsResponses[i].action_id);
                         }
-                        actionIds += self.sendPartsResponses[i].action_id;
                     }
 
-                    new Ajax.Request(TikTokShop.url.get('getErrorsSummary') + 'action_ids/' + actionIds + '/', {
-                        method: 'get',
-                        onSuccess: function (transportSummary) {
-                            $(self.errorsSummaryContainerId).innerHTML = transportSummary.responseText;
-                            $(self.errorsSummaryContainerId).show();
-                        }
-                    });
+                    if (actionIds.length > 0) {
+                        new Ajax.Request(TikTokShop.url.get('getErrorsSummary') + 'action_ids/' + actionIds.join(',') + '/', {
+                            method: 'get',
+                            onSuccess: function (transportSummary) {
+                                $(self.errorsSummaryContainerId).innerHTML = transportSummary.responseText;
+                                $(self.errorsSummaryContainerId).show();
+                            }
+                        });
+                    }
 
                 } else if (combineResult == 'warning') {
                     var message = TikTokShop.translator.translate('task_completed_warning_message');

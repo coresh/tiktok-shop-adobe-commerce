@@ -38,7 +38,7 @@ class Recommended
             return null;
         }
 
-        $category = $this->categoryRepository->getCategoryByShopIdAndCategoryId($shopId, $recommendedCategoryId);
+        $category = $this->categoryRepository->findCategoryByShopIdAndCategoryId($shopId, $recommendedCategoryId);
         if (!isset($category)) {
             return null;
         }

@@ -88,6 +88,12 @@ class GetCommand implements \M2E\Core\Model\Connector\CommandInterface
                 'package_dimension' => [
                     'is_required' => $responseData['rules']['package_dimension']['is_required'],
                 ],
+                'manufacturer' => [
+                    'is_required' => $responseData['rules']['manufacturer']['is_required'],
+                ],
+                'responsible_person' => [
+                    'is_required' => $responseData['rules']['responsible_person']['is_required'],
+                ]
             ]
         );
     }

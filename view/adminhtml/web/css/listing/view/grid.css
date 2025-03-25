@@ -55,3 +55,9 @@
 }
 
 /* ================================================ */
+.data-grid .price-not-for-sale{
+    padding: 0 6px;
+    border-radius: 6px;
+    color: #595959;
+    background-color: #59595926;
+}

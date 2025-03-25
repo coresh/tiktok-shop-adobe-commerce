@@ -35,6 +35,13 @@ class Price extends Column
 
         foreach ($dataSource['data']['items'] as &$row) {
             $unmanagedProduct = $this->unmanagedRepository->get((int)$row['id']);
+
+            if ($unmanagedProduct->isGift()) {
+                $row['price'] = 0;
+
+                continue;
+            }
+
             $currencyCode = $unmanagedProduct->getCurrency();
             $isSimple = (int)$row['is_simple'] === 1;
 

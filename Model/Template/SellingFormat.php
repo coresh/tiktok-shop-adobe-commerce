@@ -43,6 +43,9 @@ class SellingFormat extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public const QTY_MIN_POSTED_DEFAULT_VALUE = 1;
     public const QTY_MAX_POSTED_DEFAULT_VALUE = 100;
 
+    public const IS_NOT_FOR_SALE_ON = 1;
+    public const IS_NOT_FOR_SALE_OFF = 0;
+
     public const PRICE_DISCOUNT_MAP_EXPOSURE_NONE = 0;
     public const PRICE_DISCOUNT_MAP_EXPOSURE_DURING_CHECKOUT = 1;
     public const PRICE_DISCOUNT_MAP_EXPOSURE_PRE_CHECKOUT = 2;
@@ -207,5 +210,10 @@ class SellingFormat extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
                 $this->getId()
             )
             ->getSize();
+    }
+
+    public function isNotForSale(): bool
+    {
+        return (bool)$this->getData(SellingFormatResource::COLUMN_IS_NOT_FOR_SALE);
     }
 }

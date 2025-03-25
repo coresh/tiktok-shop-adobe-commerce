@@ -8,7 +8,6 @@ use M2E\TikTokShop\Model\ResourceModel\Listing as ListingResource;
 use M2E\TikTokShop\Model\Template\Description;
 use M2E\TikTokShop\Model\Template\SellingFormat;
 use M2E\TikTokShop\Model\Template\Synchronization;
-use M2E\TikTokShop\Model\Template\Compliance;
 
 class UpdateService
 {
@@ -27,10 +26,6 @@ class UpdateService
     private Synchronization\SnapshotBuilderFactory $synchronizationSnapshotBuilderFactory;
     private Synchronization\DiffFactory $synchronizationDiffFactory;
     private Synchronization\ChangeProcessorFactory $synchronizationChangeProcessorFactory;
-    private Compliance\ChangeProcessorFactory $complianceChangeProcessorFactory;
-    private Compliance\Repository $complianceTemplateRepository;
-    private Compliance\SnapshotBuilderFactory $complianceSnapshotBuilderFactory;
-    private Compliance\DiffFactory $complianceDiffFactory;
 
     public function __construct(
         \M2E\TikTokShop\Model\Listing\Repository $listingRepository,
@@ -47,11 +42,7 @@ class UpdateService
         Synchronization\Repository $synchronizationTemplateRepository,
         Synchronization\SnapshotBuilderFactory $synchronizationSnapshotBuilderFactory,
         Synchronization\DiffFactory $synchronizationDiffFactory,
-        Synchronization\ChangeProcessorFactory $synchronizationChangeProcessorFactory,
-        Compliance\ChangeProcessorFactory $complianceChangeProcessorFactory,
-        Compliance\Repository $complianceTemplateRepository,
-        Compliance\SnapshotBuilderFactory $complianceSnapshotBuilderFactory,
-        Compliance\DiffFactory $complianceDiffFactory
+        Synchronization\ChangeProcessorFactory $synchronizationChangeProcessorFactory
     ) {
         $this->listingSnapshotBuilderFactory = $listingSnapshotBuilderFactory;
         $this->listingRepository = $listingRepository;
@@ -68,10 +59,6 @@ class UpdateService
         $this->synchronizationSnapshotBuilderFactory = $synchronizationSnapshotBuilderFactory;
         $this->synchronizationDiffFactory = $synchronizationDiffFactory;
         $this->synchronizationChangeProcessorFactory = $synchronizationChangeProcessorFactory;
-        $this->complianceChangeProcessorFactory = $complianceChangeProcessorFactory;
-        $this->complianceTemplateRepository = $complianceTemplateRepository;
-        $this->complianceSnapshotBuilderFactory = $complianceSnapshotBuilderFactory;
-        $this->complianceDiffFactory = $complianceDiffFactory;
     }
 
     /**
@@ -82,7 +69,6 @@ class UpdateService
         $isNeedProcessChangesSellingFormatTemplate = false;
         $isNeedProcessChangesDescriptionTemplate = false;
         $isNeedProcessChangesSynchronizationTemplate = false;
-        $isNeedProcessChangesComplianceTemplate = false;
 
         $oldListingSnapshot = $this->makeListingSnapshot($listing);
 
@@ -113,20 +99,10 @@ class UpdateService
             $isNeedProcessChangesSynchronizationTemplate = true;
         }
 
-        $newTemplateComplianceId = $post[ListingResource::COLUMN_TEMPLATE_COMPLIANCE_ID] ?? null;
-        if (
-            $newTemplateComplianceId !== null
-            && $listing->getTemplateComplianceId() !== (int)$newTemplateComplianceId
-        ) {
-            $listing->setTemplateComplianceId((int)$newTemplateComplianceId);
-            $isNeedProcessChangesComplianceTemplate = true;
-        }
-
         if (
             $isNeedProcessChangesDescriptionTemplate === false
             && $isNeedProcessChangesSellingFormatTemplate === false
             && $isNeedProcessChangesSynchronizationTemplate === false
-            && $isNeedProcessChangesComplianceTemplate === false
         ) {
             return;
         }
@@ -158,14 +134,6 @@ class UpdateService
             $this->processChangeSynchronizationTemplate(
                 (int)$oldListingSnapshot[ListingResource::COLUMN_TEMPLATE_SYNCHRONIZATION_ID],
                 (int)$newListingSnapshot[ListingResource::COLUMN_TEMPLATE_SYNCHRONIZATION_ID],
-                $affectedListingsProducts
-            );
-        }
-
-        if ($isNeedProcessChangesComplianceTemplate) {
-            $this->processChangeComplianceTemplate(
-                (int)$oldListingSnapshot[ListingResource::COLUMN_TEMPLATE_COMPLIANCE_ID],
-                (int)$newListingSnapshot[ListingResource::COLUMN_TEMPLATE_COMPLIANCE_ID],
                 $affectedListingsProducts
             );
         }
@@ -271,38 +239,6 @@ class UpdateService
     {
         $snapshotBuilder = $this->synchronizationSnapshotBuilderFactory->create();
         $snapshotBuilder->setModel($synchronizationTemplate);
-
-        return $snapshotBuilder->getSnapshot();
-    }
-
-    /**
-     * @throws \M2E\TikTokShop\Model\Exception\Logic
-     */
-    private function processChangeComplianceTemplate(
-        int $oldId,
-        int $newId,
-        \M2E\TikTokShop\Model\TikTokShop\Listing\AffectedListingsProducts $affectedListingsProducts
-    ) {
-        $oldTemplate = $this->complianceTemplateRepository->get($oldId);
-        $newTemplate = $this->complianceTemplateRepository->get($newId);
-
-        $oldTemplateData = $this->makeComplianceTemplateSnapshot($oldTemplate);
-        $newTemplateData = $this->makeComplianceTemplateSnapshot($newTemplate);
-
-        $diff = $this->complianceDiffFactory->create();
-        $diff->setOldSnapshot($oldTemplateData);
-        $diff->setNewSnapshot($newTemplateData);
-
-        $changeProcessor = $this->complianceChangeProcessorFactory->create();
-
-        $affectedProducts = $affectedListingsProducts->getObjectsData(['id', 'status']);
-        $changeProcessor->process($diff, $affectedProducts);
-    }
-
-    private function makeComplianceTemplateSnapshot(Compliance $complianceTemplate): array
-    {
-        $snapshotBuilder = $this->complianceSnapshotBuilderFactory->create();
-        $snapshotBuilder->setModel($complianceTemplate);
 
         return $snapshotBuilder->getSnapshot();
     }

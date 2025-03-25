@@ -14,6 +14,8 @@ class Move
     private \M2E\TikTokShop\Model\Listing\AddProductsService $addProductToListing;
     private \M2E\TikTokShop\Model\Product\Repository $productRepository;
     private \M2E\TikTokShop\Model\Category\Dictionary\Repository $categoryRepository;
+    private \M2E\TikTokShop\Model\Category\CopyToOtherShop $copyCategoryToOtherShop;
+    private \M2E\TikTokShop\Helper\Module\Exception $exceptionHelper;
 
     public function __construct(
         \M2E\TikTokShop\Model\GlobalProduct\Move\Validator $validator,
@@ -21,7 +23,9 @@ class Move
         \M2E\TikTokShop\Model\GlobalProduct\CreateFromProduct $globalProductCreator,
         \M2E\TikTokShop\Model\Listing\AddProductsService $addProductToListing,
         \M2E\TikTokShop\Model\Product\Repository $productRepository,
-        \M2E\TikTokShop\Model\Category\Dictionary\Repository $categoryRepository
+        \M2E\TikTokShop\Model\Category\Dictionary\Repository $categoryRepository,
+        \M2E\TikTokShop\Model\Category\CopyToOtherShop $duplicateToOtherShop,
+        \M2E\TikTokShop\Helper\Module\Exception $exceptionHelper
     ) {
         $this->validator = $validator;
         $this->globalProductRepository = $globalProductRepository;
@@ -29,6 +33,8 @@ class Move
         $this->addProductToListing = $addProductToListing;
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->copyCategoryToOtherShop = $duplicateToOtherShop;
+        $this->exceptionHelper = $exceptionHelper;
     }
 
     public function execute(
@@ -56,6 +62,7 @@ class Move
         }
 
         $addedProduct = $this->tryMapCategory($addedProduct);
+        $addedProduct = $this->tryCopyCategory($addedProduct, $globalProduct);
         $addedProduct->setGlobalProductId($globalProduct->getId());
         $this->productRepository->save($addedProduct);
 
@@ -109,6 +116,31 @@ class Move
         }
 
         $addedProduct->setTemplateCategoryId($newCategory->getId());
+
+        return $addedProduct;
+    }
+
+    private function tryCopyCategory(
+        \M2E\TikTokShop\Model\Product $addedProduct,
+        \M2E\TikTokShop\Model\GlobalProduct $globalProduct
+    ): \M2E\TikTokShop\Model\Product {
+        if ($addedProduct->hasCategoryTemplate()) {
+            return $addedProduct;
+        }
+
+        try {
+            $categoryDictionary = $globalProduct->getSourceProduct()->getCategoryDictionary();
+            $shop = $addedProduct->getShop();
+
+            $copiedDictionary = $this->copyCategoryToOtherShop
+                ->execute($categoryDictionary, $shop);
+        } catch (\Throwable $exception) {
+            $this->exceptionHelper->process($exception);
+
+            return $addedProduct;
+        }
+
+        $addedProduct->setTemplateCategoryId($copiedDictionary->getId());
 
         return $addedProduct;
     }

@@ -13,8 +13,6 @@ class Edit extends AbstractTemplate
     private \M2E\TikTokShop\Model\Template\DescriptionFactory $descriptionFactory;
     private \M2E\TikTokShop\Model\Template\SellingFormatFactory $sellingFormatFactory;
     private \M2E\TikTokShop\Model\Template\SellingFormat\Repository $sellingFormatRepository;
-    private \M2E\TikTokShop\Model\Template\Compliance\Repository $complianceRepository;
-    private \M2E\TikTokShop\Model\Template\ComplianceFactory $complianceFactory;
 
     public function __construct(
         \M2E\TikTokShop\Model\Template\SellingFormatFactory $sellingFormatFactory,
@@ -23,8 +21,6 @@ class Edit extends AbstractTemplate
         \M2E\TikTokShop\Model\Template\Description\Repository $descriptionRepository,
         \M2E\TikTokShop\Model\Template\Synchronization\Repository $synchronizationRepository,
         \M2E\TikTokShop\Model\Template\SynchronizationFactory $synchronizationFactory,
-        \M2E\TikTokShop\Model\Template\Compliance\Repository $complianceRepository,
-        \M2E\TikTokShop\Model\Template\ComplianceFactory $complianceFactory,
         \M2E\TikTokShop\Helper\Component\TikTokShop\Template\Switcher\DataLoader $dataLoader,
         \M2E\TikTokShop\Model\TikTokShop\Template\Manager $templateManager
     ) {
@@ -37,8 +33,6 @@ class Edit extends AbstractTemplate
         $this->descriptionFactory = $descriptionFactory;
         $this->sellingFormatFactory = $sellingFormatFactory;
         $this->sellingFormatRepository = $sellingFormatRepository;
-        $this->complianceRepository = $complianceRepository;
-        $this->complianceFactory = $complianceFactory;
     }
 
     public function execute()
@@ -58,10 +52,6 @@ class Edit extends AbstractTemplate
 
         if ($nick === \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SELLING_FORMAT) {
             return $this->executeSellingFormatTemplate($id);
-        }
-
-        if ($nick === \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE) {
-            return $this->executeComplianceTemplate($id);
         }
 
         throw new \M2E\TikTokShop\Model\Exception\Logic('Unknown nick ' . $nick);
@@ -205,56 +195,6 @@ class Edit extends AbstractTemplate
             [
                 'data' => [
                     'template_nick' => \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SELLING_FORMAT,
-                ],
-            ]
-        );
-
-        $content->toHtml();
-
-        $this->getResult()->getConfig()->getTitle()->prepend($headerText);
-        $this->addContent($content);
-
-        return $this->getResult();
-    }
-
-    private function executeComplianceTemplate($id)
-    {
-        $template = $this->complianceRepository->find((int)$id);
-        if ($template === null) {
-            $template = $this->complianceFactory->createEmpty();
-        }
-
-        if (!$template->getId() && $id) {
-            $this->getMessageManager()->addError(__('Policy does not exist.'));
-
-            return $this->_redirect('*/*/index');
-        }
-
-        $dataLoader = $this->dataLoader;
-        $dataLoader->load($template);
-
-        // ---------------------------------------
-
-        $this->setPageHelpLink('https://docs-m2.m2epro.com/docs/compliance-policy-for-tiktok-shop'); //todo link
-
-        if ($template->getId()) {
-            $headerText =
-                __(
-                    'Edit "%template_title" Compliance Policy',
-                    [
-                        'template_title' => \M2E\TikTokShop\Helper\Data::escapeHtml($template->getTitle()),
-                    ],
-                );
-        } else {
-            $headerText = __('Add Compliance Policy');
-        }
-
-        $content = $this->getLayout()->createBlock(
-            \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Edit::class,
-            '',
-            [
-                'data' => [
-                    'template_nick' => \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE,
                 ],
             ]
         );

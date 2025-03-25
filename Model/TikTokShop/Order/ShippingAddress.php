@@ -33,7 +33,7 @@ class ShippingAddress extends \M2E\TikTokShop\Model\Order\ShippingAddress
 
         if (stripos($email, 'Invalid Request') !== false || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $email = str_replace(' ', '-', strtolower($this->order->getBuyerUserId()));
-            $email .= \M2E\TikTokShop\Model\Magento\Customer::FAKE_EMAIL_POSTFIX;
+            $email .= \M2E\Core\Model\Magento\Customer::FAKE_EMAIL_POSTFIX;
         }
 
         return $email;

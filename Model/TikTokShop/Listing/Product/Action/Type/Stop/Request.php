@@ -13,4 +13,9 @@ class Request extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Ty
             'shop_id' => $this->getListingProduct()->getListing()->getShop()->getShopId(),
         ];
     }
+
+    protected function getAction(): int
+    {
+        return \M2E\TikTokShop\Model\Product::ACTION_STOP;
+    }
 }

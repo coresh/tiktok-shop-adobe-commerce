@@ -62,6 +62,7 @@ class VariantSku extends AbstractDataBuilder
                 (
                     $hasActivePromotionByProduct
                     || $variant->hasActiveOrNotStartPromotion()
+                    || $this->getListingProduct()->getSellingFormatTemplate()->isNotForSale()
                 )
                 && $variantSettings->isReviseAction($variant->getId())
             ) {

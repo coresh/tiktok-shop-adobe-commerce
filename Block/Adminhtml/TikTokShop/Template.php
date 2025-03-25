@@ -82,23 +82,7 @@ class Template extends AbstractContainer
             ],
         ];
 
-        $this->addComplianceTemplateButton($data);
-
         return $data;
-    }
-
-    private function addComplianceTemplateButton(array &$data): void
-    {
-        if (!$this->shopRepository->isExistInEuRegion()) {
-            return;
-        }
-
-        $data[Manager::TEMPLATE_COMPLIANCE] = [
-            'label' => __('Compliance'),
-            'id' => 'compliance',
-            'onclick' => "setLocation('" . $this->getTemplateUrl(Manager::TEMPLATE_COMPLIANCE) . "')",
-            'default' => false,
-        ];
     }
 
     protected function getTemplateUrl($nick)

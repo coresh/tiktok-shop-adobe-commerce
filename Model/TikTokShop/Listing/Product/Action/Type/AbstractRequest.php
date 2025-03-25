@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type;
 
 use M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder;
+use M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder\NonSalableFlag;
 
 abstract class AbstractRequest extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\AbstractRequest
 {
@@ -51,6 +52,8 @@ abstract class AbstractRequest extends \M2E\TikTokShop\Model\TikTokShop\Listing\
 
     // ----------------------------------------
 
+    abstract protected function getAction(): int;
+
     private function getDataBuilder(
         string $nick
     ): \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder\AbstractDataBuilder {
@@ -58,10 +61,11 @@ abstract class AbstractRequest extends \M2E\TikTokShop\Model\TikTokShop\Listing\
             $this->dataBuilders[$nick] = $this->dataBuilderFactory->create(
                 $nick,
                 $this->getListingProduct(),
+                $this->getAction(),
                 $this->getConfigurator(),
                 $this->getVariantSettings(),
                 $this->getParams(),
-                $this->getCachedData(),
+                $this->getCachedData()
             );
         }
 
@@ -298,6 +302,18 @@ abstract class AbstractRequest extends \M2E\TikTokShop\Model\TikTokShop\Listing\
         $builderData = $dataBuilder->getBuilderData();
         $request['product_data'] = $builderData['product_data'];
         $request['publish_product_data'] = $builderData['publish_product_data'];
+
+        return $request;
+    }
+
+    protected function appendNonSalableFlag(array $request): array
+    {
+        /** @var NonSalableFlag $dataBuilder */
+        $dataBuilder = $this->getDataBuilder(NonSalableFlag::NICK);
+        $data = $dataBuilder->getBuilderData();
+        if (isset($data[NonSalableFlag::VALUE_CODE])) {
+            $request['product_data'][NonSalableFlag::VALUE_CODE] = $data[NonSalableFlag::VALUE_CODE];
+        }
 
         return $request;
     }

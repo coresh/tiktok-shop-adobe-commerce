@@ -50,6 +50,7 @@ class Grid extends AbstractGrid
             'sortable' => false,
             'filter_index' => 'id',
             'index' => 'note',
+            'escape' => false,
         ]);
 
         $this->addColumn('create_date', [

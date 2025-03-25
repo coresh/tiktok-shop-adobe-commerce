@@ -32,15 +32,13 @@ class Listing extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     private \M2E\TikTokShop\Model\Template\SellingFormat $templateSellingFormat;
     private \M2E\TikTokShop\Model\Template\Synchronization $templateSynchronization;
     private \M2E\TikTokShop\Model\Template\Description $templateDescription;
-    private Template\Compliance $templateCompliance;
+
     private \M2E\TikTokShop\Model\Product\Repository $listingProductRepository;
     private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
     private \M2E\TikTokShop\Model\Shop\Repository $shopRepository;
     private \M2E\TikTokShop\Model\Template\SellingFormat\Repository $sellingFormatTemplateRepository;
     private \M2E\TikTokShop\Model\Template\Description\Repository $descriptionTemplateRepository;
     private \M2E\TikTokShop\Model\Template\Synchronization\Repository $synchronizationTemplateRepository;
-    /** @var \M2E\TikTokShop\Model\Template\Compliance\Repository */
-    private Template\Compliance\Repository $complianceTemplateRepository;
 
     public function __construct(
         \M2E\TikTokShop\Model\Product\Repository $listingProductRepository,
@@ -49,7 +47,6 @@ class Listing extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         \M2E\TikTokShop\Model\Template\SellingFormat\Repository $sellingFormatTemplateRepository,
         \M2E\TikTokShop\Model\Template\Description\Repository $descriptionTemplateRepository,
         \M2E\TikTokShop\Model\Template\Synchronization\Repository $synchronizationTemplateRepository,
-        \M2E\TikTokShop\Model\Template\Compliance\Repository $complianceTemplateRepository,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -69,7 +66,6 @@ class Listing extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->sellingFormatTemplateRepository = $sellingFormatTemplateRepository;
         $this->descriptionTemplateRepository = $descriptionTemplateRepository;
         $this->synchronizationTemplateRepository = $synchronizationTemplateRepository;
-        $this->complianceTemplateRepository = $complianceTemplateRepository;
     }
 
     // ----------------------------------------
@@ -162,16 +158,6 @@ class Listing extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         return $this->templateDescription;
     }
 
-    public function getTemplateCompliance(): Template\Compliance
-    {
-        /** @psalm-suppress RedundantPropertyInitializationCheck */
-        if (!isset($this->templateCompliance)) {
-            $this->templateCompliance = $this->complianceTemplateRepository->get($this->getTemplateComplianceId());
-        }
-
-        return $this->templateCompliance;
-    }
-
     // ----------------------------------------
 
     public function getId(): int
@@ -237,21 +223,6 @@ class Listing extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public function getTemplateSynchronizationId(): int
     {
         return (int)$this->getData(ListingResource::COLUMN_TEMPLATE_SYNCHRONIZATION_ID);
-    }
-
-    public function hasTemplateCompliance(): bool
-    {
-        return !empty($this->getTemplateComplianceId());
-    }
-
-    public function setTemplateComplianceId(int $complianceTemplateId): void
-    {
-        $this->setData(ListingResource::COLUMN_TEMPLATE_COMPLIANCE_ID, $complianceTemplateId);
-    }
-
-    public function getTemplateComplianceId(): int
-    {
-        return (int)$this->getData(ListingResource::COLUMN_TEMPLATE_COMPLIANCE_ID);
     }
 
     // ---------------------------------------

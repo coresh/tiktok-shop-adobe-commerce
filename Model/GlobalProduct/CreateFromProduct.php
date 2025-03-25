@@ -119,6 +119,7 @@ class CreateFromProduct
             $this->dataBuilders[$nick] = $this->dataBuilderFactory->create(
                 $nick,
                 $product,
+                \M2E\TikTokShop\Model\Product::ACTION_LIST,
                 $this->getConfigurator(),
                 $this->getVariantSettings($product)
             );

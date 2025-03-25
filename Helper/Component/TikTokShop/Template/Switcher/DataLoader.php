@@ -296,10 +296,6 @@ class DataLoader
             return \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_DESCRIPTION;
         }
 
-        if ($source instanceof \M2E\TikTokShop\Model\Template\Compliance) {
-            return \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE;
-        }
-
         throw new \M2E\TikTokShop\Model\Exception\Logic('Invalid source ' . $source);
     }
 
@@ -312,8 +308,7 @@ class DataLoader
     {
         return $source instanceof \M2E\TikTokShop\Model\Template\SellingFormat
             || $source instanceof \M2E\TikTokShop\Model\Template\Description
-            || $source instanceof \M2E\TikTokShop\Model\Template\Synchronization
-            || $source instanceof \M2E\TikTokShop\Model\Template\Compliance;
+            || $source instanceof \M2E\TikTokShop\Model\Template\Synchronization;
     }
 
     /**

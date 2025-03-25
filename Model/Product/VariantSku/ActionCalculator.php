@@ -97,8 +97,10 @@ class ActionCalculator
             return true;
         }
 
+        $sellPolicy = $variant->getSellingFormatTemplate();
         if (
-            $syncPolicy->isReviseUpdatePrice()
+            !$sellPolicy->isNotForSale()
+            && $syncPolicy->isReviseUpdatePrice()
             && $this->isChangedPrice($variant)
         ) {
             return true;

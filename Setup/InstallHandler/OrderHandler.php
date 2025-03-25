@@ -220,6 +220,12 @@ class OrderHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 Table::TYPE_DATETIME
             )
             ->addColumn(
+                OrderResource::COLUMN_IS_SAMPLE,
+                Table::TYPE_SMALLINT,
+                null,
+                ['default' => 0]
+            )
+            ->addColumn(
                 OrderResource::COLUMN_CREATE_DATE,
                 Table::TYPE_DATETIME
             )
@@ -405,6 +411,12 @@ class OrderHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 Table::TYPE_SMALLINT,
                 null,
                 ['default' => \M2E\TikTokShop\Model\Order\Item::SHIPPING_IS_IN_PROGRESS_NO, 'unsigned' => true]
+            )
+            ->addColumn(
+                OrderItemResource::COLUMN_IS_GIFT,
+                Table::TYPE_SMALLINT,
+                null,
+                ['default' => 0]
             )
             ->addColumn(
                 OrderItemResource::COLUMN_UPDATE_DATE,

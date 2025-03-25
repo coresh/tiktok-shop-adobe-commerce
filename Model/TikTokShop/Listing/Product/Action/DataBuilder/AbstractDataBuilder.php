@@ -14,6 +14,7 @@ abstract class AbstractDataBuilder
     private array $params = [];
     private array $warningMessages = [];
     private \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings $variantSettings;
+    private int $action;
 
     public function __construct(\M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper)
     {
@@ -24,6 +25,7 @@ abstract class AbstractDataBuilder
         \M2E\TikTokShop\Model\Product $listingProduct,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Configurator $configurator,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings $variantSettings,
+        int $action,
         array $params,
         array $cacheData = []
     ): void {
@@ -32,6 +34,7 @@ abstract class AbstractDataBuilder
         $this->variantSettings = $variantSettings;
         $this->params = $params;
         $this->cachedData = $cacheData;
+        $this->action = $action;
     }
 
     // ----------------------------------------
@@ -64,6 +67,11 @@ abstract class AbstractDataBuilder
     }
 
     // ----------------------------------------
+
+    protected function getAction(): int
+    {
+        return $this->action;
+    }
 
     protected function getConfigurator(): \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Configurator
     {
@@ -145,5 +153,17 @@ abstract class AbstractDataBuilder
                 implode(', ', $attributesTitles),
             ),
         );
+    }
+
+    // ---------------------------------------
+
+    protected function isReviseAction(): bool
+    {
+        return $this->getAction() === \M2E\TikTokShop\Model\Product::ACTION_REVISE;
+    }
+
+    protected function isListingAction(): bool
+    {
+        return $this->getAction() === \M2E\TikTokShop\Model\Product::ACTION_LIST;
     }
 }

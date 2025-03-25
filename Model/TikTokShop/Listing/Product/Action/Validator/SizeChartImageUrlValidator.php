@@ -41,6 +41,10 @@ class SizeChartImageUrlValidator implements ValidatorInterface
 
     private function getSizeChartByDictionaryId(\M2E\TikTokShop\Model\Product $product): ?SizeChartAttribute
     {
+        if (!$product->hasCategoryTemplate()) {
+            return null;
+        }
+
         $dictionaryId = $product->getTemplateCategoryId();
         if (!isset($this->dictionaryAttributes[$dictionaryId])) {
             $dictionary = $product->getCategoryDictionary();

@@ -6,7 +6,6 @@ namespace M2E\TikTokShop\Setup\Update\y25_m01;
 
 use M2E\TikTokShop\Helper\Module\Database\Tables;
 use M2E\TikTokShop\Model\ResourceModel\Product;
-use M2E\TikTokShop\Model\ResourceModel\Template\Compliance;
 use Magento\Framework\DB\Ddl\Table;
 
 class ChangeComplianceAndProductTables extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
@@ -22,13 +21,13 @@ class ChangeComplianceAndProductTables extends \M2E\Core\Model\Setup\Upgrade\Ent
 
     private function changeComplianceColumnResponsiblePersonIds(): void {
         $modifier = $this->createTableModifier(
-            Tables::TABLE_NAME_TEMPLATE_COMPLIANCE
+            Tables::PREFIX . 'template_compliance'
         );
 
-        $modifier->renameColumn('responsible_person_id', Compliance::COLUMN_RESPONSIBLE_PERSON_IDS);
+        $modifier->renameColumn('responsible_person_id', 'responsible_person_ids');
 
         $modifier->changeColumn(
-            Compliance::COLUMN_RESPONSIBLE_PERSON_IDS,
+            'responsible_person_ids',
             Table::TYPE_TEXT,
             null,
             null,
@@ -57,7 +56,7 @@ class ChangeComplianceAndProductTables extends \M2E\Core\Model\Setup\Upgrade\Ent
     }
 
     private function updateComplianceResponsiblePersonIdsColumn(): void {
-        $templateComplianceTableName = $this->getFullTableName(Tables::TABLE_NAME_TEMPLATE_COMPLIANCE);
+        $templateComplianceTableName = $this->getFullTableName(Tables::PREFIX . 'template_compliance');
         $select = $this
             ->getConnection()
             ->select()
@@ -66,7 +65,7 @@ class ChangeComplianceAndProductTables extends \M2E\Core\Model\Setup\Upgrade\Ent
         $stmt = $select->query();
 
         while ($row = $stmt->fetch()) {
-            $responsiblePersonIdsData = $row[Compliance::COLUMN_RESPONSIBLE_PERSON_IDS] ?? null;
+            $responsiblePersonIdsData = $row['responsible_person_ids'] ?? null;
             if ($responsiblePersonIdsData === null) {
                 continue;
             }
@@ -75,7 +74,7 @@ class ChangeComplianceAndProductTables extends \M2E\Core\Model\Setup\Upgrade\Ent
 
             $this->getConnection()->update(
                 $templateComplianceTableName,
-                [Compliance::COLUMN_RESPONSIBLE_PERSON_IDS => $responsiblePersonIdsData],
+                ['responsible_person_ids' => $responsiblePersonIdsData],
                 "id = {$row['id']}"
             );
         }

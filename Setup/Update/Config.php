@@ -71,11 +71,17 @@ class Config implements \M2E\Core\Model\Setup\Upgrade\Entity\ConfigInterface
                 \M2E\TikTokShop\Setup\Update\y25_m02\MigrateRegistryToCore::class,
                 \M2E\TikTokShop\Setup\Update\y25_m02\RemoveServerHost::class,
                 \M2E\TikTokShop\Setup\Update\y25_m02\RemoveOldCronValues::class,
+                \M2E\TikTokShop\Setup\Update\y25_m02\AddNotSalableToSellingPolicy::class,
+                \M2E\TikTokShop\Setup\Update\y25_m02\AddIsGiftFlagToProduct::class,
+                \M2E\TikTokShop\Setup\Update\y25_m02\AddIsGiftFlagToUnmanagedProduct::class,
                 \M2E\TikTokShop\Setup\Update\y25_m02\AddGlobalProduct::class,
+                \M2E\TikTokShop\Setup\Update\y25_m02\AddSampleOrdersAndGiftItems::class,
             ],
             'y25_m03' => [
                 \M2E\TikTokShop\Setup\Update\y25_m03\UpdateTemplateCategoryAttributeTable::class,
                 \M2E\TikTokShop\Setup\Update\y25_m03\CheckConfigs::class,
+                \M2E\TikTokShop\Setup\Update\y25_m03\FixResponsiblePersonIds::class,
+                \M2E\TikTokShop\Setup\Update\y25_m03\AddManufacturerConfiguration::class,
             ]
         ];
     }

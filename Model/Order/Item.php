@@ -887,4 +887,16 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->setItemStatus(self::ITEM_STATUS_AWAITING_COLLECTION);
     }
     //endregion
+
+    public function setIsGift(bool $isGift): self
+    {
+        $this->setData(OrderItemResource::COLUMN_IS_GIFT, (int)$isGift);
+
+        return $this;
+    }
+
+    public function isGiftItem(): bool
+    {
+        return (bool)$this->getData(OrderItemResource::COLUMN_IS_GIFT);
+    }
 }

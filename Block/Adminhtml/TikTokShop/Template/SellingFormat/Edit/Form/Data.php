@@ -4,6 +4,7 @@ namespace M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\SellingFormat\Edit\
 
 use M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm;
 use M2E\TikTokShop\Model\Template\SellingFormat;
+use M2E\TikTokShop\Model\ResourceModel\Template\SellingFormat as ResourceSellingFormat;
 
 class Data extends AbstractForm
 {
@@ -261,12 +262,41 @@ class Data extends AbstractForm
         );
 
         $fieldset->addField(
+            ResourceSellingFormat::COLUMN_IS_NOT_FOR_SALE,
+            self::SELECT,
+            [
+                'name' => 'selling_format[' . ResourceSellingFormat::COLUMN_IS_NOT_FOR_SALE . ']',
+                'label' => __('Non-Sellable Gift'),
+                'values' => [
+                    SellingFormat::IS_NOT_FOR_SALE_OFF => __('No'),
+                    SellingFormat::IS_NOT_FOR_SALE_ON => __('Yes'),
+                ],
+                'value' => $formData[ResourceSellingFormat::COLUMN_IS_NOT_FOR_SALE],
+                'tooltip' => __(
+                    'Enable this option to list a non-sellable product as a Gift with Purchase. It won’t ' .
+                    'appear in Tiktok Shop searches or recommendations, and its price will be shown as $0.'
+                ),
+            ]
+        );
+
+        $fieldset->addField(
             'price_table_container',
             self::CUSTOM_CONTAINER,
             [
                 'text' => $this->getPriceTableHtml(),
                 'css_class' => 'TikTokShop-fieldset-table',
             ]
+        );
+
+        $this->setChild(
+            'form_after',
+            $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Form\Element\Dependence::class)
+                 ->addFieldMap(
+                     ResourceSellingFormat::COLUMN_IS_NOT_FOR_SALE,
+                     ResourceSellingFormat::COLUMN_IS_NOT_FOR_SALE
+                 )
+                 ->addFieldMap('price_table_container', 'price_table_container')
+                 ->addFieldDependence('price_table_container', ResourceSellingFormat::COLUMN_IS_NOT_FOR_SALE, 0)
         );
 
         $this->setForm($form);

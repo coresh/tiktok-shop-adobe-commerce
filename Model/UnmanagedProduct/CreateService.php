@@ -37,7 +37,8 @@ class CreateService
             $ttsProduct->getStatus(),
             $ttsProduct->getTitle(),
             $ttsProduct->getCategoryId(),
-            $ttsProduct->getCategoriesData()
+            $ttsProduct->getCategoriesData(),
+            $ttsProduct->isNotForSale()
         );
 
         $this->unmanagedRepository->create($unmanagedProduct);

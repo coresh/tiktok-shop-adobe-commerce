@@ -33,7 +33,13 @@ class Request extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Ty
         $request = $this->appendBrandData($request);
         $request = $this->appendPackageData($request);
         $request = $this->appendComplianceData($request);
+        $request = $this->appendNonSalableFlag($request);
 
         return $request;
+    }
+
+    protected function getAction(): int
+    {
+        return \M2E\TikTokShop\Model\Product::ACTION_REVISE;
     }
 }

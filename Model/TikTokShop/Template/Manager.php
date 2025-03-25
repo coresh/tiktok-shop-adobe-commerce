@@ -16,25 +16,21 @@ class Manager
     public const TEMPLATE_DESCRIPTION = 'description';
     public const TEMPLATE_SELLING_FORMAT = 'selling_format';
     public const TEMPLATE_SYNCHRONIZATION = 'synchronization';
-    public const TEMPLATE_COMPLIANCE = 'compliance';
 
     protected \M2E\TikTokShop\Model\ActiveRecord\Factory $activeRecordFactory;
 
     private \M2E\TikTokShop\Model\Template\SellingFormatFactory $sellingFormatFactory;
     private \M2E\TikTokShop\Model\Template\SynchronizationFactory $synchronizationFactory;
     private \M2E\TikTokShop\Model\Template\DescriptionFactory $descriptionFactory;
-    private \M2E\TikTokShop\Model\Template\ComplianceFactory $complianceFactory;
 
     public function __construct(
         \M2E\TikTokShop\Model\Template\SellingFormatFactory $sellingFormatFactory,
         \M2E\TikTokShop\Model\Template\SynchronizationFactory $synchronizationFactory,
         \M2E\TikTokShop\Model\Template\DescriptionFactory $descriptionFactory,
-        \M2E\TikTokShop\Model\Template\ComplianceFactory $complianceFactory,
         \M2E\TikTokShop\Model\ActiveRecord\Factory $activeRecordFactory
     ) {
         $this->activeRecordFactory = $activeRecordFactory;
 
-        $this->complianceFactory = $complianceFactory;
         $this->sellingFormatFactory = $sellingFormatFactory;
         $this->synchronizationFactory = $synchronizationFactory;
         $this->descriptionFactory = $descriptionFactory;
@@ -103,7 +99,6 @@ class Manager
             self::TEMPLATE_DESCRIPTION,
             self::TEMPLATE_SELLING_FORMAT,
             self::TEMPLATE_SYNCHRONIZATION,
-            self::TEMPLATE_COMPLIANCE
         ];
     }
 
@@ -164,9 +159,6 @@ class Manager
             case self::TEMPLATE_SYNCHRONIZATION:
                 $name = 'TikTokShop_Template_Synchronization';
                 break;
-            case self::TEMPLATE_COMPLIANCE:
-                $name = 'TikTokShop_Template_Compliance';
-                break;
         }
 
         if ($name === null) {
@@ -187,8 +179,6 @@ class Manager
                 return $this->synchronizationFactory->create();
             case self::TEMPLATE_DESCRIPTION:
                 return $this->descriptionFactory->create();
-            case self::TEMPLATE_COMPLIANCE:
-                return $this->complianceFactory->createEmpty();
         }
 
         throw new \M2E\TikTokShop\Model\Exception\Logic(

@@ -376,7 +376,7 @@ class Dictionary extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $virtualAttributes[] = new \M2E\TikTokShop\Model\Category\Dictionary\Attribute\BrandAttribute(
             'brand',
             'Brand',
-            false,
+            $this->isRequiredManufacturer() || $this->isRequiredResponsiblePerson(),
             true,
             false,
             $brandValues
@@ -466,5 +466,25 @@ class Dictionary extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         }
 
         return array_unique(array_filter($trackedAttributes));
+    }
+
+    public function isRequiredManufacturer(): bool
+    {
+        $categoryRuleManufacture = $this->getCategoryRules()['manufacturer']['is_required'] ?? null;
+        if ($categoryRuleManufacture === null) {
+            return $this->getShop()->getRegion()->isEU();
+        }
+
+        return (bool)$categoryRuleManufacture;
+    }
+
+    public function isRequiredResponsiblePerson(): bool
+    {
+        $categoryRuleResponsiblePerson = $this->getCategoryRules()['responsible_person']['is_required'] ?? null;
+        if ($categoryRuleResponsiblePerson === null) {
+            return $this->getShop()->getRegion()->isEU();
+        }
+
+        return (bool)$categoryRuleResponsiblePerson;
     }
 }

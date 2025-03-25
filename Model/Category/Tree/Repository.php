@@ -34,7 +34,7 @@ class Repository
         return array_values($collection->getItems());
     }
 
-    public function getCategoryByShopIdAndCategoryId(int $shopId, string $categoryId): ?Tree
+    public function findCategoryByShopIdAndCategoryId(int $shopId, string $categoryId): ?Tree
     {
         $collection = $this->collectionFactory->create();
 
@@ -102,7 +102,7 @@ class Repository
             return $ancestors;
         }
 
-        $parent = $this->getCategoryByShopIdAndCategoryId(
+        $parent = $this->findCategoryByShopIdAndCategoryId(
             $child->getShopId(),
             $child->getParentCategoryId()
         );

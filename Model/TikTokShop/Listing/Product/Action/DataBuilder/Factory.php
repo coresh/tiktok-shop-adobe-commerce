@@ -18,6 +18,7 @@ class Factory
         Title::NICK => Title::class,
         Compliance::NICK => Compliance::class,
         GlobalProduct::NICK => GlobalProduct::class,
+        NonSalableFlag::NICK => NonSalableFlag::class,
     ];
 
     private \Magento\Framework\ObjectManagerInterface $objectManager;
@@ -31,6 +32,7 @@ class Factory
     public function create(
         string $nick,
         \M2E\TikTokShop\Model\Product $product,
+        int $action,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Configurator $configurator = null,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings $variantSettings = null,
         array $params = [],
@@ -51,7 +53,7 @@ class Factory
             $variantSettings = \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings::createAddActionStubForSimpleProduct($product);
         }
 
-        $builder->init($product, $configurator, $variantSettings, $params, $cacheData);
+        $builder->init($product, $configurator, $variantSettings, $action, $params, $cacheData);
 
         return $builder;
     }

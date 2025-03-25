@@ -51,7 +51,10 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
             return false;
         }
 
-        if (!$listingProduct->hasCategoryTemplate()) {
+        if (
+            !$listingProduct->hasCategoryTemplate()
+            && !$listingProduct->isGlobalProduct()
+        ) {
             return false;
         }
 
@@ -297,7 +300,6 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
             SyncPolicy\ChangeProcessor::INSTRUCTION_TYPE_REVISE_OTHER_DISABLED,
             SyncPolicy\ChangeProcessor::INSTRUCTION_TYPE_REVISE_COMPLIANCE_ENABLED,
             SyncPolicy\ChangeProcessor::INSTRUCTION_TYPE_REVISE_COMPLIANCE_DISABLED,
-            \M2E\TikTokShop\Model\Template\ChangeProcessorAbstract::INSTRUCTION_TYPE_COMPLIANCE_DATA_CHANGED,
             Product::INSTRUCTION_TYPE_CHANNEL_MANUFACTURER_CHANGED,
             Product::INSTRUCTION_TYPE_CHANNEL_RESPONSIBLE_PERSON_CHANGED,
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_PRODUCT_MOVED_FROM_OTHER,

@@ -509,6 +509,10 @@ HTML;
 
     public function callbackColumnTotal($value, \M2E\TikTokShop\Model\Order $row, $column, $isExport)
     {
+        if ($row->isSample()) {
+            return 0;
+        }
+
         return $this->currency->formatPrice($row->getCurrency(), $row->getPaidAmountWithPlatformDiscount());
     }
 

@@ -49,6 +49,7 @@ class Builder
 
         $orderItem->setTaxDetails($this->getTaxDetails($rawChannelData));
         $orderItem->setTrackingDetails($this->getTrackingDetails($rawChannelData));
+        $orderItem->setIsGift($rawChannelData['is_gift'] ?? false);
 
         if ($this->isNew) {
             $this->orderItemRepository->create($orderItem);

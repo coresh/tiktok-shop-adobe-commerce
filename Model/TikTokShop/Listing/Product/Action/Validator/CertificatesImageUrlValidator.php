@@ -51,6 +51,10 @@ class CertificatesImageUrlValidator implements ValidatorInterface
      */
     private function getDictionaryCertificates(\M2E\TikTokShop\Model\Product $product): array
     {
+        if (!$product->hasCategoryTemplate()) {
+            return [];
+        }
+
         $dictionaryId = $product->getTemplateCategoryId();
         if (!isset($this->dictionaryAttributes[$dictionaryId])) {
             $dictionary = $product->getCategoryDictionary();

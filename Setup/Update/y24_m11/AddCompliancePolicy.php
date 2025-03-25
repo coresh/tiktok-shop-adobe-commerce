@@ -6,7 +6,6 @@ namespace M2E\TikTokShop\Setup\Update\y24_m11;
 
 use M2E\TikTokShop\Helper\Module\Database\Tables as TablesHelper;
 use Magento\Framework\DB\Ddl\Table;
-use M2E\TikTokShop\Model\ResourceModel\Template\Compliance as ComplianceResource;
 use M2E\TikTokShop\Model\ResourceModel\Listing as ListingResource;
 use M2E\TikTokShop\Model\ResourceModel\Template\Synchronization as SyncResource;
 
@@ -24,11 +23,11 @@ class AddCompliancePolicy extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractF
     {
         $table = $this
             ->getConnection()
-            ->newTable($this->getFullTableName(TablesHelper::TABLE_NAME_TEMPLATE_COMPLIANCE));
+            ->newTable($this->getFullTableName(TablesHelper::PREFIX . 'template_compliance'));
 
         $table
             ->addColumn(
-                ComplianceResource::COLUMN_ID,
+                'id',
                 Table::TYPE_INTEGER,
                 null,
                 [
@@ -39,19 +38,19 @@ class AddCompliancePolicy extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractF
                 ]
             )
             ->addColumn(
-                ComplianceResource::COLUMN_ACCOUNT_ID,
+                'account_id',
                 Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false]
             )
             ->addColumn(
-                ComplianceResource::COLUMN_TITLE,
+                'title',
                 Table::TYPE_TEXT,
                 255,
                 ['nullable' => false]
             )
             ->addColumn(
-                ComplianceResource::COLUMN_MANUFACTURER_ID,
+                'manufacturer_id',
                 Table::TYPE_TEXT,
                 255,
                 ['nullable' => false]
@@ -63,13 +62,13 @@ class AddCompliancePolicy extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractF
                 ['nullable' => false]
             )
             ->addColumn(
-                ComplianceResource::COLUMN_UPDATE_DATE,
+                'update_date',
                 Table::TYPE_DATETIME,
                 null,
                 ['default' => null],
             )
             ->addColumn(
-                ComplianceResource::COLUMN_CREATE_DATE,
+                'create_date',
                 Table::TYPE_DATETIME,
                 null,
                 ['default' => null],
@@ -85,7 +84,7 @@ class AddCompliancePolicy extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractF
     {
         $modifier = $this->createTableModifier(TablesHelper::TABLE_NAME_LISTING);
         $modifier->addColumn(
-            ListingResource::COLUMN_TEMPLATE_COMPLIANCE_ID,
+            'template_compliance_id',
             'INT UNSIGNED',
             'NULL',
             ListingResource::COLUMN_TEMPLATE_SYNCHRONIZATION_ID,

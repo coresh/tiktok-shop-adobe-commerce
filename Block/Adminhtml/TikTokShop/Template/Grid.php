@@ -13,19 +13,15 @@ class Grid extends AbstractGrid
     private \M2E\TikTokShop\Model\ResourceModel\Template\SellingFormat\CollectionFactory $sellingCollectionFactory;
     private \M2E\TikTokShop\Model\ResourceModel\Template\Description\CollectionFactory $descriptionCollectionFactory;
     private \M2E\TikTokShop\Model\ResourceModel\Template\Synchronization\CollectionFactory $syncCollectionFactory;
-    private \M2E\TikTokShop\Model\ResourceModel\Template\Compliance\CollectionFactory $complianceCollectionFactory;
-    private \M2E\TikTokShop\Model\ResourceModel\Account $accountResource;
     private \M2E\TikTokShop\Model\ResourceModel\Account\CollectionFactory $accountCollectionFactory;
     /** @var \M2E\TikTokShop\Model\ResourceModel\Account\Collection */
     private AccountResource\Collection $enabledAccountCollection;
 
     public function __construct(
-        \M2E\TikTokShop\Model\ResourceModel\Account $accountResource,
         \M2E\TikTokShop\Model\ResourceModel\Account\CollectionFactory $accountCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Template\SellingFormat\CollectionFactory $sellingCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Template\Description\CollectionFactory $descriptionCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Template\Synchronization\CollectionFactory $syncCollectionFactory,
-        \M2E\TikTokShop\Model\ResourceModel\Template\Compliance\CollectionFactory $complianceCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Collection\WrapperFactory $wrapperCollectionFactory,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
@@ -34,11 +30,9 @@ class Grid extends AbstractGrid
     ) {
         $this->wrapperCollectionFactory = $wrapperCollectionFactory;
         $this->resourceConnection = $resourceConnection;
-        $this->accountResource = $accountResource;
         $this->sellingCollectionFactory = $sellingCollectionFactory;
         $this->descriptionCollectionFactory = $descriptionCollectionFactory;
         $this->syncCollectionFactory = $syncCollectionFactory;
-        $this->complianceCollectionFactory = $complianceCollectionFactory;
         $this->accountCollectionFactory = $accountCollectionFactory;
         parent::__construct($context, $backendHelper, $data);
     }
@@ -120,34 +114,6 @@ class Grid extends AbstractGrid
             ]
         );
 
-        // Prepare Compliance collection
-        // ----------------------------------------
-        $collectionCompliance = $this->complianceCollectionFactory->create();
-        $collectionCompliance->getSelect()->reset(Select::COLUMNS);
-        $collectionCompliance->getSelect()->join(
-            ['account' => $this->accountResource->getMainTable()],
-            sprintf(
-                'account.%s = main_table.%s',
-                \M2E\TikTokShop\Model\ResourceModel\Account::COLUMN_ID,
-                \M2E\TikTokShop\Model\ResourceModel\Template\Compliance::COLUMN_ACCOUNT_ID
-            ),
-            []
-        );
-
-        $collectionCompliance->getSelect()->columns(
-            [
-                'id as template_id',
-                'title',
-                new \Zend_Db_Expr('account.title as `account_title`'),
-                new \Zend_Db_Expr('account.id as `account_id`'),
-                new \Zend_Db_Expr(
-                    '\'' . \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE . '\' as `nick`'
-                ),
-                'create_date',
-                'update_date',
-            ]
-        );
-
         // ---------------------------------------
 
         // Prepare union select
@@ -157,7 +123,6 @@ class Grid extends AbstractGrid
             $collectionSellingFormat->getSelect(),
             $collectionSynchronization->getSelect(),
             $collectionDescription->getSelect(),
-            $collectionCompliance->getSelect()
         ]);
         // ---------------------------------------
 
@@ -191,7 +156,6 @@ class Grid extends AbstractGrid
             \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SELLING_FORMAT => __('Selling'),
             \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_DESCRIPTION => __('Description'),
             \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SYNCHRONIZATION => __('Synchronization'),
-            \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE => __('Compliance'),
         ];
         $this->addColumn('nick', [
             'header' => __('Type'),

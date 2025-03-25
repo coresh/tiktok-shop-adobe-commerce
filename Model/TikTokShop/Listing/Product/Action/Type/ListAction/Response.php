@@ -29,6 +29,10 @@ class Response extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\T
             $product->setOnlineBrandName($requestMetadata[DataBuilder\Brand::NICK]['online_brand_name']);
         }
 
+        if (array_key_exists(DataBuilder\NonSalableFlag::NICK, $requestMetadata)) {
+            $product->setIsGift($requestMetadata[DataBuilder\NonSalableFlag::NICK]);
+        }
+
         $this->processVariants($response['skus']);
 
         $product->setOnlineBrandId($response['brand_id'] ?? null)

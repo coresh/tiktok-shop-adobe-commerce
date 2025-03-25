@@ -31,7 +31,7 @@ class CreateService
         string $categoryId
     ): \M2E\TikTokShop\Model\Category\Dictionary {
         $treeNode = $this->categoryTreeRepository
-            ->getCategoryByShopIdAndCategoryId($shop->getId(), $categoryId);
+            ->findCategoryByShopIdAndCategoryId($shop->getId(), $categoryId);
 
         if ($treeNode === null) {
             throw new \M2E\TikTokShop\Model\Exception\Logic('Not found category tree');

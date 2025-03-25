@@ -16,6 +16,7 @@ class SellingFormat extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\Abs
     public const COLUMN_QTY_MODIFICATION_MODE = 'qty_modification_mode';
     public const COLUMN_QTY_MIN_POSTED_VALUE = 'qty_min_posted_value';
     public const COLUMN_QTY_MAX_POSTED_VALUE = 'qty_max_posted_value';
+    public const COLUMN_IS_NOT_FOR_SALE = 'is_not_for_sale';
     public const COLUMN_FIXED_PRICE_MODE = 'fixed_price_mode';
     public const COLUMN_FIXED_PRICE_MODIFIER = 'fixed_price_modifier';
     public const COLUMN_FIXED_PRICE_CUSTOM_ATTRIBUTE = 'fixed_price_custom_attribute';

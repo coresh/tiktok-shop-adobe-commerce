@@ -125,6 +125,9 @@
                 <item name="tag" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\TagHandler</item>
                 <item name="processing" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\ProcessingHandler</item>
                 <item name="promotion" xsi:type="object">M2E\TikTokShop\Setup\InstallHandler\PromotionHandler</item>
+                <item name="manufacturerConfiguration" xsi:type="object">
+                    M2E\TikTokShop\Setup\InstallHandler\ManufacturerConfigurationHandler
+                </item>
             </argument>
         </arguments>
     </type>
@@ -174,6 +177,9 @@
                 </item>
                 <item name="size_chart_image_url" xsi:type="object">
                     M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\SizeChartImageUrlValidator
+                </item>
+                <item name="brand" xsi:type="object">
+                    M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\BrandValidator
                 </item>
             </argument>
         </arguments>

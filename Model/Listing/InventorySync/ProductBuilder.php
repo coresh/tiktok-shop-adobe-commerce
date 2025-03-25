@@ -69,7 +69,8 @@ class ProductBuilder
                 $unmanagedItem['manufacturer_ids'],
                 $unmanagedItem['responsible_person_ids'],
                 $ttsProductVariantCollection,
-                $listingQuality
+                $listingQuality,
+                $unmanagedItem['is_not_for_sale']
             );
 
             $result->add($ttsProduct);

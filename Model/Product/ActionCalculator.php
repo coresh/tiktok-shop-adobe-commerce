@@ -253,6 +253,10 @@ class ActionCalculator
             return;
         }
 
+        if (!$product->hasCategoryTemplate()) {
+            return;
+        }
+
         if (
             $this->reviseChecker->isNeedReviseForCategories($product)
             || $this->reviseChecker->isNeedReviseForBrand($product)

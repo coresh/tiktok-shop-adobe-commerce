@@ -619,3 +619,42 @@ button.action * {
     display: none;
 }
 /* ================================================ */
+
+.m2e-suggest-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 70%;
+}
+
+.m2e-suggest-wrapper input[type="text"].input-text {
+    width: 100%;
+}
+
+.m2e-suggest-wrapper .m2e-suggest-dropdown-wrapper {
+    position: absolute;
+    z-index: 500;
+    background-color: #fff;
+    top: 36px;
+    left: 0;
+    width: 100%;
+    max-height: 205px;
+    overflow: auto;
+}
+
+.m2e-suggest-wrapper .m2e-suggest-dropdown-wrapper:has(ul) {
+    border: 1px solid #007bdb;
+}
+
+.m2e-suggest-dropdown-wrapper ul {
+    margin: 0;
+}
+
+.m2e-suggest-dropdown-wrapper ul li {
+    list-style: none;
+    padding: 5px 20px;
+    cursor: pointer;
+}
+
+.m2e-suggest-dropdown-wrapper .ui-menu-item._active {
+    background-color: lightgrey;
+}

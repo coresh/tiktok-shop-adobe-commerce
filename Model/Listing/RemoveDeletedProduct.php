@@ -13,19 +13,22 @@ class RemoveDeletedProduct
     private \M2E\TikTokShop\Model\Product\DeleteService $productDeleteService;
     private \M2E\TikTokShop\Model\Listing\LogService $listingLogService;
     private \M2E\TikTokShop\Model\InstructionService $instructionService;
+    private \M2E\TikTokShop\Model\GlobalProduct\DeleteService $globalProductDeleteService;
 
     public function __construct(
         \M2E\TikTokShop\Model\Product\Repository $productRepository,
         \M2E\TikTokShop\Model\StopQueue\CreateService $stopQueueCreateService,
         \M2E\TikTokShop\Model\Product\DeleteService $productDeleteService,
         \M2E\TikTokShop\Model\Listing\LogService $listingLogService,
-        \M2E\TikTokShop\Model\InstructionService $instructionService
+        \M2E\TikTokShop\Model\InstructionService $instructionService,
+        \M2E\TikTokShop\Model\GlobalProduct\DeleteService $globalProductDeleteService
     ) {
         $this->productRepository = $productRepository;
         $this->stopQueueCreateService = $stopQueueCreateService;
         $this->productDeleteService = $productDeleteService;
         $this->listingLogService = $listingLogService;
         $this->instructionService = $instructionService;
+        $this->globalProductDeleteService = $globalProductDeleteService;
     }
 
     /**
@@ -45,6 +48,8 @@ class RemoveDeletedProduct
 
     private function processSimpleProducts(int $magentoProductId): void
     {
+        $this->globalProductDeleteService->byMagentoProductId($magentoProductId);
+
         $listingsProducts = $this->productRepository
             ->findByMagentoProductId($magentoProductId);
 
@@ -84,6 +89,8 @@ class RemoveDeletedProduct
 
     private function processVariantSku(int $magentoProductId): void
     {
+        $this->globalProductDeleteService->variantByMagentoProductId($magentoProductId);
+
         $variantSkus = $this->productRepository
             ->findVariantSkusByMagentoProductId($magentoProductId);
 

@@ -84,9 +84,7 @@ class After extends AbstractAddUpdate
         $this->performSpecialPriceChanges();
         $this->performSpecialPriceFromDateChanges();
         $this->performSpecialPriceToDateChanges();
-        $this->performTierPriceChanges();
         $this->performTrackingAttributesChanges();
-        $this->performDefaultQtyChanges();
         $this->performRecalculateProduct();
 
         $this->addListingProductInstructions();
@@ -229,30 +227,6 @@ class After extends AbstractAddUpdate
         }
     }
 
-    private function performTierPriceChanges()
-    {
-        $oldValue = $this->getProxy()->getData('tier_price');
-        $newValue = $this->getProduct()->getTierPrice();
-
-        if ($oldValue == $newValue) {
-            return;
-        }
-
-        $oldValue = $this->convertTierPriceForLog($oldValue);
-        $newValue = $this->convertTierPriceForLog($newValue);
-
-        foreach ($this->getAffectedProductCollection()->getProducts() as $affectedProduct) {
-            $this->listingsProductsChangedAttributes[$affectedProduct->getProduct()->getId()][] = 'tier_price';
-
-            $this->logListingProductMessage(
-                $affectedProduct,
-                \M2E\TikTokShop\Model\Listing\Log::ACTION_CHANGE_PRODUCT_TIER_PRICE,
-                $oldValue,
-                $newValue
-            );
-        }
-    }
-
     // ---------------------------------------
 
     private function performTrackingAttributesChanges()
@@ -283,55 +257,6 @@ class After extends AbstractAddUpdate
                     $oldValue,
                     $newValue,
                     'for attribute "' . $attributeCode . '"'
-                );
-            }
-        }
-    }
-
-    // ---------------------------------------
-
-    private function performDefaultQtyChanges()
-    {
-        if (!$this->getHelper('Magento_Product')->isGroupedType($this->getProduct()->getTypeId())) {
-            return;
-        }
-
-        $values = $this->getProxy()->getData('default_qty');
-        foreach ($this->getProduct()->getTypeInstance()->getAssociatedProducts($this->getProduct()) as $childProduct) {
-            $sku = $childProduct->getSku();
-            $newValue = (int)$childProduct->getQty();
-            $oldValue = isset($values[$sku]) ? (int)$values[$sku] : 0;
-
-            unset($values[$sku]);
-            if ($oldValue == $newValue) {
-                continue;
-            }
-
-            foreach ($this->getAffectedProductCollection()->getProducts() as $affectedProduct) {
-                $this->listingsProductsChangedAttributes[$affectedProduct->getProduct()->getId()][] = 'qty';
-
-                $this->logListingProductMessage(
-                    $affectedProduct,
-                    \M2E\TikTokShop\Model\Listing\Log::ACTION_CHANGE_PRODUCT_QTY,
-                    $oldValue,
-                    $newValue,
-                    "SKU $sku: Default QTY was changed."
-                );
-            }
-        }
-
-        //----------------------------------------
-
-        foreach ($values as $sku => $defaultQty) {
-            foreach ($this->getAffectedProductCollection()->getProducts() as $affectedProduct) {
-                $this->listingsProductsChangedAttributes[$affectedProduct->getProduct()->getId()][] = 'qty';
-
-                $this->logListingProductMessage(
-                    $affectedProduct,
-                    \M2E\TikTokShop\Model\Listing\Log::ACTION_CHANGE_PRODUCT_QTY,
-                    $defaultQty,
-                    0,
-                    "SKU $sku: was removed from the Product Set."
                 );
             }
         }
@@ -494,24 +419,6 @@ class After extends AbstractAddUpdate
         }
 
         return $result;
-    }
-
-    private function convertTierPriceForLog($tierPrice): string
-    {
-        if (empty($tierPrice) || !is_array($tierPrice)) {
-            return 'None';
-        }
-
-        $result = [];
-        foreach ($tierPrice as $tierPriceData) {
-            $result[] = sprintf(
-                "[price = %s, qty = %s]",
-                $tierPriceData["website_price"],
-                $tierPriceData["price_qty"]
-            );
-        }
-
-        return implode(",", $result);
     }
 
     private function logListingProductMessage(

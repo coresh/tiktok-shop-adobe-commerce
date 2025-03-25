@@ -12,4 +12,9 @@ class Request extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Ty
 
         return parent::getActionData();
     }
+
+    protected function getAction(): int
+    {
+        return \M2E\TikTokShop\Model\Product::ACTION_RELIST;
+    }
 }

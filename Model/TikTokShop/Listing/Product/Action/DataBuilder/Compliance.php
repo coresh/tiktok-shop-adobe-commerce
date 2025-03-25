@@ -6,6 +6,19 @@ namespace M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder;
 
 class Compliance extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder\AbstractDataBuilder
 {
+    private \M2E\TikTokShop\Model\ManufacturerConfiguration\Repository $manufacturerConfigurationRepository;
+    private \M2E\TikTokShop\Model\ManufacturerConfiguration\Mapper $manufacturerConfigurationMapper;
+
+    public function __construct(
+        \M2E\TikTokShop\Model\ManufacturerConfiguration\Mapper $manufacturerConfigurationMapper,
+        \M2E\TikTokShop\Model\ManufacturerConfiguration\Repository $manufacturerConfigurationRepository,
+        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper
+    ) {
+        parent::__construct($magentoAttributeHelper);
+        $this->manufacturerConfigurationRepository = $manufacturerConfigurationRepository;
+        $this->manufacturerConfigurationMapper = $manufacturerConfigurationMapper;
+    }
+
     public const NICK = 'compliance';
 
     private ?string $manufacturerId = null;
@@ -13,21 +26,23 @@ class Compliance extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action
 
     public function getBuilderData(): array
     {
-        $listing = $this->getListingProduct()->getListing();
-
-        $result = [
-            'manufacturer_id' => null,
-            'responsible_person_ids' => null,
-        ];
-
-        if (!$listing->hasTemplateCompliance()) {
-            return $result;
+        if ($this->getListingProduct()->getManufacturerConfigId() === null) {
+            $this->manufacturerConfigurationMapper->execute($this->getListingProduct());
         }
 
-        $policy = $listing->getTemplateCompliance();
+        $manufacturerConfiguration = $this
+            ->manufacturerConfigurationRepository
+            ->find((int)$this->getListingProduct()->getManufacturerConfigId());
 
-        $this->manufacturerId = $policy->getManufacturerId();
-        $this->responsiblePersonIds = $policy->getResponsiblePersonIds();
+        if ($manufacturerConfiguration === null) {
+            return [
+                'manufacturer_id' => null,
+                'responsible_person_ids' => null,
+            ];
+        }
+
+        $this->manufacturerId = $manufacturerConfiguration->getManufacturerId();
+        $this->responsiblePersonIds = $manufacturerConfiguration->getResponsiblePersonIds();
 
         $result['manufacturer_id'] = $this->manufacturerId;
         $result['responsible_person_ids'] = $this->responsiblePersonIds;

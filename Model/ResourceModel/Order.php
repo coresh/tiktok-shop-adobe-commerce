@@ -37,6 +37,7 @@ class Order extends ActiveRecord\AbstractModel
     public const COLUMN_DELIVER_BY_DATE = 'deliver_by_date';
     public const COLUMN_BUYER_CANCELLATION_REQUEST = 'buyer_cancellation_request';
     public const COLUMN_BUYER_CANCELLATION_REQUEST_REASON = 'buyer_cancellation_request_reason';
+    public const COLUMN_IS_SAMPLE = 'is_sample';
     public const COLUMN_CREATE_DATE = 'create_date';
     public const COLUMN_UPDATE_DATE = 'update_date';
 

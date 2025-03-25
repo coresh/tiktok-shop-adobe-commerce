@@ -247,6 +247,13 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
             return '<span style="color: #f00;">0</span>';
         }
 
+        if ($this->listingProduct->isGift()) {
+            return sprintf(
+                '0 <span class="price-not-for-sale">%s</span>',
+                __('Not for sale')
+            );
+        }
+
         $promotionHtml = '';
         if ($row['has_promotion']) {
             $promotionHtml =

@@ -23,13 +23,13 @@ class ProxyObject
 
     private UserInfoFactory $userInfoFactory;
     protected \Magento\Tax\Model\Calculation $taxCalculation;
-    private \M2E\TikTokShop\Model\Magento\CustomerFactory $magentoCustomerFactory;
+    private \M2E\Core\Model\Magento\CustomerFactory $magentoCustomerFactory;
     private \M2E\TikTokShop\Model\Config\Manager $config;
 
     public function __construct(
         \M2E\TikTokShop\Model\Order $order,
         \M2E\TikTokShop\Model\Config\Manager $config,
-        \M2E\TikTokShop\Model\Magento\CustomerFactory $magentoCustomerFactory,
+        \M2E\Core\Model\Magento\CustomerFactory $magentoCustomerFactory,
         \Magento\Tax\Model\Calculation $taxCalculation,
         \M2E\TikTokShop\Model\Currency $currency,
         TikTokShopPayment $payment,
@@ -560,7 +560,7 @@ class ProxyObject
      */
     public function getChannelComments()
     {
-        return [];
+        return array_merge($this->getGiftItemsComments(), $this->getSampleOrderComment());
     }
 
     /**
@@ -615,5 +615,30 @@ class ProxyObject
         }
 
         return $comments;
+    }
+
+    public function getGiftItemsComments(): array
+    {
+        $giftItems = array_filter($this->order->getItems(), fn($item) => $item->isGiftItem());
+
+        if (empty($giftItems)) {
+            return [];
+        }
+
+        $comments = [];
+        /** @var \M2E\TikTokShop\Model\Order\Item $giftItem */
+        foreach ($giftItems as $giftItem) {
+            $comments[] = (string) __(
+                "<b>SKU</b> %sku <b>is a gift product</b>",
+                ['sku' => $giftItem->getSku()]
+            );
+        }
+
+        return $comments;
+    }
+
+    public function getSampleOrderComment(): array
+    {
+        return $this->order->isSample() ? [(string)__('This Order contains a free Sample')] : [];
     }
 }

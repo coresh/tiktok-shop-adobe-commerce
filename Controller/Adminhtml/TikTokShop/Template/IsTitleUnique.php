@@ -9,13 +9,11 @@ class IsTitleUnique extends AbstractTemplate
     private \M2E\TikTokShop\Model\ResourceModel\Template\Synchronization\CollectionFactory $syncCollectionFactory;
     private \M2E\TikTokShop\Model\ResourceModel\Template\SellingFormat\CollectionFactory $sellingCollectionFactory;
     private \M2E\TikTokShop\Model\ResourceModel\Template\Description\CollectionFactory $descriptionCollectionFactory;
-    private \M2E\TikTokShop\Model\ResourceModel\Template\Compliance\CollectionFactory $complianceCollectionFactory;
 
     public function __construct(
         \M2E\TikTokShop\Model\ResourceModel\Template\Synchronization\CollectionFactory $syncCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Template\SellingFormat\CollectionFactory $sellingCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Template\Description\CollectionFactory $descriptionCollectionFactory,
-        \M2E\TikTokShop\Model\ResourceModel\Template\Compliance\CollectionFactory $complianceCollectionFactory,
         \M2E\TikTokShop\Model\TikTokShop\Template\Manager $templateManager,
         \M2E\TikTokShop\Controller\Adminhtml\Context $context
     ) {
@@ -23,7 +21,6 @@ class IsTitleUnique extends AbstractTemplate
         $this->syncCollectionFactory = $syncCollectionFactory;
         $this->sellingCollectionFactory = $sellingCollectionFactory;
         $this->descriptionCollectionFactory = $descriptionCollectionFactory;
-        $this->complianceCollectionFactory = $complianceCollectionFactory;
     }
 
     public function execute()
@@ -48,10 +45,6 @@ class IsTitleUnique extends AbstractTemplate
 
         if ($nick === \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_SELLING_FORMAT) {
             return $this->isUniqueTitleSellingFormatTemplate($ignoreId, $title);
-        }
-
-        if ($nick === \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_COMPLIANCE) {
-            return $this->isUniqueTitleComplianceTemplate($ignoreId, $title);
         }
 
         throw new \M2E\TikTokShop\Model\Exception\Logic('Unknown nick ' . $nick);
@@ -123,27 +116,6 @@ class IsTitleUnique extends AbstractTemplate
         if ($ignoreId) {
             $collection->addFieldToFilter(
                 \M2E\TikTokShop\Model\ResourceModel\Template\SellingFormat::COLUMN_ID,
-                ['neq' => $ignoreId]
-            );
-        }
-
-        $this->setJsonContent(['unique' => $collection->getSize() === 0]);
-
-        return $this->getResult();
-    }
-
-    private function isUniqueTitleComplianceTemplate($ignoreId, $title)
-    {
-        $collection = $this->complianceCollectionFactory
-            ->create()
-            ->addFieldToFilter(
-                \M2E\TikTokShop\Model\ResourceModel\Template\Compliance::COLUMN_TITLE,
-                $title
-            );
-
-        if ($ignoreId) {
-            $collection->addFieldToFilter(
-                \M2E\TikTokShop\Model\ResourceModel\Template\Compliance::COLUMN_ID,
                 ['neq' => $ignoreId]
             );
         }

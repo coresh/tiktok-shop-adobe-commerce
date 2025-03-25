@@ -232,6 +232,7 @@ class GlobalProduct extends AbstractDataBuilder
         return $this->dataBuilderFactory->create(
             $nick,
             $this->getListingProduct(),
+            \M2E\TikTokShop\Model\Product::ACTION_LIST,
             $this->getConfigurator(),
             $this->getVariantSettings(),
             $this->getParams()

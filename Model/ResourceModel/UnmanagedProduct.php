@@ -14,6 +14,7 @@ class UnmanagedProduct extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\
     public const COLUMN_MIN_PRICE = 'min_price';
     public const COLUMN_MAX_PRICE = 'max_price';
     public const COLUMN_IS_SIMPLE = 'is_simple';
+    public const COLUMN_IS_GIFT = 'is_gift';
     public const COLUMN_QTY = 'qty';
     public const COLUMN_TTS_PRODUCT_ID = 'tts_product_id';
     public const COLUMN_TITLE = 'title';

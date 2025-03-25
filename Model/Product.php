@@ -25,6 +25,9 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public const STATUS_CHANGER_COMPONENT = 3;
     public const STATUS_CHANGER_OBSERVER = 4;
 
+    public const IS_GIFT_ON = 1;
+    public const IS_GIFT_OFF = 0;
+
     public const MOVING_LISTING_OTHER_SOURCE_KEY = 'moved_from_listing_other_id';
 
     public const INSTRUCTION_TYPE_CHANNEL_STATUS_CHANGED = 'channel_status_changed';
@@ -106,7 +109,8 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->setTtsProductId($unmanagedProduct->getProductId())
              ->setStatus($unmanagedProduct->getStatus(), self::STATUS_CHANGER_COMPONENT)
              ->setOnlineTitle($unmanagedProduct->getTitle())
-             ->setOnlineQty($unmanagedProduct->getQty());
+             ->setOnlineQty($unmanagedProduct->getQty())
+             ->setIsGift($unmanagedProduct->isGift());
 
         if ($unmanagedProduct->getCategoryId() !== null) {
             $this->setOnlineMainCategory($unmanagedProduct->getCategoryId());
@@ -937,4 +941,33 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         return json_decode($recommendations, true);
     }
     //endregion
+
+    public function isGift(): bool
+    {
+        return (bool)$this->getData(ListingProductResource::COLUMN_IS_GIFT);
+    }
+
+    public function setIsGift(bool $value): self
+    {
+        $this->setData(ListingProductResource::COLUMN_IS_GIFT, $value);
+
+        return $this;
+    }
+
+    public function setManufacturerConfigId(int $manufacturerConfigId): self
+    {
+        $this->setData(ListingProductResource::COLUMN_MANUFACTURER_CONFIG_ID, $manufacturerConfigId);
+
+        return $this;
+    }
+
+    public function getManufacturerConfigId(): ?int
+    {
+        $value = $this->getData(ListingProductResource::COLUMN_MANUFACTURER_CONFIG_ID);
+        if (empty($value)) {
+            return null;
+        }
+
+        return (int)$value;
+    }
 }

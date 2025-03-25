@@ -34,6 +34,7 @@ class Builder extends \Magento\Framework\DataObject
     private \M2E\TikTokShop\Model\Order\Repository $orderRepository;
     private \M2E\TikTokShop\Model\TikTokShop\Order\AddressParserFactory $addressParserFactory;
     private \M2E\TikTokShop\Model\Order\CreditMemo $creditMemo;
+    private \M2E\TikTokShop\Model\Order\Note\Create $noteCreateService;
 
     public function __construct(
         AddressParserFactory $addressParserFactory,
@@ -42,7 +43,8 @@ class Builder extends \Magento\Framework\DataObject
         \M2E\TikTokShop\Model\Magento\Order\Updater $magentoOrderUpdater,
         \M2E\TikTokShop\Model\TikTokShop\Order\StatusResolver $statusResolver,
         \M2E\TikTokShop\Model\OrderFactory $orderFactory,
-        \M2E\TikTokShop\Model\Order\CreditMemo $creditMemo
+        \M2E\TikTokShop\Model\Order\CreditMemo $creditMemo,
+        \M2E\TikTokShop\Model\Order\Note\Create $noteCreateService
     ) {
         parent::__construct();
         $this->orderFactory = $orderFactory;
@@ -52,6 +54,7 @@ class Builder extends \Magento\Framework\DataObject
         $this->orderRepository = $orderRepository;
         $this->addressParserFactory = $addressParserFactory;
         $this->creditMemo = $creditMemo;
+        $this->noteCreateService = $noteCreateService;
     }
 
     public function initialize(
@@ -86,6 +89,7 @@ class Builder extends \Magento\Framework\DataObject
 
         $this->setData(OrderResource::COLUMN_PAID_AMOUNT, (float)$data['payment']['total_amount']);
         $this->setData(OrderResource::COLUMN_CURRENCY, $data['payment']['currency']);
+        $this->setData(OrderResource::COLUMN_IS_SAMPLE, $data['is_sample'] ?? 0);
 
         // Tax
         $productTaxAmount = (float)($data['payment']['product_tax'] ?? 0.0);
@@ -217,6 +221,14 @@ class Builder extends \Magento\Framework\DataObject
 
             $item = $itemBuilder->create($orderItemData, (int)$this->order->getId());
             $item->setOrder($this->order);
+
+            if ($item->isGiftItem() && $this->isNew()) {
+                $note = (string)__(
+                    "<b>SKU</b> %sku <b>is a gift product</b>",
+                    ['sku' => $orderItemData['seller_sku']]
+                );
+                $this->noteCreateService->process($this->order, $note);
+            }
         }
     }
 
@@ -269,6 +281,11 @@ class Builder extends \Magento\Framework\DataObject
 
                 break;
             }
+        }
+
+        if ($this->order->isSample() && $this->isNew()) {
+            $note = (string)__('This Order contains a free Sample');
+            $this->noteCreateService->process($this->order, $note);
         }
 
         $this->order->setAccount($this->account);
