@@ -107,7 +107,8 @@ class ActionCalculator
         }
 
         if (
-            $syncPolicy->isReviseUpdateImages()
+            $variant->getProduct()->getMagentoProduct()->isConfigurableType()
+            && $syncPolicy->isReviseUpdateImages()
             && $this->isChangedImage($variant)
         ) {
             return true;

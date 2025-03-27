@@ -177,20 +177,6 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Grid
                 ],
             ],
 
-            'addProductsSourceProducts' => [
-                'caption' => __('Add From Products List'),
-                'group' => 'products_actions',
-                'field' => 'id',
-                'onclick_action' => 'TikTokShopListingGridObj.addProductsSourceProductsAction',
-            ],
-
-            'addProductsSourceCategories' => [
-                'caption' => __('Add From Categories'),
-                'group' => 'products_actions',
-                'field' => 'id',
-                'onclick_action' => 'TikTokShopListingGridObj.addProductsSourceCategoriesAction',
-            ],
-
             'editTitle' => [
                 'caption' => __('Title'),
                 'group' => 'edit_actions',
@@ -375,11 +361,9 @@ HTML;
         $this->js->add(
             <<<JS
     require([
-        'TikTokShop/TikTokShop/Listing/Grid',
         'TikTokShop/Listing/EditTitle',
         'TikTokShop/Listing/EditStoreView'
     ], function(){
-        window.TikTokShopListingGridObj = new TikTokShopListingGrid('{$this->getId()}');
         window.EditListingTitleObj = new ListingEditListingTitle('{$this->getId()}');
         window.EditListingStoreViewObj = new ListingEditListingStoreView('{$this->getId()}');
     });

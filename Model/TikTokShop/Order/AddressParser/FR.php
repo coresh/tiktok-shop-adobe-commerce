@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Model\TikTokShop\Order\AddressParser;
 
-class US extends \M2E\TikTokShop\Model\TikTokShop\Order\BaseAddressParser
+class FR extends \M2E\TikTokShop\Model\TikTokShop\Order\BaseAddressParser
 {
-    public function getCity(): string
+    public function getState(): string
     {
         foreach ($this->getDistricts() as $district) {
-            if ($district['level'] === 'City') {
+            if ($district['level'] === 'department') {
                 return $district['name'];
             }
         }
@@ -17,10 +17,10 @@ class US extends \M2E\TikTokShop\Model\TikTokShop\Order\BaseAddressParser
         return '';
     }
 
-    public function getState(): string
+    public function getCity(): string
     {
         foreach ($this->getDistricts() as $district) {
-            if ($district['level'] === 'State') {
+            if ($district['level'] === 'arrondissement') {
                 return $district['name'];
             }
         }
@@ -32,20 +32,24 @@ class US extends \M2E\TikTokShop\Model\TikTokShop\Order\BaseAddressParser
     {
         $streetLines = parent::getStreetLines();
         $streetLines[1] = !empty($streetLines[1])
-            ? $streetLines[1] .  ', ' . $this->getCounty()
-            : $this->getCounty();
+            ? $streetLines[1] .  ', ' . $this->getStreetLine()
+            : $this->getStreetLine();
 
         return $streetLines;
     }
 
-    public function getCounty(): string
+    private function getStreetLine(): string
     {
+        $result = [];
+
         foreach ($this->getDistricts() as $district) {
-            if ($district['level'] === 'County') {
-                return $district['name'];
+            if ($district['level'] === 'region') {
+                $result[] = $district['name'];
+            } elseif ($district['level'] === 'commune') {
+                $result[] = $district['name'];
             }
         }
 
-        return '';
+        return implode(', ', $result);
     }
 }

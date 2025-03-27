@@ -117,6 +117,36 @@ class Region
         return $this->regionCode === self::REGION_US;
     }
 
+    public function isRegionCodeGB(): bool
+    {
+        return $this->regionCode === self::REGION_GB;
+    }
+
+    public function isRegionCodeIT(): bool
+    {
+        return $this->regionCode === self::REGION_IT;
+    }
+
+    public function isRegionCodeDE(): bool
+    {
+        return $this->regionCode === self::REGION_DE;
+    }
+
+    public function isRegionCodeES(): bool
+    {
+        return $this->regionCode === self::REGION_ES;
+    }
+
+    public function isRegionCodeFR(): bool
+    {
+        return $this->regionCode === self::REGION_FR;
+    }
+
+    public function isRegionCodeIE(): bool
+    {
+        return $this->regionCode === self::REGION_IE;
+    }
+
     public function getLocale(): string
     {
         $locales = [
