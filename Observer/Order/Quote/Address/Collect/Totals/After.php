@@ -10,11 +10,8 @@ class After extends \M2E\TikTokShop\Observer\AbstractObserver
     private $priceCurrency;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         PriceCurrencyInterface $priceCurrency
     ) {
-        parent::__construct($helperFactory);
-
         $this->priceCurrency = $priceCurrency;
     }
 

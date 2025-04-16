@@ -24,15 +24,15 @@ class Repository
 
     public function create(\M2E\TikTokShop\Model\Category\Dictionary $dictionary): void
     {
-        $dictionary->setUpdateDate(\M2E\TikTokShop\Helper\Date::createCurrentGmt());
-        $dictionary->setCreateDate(\M2E\TikTokShop\Helper\Date::createCurrentGmt());
+        $dictionary->setUpdateDate(\M2E\Core\Helper\Date::createCurrentGmt());
+        $dictionary->setCreateDate(\M2E\Core\Helper\Date::createCurrentGmt());
 
         $this->categoryDictionaryResource->save($dictionary);
     }
 
     public function save(\M2E\TikTokShop\Model\Category\Dictionary $dictionary): void
     {
-        $dictionary->setUpdateDate(\M2E\TikTokShop\Helper\Date::createCurrentGmt());
+        $dictionary->setUpdateDate(\M2E\Core\Helper\Date::createCurrentGmt());
 
         $this->categoryDictionaryResource->save($dictionary);
     }

@@ -27,7 +27,7 @@ class TikTokShop
         foreach ($options as &$singleOption) {
             if ($singleOption instanceof \Magento\Catalog\Model\Product) {
                 $reducedName = trim(
-                    \M2E\TikTokShop\Helper\Data::reduceWordsInString(
+                    \M2E\Core\Helper\Data::reduceWordsInString(
                         $singleOption->getName(),
                         self::MAX_LENGTH_FOR_OPTION_VALUE
                     )
@@ -40,7 +40,7 @@ class TikTokShop
             foreach ($singleOption['values'] as &$singleOptionValue) {
                 foreach ($singleOptionValue['labels'] as &$singleOptionLabel) {
                     $singleOptionLabel = trim(
-                        \M2E\TikTokShop\Helper\Data::reduceWordsInString(
+                        \M2E\Core\Helper\Data::reduceWordsInString(
                             $singleOptionLabel,
                             self::MAX_LENGTH_FOR_OPTION_VALUE
                         )

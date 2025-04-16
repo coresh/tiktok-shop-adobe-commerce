@@ -93,6 +93,6 @@ class Instruction extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             return null;
         }
 
-        return \M2E\TikTokShop\Helper\Date::createDateGmt($value);
+        return \M2E\Core\Helper\Date::createDateGmt($value);
     }
 }

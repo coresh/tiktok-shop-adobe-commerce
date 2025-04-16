@@ -51,17 +51,22 @@ class Order extends AbstractContainer
     protected function _prepareLayout()
     {
         $this->appendHelpBlock([
-            'content' => __('<p>In this section, you can find the list of the Orders imported ' .
-                'from TikTok Shop.</p><p>An TikTok Shop Order, for which Magento Order is created, ' .
+            'content' => __(
+                '<p>In this section, you can find the list of the Orders imported ' .
+                'from %channel_title .</p><p>An %channel_title Order, for which Magento Order is created, ' .
                 'contains a value in <strong>Magento Order #</strong> column of the grid. ' .
                 'You can find the corresponding Magento Order in Sales > Orders section of your Magento</p><br>' .
-                '<p>To manage the imported TikTok Shop Orders, you can use Mass Action options available in the ' .
+                '<p>To manage the imported %channel_title Orders, you can use Mass Action options available in the ' .
                 'Actions bulk: Reserve QTY, Cancel QTY Reserve, Mark Order(s) as Shipped or Paid and Resend ' .
                 'Shipping Information.</p><br><p>Also, you can view the detailed Order information by ' .
                 'clicking on the appropriate row of the grid.</p><br><p><strong>Note:</strong> Automatic creation ' .
                 'of Magento Orders, Invoices, and Shipments is performed in accordance with the Order ' .
-                'settings specified in <br> <strong>Account Settings (TikTok Shop Integration ' .
-                '> Configuration > Accounts)</strong>. </p>'),
+                'settings specified in <br> <strong>Account Settings (%channel_title Integration ' .
+                '> Configuration > Accounts)</strong>. </p>',
+                [
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                ]
+            ),
         ]);
 
         $this->setPageActionsBlock(\M2E\TikTokShop\Block\Adminhtml\TikTokShop\Order\PageActions::class);
@@ -114,10 +119,6 @@ JS,
 
         $dropDownOptions = $this->getAccountSettingsDropDownItems($accountId);
 
-        if ($dropDownOptions === []) {
-            return;
-        }
-
         $this->addButton(
             'order_settings',
             [
@@ -152,7 +153,6 @@ JS,
         /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (!isset($this->accountCollection)) {
             $collection = $this->accountCollectionFactory->create();
-            $collection->addFieldToFilter('is_active', 1);
 
             $this->accountCollection = $collection;
         }

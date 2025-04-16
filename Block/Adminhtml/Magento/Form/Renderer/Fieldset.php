@@ -59,7 +59,7 @@ HTML;
      */
     public function escapeHtml($data, $allowedTags = null)
     {
-        return \M2E\TikTokShop\Helper\Data::escapeHtml(
+        return \M2E\Core\Helper\Data::escapeHtml(
             $data,
             ['div', 'a', 'strong', 'br', 'i', 'b', 'ul', 'li', 'p'],
             ENT_NOQUOTES

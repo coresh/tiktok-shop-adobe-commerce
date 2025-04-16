@@ -84,10 +84,11 @@ class ShippingProcessor
         \M2E\TikTokShop\Model\Order\Change\ShippingProcessor\ChangeResult $changeResult
     ): void {
         $order->addSuccessLog(
-            'Tracking number "%num%" for "%code%" has been sent to TikTok Shop.',
+            'Tracking number "%num%" for "%code%" has been sent to "%channel_title%".',
             [
                 '!num' => $changeResult->trackingNumber,
                 '!code' => $changeResult->shippingProviderName,
+                '!channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle(),
             ]
         );
 

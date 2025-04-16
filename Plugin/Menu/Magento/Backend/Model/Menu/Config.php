@@ -18,17 +18,20 @@ class Config extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
     public function __construct(
         \M2E\TikTokShop\Model\Registry\Manager $registry,
-        \Magento\Backend\Model\Menu\Item\Factory $itemFactory,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \Magento\Backend\Model\Menu\Item\Factory $itemFactory
     ) {
-        parent::__construct($helperFactory);
         $this->itemFactory = $itemFactory;
         $this->registry = $registry;
     }
 
     protected function canExecute(): bool
     {
-        return $this->helperFactory->getObject('Module')->areImportantTablesExist();
+        /** @var \M2E\TikTokShop\Helper\Module $helper */
+        $helper = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\TikTokShop\Helper\Module::class
+        );
+
+        return $helper->areImportantTablesExist();
     }
 
     public function aroundGetMenu(\Magento\Backend\Model\Menu\Config $interceptor, \Closure $callback, ...$arguments)
@@ -52,17 +55,32 @@ class Config extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
         // ---------------------------------------
 
-        $maintenanceMenuState = $this->helperFactory->getObject('Data_Cache_Permanent')->getValue(
+        /** @var \M2E\TikTokShop\Helper\Data\Cache\Permanent $cachePermanentHelper */
+        $cachePermanentHelper = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\TikTokShop\Helper\Data\Cache\Permanent::class
+        );
+
+        $maintenanceMenuState = $cachePermanentHelper->getValue(
             self::MAINTENANCE_MENU_STATE_CACHE_KEY
         );
 
-        if ($this->helperFactory->getObject('Module\Maintenance')->isEnabled()) {
+        /** @var \M2E\Core\Helper\Magento $helper */
+        $magentoHelper = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\Core\Helper\Magento::class
+        );
+
+        /** @var \M2E\TikTokShop\Helper\Module\Maintenance $maintenanceHelper */
+        $maintenanceHelper = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\TikTokShop\Helper\Module\Maintenance::class
+        );
+
+        if ($maintenanceHelper->isEnabled()) {
             if ($maintenanceMenuState === null) {
-                $this->helperFactory->getObject('Data_Cache_Permanent')->setValue(
+                $cachePermanentHelper->setValue(
                     self::MAINTENANCE_MENU_STATE_CACHE_KEY,
                     true
                 );
-                $this->helperFactory->getObject('Magento')->clearMenuCache();
+                $magentoHelper->clearMenuCache();
             }
             $this->processMaintenance($menuModel);
 
@@ -70,10 +88,10 @@ class Config extends \M2E\TikTokShop\Plugin\AbstractPlugin
         }
 
         if ($maintenanceMenuState !== null) {
-            $this->helperFactory->getObject('Data_Cache_Permanent')->removeValue(
+            $cachePermanentHelper->removeValue(
                 self::MAINTENANCE_MENU_STATE_CACHE_KEY
             );
-            $this->helperFactory->getObject('Magento')->clearMenuCache();
+            $magentoHelper->clearMenuCache();
         }
 
         // ---------------------------------------
@@ -83,12 +101,17 @@ class Config extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
         if ($previousMenuState != $currentMenuState) {
             $this->registry->setValue(self::MENU_STATE_REGISTRY_KEY, $currentMenuState);
-            $this->helperFactory->getObject('Magento')->clearMenuCache();
+            $magentoHelper->clearMenuCache();
         }
 
         // ---------------------------------------
 
-        if ($this->helperFactory->getObject('Module')->isDisabled()) {
+        /** @var \M2E\TikTokShop\Helper\Module $moduleHelper */
+        $moduleHelper = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\TikTokShop\Helper\Module::class
+        );
+
+        if ($moduleHelper->isDisabled()) {
             $this->processModuleDisable($menuModel);
 
             return $menuModel;
@@ -112,7 +135,7 @@ class Config extends \M2E\TikTokShop\Plugin\AbstractPlugin
                 $maintenanceMenuItem = $this->itemFactory->create([
                     'id' => Maintenance::MENU_ROOT_NODE_NICK,
                     'module' => Module::IDENTIFIER,
-                    'title' => 'TikTok Shop',
+                    'title' => \M2E\TikTokShop\Helper\Module::getChannelTitle(),
                     'resource' => $maintenanceMenuItemResource,
                     'action' => 'm2e_tiktokshop/maintenance',
                 ]);
@@ -138,7 +161,10 @@ class Config extends \M2E\TikTokShop\Plugin\AbstractPlugin
         }
 
         /** @var \M2E\TikTokShop\Helper\Module\Wizard $wizard */
-        $wizard = $this->helperFactory->getObject('Module\Wizard');
+        $wizard = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\TikTokShop\Helper\Module\Wizard::class
+        );
+
         $activeBlocker = $wizard->getActiveBlockerWizard(TikTokShop::NICK);
 
         if ($activeBlocker === null) {
@@ -153,12 +179,22 @@ class Config extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
     private function buildMenuStateData(): array
     {
+        /** @var \M2E\TikTokShop\Helper\Module $moduleHelper */
+        $moduleHelper = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\TikTokShop\Helper\Module::class
+        );
+
+        /** @var \M2E\TikTokShop\Helper\Module\Wizard $wizardHelper */
+        $wizardHelper = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\TikTokShop\Helper\Module\Wizard::class
+        );
+
         return [
             Module::IDENTIFIER => [
-                $this->helperFactory->getObject('Module')->isDisabled(),
+                $moduleHelper->isDisabled(),
             ],
             TikTokShop::MENU_ROOT_NODE_NICK => [
-                $this->helperFactory->getObject('Module\Wizard')->getActiveBlockerWizard(TikTokShop::NICK) === null,
+                $wizardHelper->getActiveBlockerWizard(TikTokShop::NICK) === null,
             ],
         ];
     }

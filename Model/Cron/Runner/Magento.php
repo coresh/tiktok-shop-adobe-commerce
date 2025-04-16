@@ -20,7 +20,7 @@ class Magento extends AbstractRunner
 
     public function getInitiator(): int
     {
-        return \M2E\TikTokShop\Helper\Data::INITIATOR_UNKNOWN;
+        return \M2E\Core\Helper\Data::INITIATOR_UNKNOWN;
     }
 
     protected function isPossibleToRun(): bool

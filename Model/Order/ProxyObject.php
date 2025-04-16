@@ -207,8 +207,10 @@ class ProxyObject
 
             if ($customerDataObject->getId() === null) {
                 throw new \M2E\TikTokShop\Model\Exception(
-                    "Customer with ID specified in TikTok Shop Account
-                    Settings does not exist."
+                    sprintf(
+                        'Customer with ID specified in %s Account Settings does not exist.',
+                        \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    )
                 );
             }
 
@@ -367,7 +369,7 @@ class ProxyObject
             ->isImportShipByDate();
 
         if (!empty($shipByDate) && $isImportShipByDate) {
-            $shippingDate = \M2E\TikTokShop\Helper\Date::createDateInCurrentZone($shipByDate);
+            $shippingDate = \M2E\Core\Helper\Date::createDateInCurrentZone($shipByDate);
             $additionalData .= sprintf('Ship By Date: %s | ', $shippingDate->format('M d, Y, H:i:s'));
         }
 
@@ -378,7 +380,12 @@ class ProxyObject
         $shippingMethod = $this->order->getShippingService();
 
         return [
-            'carrier_title' => (string)__('TikTok Shop Delivery Option'),
+            'carrier_title' => (string)__(
+                '%channel_title Delivery Option',
+                [
+                    'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                ]
+            ),
             'shipping_method' => $shippingMethod . $additionalData,
             'shipping_price' => $this->getBaseShippingPrice(),
         ];

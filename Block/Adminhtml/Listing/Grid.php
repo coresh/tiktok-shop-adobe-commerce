@@ -12,10 +12,10 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
 
     /** @var \M2E\TikTokShop\Helper\Data */
     protected $dataHelper;
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Url $urlHelper,
+        \M2E\Core\Helper\Url $urlHelper,
         \M2E\TikTokShop\Helper\View $viewHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Backend\Helper\Data $backendHelper,

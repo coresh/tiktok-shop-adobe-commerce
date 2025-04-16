@@ -22,11 +22,8 @@ class Config extends \M2E\TikTokShop\Plugin\AbstractPlugin
         \M2E\TikTokShop\Helper\Module $moduleHelper,
         \M2E\TikTokShop\Helper\Module\Maintenance $moduleMaintenanceHelper,
         \M2E\TikTokShop\Helper\Module\Configuration $moduleConfigurationHelper,
-        \M2E\TikTokShop\Model\Log\Clearing $logClearing,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \M2E\TikTokShop\Model\Log\Clearing $logClearing
     ) {
-        parent::__construct($helperFactory);
-
         $this->request = $request;
         $this->moduleHelper = $moduleHelper;
         $this->moduleMaintenanceHelper = $moduleMaintenanceHelper;

@@ -254,7 +254,7 @@ class Reserve
 
                 if (
                     !$magentoStockItem->canChangeQty() &&
-                    $this->order->getLogService()->getInitiator() == \M2E\TikTokShop\Helper\Data::INITIATOR_USER
+                    $this->order->getLogService()->getInitiator() == \M2E\Core\Helper\Data::INITIATOR_USER
                 ) {
                     $this->order->addWarningLog(
                         'The QTY Reservation action (reserve/release/cancel) has not been performed for "%name%"
@@ -364,7 +364,7 @@ class Reserve
         if ($newState === self::STATE_PLACED && !$this->getFlag('order_reservation')) {
             $this->order->setData(
                 'reservation_start_date',
-                \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s'),
+                \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s'),
             );
         }
 

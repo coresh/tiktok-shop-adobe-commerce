@@ -127,7 +127,7 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
             ],
         );
 
-        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+        $now = \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
         $select = $this->promotionProductResource->getConnection()->select();
         $select->from(
             $this->promotionProductResource->getMainTable(),
@@ -239,7 +239,7 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
     private function buildFilterByPromotion($condition): void
     {
         $conditionValue = (int)$condition['eq'];
-        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+        $now = \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
 
         if ($conditionValue === \M2E\TikTokShop\Ui\Select\YesNoAnyOption::OPTION_YES) {
             $this->wrappedCollection->getSelect()->where(

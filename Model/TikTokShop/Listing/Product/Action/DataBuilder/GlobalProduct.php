@@ -12,7 +12,7 @@ class GlobalProduct extends AbstractDataBuilder
     private \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder\Factory $dataBuilderFactory;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper,
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper,
         \M2E\TikTokShop\Model\Image\Repository $imageRepository,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder\Factory $dataBuilderFactory
     ) {

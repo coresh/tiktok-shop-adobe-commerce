@@ -159,7 +159,7 @@ class Repository
             )
             ->addFieldToFilter(
                 ProcessingResource::COLUMN_EXPIRATION_DATE,
-                ['lt' => \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')],
+                ['lt' => \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')],
             )
             ->addFieldToFilter(
                 ProcessingResource::COLUMN_STAGE,

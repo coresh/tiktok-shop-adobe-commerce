@@ -32,9 +32,14 @@ class InvoicesAndShipments extends AbstractForm
             'invoices_and_shipments',
             self::HELP_BLOCK,
             [
-                'content' => __('<p>Under this tab, you can set M2E TikTok Shop Connect to automatically create ' .
+                'content' => __(
+                    '<p>Under this tab, you can set %extension_title to automatically create ' .
                     'invoices and shipments in your Magento. To do that, keep Magento ' .
-                    '<i>Invoice/Shipment Creation</i> options enabled.</p>'),
+                    '<i>Invoice/Shipment Creation</i> options enabled.</p>',
+                    [
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
+                ),
             ]
         );
 

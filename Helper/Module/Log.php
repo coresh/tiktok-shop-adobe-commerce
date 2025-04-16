@@ -171,10 +171,10 @@ class Log
     public function getStatusByResultType($resultType)
     {
         $typesStatusesMap = [
-            \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_INFO => \M2E\TikTokShop\Helper\Data::STATUS_SUCCESS,
-            \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_SUCCESS => \M2E\TikTokShop\Helper\Data::STATUS_SUCCESS,
-            \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_WARNING => \M2E\TikTokShop\Helper\Data::STATUS_WARNING,
-            \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_ERROR => \M2E\TikTokShop\Helper\Data::STATUS_ERROR,
+            \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_INFO => \M2E\Core\Helper\Data::STATUS_SUCCESS,
+            \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_SUCCESS => \M2E\Core\Helper\Data::STATUS_SUCCESS,
+            \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_WARNING => \M2E\Core\Helper\Data::STATUS_WARNING,
+            \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_ERROR => \M2E\Core\Helper\Data::STATUS_ERROR,
         ];
 
         return $typesStatusesMap[$resultType];

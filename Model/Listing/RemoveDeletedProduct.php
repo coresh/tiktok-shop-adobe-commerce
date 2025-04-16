@@ -67,7 +67,7 @@ class RemoveDeletedProduct
             $listingProduct->setStatusInactive(\M2E\TikTokShop\Model\Product::STATUS_CHANGER_USER);
             $this->productRepository->save($listingProduct);
 
-            $this->productDeleteService->process($listingProduct, \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION);
+            $this->productDeleteService->process($listingProduct, \M2E\Core\Helper\Data::INITIATOR_EXTENSION);
 
             $listingId = $listingProduct->getListingId();
             if (isset($processedListings[$listingId])) {
@@ -78,7 +78,7 @@ class RemoveDeletedProduct
 
             $this->listingLogService->addProduct(
                 $listingProduct,
-                \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+                \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
                 \M2E\TikTokShop\Model\Listing\Log::ACTION_DELETE_PRODUCT_FROM_MAGENTO,
                 null,
                 $message,
@@ -134,7 +134,7 @@ class RemoveDeletedProduct
 
         $this->listingLogService->addProduct(
             $variantSku->getProduct(),
-            \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+            \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_DELETE_PRODUCT_FROM_MAGENTO,
             null,
             $message,

@@ -29,7 +29,13 @@ class Delete
 
         $this->updateMagentoOrderComment(
             $order,
-            (string)__('Custom Note for the corresponding TikTok Shop order was deleted.'),
+            (string)__(
+                'Custom Note for the corresponding %channel_title order was deleted.' .
+                'automatically</p>',
+                [
+                    'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                ]
+            ),
         );
     }
 }

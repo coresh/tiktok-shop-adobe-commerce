@@ -75,7 +75,7 @@ class Save extends AbstractOrder
         $shippingDetails = $order->getShippingDetails();
         $shippingDetails['address'] = $data;
 
-        $order->setData('shipping_details', \M2E\TikTokShop\Helper\Json::encode($shippingDetails));
+        $order->setData('shipping_details', \M2E\Core\Helper\Json::encode($shippingDetails));
         $order->save();
 
         $shippingAddressBlock = $this

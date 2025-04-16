@@ -32,7 +32,7 @@ class JsUrlRenderer extends AbstractRenderer
             return '';
         }
 
-        $urls = \M2E\TikTokShop\Helper\Json::encode($this->jsUrls);
+        $urls = \M2E\Core\Helper\Json::encode($this->jsUrls);
 
         return "TikTokShop.url.add({$urls});";
     }

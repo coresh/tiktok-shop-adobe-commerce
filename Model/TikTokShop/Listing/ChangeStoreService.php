@@ -61,7 +61,7 @@ class ChangeStoreService
         $this->logService->addRecordToListing(
             $this->prepareChangeRecord($prevStoreId, $storeId),
             $listing,
-            \M2E\TikTokShop\Helper\Data::INITIATOR_USER,
+            \M2E\Core\Helper\Data::INITIATOR_USER,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_EDIT_LISTING_SETTINGS,
             null
         );

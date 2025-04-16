@@ -70,10 +70,11 @@ define([
 
                 categoryId = categorySelect.options[categorySelect.selectedIndex].value;
                 const isLeaf = categorySelect.options[categorySelect.selectedIndex].getAttribute('is_leaf');
+                const skipInvite = categorySelect.options[categorySelect.selectedIndex].getAttribute('data-skip_invite');
                 const invaiteOnly = categorySelect.options[categorySelect.selectedIndex].getAttribute('data-invite_only');
                 selectedCategories[selectedCategories.length] = {
                     'value': categoryId,
-                    'invite_only': invaiteOnly,
+                    'invite_only': (Number(skipInvite) > 0) ? 0 : invaiteOnly,
                 }
 
                 if (isLeaf == 1) {
@@ -120,7 +121,7 @@ define([
                             title += ' >'
                         }
 
-                        optionsHtml += `<option data-invite_only="${category.invite_only}" is_leaf="${category.is_leaf}" value="${category.category_id}">`;
+                        optionsHtml += `<option data-invite_only="${category.invite_only}" data-skip_invite="${category.skip_invite}" is_leaf="${category.is_leaf}" value="${category.category_id}">`;
                         optionsHtml += title;
                         optionsHtml += '</option>';
                     });

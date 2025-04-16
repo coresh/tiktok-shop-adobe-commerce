@@ -124,7 +124,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
      */
     public function callbackColumnTitle($value, $row, $column, $isExport)
     {
-        $title = \M2E\TikTokShop\Helper\Data::escapeHtml($value);
+        $title = \M2E\Core\Helper\Data::escapeHtml($value);
         $url = $this->urlBuilder->getUrl("*/tiktokshop_listing/view", ['id' => $row->getData('id')]);
 
         $html = '<div>';
@@ -243,10 +243,16 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         $helpBlockHtml = '';
 
         if ($this->canDisplayContainer()) {
-            $helpContent = __('To publish a Global Product in a new TikTok Shop market, move the Item(s) ' .
-                'to a Listing within the same TikTok Shop Account and Shop, but with a different target region.<br>' .
-                'You can choose an existing M2E TikTok Shop Connect Listing or create a new one to efficiently ' .
-                'manage your products across multiple TikTok Shop markets.');
+            $helpContent = __(
+                'To publish a Global Product in a new %channel_title market, move the Item(s) ' .
+                'to a Listing within the same %channel_title Account and Shop, but with a different target region.<br>' .
+                'You can choose an existing %extension_title Listing or create a new one to efficiently ' .
+                'manage your products across multiple %channel_title markets.',
+                [
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                    'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                ]
+            );
 
             $helpBlockHtml = $this
                 ->getLayout()

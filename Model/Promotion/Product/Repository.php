@@ -176,7 +176,7 @@ class Repository
 
     public function isExistActiveOrNotStartPromotionForProduct(string $channelProductId, int $accountId, int $shopId): bool
     {
-        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+        $now = \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
 
         $collection = $this->collectionFactory->create();
 
@@ -205,7 +205,7 @@ class Repository
 
     public function isExistActiveOrNotStartPromotionForSku(string $skuId, int $accountId, int $shopId): bool
     {
-        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+        $now = \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
 
         $collection = $this->collectionFactory->create();
 

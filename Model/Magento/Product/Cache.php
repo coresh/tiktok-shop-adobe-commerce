@@ -72,7 +72,7 @@ class Cache extends \M2E\TikTokShop\Model\Magento\Product
             . '_'
             . $this->getStoreId()
             . '_'
-            . \M2E\TikTokShop\Helper\Json::encode($key),
+            . \M2E\Core\Helper\Json::encode($key),
         );
 
         return $this->runtimeCache->getValue($key);
@@ -86,7 +86,7 @@ class Cache extends \M2E\TikTokShop\Model\Magento\Product
             . '_'
             . $this->getStoreId()
             . '_'
-            . \M2E\TikTokShop\Helper\Json::encode($key),
+            . \M2E\Core\Helper\Json::encode($key),
         );
 
         $tags = [

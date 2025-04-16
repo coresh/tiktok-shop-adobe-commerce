@@ -40,7 +40,7 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options
             );
             $html = $viewLogIcon->render($row);
 
-            $additionalData = (array)\M2E\TikTokShop\Helper\Json::decode($row->getData('additional_data'));
+            $additionalData = (array)\M2E\Core\Helper\Json::decode($row->getData('additional_data'));
             $synchNote = $additionalData['synch_template_list_rules_note'] ?? [];
             if (!empty($synchNote)) {
                 $synchNote = $this->viewHelper->getModifiedLogMessage($synchNote);

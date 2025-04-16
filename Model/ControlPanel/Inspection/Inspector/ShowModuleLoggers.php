@@ -7,11 +7,11 @@ class ShowModuleLoggers implements \M2E\Core\Model\ControlPanel\Inspection\Inspe
     private array $loggers = [];
 
     private \M2E\Core\Model\ControlPanel\Inspection\IssueFactory $issueFactory;
-    private \M2E\TikTokShop\Helper\Client $clientHelper;
+    private \M2E\Core\Helper\Client $clientHelper;
 
     public function __construct(
         \M2E\Core\Model\ControlPanel\Inspection\IssueFactory $issueFactory,
-        \M2E\TikTokShop\Helper\Client $clientHelper
+        \M2E\Core\Helper\Client $clientHelper
     ) {
         $this->issueFactory = $issueFactory;
         $this->clientHelper = $clientHelper;

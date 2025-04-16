@@ -23,7 +23,7 @@ abstract class AbstractProcessor
     {
         $this->init();
 
-        $this->actionLogger->setStatus(\M2E\TikTokShop\Helper\Data::STATUS_SUCCESS);
+        $this->actionLogger->setStatus(\M2E\Core\Helper\Data::STATUS_SUCCESS);
 
         if ($this->isListingProductLocked()) {
             $this->actionLogger->logListingProductMessage(

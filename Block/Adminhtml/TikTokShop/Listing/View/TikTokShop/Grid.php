@@ -20,7 +20,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
     private \M2E\TikTokShop\Helper\Data\Session $sessionDataHelper;
     private \M2E\TikTokShop\Model\Currency $currency;
     private ListingProductResource $listingProductResource;
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
     private \M2E\TikTokShop\Model\Magento\ProductFactory $ourMagentoProductFactory;
     /** @var \M2E\TikTokShop\Model\ResourceModel\Product\VariantSku */
     private ListingProductResource\VariantSku $productVariantResource;
@@ -47,7 +47,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \M2E\TikTokShop\Helper\Data $dataHelper,
-        \M2E\TikTokShop\Helper\Url $urlHelper,
+        \M2E\Core\Helper\Url $urlHelper,
         \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper,
         \M2E\TikTokShop\Model\Currency $currency,
         array $data = []
@@ -172,7 +172,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             'left'
         );
 
-        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+        $now = \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
         $select = $this->promotionProductResource->getConnection()->select();
         $select->from(
             $this->promotionProductResource->getMainTable(),
@@ -246,7 +246,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         ]);
 
         $this->addColumn('tik_tok_shop_product_id', [
-            'header' => __('TikTok Shop Product ID'),
+            'header' => __(\M2E\TikTokShop\Helper\Module::getChannelTitle() . ' Product ID'),
             'align' => 'left',
             'width' => '100',
             'type' => 'text',
@@ -358,27 +358,32 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         // ---------------------------------------
 
         $this->getMassactionBlock()->addItem('list', [
-            'label' => __('List Item(s) on TikTok Shop'),
+            'label' => __('List Item(s) on ' . \M2E\TikTokShop\Helper\Module::getChannelTitle()),
             'url' => '',
         ], 'actions');
 
         $this->getMassactionBlock()->addItem('revise', [
-            'label' => __('Revise Item(s) on TikTok Shop'),
+            'label' => __('Revise Item(s) on ' . \M2E\TikTokShop\Helper\Module::getChannelTitle()),
             'url' => '',
         ], 'actions');
 
         $this->getMassactionBlock()->addItem('relist', [
-            'label' => __('Relist Item(s) on TikTok Shop'),
+            'label' => __('Relist Item(s) on ' . \M2E\TikTokShop\Helper\Module::getChannelTitle()),
             'url' => '',
         ], 'actions');
 
         $this->getMassactionBlock()->addItem('stop', [
-            'label' => __('Stop Item(s) on TikTok Shop'),
+            'label' => __('Stop Item(s) on ' . \M2E\TikTokShop\Helper\Module::getChannelTitle()),
             'url' => '',
         ], 'actions');
 
         $this->getMassactionBlock()->addItem('stopAndRemove', [
-            'label' => __('Remove from TikTok Shop / Remove from Listing'),
+            'label' => __(
+                'Remove from %channel_title / Remove from Listing',
+                [
+                    'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                ]
+            ),
             'url' => '',
         ], 'actions');
 
@@ -430,7 +435,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
             $title = $onlineTitle;
         }
 
-        $title = \M2E\TikTokShop\Helper\Data::escapeHtml($title);
+        $title = \M2E\Core\Helper\Data::escapeHtml($title);
 
         $valueHtml = '<span class="product-title-value">' . $title . '</span>';
 
@@ -443,19 +448,19 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         }
 
         if ($isExport) {
-            return \M2E\TikTokShop\Helper\Data::escapeHtml($sku);
+            return \M2E\Core\Helper\Data::escapeHtml($sku);
         }
 
         $valueHtml .= '<br/>' .
             '<strong>' . __('SKU') . ':</strong>&nbsp;' .
-            \M2E\TikTokShop\Helper\Data::escapeHtml($sku);
+            \M2E\Core\Helper\Data::escapeHtml($sku);
 
         if ($categoryId = $row->getData('online_category')) {
             $categoryPath = $row->getData('category_path');
             $categoryInfo = sprintf('%s (%s)', $categoryPath, $categoryId);
             $valueHtml .= '<br/><br/>' .
                 '<strong>' . __('Category') . ':</strong>&nbsp;' .
-                \M2E\TikTokShop\Helper\Data::escapeHtml($categoryInfo);
+                \M2E\Core\Helper\Data::escapeHtml($categoryInfo);
         }
 
         $listingProduct = $row->getListingProduct();
@@ -596,7 +601,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
         $to = $condition['to'] ?? null;
 
         $whereConditions = [];
-        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+        $now = \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
 
         if ($from === null || $to === null) {
             $value = $column->getFilter()->getValue();
@@ -755,7 +760,7 @@ HTML;
         $productsIdsForList = empty($temp) ? '' : $temp;
 
         $gridId = $this->getId();
-        $ignoreListings = \M2E\TikTokShop\Helper\Json::encode([$this->getListing()->getId()]);
+        $ignoreListings = \M2E\Core\Helper\Json::encode([$this->getListing()->getId()]);
 
         $this->jsUrl->addUrls([
             'runListProducts' => $this->getUrl('*/tiktokshop_listing/runListProducts'),
@@ -817,19 +822,49 @@ HTML;
             '<a target="_blank" href="%url%">View Log</a> for details.'
         );
 
+        $channelTitle = \M2E\TikTokShop\Helper\Module::getChannelTitle();
+
         $this->jsTranslator->addTranslations([
             'task_completed_message' => __('Task completed. Please wait ...'),
             'task_completed_success_message' => __('"%task_title%" task has completed.'),
             'task_completed_warning_message' => $taskCompletedWarningMessage,
             'task_completed_error_message' => $taskCompletedErrorMessage,
-            'sending_data_message' => __('Sending %product_title% Product(s) data on TikTok Shop.'),
+            'sending_data_message' => __(
+                'Sending %product_title% Product(s) data on %channel_title.',
+                [
+                    'channel_title' => $channelTitle
+                ]
+            ),
             'view_full_product_log' => __('View Full Product Log.'),
-            'listing_selected_items_message' => __('Listing Selected Items On TikTok Shop'),
-            'revising_selected_items_message' => __('Revising Selected Items On TikTok Shop'),
-            'relisting_selected_items_message' => __('Relisting Selected Items On TikTok Shop'),
-            'stopping_selected_items_message' => __('Stopping Selected Items On TikTok Shop'),
+            'listing_selected_items_message' => __(
+                'Listing Selected Items On %channel_title',
+                [
+                    'channel_title' => $channelTitle
+                ]
+            ),
+            'revising_selected_items_message' => __(
+                'Revising Selected Items On %channel_title',
+                [
+                    'channel_title' => $channelTitle
+                ]
+            ),
+            'relisting_selected_items_message' => __(
+                'Relisting Selected Items On %channel_title',
+                [
+                    'channel_title' => $channelTitle
+                ]
+            ),
+            'stopping_selected_items_message' => __(
+                'Stopping Selected Items On %channel_title',
+                [
+                    'channel_title' => $channelTitle
+                ]
+            ),
             'stopping_and_removing_selected_items_message' => __(
-                'Removing from TikTok Shop And Removing From Listing Selected Items'
+                'Removing from %channel_title And Removing From Listing Selected Items',
+                [
+                    'channel_title' => $channelTitle
+                ]
             ),
             'removing_selected_items_message' => __('Removing From Listing Selected Items'),
 

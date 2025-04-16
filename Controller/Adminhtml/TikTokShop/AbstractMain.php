@@ -19,12 +19,12 @@ abstract class AbstractMain extends \M2E\TikTokShop\Controller\Adminhtml\Abstrac
         if ($this->resultPage !== null) {
             return;
         }
-        
+
         parent::initResultPage();
 
         $this->getResultPage()
              ->getConfig()
-             ->getTitle()->prepend(\M2E\TikTokShop\Helper\View\TikTokShop::getTitle());
+             ->getTitle()->prepend(\M2E\TikTokShop\Helper\Module::getChannelTitle());
 
         if ($this->getLayoutType() != self::LAYOUT_BLANK) {
             /** @psalm-suppress UndefinedMethod */

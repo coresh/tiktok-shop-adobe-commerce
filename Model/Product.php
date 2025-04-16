@@ -740,7 +740,7 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     public static function createOnlineDescription(string $description): string
     {
-        return \M2E\TikTokShop\Helper\Data::md5String($description);
+        return \M2E\Core\Helper\Data::md5String($description);
     }
 
     // region qty
@@ -854,8 +854,8 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             return false;
         }
 
-        $lastBlockingDate = \M2E\TikTokShop\Helper\Date::createDateGmt($rawDate);
-        $twentyFourHoursAgoDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->modify('-24 hour');
+        $lastBlockingDate = \M2E\Core\Helper\Date::createDateGmt($rawDate);
+        $twentyFourHoursAgoDate = \M2E\Core\Helper\Date::createCurrentGmt()->modify('-24 hour');
 
         return $lastBlockingDate->getTimestamp() > $twentyFourHoursAgoDate->getTimestamp();
     }

@@ -16,6 +16,6 @@ abstract class AbstractInstallation extends AbstractWizard
         $this->getResultPage()
              ->getConfig()
              ->getTitle()
-             ->prepend(__('Configuration of %channel Integration', ['channel' => (string)__('TikTok Shop')]));
+             ->prepend(__('Configuration of %channel Integration', ['channel' => (string)__(\M2E\TikTokShop\Helper\Module::getChannelTitle())]));
     }
 }

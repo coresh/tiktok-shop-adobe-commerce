@@ -34,7 +34,7 @@ class StopAndRemoveAction extends AbstractRealtime
                 continue;
             }
 
-            $this->removeHandler->process($listingProduct, \M2E\TikTokShop\Helper\Data::INITIATOR_USER);
+            $this->removeHandler->process($listingProduct, \M2E\Core\Helper\Data::INITIATOR_USER);
         }
 
         return $result;

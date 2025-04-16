@@ -35,18 +35,22 @@ class License extends \M2E\TikTokShop\Block\Adminhtml\System\Config\Sections
                 'no_collapse' => true,
                 'no_hide' => true,
                 'content' => __(
-                    '<p>To use M2E TikTok Shop Connect, you need to register on M2E Accounts ' .
+                    '<p>To use %extension_title, you need to register on M2E Accounts ' .
                     'and generate a License Key.</p><br><p>Your email address used during the initial setup ' .
-                    'of M2E TikTok Shop Connect automatically registers you on M2E Accounts. After logging in, you can ' .
+                    'of %extension_title automatically registers you on M2E Accounts. After logging in, you can ' .
                     'manage your Subscription and Billing information.</p><br><p>License Key is a unique ' .
-                    'identifier of M2E TikTok Shop Connect instance which is generated automatically and strictly ' .
+                    'identifier of %extension_title instance which is generated automatically and strictly ' .
                     'associated with the current IP and Domain of your Magento.</p><br><p>The same License Key ' .
                     'cannot be used for different domains, sub-domains or IPs. If your Magento Server changes ' .
-                    'its location, the new License Key must be obtained and provided to M2E TikTok Shop Connect License ' .
+                    'its location, the new License Key must be obtained and provided to %extension_title License ' .
                     'section. Click <strong>Save</strong> after the changes are made.</p><br><p>' .
-                    '<strong>Note:</strong> If you need some assistance to activate your M2E TikTok Shop Connect instance, ' .
+                    '<strong>Note:</strong> If you need some assistance to activate your %extension_title instance, ' .
                     'please contact Support Team at <a href="mailto:%email">%email</a>.</p>',
-                    ['email' => 'support@m2epro.com']
+                    [
+                        'email' => 'support@m2epro.com',
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle(),
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
                 ),
             ]
         );
@@ -81,7 +85,7 @@ class License extends \M2E\TikTokShop\Block\Adminhtml\System\Config\Sections
                         'This email address is associated with your License. ' .
                         'You can also use it to access <a href="%url" target="_blank" ' .
                         'class="external-link">M2E Accounts</a>.',
-                        ['url' => \M2E\TikTokShop\Helper\Module\Support::ACCOUNTS_URL],
+                        ['url' => \M2E\Core\Helper\Module\Support::ACCOUNTS_URL],
                     ),
                 ]
             );
@@ -94,7 +98,7 @@ class License extends \M2E\TikTokShop\Block\Adminhtml\System\Config\Sections
                 [
                     'label' => '',
                     'value' => __('Manage License'),
-                    'href' => \M2E\TikTokShop\Helper\Module\Support::ACCOUNTS_URL,
+                    'href' => \M2E\Core\Helper\Module\Support::ACCOUNTS_URL,
                     'class' => 'external-link',
                     'target' => '_blank',
                 ]
@@ -121,7 +125,7 @@ class License extends \M2E\TikTokShop\Block\Adminhtml\System\Config\Sections
                     $text .= sprintf(
                         '<span>(%s: %s)</span>',
                         __('Your Domain'),
-                        \M2E\TikTokShop\Helper\Data::escapeHtml($this->licenseData['connection']['domain'])
+                        \M2E\Core\Helper\Data::escapeHtml($this->licenseData['connection']['domain'])
                     );
                 }
 
@@ -144,7 +148,7 @@ class License extends \M2E\TikTokShop\Block\Adminhtml\System\Config\Sections
                     && $this->licenseData['connection']['ip'] !== null
                 ) {
                     $text .= '<span> (' . __('Your IP') . ': '
-                        . \M2E\TikTokShop\Helper\Data::escapeHtml($this->licenseData['connection']['ip']) . ')</span>';
+                        . \M2E\Core\Helper\Data::escapeHtml($this->licenseData['connection']['ip']) . ')</span>';
                 }
 
                 $fieldSet->addField(
@@ -190,13 +194,13 @@ class License extends \M2E\TikTokShop\Block\Adminhtml\System\Config\Sections
         $domainIdentifier = $license->getInfo()->getDomainIdentifier();
         $ipIdentifier = $license->getInfo()->getIpIdentifier();
 
-        $this->key = \M2E\TikTokShop\Helper\Data::escapeHtml($license->getKey());
+        $this->key = \M2E\Core\Helper\Data::escapeHtml($license->getKey());
 
         $this->licenseData = [
-            'domain' => \M2E\TikTokShop\Helper\Data::escapeHtml($domainIdentifier->getValidValue()),
-            'ip' => \M2E\TikTokShop\Helper\Data::escapeHtml($ipIdentifier->getValidValue()),
+            'domain' => \M2E\Core\Helper\Data::escapeHtml($domainIdentifier->getValidValue()),
+            'ip' => \M2E\Core\Helper\Data::escapeHtml($ipIdentifier->getValidValue()),
             'info' => [
-                'email' => \M2E\TikTokShop\Helper\Data::escapeHtml($license->getInfo()->getEmail()),
+                'email' => \M2E\Core\Helper\Data::escapeHtml($license->getInfo()->getEmail()),
             ],
             'valid' => [
                 'domain' => $domainIdentifier->isValid(),

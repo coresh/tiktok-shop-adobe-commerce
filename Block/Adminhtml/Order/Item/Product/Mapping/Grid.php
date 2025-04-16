@@ -143,7 +143,7 @@ class Grid extends AbstractGrid
 
     public function callbackColumnTitle($value, $row, $column, $isExport)
     {
-        $value = '<div style="margin-left: 3px">' . \M2E\TikTokShop\Helper\Data::escapeHtml($value);
+        $value = '<div style="margin-left: 3px">' . \M2E\Core\Helper\Data::escapeHtml($value);
 
         $sku = $row->getData('sku');
         if ($sku === null) {
@@ -153,14 +153,14 @@ class Grid extends AbstractGrid
         }
 
         $value .= '<br/><strong>' . __('SKU') . ':</strong> ';
-        $value .= \M2E\TikTokShop\Helper\Data::escapeHtml($sku) . '</div>';
+        $value .= \M2E\Core\Helper\Data::escapeHtml($sku) . '</div>';
 
         return $value;
     }
 
     public function callbackColumnType($value, $row, $column, $isExport)
     {
-        return '<div style="margin-left: 3px">' . \M2E\TikTokShop\Helper\Data::escapeHtml($value) . '</div>';
+        return '<div style="margin-left: 3px">' . \M2E\Core\Helper\Data::escapeHtml($value) . '</div>';
     }
 
     public function callbackColumnIsInStock($value, $row, $column, $isExport)

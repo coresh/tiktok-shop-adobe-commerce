@@ -39,7 +39,6 @@ class SettingsContinue extends Installation
 
         $this->configuration->setConfigValues($params);
         $this->saveShippingMapping($params['shipping_provider_mapping'] ?? []);
-        $this->activateAccount((int)$params['account_settings']['account_id']);
 
         $this->setStep($this->getNextStep());
 
@@ -55,13 +54,5 @@ class SettingsContinue extends Installation
         foreach ($data as $warehouseId => $warehouseData) {
             $this->shippingMappingUpdater->update((string)$warehouseId, $warehouseData);
         }
-    }
-
-    private function activateAccount(int $accountId): void
-    {
-        $account = $this->accountRepository->get($accountId);
-        $account->activate();
-
-        $this->accountRepository->save($account);
     }
 }

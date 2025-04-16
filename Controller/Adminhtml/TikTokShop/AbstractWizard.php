@@ -23,6 +23,6 @@ abstract class AbstractWizard extends \M2E\TikTokShop\Controller\Adminhtml\Abstr
 
     protected function getMenuRootNodeLabel()
     {
-        return \M2E\TikTokShop\Helper\View\TikTokShop::getMenuRootNodeLabel();
+        return \M2E\TikTokShop\Helper\Module::getMenuRootNodeLabel();
     }
 }

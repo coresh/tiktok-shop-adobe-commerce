@@ -36,8 +36,8 @@ class MagentoProductId extends \Magento\Ui\Component\Listing\Columns\Column
             if (strlen($productTitle) > 60) {
                 $productTitle = substr($productTitle, 0, 60) . '...';
             }
-            $productTitle = \M2E\TikTokShop\Helper\Data::escapeHtml($productTitle);
-            $productTitle = \M2E\TikTokShop\Helper\Data::escapeJs($productTitle);
+            $productTitle = \M2E\Core\Helper\Data::escapeHtml($productTitle);
+            $productTitle = \M2E\Core\Helper\Data::escapeJs($productTitle);
 
             if ($magentoProductId === null) {
                 $link = sprintf(

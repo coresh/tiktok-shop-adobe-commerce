@@ -74,7 +74,7 @@ class UploadByUser implements \M2E\Core\Model\Cron\TaskHandlerInterface
                         ->processTikTokOrders($shop, $response->getOrders());
                     $ordersCreator->processMagentoOrders($processTikTokOrders);
 
-                    $responseMaxDate = \M2E\TikTokShop\Helper\Date::createDateGmt($response->getMaxDateInResult());
+                    $responseMaxDate = \M2E\Core\Helper\Date::createDateGmt($response->getMaxDateInResult());
                     if (
                         $maxDate === null
                         || $maxDate->getTimestamp() < $responseMaxDate->getTimestamp()
@@ -96,8 +96,11 @@ class UploadByUser implements \M2E\Core\Model\Cron\TaskHandlerInterface
                 }
             } catch (\Throwable $exception) {
                 $message = (string)\__(
-                    'The "Upload Orders By User" Action for TikTok Shop Account "%account" was completed with error.',
-                    ['account' => $account->getTitle()],
+                    'The "Upload Orders By User" Action for %channel_title Account "%account" was completed with error.',
+                    [
+                        'account' => $account->getTitle(),
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ],
                 );
 
                 $context->getExceptionHandler()->processTaskAccountException($message, __FILE__, __LINE__);

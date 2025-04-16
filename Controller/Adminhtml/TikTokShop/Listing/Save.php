@@ -5,13 +5,13 @@ namespace M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Listing;
 class Save extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractListing
 {
     private \M2E\TikTokShop\Model\Listing\Repository $listingRepository;
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
     private \M2E\TikTokShop\Model\Listing\UpdateService $listingUpdateService;
 
     public function __construct(
         \M2E\TikTokShop\Model\Listing\UpdateService $listingUpdateService,
         \M2E\TikTokShop\Model\Listing\Repository $listingRepository,
-        \M2E\TikTokShop\Helper\Url $urlHelper
+        \M2E\Core\Helper\Url $urlHelper
     ) {
         parent::__construct();
 

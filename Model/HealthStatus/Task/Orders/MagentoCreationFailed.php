@@ -33,7 +33,7 @@ class MagentoCreationFailed extends IssueType
             $result->setTaskData($failedOrders);
             $result->setTaskMessage(
                 (string)__(
-                    'During the last 24 hours, M2E TikTok Shop Connect has not created Magento ' .
+                    'During the last 24 hours, %extension_title has not created Magento ' .
                     'orders for <strong>%failed_orders_count</strong> imported Channel orders. ' .
                     'See the <a target="_blank" href="%url">Order Log</a> for more details.',
                     [
@@ -42,6 +42,7 @@ class MagentoCreationFailed extends IssueType
                             'tiktokshop_log_order/index',
                             ['magento_order_failed' => true],
                         ),
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
                     ],
                 )
             );

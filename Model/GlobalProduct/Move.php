@@ -98,7 +98,7 @@ class Move
             $targetListing,
             $product->getMagentoProduct(),
             $globalProduct->getSourceProduct()->getTemplateCategoryId(),
-            \M2E\TikTokShop\Helper\Data::INITIATOR_USER
+            \M2E\Core\Helper\Data::INITIATOR_USER
         );
     }
 

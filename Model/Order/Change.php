@@ -117,7 +117,7 @@ class Change extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->setData(OrderChangeResource::COLUMN_PROCESSING_ATTEMPT_COUNT, $this->getAttemptsCount() + 1);
         $this->setData(
             OrderChangeResource::COLUMN_PROCESSING_ATTEMPT_DATE,
-            \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')
+            \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')
         );
     }
 

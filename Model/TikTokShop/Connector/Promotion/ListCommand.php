@@ -68,8 +68,8 @@ class ListCommand implements \M2E\Core\Model\Connector\CommandInterface
                 $promotion['type'],
                 $promotion['status'],
                 $promotion['product_level'],
-                \M2E\TikTokShop\Helper\Date::createDateGmt($promotion['start_date']),
-                \M2E\TikTokShop\Helper\Date::createDateGmt($promotion['end_date']),
+                \M2E\Core\Helper\Date::createDateGmt($promotion['start_date']),
+                \M2E\Core\Helper\Date::createDateGmt($promotion['end_date']),
                 $promotionProducts
             );
         }

@@ -25,7 +25,7 @@ class ReserveCancelTask implements \M2E\Core\Model\Cron\TaskHandlerInterface
     public function process($context): void
     {
         $context->getSynchronizationLog()->setTask(\M2E\TikTokShop\Model\Synchronization\Log::TASK_ORDERS);
-        $context->getSynchronizationLog()->setInitiator(\M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION);
+        $context->getSynchronizationLog()->setInitiator(\M2E\Core\Helper\Data::INITIATOR_EXTENSION);
 
         $permittedAccounts = $this->accountRepository->getAll();
 
@@ -69,7 +69,7 @@ class ReserveCancelTask implements \M2E\Core\Model\Cron\TaskHandlerInterface
 
         $reservationDays = $account->getOrdersSettings()->getQtyReservationDays();
 
-        $minReservationStartDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $minReservationStartDate = \M2E\Core\Helper\Date::createCurrentGmt();
         $minReservationStartDate->modify('- ' . $reservationDays . ' days');
         $minReservationStartDate = $minReservationStartDate->format('Y-m-d H:i');
 

@@ -46,7 +46,12 @@ class LogsClearing extends \M2E\TikTokShop\Block\Adminhtml\System\Config\Section
         $fieldSet = $form->addFieldset(
             'magento_block_configuration_logs_clearing_listings',
             [
-                'legend' => __('M2E TikTok Shop Connect Listings Logs & Events Clearing'),
+                'legend' => __(
+                    '%extension_title Listings Logs & Events Clearing',
+                    [
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
+                ),
                 'collapsable' => false,
             ]
         );

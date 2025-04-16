@@ -102,7 +102,7 @@ class Builder extends \Magento\Framework\DataObject
             'total_amount' => $totalTaxAmount,
         ];
 
-        $this->setData(OrderResource::COLUMN_TAX_DETAILS, \M2E\TikTokShop\Helper\Json::encode($taxDetails));
+        $this->setData(OrderResource::COLUMN_TAX_DETAILS, \M2E\Core\Helper\Json::encode($taxDetails));
 
         // Buyer
         $this->setData(OrderResource::COLUMN_BUYER_USER_ID, trim($data['user_id']));
@@ -126,7 +126,7 @@ class Builder extends \Magento\Framework\DataObject
 
         $paymentDetails['sub_total'] = $data['payment']['sub_total'];
 
-        $this->setData(OrderResource::COLUMN_PAYMENT_DETAILS, \M2E\TikTokShop\Helper\Json::encode($paymentDetails));
+        $this->setData(OrderResource::COLUMN_PAYMENT_DETAILS, \M2E\Core\Helper\Json::encode($paymentDetails));
 
         // Shipping
         $addressParser = $this->addressParserFactory->create($this->shop->getRegion(), $data);
@@ -253,10 +253,10 @@ class Builder extends \Magento\Framework\DataObject
     private function canCreateOrUpdateOrder(): bool
     {
         if ($this->order->getId()) {
-            $newPurchaseUpdateDate = \M2E\TikTokShop\Helper\Date::createDateGmt(
+            $newPurchaseUpdateDate = \M2E\Core\Helper\Date::createDateGmt(
                 $this->getData('purchase_update_date')
             );
-            $oldPurchaseUpdateDate = \M2E\TikTokShop\Helper\Date::createDateGmt(
+            $oldPurchaseUpdateDate = \M2E\Core\Helper\Date::createDateGmt(
                 $this->order->getPurchaseUpdateDate()
             );
 
@@ -384,8 +384,9 @@ class Builder extends \Magento\Framework\DataObject
         if ($this->hasUpdate(self::STATUS_HAS_UPDATED)) {
             $this->order->addSuccessLog(
                 sprintf(
-                    'Order status was updated to %s on TikTok Shop',
-                    \M2E\TikTokShop\Model\Order::getStatusTitle($this->order->getOrderStatus())
+                    'Order status was updated to %s on %s',
+                    \M2E\TikTokShop\Model\Order::getStatusTitle($this->order->getOrderStatus()),
+                    \M2E\TikTokShop\Helper\Module::getChannelTitle()
                 )
             );
         }

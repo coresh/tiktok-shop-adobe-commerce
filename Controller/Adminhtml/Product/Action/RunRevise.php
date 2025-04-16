@@ -28,16 +28,27 @@ class RunRevise extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Listing\
     public function execute()
     {
         $products = $this->productRepository->massActionSelectedProducts($this->massActionFilter);
+        $channelTitle = \M2E\TikTokShop\Helper\Module::getChannelTitle();
 
         if ($this->isRealtimeAction($products)) {
             ['result' => $result] = $this->actionService->runRevise($products);
             if ($result === 'success') {
                 $this->getMessageManager()->addSuccessMessage(
-                    __('"Revising Selected Items On TikTok Shop" task has completed.'),
+                    __(
+                        '"Revising Selected Items On %channel_title" task has completed.',
+                        [
+                            'channel_title' => $channelTitle
+                        ]
+                    ),
                 );
             } else {
                 $this->getMessageManager()->addErrorMessage(
-                    __('"Revising Selected Items On TikTok Shop" task has completed with errors.'),
+                    __(
+                        '"Revising Selected Items On %channel_title" task has completed with errors.',
+                        [
+                            'channel_title' => $channelTitle
+                        ]
+                    ),
                 );
             }
 
@@ -47,7 +58,12 @@ class RunRevise extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Listing\
         $this->actionService->scheduleRevise($products);
 
         $this->getMessageManager()->addSuccessMessage(
-            __('"Revising Selected Items On TikTok Shop" task has completed.'),
+            __(
+                '"Revising Selected Items On %channel_title" task has completed.',
+                [
+                    'channel_title' => $channelTitle
+                ]
+            ),
         );
 
         return $this->redirectToGrid();

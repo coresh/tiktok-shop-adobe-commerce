@@ -79,9 +79,10 @@ class RecurringData implements InstallDataInterface
             $this->maintenanceHelper->enableDueLowMagentoVersion();
 
             $message = sprintf(
-                'Magento version %s is not compatible with M2E TikTok Shop Connect version. ' .
+                'Magento version %s is not compatible with %s version. ' .
                 'Please upgrade your Magento first.',
                 $magentoVersion,
+                \M2E\TikTokShop\Helper\Module::getExtensionTitle()
             );
 
             throw new \RuntimeException($message);

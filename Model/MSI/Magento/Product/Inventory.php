@@ -17,12 +17,12 @@ class Inventory extends AbstractModel
     private $salableQtyResolver;
     /** @var StockResolverInterface */
     private $stockResolver;
-    private \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper;
+    private \M2E\Core\Helper\Magento\Store $magentoStoreHelper;
 
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper,
+        \M2E\Core\Helper\Magento\Store $magentoStoreHelper,
         \M2E\TikTokShop\Helper\Magento\Product $magentoProductHelper
     ) {
         parent::__construct($magentoProductHelper, $stockRegistry);

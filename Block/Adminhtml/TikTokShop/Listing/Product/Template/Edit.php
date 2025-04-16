@@ -34,10 +34,13 @@ class Edit extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractContaine
             [
                 'content' => __(
                     '<p>You may edit Policies assigned to your Listing or create new ones. ' .
-                    'The changes you make are automatically applied to all M2E TikTok Shop Connect Listings that ' .
+                    'The changes you make are automatically applied to all %extension_title Listings that ' .
                     'use this Policy.</p><p>Find more details on configuring Policies in ' .
                     'the <a href="%url" target="_blank">documentation</a>.</p>',
-                    ['url' => 'https://docs-m2.m2epro.com/m2e-tiktok-shop-policies'],
+                    [
+                        'url' => 'https://docs-m2.m2epro.com/m2e-tiktok-shop-policies',
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ],
                 ),
                 'style' => 'margin-top: 30px',
             ]

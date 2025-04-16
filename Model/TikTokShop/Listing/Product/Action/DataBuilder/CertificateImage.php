@@ -18,7 +18,7 @@ class CertificateImage extends AbstractDataBuilder
         \M2E\TikTokShop\Model\Category\Attribute\Repository $attributeRepository,
         \M2E\TikTokShop\Model\Image\Repository $imageRepository,
         \M2E\TikTokShop\Model\Magento\Product\ImageFactory $magentoProductImageFactory,
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper
     ) {
         parent::__construct($magentoAttributeHelper);
         $this->imageRepository = $imageRepository;

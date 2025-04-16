@@ -201,7 +201,7 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractList
 
         $this->listingLogService->addListing(
             $model,
-            \M2E\TikTokShop\Helper\Data::INITIATOR_USER,
+            \M2E\Core\Helper\Data::INITIATOR_USER,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_ADD_LISTING,
             null,
             (string)__('Listing was Added'),

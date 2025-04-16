@@ -12,11 +12,9 @@ class SetDataToLegacyStockItem extends \M2E\TikTokShop\Plugin\AbstractPlugin
     private $productResource;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \M2E\TikTokShop\Helper\Data\GlobalData $globalData,
         \Magento\Catalog\Model\ResourceModel\Product $productResource
     ) {
-        parent::__construct($helperFactory);
         $this->globalData = $globalData;
         $this->productResource = $productResource;
     }

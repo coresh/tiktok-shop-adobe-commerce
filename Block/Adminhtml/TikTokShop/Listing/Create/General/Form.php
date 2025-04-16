@@ -7,7 +7,7 @@ use M2E\TikTokShop\Model\Listing;
 
 class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
 {
-    private \M2E\TikTokShop\Helper\Magento\Store $storeHelper;
+    private \M2E\Core\Helper\Magento\Store $storeHelper;
     private \M2E\TikTokShop\Model\Shop\Repository $shopRepository;
     protected Listing $listing;
     private \M2E\TikTokShop\Helper\Data $dataHelper;
@@ -20,7 +20,7 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
     public function __construct(
         \M2E\TikTokShop\Model\Listing\Repository $listingRepository,
         \M2E\TikTokShop\Model\Account\Repository $accountRepository,
-        \M2E\TikTokShop\Helper\Magento\Store $storeHelper,
+        \M2E\Core\Helper\Magento\Store $storeHelper,
         \M2E\TikTokShop\Model\Shop\Repository $shopRepository,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Framework\Registry $registry,
@@ -71,16 +71,22 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
                 'value' => $title,
                 'required' => true,
                 'class' => 'TikTokShop-listing-title',
-                'tooltip' => __('Create a descriptive and meaningful Title for your M2E TikTok Shop Connect ' .
-                    'Listing. <br/> This is used for reference within M2E TikTok Shop Connect and will not appear on ' .
-                    'your TikTok Shop Listings.'),
+                'tooltip' => __(
+                    'Create a descriptive and meaningful Title for your %extension_title
+                    Listing. <br/> This is used for reference within %extension_title and will not appear on
+                    your %channel_title Listings.',
+                    [
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
+                ),
             ]
         );
 
         $fieldset = $form->addFieldset(
             'tiktokshop_settings_fieldset',
             [
-                'legend' => __('TikTok Shop Settings'),
+                'legend' => __(\M2E\TikTokShop\Helper\Module::getChannelTitle() . ' Settings'),
                 'collapsable' => false,
             ]
         );
@@ -176,8 +182,13 @@ HTML
                 'label' => __('Shop'),
                 'value' => $shopData['active_shop_id'],
                 'values' => $shopData['shops'],
-                'tooltip' => __('Choose the Shop you want to list on using this M2E TikTok Shop Connect ' .
-                    'Listing. Currency will be set automatically based on the Shop you choose.'),
+                'tooltip' => __(
+                    'Choose the Shop you want to list on using this %extension_title
+                    Listing. Currency will be set automatically based on the Shop you choose.',
+                    [
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
+                ),
                 'field_extra_attributes' => 'style="margin-bottom: 0px"',
                 'required' => $shopData['is_required']
             ]
@@ -203,9 +214,14 @@ HTML
                 'value' => $storeId,
                 'required' => true,
                 'has_empty_option' => true,
-                'tooltip' => __('Choose the Magento Store View you want to use for this M2E TikTok Shop Connect ' .
-                    'Listing. Please remember that Attribute values from the selected Store View will ' .
-                    'be used in the Listing.'),
+                'tooltip' => __(
+                    'Choose the Magento Store View you want to use for this %extension_title
+                    Listing. Please remember that Attribute values from the selected Store View will
+                    be used in the Listing.',
+                    [
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
+                ),
                 'display_default_store_mode' => StoreSwitcher::DISPLAY_DEFAULT_STORE_MODE_DOWN,
             ]
         );

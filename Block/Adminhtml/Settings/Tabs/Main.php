@@ -8,11 +8,11 @@ use M2E\TikTokShop\Helper\Component\TikTokShop\Configuration as ConfigurationHel
 
 class Main extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
 {
-    protected \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper;
+    protected \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper;
     private ConfigurationHelper $configuration;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper,
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -124,8 +124,13 @@ HTML
                     ? $configurationHelper->getIdentifierCodeMode()
                     : '',
                 'create_magento_attribute' => true,
-                'tooltip' => __('TikTok Shop uses EAN/UPC to associate your Item with its catalog. ' .
-                    'Select Attribute where the Product ID values are stored.'),
+                'tooltip' => __(
+                    '%channel_title uses EAN/UPC to associate your Item with its catalog. ' .
+                    'Select Attribute where the Product ID values are stored.',
+                    [
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
+                ),
                 'after_element_html' => $warningToolTip,
                 'required' => false,
             ]

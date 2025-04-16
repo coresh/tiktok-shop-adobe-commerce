@@ -4,14 +4,14 @@ namespace M2E\TikTokShop\Block\Adminhtml\Template\SellingFormat;
 
 class Messages extends \M2E\TikTokShop\Block\Adminhtml\Template\AbstractMessages
 {
-    private \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper;
+    private \M2E\Core\Helper\Magento\Store $magentoStoreHelper;
     private \M2E\TikTokShop\Model\Currency $currency;
     private \M2E\TikTokShop\Model\Shop $shop;
     private \Magento\Store\Model\Store $store;
 
     public function __construct(
         \M2E\TikTokShop\Model\Currency $currency,
-        \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper,
+        \M2E\Core\Helper\Magento\Store $magentoStoreHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \M2E\TikTokShop\Model\Shop $shop,
         \Magento\Store\Model\Store $store,

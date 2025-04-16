@@ -8,11 +8,9 @@ class ToOrderItem extends \M2E\TikTokShop\Plugin\AbstractPlugin
     protected $eventManager;
 
     public function __construct(
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \Magento\Framework\Event\ManagerInterface $eventManager
     ) {
         $this->eventManager = $eventManager;
-        parent::__construct($helperFactory);
     }
 
     public function aroundConvert($interceptor, \Closure $callback, ...$arguments)

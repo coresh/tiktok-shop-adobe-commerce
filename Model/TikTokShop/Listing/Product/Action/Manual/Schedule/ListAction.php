@@ -26,7 +26,7 @@ class ListAction extends AbstractSchedule
     ): void {
         $logService->addProduct(
             $product,
-            \M2E\TikTokShop\Helper\Data::INITIATOR_USER,
+            \M2E\Core\Helper\Data::INITIATOR_USER,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_LIST_PRODUCT,
             $this->getLogActionId(),
             $this->createSkipListMessage(),

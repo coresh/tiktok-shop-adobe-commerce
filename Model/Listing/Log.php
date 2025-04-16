@@ -127,7 +127,7 @@ class Log extends \M2E\TikTokShop\Model\Log\AbstractModel
         string $description,
         int $type
     ): self {
-        \M2E\TikTokShop\Helper\Data::validateInitiator($initiator);
+        \M2E\Core\Helper\Data::validateInitiator($initiator);
         $this->validateType($type);
 
         $this
@@ -159,7 +159,7 @@ class Log extends \M2E\TikTokShop\Model\Log\AbstractModel
         string $description,
         int $type
     ): self {
-        \M2E\TikTokShop\Helper\Data::validateInitiator($initiator);
+        \M2E\Core\Helper\Data::validateInitiator($initiator);
         $this->validateType($type);
 
         $this

@@ -9,7 +9,7 @@ class Collection extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\Collec
 
     public function __construct(
         \M2E\TikTokShop\Model\ResourceModel\Account $accountResource,
-        \M2E\TikTokShop\Helper\Magento\Staging $magentoStagingHelper,
+        \M2E\Core\Helper\Magento\Staging $magentoStagingHelper,
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,

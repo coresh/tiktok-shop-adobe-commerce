@@ -29,7 +29,14 @@ class Index extends \Magento\Backend\App\Action
 
         $result = $this->pageFactory->create();
 
-        $result->getConfig()->getTitle()->set(__('M2E TikTok Shop Connect is currently under maintenance'));
+        $result->getConfig()->getTitle()->set(
+            __(
+                '%extension_title is currently under maintenance',
+                [
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                ]
+            )
+        );
         $this->_setActiveMenu('M2E_TikTokShop::tiktokshop_maintenance');
 
         /** @var \Magento\Framework\View\Element\Template $block */

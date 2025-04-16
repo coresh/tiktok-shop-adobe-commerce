@@ -14,7 +14,7 @@ class Brand extends AbstractDataBuilder
 
     public function __construct(
         \M2E\TikTokShop\Model\Category\Attribute\Repository $attributeRepository,
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper
     ) {
         parent::__construct($magentoAttributeHelper);
         $this->attributeRepository = $attributeRepository;

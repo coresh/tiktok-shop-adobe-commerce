@@ -181,7 +181,7 @@ class RecalculateVariantProduct
     ): void {
         $this->listingLogService->addProduct(
             $variantSku->getProduct(),
-            \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+            \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
             $action,
             $this->actionId,
             $message,

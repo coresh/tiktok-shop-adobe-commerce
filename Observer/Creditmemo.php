@@ -11,10 +11,8 @@ class Creditmemo extends AbstractObserver
 
     public function __construct(
         \M2E\TikTokShop\Model\Order\Repository $repository,
-        \M2E\TikTokShop\Model\Order\Cancel $cancel,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \M2E\TikTokShop\Model\Order\Cancel $cancel
     ) {
-        parent::__construct($helperFactory);
         $this->repository = $repository;
         $this->cancel = $cancel;
     }
@@ -30,6 +28,6 @@ class Creditmemo extends AbstractObserver
             return;
         }
 
-        $this->cancel->process($order, \M2E\TikTokShop\Helper\Data::INITIATOR_USER);
+        $this->cancel->process($order, \M2E\Core\Helper\Data::INITIATOR_USER);
     }
 }

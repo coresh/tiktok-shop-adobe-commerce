@@ -9,7 +9,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Grid
     private \M2E\TikTokShop\Model\ResourceModel\Account $accountResource;
     private \M2E\TikTokShop\Model\ResourceModel\Shop $shopResource;
     private \M2E\TikTokShop\Model\ResourceModel\Product $listingProductResource;
-    /** @var \M2E\TikTokShop\Helper\Url */
+    /** @var \M2E\Core\Helper\Url */
     private $urlHelper;
     /** @var \M2E\TikTokShop\Model\ResourceModel\Listing\CollectionFactory */
     private $listingCollectionFactory;
@@ -23,7 +23,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Grid
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \M2E\TikTokShop\Helper\Data $dataHelper,
-        \M2E\TikTokShop\Helper\Url $urlHelper,
+        \M2E\Core\Helper\Url $urlHelper,
         \M2E\TikTokShop\Model\ResourceModel\Listing\CollectionFactory $listingCollectionFactory,
         \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection,
         array $data = []
@@ -264,7 +264,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Grid
      */
     public function callbackColumnTitle($value, $row, $column, $isExport)
     {
-        $title = \M2E\TikTokShop\Helper\Data::escapeHtml($value);
+        $title = \M2E\Core\Helper\Data::escapeHtml($value);
 
         $value = <<<HTML
 <span id="listing_title_{$row->getId()}">

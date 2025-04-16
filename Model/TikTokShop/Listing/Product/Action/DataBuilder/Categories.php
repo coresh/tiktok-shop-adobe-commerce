@@ -13,15 +13,19 @@ class Categories extends AbstractDataBuilder
     private string $onlineCategoryId = '';
     private string $onlineCategoriesData = '';
     private \M2E\TikTokShop\Helper\Module\Renderer\Description $descriptionRender;
+    private \M2E\TikTokShop\Model\Category\Attribute\RecommendedValue\RetrieveValue $recommendedValue;
 
     public function __construct(
         \M2E\TikTokShop\Helper\Module\Renderer\Description $descriptionRender,
         \M2E\TikTokShop\Model\Category\Attribute\Repository $attributeRepository,
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper,
+        \M2E\TikTokShop\Model\Category\Attribute\RecommendedValue\RetrieveValue $recommendedValue
     ) {
         parent::__construct($magentoAttributeHelper);
+
         $this->attributeRepository = $attributeRepository;
         $this->descriptionRender = $descriptionRender;
+        $this->recommendedValue = $recommendedValue;
     }
 
     /**
@@ -74,11 +78,20 @@ class Categories extends AbstractDataBuilder
                 continue;
             }
 
+            $recommendedValue = $this->recommendedValue->tryRetrieve($attribute, $magentoProduct);
+            if (!empty($recommendedValue)) {
+                if ($recommendedValue->isFail()) {
+                    $this->addWarningMessage($recommendedValue->getFailMessages());
+                } else {
+                    $result[$attribute->getAttributeId()][] = $recommendedValue->getResult();
+                }
+                continue;
+            }
+
             if ($attribute->isValueModeRecommended()) {
                 foreach ($attribute->getRecommendedValue() as $valueId) {
                     $result[$attribute->getAttributeId()][] = ['id' => $valueId];
                 }
-
                 continue;
             }
 

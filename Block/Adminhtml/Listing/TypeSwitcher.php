@@ -25,7 +25,7 @@ abstract class TypeSwitcher extends \M2E\TikTokShop\Block\Adminhtml\Switcher
             'mode' => [
                 'value' => [
                     [
-                        'label' => __('M2E TikTok Shop Connect'),
+                        'label' => __(\M2E\TikTokShop\Helper\Module::getExtensionTitle()),
                         'value' => self::LISTING_TYPE_M2E,
                     ],
                     [

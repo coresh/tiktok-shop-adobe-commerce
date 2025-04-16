@@ -25,7 +25,7 @@ class Decline extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractOr
             $order = $this->getOrderFromRequest($this->getRequest());
             $declineReason = $this->getDeclineReasonFromRequest($this->getRequest());
             $declineResult = $this->declineCancellationRequest
-                ->process($order, $declineReason, \M2E\TikTokShop\Helper\Data::INITIATOR_USER);
+                ->process($order, $declineReason, \M2E\Core\Helper\Data::INITIATOR_USER);
         } catch (\Throwable $exception) {
             $this->messageManager->addErrorMessage(
                 __('Order Cancellation Request was not declined. Reason: %reason', [

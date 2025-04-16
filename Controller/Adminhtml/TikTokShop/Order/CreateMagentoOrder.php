@@ -27,7 +27,7 @@ class CreateMagentoOrder extends AbstractOrder
         foreach ($orderIds as $orderId) {
             $order = $this->orderFactory->create();
             $this->orderResource->load($order, (int)$orderId);
-            $order->getLogService()->setInitiator(\M2E\TikTokShop\Helper\Data::INITIATOR_USER);
+            $order->getLogService()->setInitiator(\M2E\Core\Helper\Data::INITIATOR_USER);
 
             // Create magento order
             // ---------------------------------------

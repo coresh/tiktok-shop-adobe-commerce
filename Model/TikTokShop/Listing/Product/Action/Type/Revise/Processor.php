@@ -17,8 +17,10 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
     private \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type\ImageResponseHandler $imageResponseHandler;
     private \Magento\Framework\Locale\CurrencyInterface $localeCurrency;
     private array $requestMetadata;
+    private LoggerFactory $loggerFactory;
 
     public function __construct(
+        LoggerFactory $loggerFactory,
         ValidatorFactory $actionValidatorFactory,
         RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
@@ -28,6 +30,7 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type\ImageResponseHandler $imageResponseHandler,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency
     ) {
+        $this->loggerFactory = $loggerFactory;
         $this->serverClient = $serverClient;
         $this->actionValidatorFactory = $actionValidatorFactory;
         $this->requestFactory = $requestFactory;
@@ -78,7 +81,6 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
         /** @var Response $responseObj */
         $responseObj = $this->responseFactory->create(
             $this->getProduct(),
-            $this->getActionConfigurator(),
             $this->getVariantSettings(),
             $this->requestData,
             $this->getParams(),
@@ -86,49 +88,22 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
             $this->requestMetadata,
         );
 
-        $variantOnlineDataBefore = $this->getProduct()->getVariantOnlineData();
-
-        $brandIdBefore = $this->getProduct()->getOnlineBrandId();
-        $brandNameBefore = $this->getProduct()->getOnlineBrandName();
+        $logger = $this->loggerFactory->create();
+        $logger->saveProductDataBeforeUpdate($this->getProduct());
 
         $responseObj->processSuccess($response->getResponseData());
 
-        $this->processSuccessRevisePrice($variantOnlineDataBefore);
-        $this->processSuccessReviseQty($variantOnlineDataBefore);
-        $this->processSuccessFoundBrand($brandIdBefore, $brandNameBefore);
+        $logs = $logger->calculateLogs($this->getProduct(), $this->requestMetadata);
 
-        $sequenceStrings = [];
-        $isPlural = false;
-
-        if ($this->getActionConfigurator()->isTitleAllowed()) {
-            $sequenceStrings[] = 'Title';
-        }
-
-        if ($this->getActionConfigurator()->isDescriptionAllowed()) {
-            $sequenceStrings[] = 'Description';
-        }
-
-        if ($this->getActionConfigurator()->isImagesAllowed()) {
-            $sequenceStrings[] = 'Images';
-            $isPlural = true;
-        }
-
-        if ($this->getActionConfigurator()->isCategoriesAllowed()) {
-            $sequenceStrings[] = 'Categories';
-            $isPlural = true;
-        }
-
-        if (empty($sequenceStrings)) {
+        if (empty($logs)) {
             return 'Item was Revised';
         }
 
-        if (count($sequenceStrings) === 1) {
-            $verb = $isPlural ? 'were' : 'was';
-
-            return $sequenceStrings[0] . ' ' . $verb . ' Revised';
+        foreach ($logs as $log) {
+            $this->addActionLogMessage($log);
         }
 
-        return implode(', ', $sequenceStrings) . ' were Revised';
+        return '';
     }
 
     protected function processFail(\M2E\Core\Model\Connector\Response $response): void
@@ -176,123 +151,5 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
             $this->requestData,
             $response,
         );
-    }
-
-    // ----------------------------------------
-
-    /**
-     * @param \M2E\TikTokShop\Model\Product\VariantSku\OnlineData[] $beforeVariantOnlineData
-     *
-     * @return void
-     * @throws \Magento\Framework\Currency\Exception\CurrencyException
-     */
-    private function processSuccessRevisePrice(array $beforeVariantOnlineData): void
-    {
-        if (!$this->getActionConfigurator()->isVariantsAllowed()) {
-            return;
-        }
-
-        $beforeData = [];
-        foreach ($beforeVariantOnlineData as $onlineData) {
-            $beforeData[$onlineData->getVariantId()] = $onlineData;
-        }
-
-        $currencyCode = $this->getProduct()->getListing()->getShop()->getCurrencyCode();
-        $currency = $this->localeCurrency->getCurrency($currencyCode);
-        foreach ($this->getProduct()->getVariants() as $variant) {
-            $newOnlineData = $variant->getOnlineData();
-            $from = 'N/A';
-            if (isset($beforeData[$newOnlineData->getVariantId()])) {
-                $from = $beforeData[$newOnlineData->getVariantId()]->getPrice();
-            }
-
-            if ($from === $newOnlineData->getPrice()) {
-                continue;
-            }
-
-            if ($this->getProduct()->isSimple()) {
-                $message = sprintf(
-                    'Price was revised from %s to %s',
-                    $currency->toCurrency($from),
-                    $currency->toCurrency($newOnlineData->getPrice()),
-                );
-            } else {
-                $message = sprintf(
-                    'SKU %s: Price was revised from %s to %s',
-                    $newOnlineData->getSku(),
-                    $currency->toCurrency($from),
-                    $currency->toCurrency($newOnlineData->getPrice()),
-                );
-            }
-
-            $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createSuccess($message));
-        }
-    }
-
-    /**
-     * @param \M2E\TikTokShop\Model\Product\VariantSku\OnlineData[] $beforeVariantOnlineData
-     *
-     * @return void
-     */
-    private function processSuccessReviseQty(array $beforeVariantOnlineData): void
-    {
-        if (!$this->getActionConfigurator()->isVariantsAllowed()) {
-            return;
-        }
-
-        $beforeData = [];
-        foreach ($beforeVariantOnlineData as $onlineData) {
-            $beforeData[$onlineData->getVariantId()] = $onlineData;
-        }
-
-        foreach ($this->getProduct()->getVariants() as $variant) {
-            $newOnlineData = $variant->getOnlineData();
-            $from = 'N/A';
-            if (isset($beforeData[$newOnlineData->getVariantId()])) {
-                $from = $beforeData[$newOnlineData->getVariantId()]->getQty();
-            }
-
-            if ($from === $newOnlineData->getQty()) {
-                continue;
-            }
-
-            if ($this->getProduct()->isSimple()) {
-                $message = sprintf(
-                    'QTY was revised from %s to %s',
-                    $from,
-                    $newOnlineData->getQty()
-                );
-            } else {
-                $message = sprintf(
-                    'SKU %s: QTY was revised from %s to %s',
-                    $newOnlineData->getSku(),
-                    $from,
-                    $newOnlineData->getQty()
-                );
-            }
-
-            $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createSuccess($message));
-        }
-    }
-
-    private function processSuccessFoundBrand(string $beforeBrandId, string $beforeBrandName): void
-    {
-        $listingProduct = $this->getProduct();
-
-        $newBrandId = $listingProduct->getOnlineBrandId();
-        $newBrandName = $listingProduct->getOnlineBrandName();
-
-        if (empty($beforeBrandId) && !empty($newBrandId)) {
-            $message = sprintf(
-                'Brand "%s" was assigned to the Product on TikTok Shop',
-                $newBrandName
-            );
-            $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createSuccess($message));
-        }
-
-        if (!empty($beforeBrandId) && !empty($newBrandId) && $beforeBrandId !== $newBrandId) {
-            $message = sprintf('Brand was changed from "%s" to "%s"', $beforeBrandName, $newBrandName);
-            $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createSuccess($message));
-        }
     }
 }

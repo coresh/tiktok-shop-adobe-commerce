@@ -82,7 +82,7 @@ class Edit extends AbstractTemplate
                 __(
                     'Edit "%template_title" Synchronization Policy',
                     [
-                        'template_title' => \M2E\TikTokShop\Helper\Data::escapeHtml($template->getTitle()),
+                        'template_title' => \M2E\Core\Helper\Data::escapeHtml($template->getTitle()),
                     ],
                 );
         } else {
@@ -132,7 +132,7 @@ class Edit extends AbstractTemplate
                 __(
                     'Edit "%template_title" Description Policy',
                     [
-                        'template_title' => \M2E\TikTokShop\Helper\Data::escapeHtml($template->getTitle()),
+                        'template_title' => \M2E\Core\Helper\Data::escapeHtml($template->getTitle()),
                     ],
                 );
         } else {
@@ -182,7 +182,7 @@ class Edit extends AbstractTemplate
                 __(
                     'Edit "%template_title" Selling Policy',
                     [
-                        'template_title' => \M2E\TikTokShop\Helper\Data::escapeHtml($template->getTitle()),
+                        'template_title' => \M2E\Core\Helper\Data::escapeHtml($template->getTitle()),
                     ],
                 );
         } else {

@@ -21,7 +21,7 @@ class Validator implements \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Acti
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings $variantSettings
     ): bool {
         if (!$product->isRetirable()) {
-            $this->removeHandler->process($product, \M2E\TikTokShop\Helper\Data::INITIATOR_UNKNOWN);
+            $this->removeHandler->process($product, \M2E\Core\Helper\Data::INITIATOR_UNKNOWN);
 
             return false;
         }

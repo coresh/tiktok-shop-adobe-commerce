@@ -236,7 +236,7 @@ class Shop extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             return null;
         }
 
-        return \M2E\TikTokShop\Helper\Date::createDateGmt($value);
+        return \M2E\Core\Helper\Date::createDateGmt($value);
     }
 
     public function setInventoryLastSyncDate(\DateTimeInterface $date): self
@@ -260,19 +260,19 @@ class Shop extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             return null;
         }
 
-        return \DateTimeImmutable::createFromMutable(\M2E\TikTokShop\Helper\Date::createDateGmt($value));
+        return \DateTimeImmutable::createFromMutable(\M2E\Core\Helper\Date::createDateGmt($value));
     }
 
     public function getUpdateDate(): \DateTime
     {
-        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+        return \M2E\Core\Helper\Date::createDateGmt(
             $this->getData(ShopResource::COLUMN_UPDATE_DATE),
         );
     }
 
     public function getCreateDate(): \DateTime
     {
-        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+        return \M2E\Core\Helper\Date::createDateGmt(
             $this->getData(ShopResource::COLUMN_CREATE_DATE),
         );
     }

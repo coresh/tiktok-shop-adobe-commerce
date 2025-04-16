@@ -78,7 +78,7 @@ class Title extends \Magento\Ui\Component\Listing\Columns\Column
     {
         $unmanagedProduct = $this->getUnmanagedProduct((int)$row['id']);
 
-        return \M2E\TikTokShop\Helper\Data::escapeHtml(!$unmanagedProduct->isSimple() ? '' : $unmanagedProduct->getSku());
+        return \M2E\Core\Helper\Data::escapeHtml(!$unmanagedProduct->isSimple() ? '' : $unmanagedProduct->getSku());
     }
 
     private function getCategoriesPath(string $categoriesDataJson): string
@@ -100,7 +100,7 @@ class Title extends \Magento\Ui\Component\Listing\Columns\Column
             return $categoryName;
         }, $categoriesData);
 
-        return \M2E\TikTokShop\Helper\Data::escapeHtml(implode(' >> ', $parts));
+        return \M2E\Core\Helper\Data::escapeHtml(implode(' >> ', $parts));
     }
 
     private function renderSalesAttributes(array $row): string

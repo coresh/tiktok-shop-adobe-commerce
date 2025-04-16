@@ -33,9 +33,14 @@ class Browse extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractBlock
 
     public function getInviteOnlyNotice()
     {
-        $message = (string)__('This category is invite-only. Please reach out to your account manager or ' .
-            'contact TikTok Shop support for permission to access this category, or select another category ' .
-            'that is available.');
+        $message = (string)__(
+            'This category is invite-only. Please reach out to your account manager or ' .
+            'contact %channel_title support for permission to access this category, or select another category ' .
+            'that is available.',
+            [
+                'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+            ]
+        );
 
         $noticeHtml = $this
             ->getLayout()

@@ -14,15 +14,12 @@ class Save extends \M2E\TikTokShop\Plugin\AbstractPlugin
     private \Magento\Inventory\Model\SourceItemRepository $sourceItemRepo;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \M2E\TikTokShop\Model\MSI\AffectedProducts $msiAffectedProducts,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \M2E\TikTokShop\Model\Magento\Product\ChangeAttributeTrackerFactory $changeAttributeTrackerFactory,
         \M2E\TikTokShop\Model\Listing\LogService $listingLogService,
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
-        parent::__construct($helperFactory);
-
         $this->msiAffectedProducts = $msiAffectedProducts;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->changeAttributeTrackerFactory = $changeAttributeTrackerFactory;
@@ -164,7 +161,7 @@ class Save extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
         $this->listingLogService->addProduct(
             $affectedProduct->getProduct(),
-            \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+            \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
             $action,
             null,
             $description,

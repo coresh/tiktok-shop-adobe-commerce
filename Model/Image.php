@@ -75,21 +75,21 @@ class Image extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     public function getUpdateDate(): \DateTime
     {
-        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+        return \M2E\Core\Helper\Date::createDateGmt(
             $this->getData(ImageResource::COLUMN_UPDATE_DATE)
         );
     }
 
     public function setUpdateDate(\DateTime $createDate): void
     {
-        $timeZone = new \DateTimeZone(\M2E\TikTokShop\Helper\Date::getTimezone()->getDefaultTimezone());
+        $timeZone = new \DateTimeZone(\M2E\Core\Helper\Date::getTimezone()->getDefaultTimezone());
         $createDate->setTimezone($timeZone);
         $this->setData(ImageResource::COLUMN_UPDATE_DATE, $createDate->format('Y-m-d H:i:s'));
     }
 
     public function getCreateDate(): \DateTime
     {
-        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+        return \M2E\Core\Helper\Date::createDateGmt(
             $this->getData(ImageResource::COLUMN_CREATE_DATE)
         );
     }

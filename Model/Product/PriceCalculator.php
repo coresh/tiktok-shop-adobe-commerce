@@ -2,7 +2,7 @@
 
 namespace M2E\TikTokShop\Model\Product;
 
-use M2E\TikTokShop\Helper\Magento\Attribute;
+use M2E\Core\Helper\Magento\Attribute;
 use M2E\TikTokShop\Model\Exception\Logic;
 use M2E\TikTokShop\Model\Listing;
 use M2E\TikTokShop\Model\Magento\Product;
@@ -641,7 +641,7 @@ class PriceCalculator
     {
         foreach ($optionTitles as &$optionTitle) {
             $optionTitle = trim(
-                \M2E\TikTokShop\Helper\Data::reduceWordsInString(
+                \M2E\Core\Helper\Data::reduceWordsInString(
                     $optionTitle,
                     \M2E\TikTokShop\Helper\Component\TikTokShop::MAX_LENGTH_FOR_OPTION_VALUE
                 )

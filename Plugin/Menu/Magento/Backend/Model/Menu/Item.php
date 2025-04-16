@@ -16,13 +16,10 @@ class Item extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
     public function __construct(
         \M2E\TikTokShop\Helper\Module\Wizard $wizardHelper,
-        View\TikTokShop $view,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        View\TikTokShop $view
     ) {
         $this->wizardHelper = $wizardHelper;
         $this->view = $view;
-
-        parent::__construct($helperFactory);
     }
 
     /**
@@ -74,7 +71,7 @@ class Item extends \M2E\TikTokShop\Plugin\AbstractPlugin
             if ($wizard === null) {
                 $this->menuTitlesUsing[View\TikTokShop::MENU_ROOT_NODE_NICK] = true;
 
-                return 'TikTok Shop';
+                return \M2E\TikTokShop\Helper\Module::getChannelTitle();
             }
         }
 

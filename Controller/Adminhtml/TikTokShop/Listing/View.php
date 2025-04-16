@@ -95,8 +95,11 @@ class View extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractListi
              ->getTitle()
              ->prepend(
                  (string)__(
-                     'M2E TikTok Shop Connect Listing "%listing_title"',
-                     ['listing_title' => $listing->getTitle()]
+                     '%extension_title Listing "%listing_title"',
+                     [
+                         'listing_title' => $listing->getTitle(),
+                         'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                     ]
                  )
              );
 

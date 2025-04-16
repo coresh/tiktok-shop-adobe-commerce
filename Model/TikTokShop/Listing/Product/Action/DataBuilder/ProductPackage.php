@@ -10,7 +10,7 @@ class ProductPackage extends AbstractDataBuilder
 
     public function __construct(
         \M2E\TikTokShop\Model\Product\PackageDimensionFinder $packageDimensionService,
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper
     ) {
         parent::__construct($magentoAttributeHelper);
         $this->packageDimensionFinder = $packageDimensionService;

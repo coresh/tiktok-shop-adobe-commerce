@@ -26,10 +26,13 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
             [
                 'content' => __(
                     '<p>Saving Policy under a distinctive title will let you easily and quickly ' .
-                    'search for it in case you need to use it in a different M2E TikTok Shop Connect Listing ' .
+                    'search for it in case you need to use it in a different %extension_title Listing ' .
                     'in the future.</p><br> <p>More detailed information you can find ' .
                     '<a href="%url" target="_blank" class="external-link">here</a>.</p>',
-                    ['url' => 'https://docs-m2.m2epro.com/m2e-tiktok-shop-policies']
+                    [
+                        'url' => 'https://docs-m2.m2epro.com/m2e-tiktok-shop-policies',
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
                 ),
             ]
         );

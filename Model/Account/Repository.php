@@ -70,12 +70,9 @@ class Repository
     /**
      * @return \M2E\TikTokShop\Model\Account[]
      */
-    public function getAll(bool $onlyActive = true): array
+    public function getAll(): array
     {
         $collection = $this->collectionFactory->create();
-        if ($onlyActive) {
-            $collection->addFieldToFilter(AccountResource::COLUMN_IS_ACTIVE, 1);
-        }
 
         return array_values($collection->getItems());
     }
@@ -118,10 +115,9 @@ class Repository
     /**
      * @return \M2E\TikTokShop\Model\Account[]
      */
-    public function findActiveWithEnabledInventorySync(): array
+    public function findWithEnabledInventorySync(): array
     {
         $collection = $this->collectionFactory->create();
-        $collection->addFieldToFilter(AccountResource::COLUMN_IS_ACTIVE, 1);
         $collection->addFieldToFilter(AccountResource::COLUMN_OTHER_LISTINGS_SYNCHRONIZATION, 1);
 
         return array_values($collection->getItems());

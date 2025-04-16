@@ -23,15 +23,18 @@ abstract class Content extends AbstractForm
     {
         $this->getLayout()->getBlock('wizard.help.block')->setContent(
             __(
-                'M2E TikTok Shop Connect requires activation for further work. ' .
+                '%extension_title requires activation for further work. ' .
                 'To activate your installation, you should obtain a <strong>License Key</strong>. For more details, ' .
-                'please read our <a href="%1" target="_blank">Privacy Policy</a>.<br/><br/> Fill out the form ' .
+                'please read our <a href="%privacy" target="_blank">Privacy Policy</a>.<br/><br/> Fill out the form ' .
                 'below with the required information. This information will be used to register you on ' .
-                '<a href="%2" target="_blank">M2E Accounts</a> and auto-generate a new License Key.<br/><br/> ' .
-                'Access to <a href="%2" target="_blank">M2E Accounts</a> will allow you to manage your ' .
+                '<a href="%urk" target="_blank">M2E Accounts</a> and auto-generate a new License Key.<br/><br/> ' .
+                'Access to <a href="%urk" target="_blank">M2E Accounts</a> will allow you to manage your ' .
                 'Subscription, keep track of your Trial and Paid terms, control your License Key details, and more.',
-                \M2E\TikTokShop\Helper\Module\Support::WEBSITE_PRIVACY_URL,
-                \M2E\TikTokShop\Helper\Module\Support::ACCOUNTS_URL
+                [
+                    'privacy' => \M2E\Core\Helper\Module\Support::WEBSITE_PRIVACY_URL,
+                    'urk' => \M2E\Core\Helper\Module\Support::ACCOUNTS_URL,
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                ]
             )
         );
 

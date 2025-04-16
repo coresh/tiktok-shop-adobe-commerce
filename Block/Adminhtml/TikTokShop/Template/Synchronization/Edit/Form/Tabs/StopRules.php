@@ -38,19 +38,24 @@ class StopRules extends AbstractTab
         $formData = array_merge($default, $formData);
 
         $form = $this->_formFactory->create();
+        $channelTitle = \M2E\TikTokShop\Helper\Module::getChannelTitle();
 
         $form->addField(
             'template_synchronization_form_data_stop',
             self::HELP_BLOCK,
             [
                 'content' => __(
-                    'Set the Conditions when M2E TikTok Shop Connect should stop ' .
-                    'Listings on TikTok Shop.<br/><br/>If all Conditions are set to No or No Action then no ' .
-                    'TikTok Shop Items using this Synchronization Policy will be Stopped. If all Options are ' .
+                    'Set the Conditions when %extension_title should stop ' .
+                    'Listings on %channel_title.<br/><br/>If all Conditions are set to No or No Action then no ' .
+                    '%channel_title Items using this Synchronization Policy will be Stopped. If all Options are ' .
                     'enabled, then an Item will be Stopped if at least one of the Stop Conditions is met.<br/><br/>' .
                     'More detailed information about ability to work with this Page you can find ' .
                     '<a href="%url" target="_blank" class="external-link">here</a>.',
-                    ['url' => 'https://docs-m2.m2epro.com/stop-rules-for-tiktok-shop-listings']
+                    [
+                        'url' => 'https://docs-m2.m2epro.com/stop-rules-for-tiktok-shop-listings',
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
                 ),
             ]
         );
@@ -99,8 +104,13 @@ class StopRules extends AbstractTab
                     0 => __('No'),
                     1 => __('Yes'),
                 ],
-                'tooltip' => __('Automatically stops an Item that is on TikTok Shop if Status is ' .
-                    'changed to \'Disabled\' in Magento.'),
+                'tooltip' => __(
+                    'Automatically stops an Item that is on %channel_title if Status is ' .
+                    'changed to \'Disabled\' in Magento.',
+                    [
+                        'channel_title' => $channelTitle
+                    ]
+                ),
             ]
         );
 
@@ -115,8 +125,13 @@ class StopRules extends AbstractTab
                     0 => __('No'),
                     1 => __('Yes'),
                 ],
-                'tooltip' => __('Automatically stops an Item that is on TikTok Shop if ' .
-                    'Stock Availability is changed to \'Out of Stock\' in Magento.'),
+                'tooltip' => __(
+                    'Automatically stops an Item that is on %channel_title if ' .
+                    'Stock Availability is changed to \'Out of Stock\' in Magento.',
+                    [
+                        'channel_title' => $channelTitle
+                    ]
+                ),
             ]
         );
 
@@ -144,8 +159,13 @@ class StopRules extends AbstractTab
                     TemplateSynchronization::QTY_MODE_NONE => __('No Action'),
                     TemplateSynchronization::QTY_MODE_YES => __('Less or Equal'),
                 ],
-                'tooltip' => __('Automatically stops an Item on TikTok Shop if Quantity according ' .
-                    'to the Selling Policy is changed <b>and</b> it meets the selected Conditions.'),
+                'tooltip' => __(
+                    'Automatically stops an Item on %channel_title if Quantity according ' .
+                    'to the Selling Policy is changed <b>and</b> it meets the selected Conditions.',
+                    [
+                        'channel_title' => $channelTitle
+                    ]
+                ),
             ]
         )->setAfterElementHtml(
             <<<HTML

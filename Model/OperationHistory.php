@@ -237,7 +237,7 @@ class OperationHistory extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
         $nick = strtoupper($this->getObject()->getData(OperationHistoryResource::COLUMN_NICK));
 
-        $contentData = (array)\M2E\TikTokShop\Helper\Json::decode(
+        $contentData = (array)\M2E\Core\Helper\Json::decode(
             $this->getObject()->getData(OperationHistoryResource::COLUMN_DATA)
         );
         $contentData = preg_replace(

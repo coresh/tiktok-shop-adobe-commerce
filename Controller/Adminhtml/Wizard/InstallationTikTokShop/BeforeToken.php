@@ -44,23 +44,28 @@ class BeforeToken extends Installation
             $response = $this->getGrantAccessUrlProcessor->processAddAccount($backUrl, $region);
         } catch (\Throwable $exception) {
             $this->exceptionHelper->process($exception);
+            $channelTitle = \M2E\TikTokShop\Helper\Module::getChannelTitle();
 
             if (
                 !$this->licenseService->get()->getInfo()->getDomainIdentifier()->isValid()
                 || !$this->licenseService->get()->getInfo()->getIpIdentifier()->isValid()
             ) {
                 $error = __(
-                    'The TikTok Shop token obtaining is currently unavailable.<br/>Reason: %error_message' .
+                    'The %channel_title token obtaining is currently unavailable.<br/>Reason: %error_message' .
                     '</br>Go to the <a href="%url" target="_blank">License Page</a>.',
                     [
                         'error_message' => $exception->getMessage(),
                         'url' => $this->configurationHelper->getLicenseUrl(['wizard' => 1]),
+                        'channel_title' => $channelTitle
                     ],
                 );
             } else {
                 $error = __(
-                    'The TikTok Shop token obtaining is currently unavailable.<br/>Reason: %error_message',
-                    ['error_message' => $exception->getMessage()]
+                    'The %channel_title token obtaining is currently unavailable.<br/>Reason: %error_message',
+                    [
+                        'error_message' => $exception->getMessage(),
+                        'channel_title' => $channelTitle
+                    ]
                 );
             }
 

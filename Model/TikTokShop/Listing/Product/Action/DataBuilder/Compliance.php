@@ -12,7 +12,7 @@ class Compliance extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action
     public function __construct(
         \M2E\TikTokShop\Model\ManufacturerConfiguration\Mapper $manufacturerConfigurationMapper,
         \M2E\TikTokShop\Model\ManufacturerConfiguration\Repository $manufacturerConfigurationRepository,
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper
     ) {
         parent::__construct($magentoAttributeHelper);
         $this->manufacturerConfigurationRepository = $manufacturerConfigurationRepository;

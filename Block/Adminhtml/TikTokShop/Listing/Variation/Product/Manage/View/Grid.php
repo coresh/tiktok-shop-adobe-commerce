@@ -85,7 +85,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
             ]
         );
 
-        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+        $now = \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
         $collection->joinTable(
             ['promotion_product' => $this->promotionProductResource->getMainTable()],
             sprintf('sku_id = %s', PromotionProductResource::COLUMN_SKU_ID),

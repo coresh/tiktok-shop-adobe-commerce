@@ -32,6 +32,7 @@ class ReviseRules extends AbstractTab
         $formData = array_merge($default, $formData);
 
         $form = $this->_formFactory->create();
+        $channelTitle = \M2E\TikTokShop\Helper\Module::getChannelTitle();
 
         $form->addField(
             'template_synchronization_form_data_revise',
@@ -39,11 +40,15 @@ class ReviseRules extends AbstractTab
             [
                 'content' => __(
                     '<p>Specify which Channel data should be automatically revised ' .
-                    'by M2E TikTok Shop Connect.</p><br> <p>Selected Item Properties will be automatically updated based ' .
+                    'by %extension_title.</p><br> <p>Selected Item Properties will be automatically updated based ' .
                     'on the changes in related Magento Attributes or Policy Templates.</p><br>' .
                     '<p>More detailed information on how to work with this Page can be found ' .
                     '<a href="%url" target="_blank" class="external-link">here</a>.</p>',
-                    ['url' => 'https://docs-m2.m2epro.com/revise-rules-for-tiktok-shop-listings'],
+                    [
+                        'url' => 'https://docs-m2.m2epro.com/revise-rules-for-tiktok-shop-listings',
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ],
                 ),
             ]
         );
@@ -67,10 +72,15 @@ class ReviseRules extends AbstractTab
                     1 => __('Yes'),
                 ],
                 'disabled' => true,
-                'tooltip' => __('Automatically revises Item Quantity on TikTok Shop when Product Quantity, ' .
+                'tooltip' => __(
+                    'Automatically revises Item Quantity on %channel_title when Product Quantity, ' .
                     'Magento Attribute used for Item Quantity or Custom Quantity value are modified in Magento or ' .
                     'Policy Template. The Quantity management is the basic functionality the ' .
-                    'Magento-to-TikTok Shop integration is based on and it cannot be disabled.'),
+                    'Magento-to-TikTok Shop integration is based on and it cannot be disabled.',
+                    [
+                        'channel_title' => $channelTitle
+                    ]
+                ),
             ]
         );
 
@@ -115,9 +125,14 @@ HTML
                     0 => __('No'),
                     1 => __('Yes'),
                 ],
-                'tooltip' => __('Automatically revises Item Price on TikTok Shop when Product Price, ' .
+                'tooltip' => __(
+                    'Automatically revises Item Price on %channel_title when Product Price, ' .
                     'Special Price or Magento Attribute used for Item Price are modified in ' .
-                    'Magento or Policy Template.'),
+                    'Magento or Policy Template.',
+                    [
+                        'channel_title' => $channelTitle
+                    ]
+                ),
             ]
         );
 
@@ -132,9 +147,14 @@ HTML
                     0 => __('No'),
                     1 => __('Yes'),
                 ],
-                'tooltip' => __('Automatically revises Item Title on TikTok Shop when Product Name, ' .
+                'tooltip' => __(
+                    'Automatically revises Item Title on %channel_title when Product Name, ' .
                     'Magento Attribute used for Item Title or Custom Title value are ' .
-                    'modified in Magento or Policy Template.'),
+                    'modified in Magento or Policy Template.',
+                    [
+                        'channel_title' => $channelTitle
+                    ]
+                ),
             ]
         );
 
@@ -149,9 +169,14 @@ HTML
                     0 => __('No'),
                     1 => __('Yes'),
                 ],
-                'tooltip' => __('Automatically revises Item Description on TikTok Shop ' .
+                'tooltip' => __(
+                    'Automatically revises Item Description on %channel_title ' .
                     'when Product Description, Product Short Description or Custom Description ' .
-                    'value are modified in Magento or Policy Template.'),
+                    'value are modified in Magento or Policy Template.',
+                    [
+                        'channel_title' => $channelTitle
+                    ]
+                ),
             ]
         );
 
@@ -166,9 +191,14 @@ HTML
                     0 => __('No'),
                     1 => __('Yes'),
                 ],
-                'tooltip' => __('Automatically revises Item Image(s) on TikTok Shop ' .
+                'tooltip' => __(
+                    'Automatically revises Item Image(s) on %channel_title ' .
                     'when Product Image(s) or Magento Attribute used for Product Image(s) ' .
-                    'are modified in Magento or Policy Template.'),
+                    'are modified in Magento or Policy Template.',
+                    [
+                        'channel_title' => $channelTitle
+                    ]
+                ),
             ]
         );
 
@@ -183,9 +213,14 @@ HTML
                     0 => __('No'),
                     1 => __('Yes'),
                 ],
-                'tooltip' => __('Automatically revises Item Categories/Attributes on TikTok Shop ' .
+                'tooltip' => __(
+                    'Automatically revises Item Categories/Attributes on %channel_title ' .
                     'when Categories/Attributes data or Magento Attributes used ' .
-                    'for Categories/Attributes are modified.'),
+                    'for Categories/Attributes are modified.',
+                    [
+                        'channel_title' => $channelTitle
+                    ]
+                ),
             ]
         );
 

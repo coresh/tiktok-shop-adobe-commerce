@@ -163,7 +163,7 @@ class Promotion extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     public function isActiveNow(): bool
     {
-        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $now = \M2E\Core\Helper\Date::createCurrentGmt();
 
         $startDate = $this->getStartDate();
         $endDate = $this->getEndDate();
@@ -199,7 +199,7 @@ class Promotion extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     {
         $startDate = $this->getDataByKey(TikTokShopPromotionResource::COLUMN_START_DATE);
 
-        return \M2E\TikTokShop\Helper\Date::createDateGmt($startDate);
+        return \M2E\Core\Helper\Date::createDateGmt($startDate);
     }
 
     public function setStartDate(\DateTimeInterface $startDate): self
@@ -215,7 +215,7 @@ class Promotion extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     {
         $endDate = $this->getDataByKey(TikTokShopPromotionResource::COLUMN_END_DATE);
 
-        return \M2E\TikTokShop\Helper\Date::createDateGmt($endDate);
+        return \M2E\Core\Helper\Date::createDateGmt($endDate);
     }
 
     public function setEndDate(\DateTimeInterface $endDate): self

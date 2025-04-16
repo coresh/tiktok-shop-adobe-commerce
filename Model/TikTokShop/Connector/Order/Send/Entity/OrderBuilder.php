@@ -50,12 +50,12 @@ class OrderBuilder
     {
         /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (!isset($this->ttsOrderId)) {
-            throw new \M2E\TikTokShop\Model\Exception\Logic('TikTok Shop order ID not set');
+            throw new \M2E\TikTokShop\Model\Exception\Logic(\M2E\TikTokShop\Helper\Module::getChannelTitle() . ' order ID not set');
         }
 
         /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (empty($this->orderItems)) {
-            throw new \M2E\TikTokShop\Model\Exception\Logic('TikTok Shop order items is empty');
+            throw new \M2E\TikTokShop\Model\Exception\Logic(\M2E\TikTokShop\Helper\Module::getChannelTitle() . ' order items is empty');
         }
     }
 }

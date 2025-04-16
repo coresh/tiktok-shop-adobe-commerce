@@ -25,8 +25,11 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Account\Grid
             [
                 'Be attentive! By Deleting Account you delete all information on it from M2E TikTok Shop Connect Server. '
                 . 'This will cause inappropriate work of all Accounts\' copies.' => __(
-                    'Be attentive! By Deleting Account you delete all information on it from M2E TikTok Shop Connect Server. '
-                    . 'This will cause inappropriate work of all Accounts\' copies.'
+                    'Be attentive! By Deleting Account you delete all information on it from %extension_title Server. '
+                    . 'This will cause inappropriate work of all Accounts\' copies.',
+                    [
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
                 ),
                 'No Customer entry is found for specified ID.' => __(
                     'No Customer entry is found for specified ID.'

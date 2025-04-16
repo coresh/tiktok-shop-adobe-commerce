@@ -41,7 +41,13 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Log\Abstract
             }
 
             $this->getResult()->getConfig()->getTitle()->prepend(
-                __('M2E TikTok Shop Connect Listing "%s" Log', ['s' => $listing->getTitle()]),
+                __(
+                    '%extension_title Listing "%s" Log',
+                    [
+                        's' => $listing->getTitle(),
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                    ]
+                ),
             );
         } elseif ($listingProductId) {
             $listingProduct = $this->listingProductRepository->find($listingProductId);
@@ -54,8 +60,11 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Log\Abstract
 
             $this->getResult()->getConfig()->getTitle()->prepend(
                 __(
-                    'M2E TikTok Shop Connect Listing Product "%1" Log',
-                    $this->filterManager->truncate($listingProduct->getMagentoProduct()->getName(), ['length' => 28])
+                    '%extension_title Listing Product "%name" Log',
+                    [
+                        'name' => $this->filterManager->truncate($listingProduct->getMagentoProduct()->getName(), ['length' => 28]),
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
                 )
             );
         } else {

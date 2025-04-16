@@ -169,7 +169,7 @@ class Buffer
         }
 
         if (!empty($productIdsWithBlockingError)) {
-            $lastBlockingErrorDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+            $lastBlockingErrorDate = \M2E\Core\Helper\Date::createCurrentGmt();
             foreach (array_chunk($productIdsWithBlockingError, self::MAX_PACK_SIZE, true) as $chunk) {
                 $this->productRepository->updateLastBlockingErrorDate($chunk, $lastBlockingErrorDate);
             }

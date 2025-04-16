@@ -12,13 +12,10 @@ class Config extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
     public function __construct(
         \M2E\TikTokShop\Model\Magento\Config\Mutable $mutableConfig,
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper
     ) {
         $this->mutableConfig = $mutableConfig;
         $this->globalDataHelper = $globalDataHelper;
-
-        parent::__construct($helperFactory);
     }
 
     /**

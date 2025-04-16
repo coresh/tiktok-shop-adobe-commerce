@@ -6,18 +6,19 @@ class Disable extends \M2E\TikTokShop\Observer\AbstractObserver
 {
     /** @var \M2E\TikTokShop\Model\Magento\Product\Index */
     private $productIndex;
+    private \M2E\Core\Helper\Magento $helperMagento;
 
     public function __construct(
         \M2E\TikTokShop\Model\Magento\Product\Index $productIndex,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \M2E\Core\Helper\Magento $helperMagento
     ) {
         $this->productIndex = $productIndex;
-        parent::__construct($helperFactory);
+        $this->helperMagento = $helperMagento;
     }
 
     protected function process(): void
     {
-        if ($this->getHelper('Magento')->isMSISupportingVersion()) {
+        if ($this->helperMagento->isMSISupportingVersion()) {
             return;
         }
 

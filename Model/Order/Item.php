@@ -27,7 +27,7 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     // ----------------------------------------
 
     private \M2E\TikTokShop\Model\Order\Item\ProxyObjectFactory $proxyObjectFactory;
-    private \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper;
+    private \M2E\Core\Helper\Magento\Store $magentoStoreHelper;
     private \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $magentoProductCollectionFactory;
     private \M2E\TikTokShop\Model\Order\Item\OptionsFinder $optionsFinder;
     private \M2E\TikTokShop\Model\Product\Repository $listingProductRepository;
@@ -42,7 +42,7 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         \M2E\TikTokShop\Model\Product\Repository $listingProductRepository,
         \M2E\TikTokShop\Model\Order\Item\OptionsFinder $optionsFinder,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $magentoProductCollectionFactory,
-        \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper,
+        \M2E\Core\Helper\Magento\Store $magentoStoreHelper,
         \M2E\TikTokShop\Model\Order\Item\ProxyObjectFactory $proxyObjectFactory,
         \M2E\TikTokShop\Model\Magento\ProductFactory $magentoProductFactory,
         \Magento\Framework\Model\Context $context,
@@ -304,7 +304,7 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             $this->productAssignService->assign(
                 [$this],
                 $this->getAssociatedProduct(),
-                \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION
+                \M2E\Core\Helper\Data::INITIATOR_EXTENSION
             );
         }
 

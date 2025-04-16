@@ -98,7 +98,7 @@
                         <?php
                         if ($block->getTemplatesCount() !== 0) : ?>
                             <optgroup label="<?php
-                            echo \M2E\TikTokShop\Helper\Data::escapeHtml((string)__('Policies')) ?>"
+                            echo \M2E\Core\Helper\Data::escapeHtml((string)__('Policies')) ?>"
                                       class="templates-group">
                                 <?php
                                 foreach ($block->getTemplates() as $template) : ?>
@@ -117,7 +117,7 @@
                                             ?>selected="selected"<?php
                                     endif; ?> class="template-switcher-template-option">
                                         <?php
-                                        echo \M2E\TikTokShop\Helper\Data::escapeHtml($template->getTitle()) ?>
+                                        echo \M2E\Core\Helper\Data::escapeHtml($template->getTitle()) ?>
                                     </option>
                                 <?php
                                 endforeach; ?>

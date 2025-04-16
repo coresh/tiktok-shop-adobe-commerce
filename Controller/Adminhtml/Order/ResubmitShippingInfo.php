@@ -48,7 +48,7 @@ class ResubmitShippingInfo extends \M2E\TikTokShop\Controller\Adminhtml\Abstract
                 $result = $this->orderShipmentHandler->shipByShipment(
                     $order,
                     $shipment,
-                    \M2E\TikTokShop\Helper\Data::INITIATOR_USER
+                    \M2E\Core\Helper\Data::INITIATOR_USER
                 );
 
                 if ($result === \M2E\TikTokShop\Model\Order\ShipmentService::HANDLE_RESULT_FAILED) {

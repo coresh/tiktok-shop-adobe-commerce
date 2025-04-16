@@ -11,11 +11,16 @@ class VariantSku extends AbstractDataBuilder
 {
     public const NICK = 'VariantSku';
 
+    /**
+     * The special value of the identifier attribute will be treated as empty.
+     */
+    private const SPECIAL_EMPTY_IDENTIFIER_VALUE = 'Does not apply';
+
     private static array $identifierTypeMap = [
-        \M2E\TikTokShop\Helper\Data\Product\Identifier::GTIN => 'GTIN',
-        \M2E\TikTokShop\Helper\Data\Product\Identifier::EAN => 'EAN',
-        \M2E\TikTokShop\Helper\Data\Product\Identifier::UPC => 'UPC',
-        \M2E\TikTokShop\Helper\Data\Product\Identifier::ISBN => 'ISBN',
+        \M2E\Core\Helper\Data\Product\Identifier::GTIN => 'GTIN',
+        \M2E\Core\Helper\Data\Product\Identifier::EAN => 'EAN',
+        \M2E\Core\Helper\Data\Product\Identifier::UPC => 'UPC',
+        \M2E\Core\Helper\Data\Product\Identifier::ISBN => 'ISBN',
     ];
 
     private \M2E\TikTokShop\Helper\Component\TikTokShop\Configuration $ttsConfiguration;
@@ -26,7 +31,7 @@ class VariantSku extends AbstractDataBuilder
 
     public function __construct(
         \M2E\TikTokShop\Helper\Component\TikTokShop\Configuration $ttsConfiguration,
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper,
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder\VariantSku\Item\ItemPartFactory $itemPartFactory
     ) {
         parent::__construct($magentoAttributeHelper);
@@ -231,7 +236,7 @@ class VariantSku extends AbstractDataBuilder
 
     private function getIdentifierType(string $identifierValue): ?string
     {
-        $type = \M2E\TikTokShop\Helper\Data\Product\Identifier::getIdentifierType($identifierValue);
+        $type = \M2E\Core\Helper\Data\Product\Identifier::getIdentifierType($identifierValue);
         if ($type === null) {
             return null;
         }
@@ -241,6 +246,6 @@ class VariantSku extends AbstractDataBuilder
 
     private function isSpecialIdentifierValue(string $value): bool
     {
-        return $value === \M2E\TikTokShop\Helper\Data\Product\Identifier::SPECIAL_EMPTY_IDENTIFIER_VALUE;
+        return $value === self::SPECIAL_EMPTY_IDENTIFIER_VALUE;
     }
 }

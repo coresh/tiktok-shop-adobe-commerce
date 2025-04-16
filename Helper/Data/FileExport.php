@@ -44,7 +44,7 @@ class FileExport
      */
     private function generateExportFileName(string $gridName): string
     {
-        $date = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $date = \M2E\Core\Helper\Date::createCurrentGmt();
         $dateString = $date->format('Ymd_His');
 
         return $gridName . '_' . $dateString . '.csv';

@@ -10,12 +10,9 @@ class Delete extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
     public function __construct(
         \M2E\TikTokShop\Model\Listing\LogService $listingLogService,
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \M2E\TikTokShop\Model\MSI\AffectedProducts $msiAffectedProducts,
         \M2E\TikTokShop\Model\Magento\Product\ChangeAttributeTrackerFactory $changeAttributeTrackerFactory
     ) {
-        parent::__construct($helperFactory);
-
         $this->msiAffectedProducts = $msiAffectedProducts;
         $this->changeAttributeTrackerFactory = $changeAttributeTrackerFactory;
         $this->listingLogService = $listingLogService;
@@ -59,7 +56,7 @@ class Delete extends \M2E\TikTokShop\Plugin\AbstractPlugin
     ): void {
         $this->listingLogService->addProduct(
             $affectedProduct->getProduct(),
-            \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+            \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_CHANGE_PRODUCT_QTY,
             null,
             \M2E\TikTokShop\Helper\Module\Log::encodeDescription(

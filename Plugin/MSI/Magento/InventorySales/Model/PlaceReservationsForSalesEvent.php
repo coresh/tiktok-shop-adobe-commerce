@@ -15,13 +15,10 @@ class PlaceReservationsForSalesEvent extends \M2E\TikTokShop\Plugin\AbstractPlug
 
     public function __construct(
         \M2E\TikTokShop\Model\Listing\LogService $listingLogService,
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \M2E\TikTokShop\Model\MSI\AffectedProducts $msiAffectedProducts,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \M2E\TikTokShop\Model\Magento\Product\ChangeAttributeTrackerFactory $attributeTrackerFactory
     ) {
-        parent::__construct($helperFactory);
-
         $this->msiAffectedProducts = $msiAffectedProducts;
         $this->getStockByChannel = $objectManager->get(GetStockBySalesChannelInterface::class);
         $this->changeAttributeTrackerFactory = $attributeTrackerFactory;
@@ -179,7 +176,7 @@ class PlaceReservationsForSalesEvent extends \M2E\TikTokShop\Plugin\AbstractPlug
 
         $this->listingLogService->addProduct(
             $affectedProduct->getProduct(),
-            \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+            \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_CHANGE_PRODUCT_QTY,
             null,
             \M2E\TikTokShop\Helper\Module\Log::encodeDescription(

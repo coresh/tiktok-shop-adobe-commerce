@@ -11,14 +11,14 @@ use M2E\TikTokShop\Model\TikTokShop\Listing\Product\Description\Renderer;
 
 class Data extends AbstractForm
 {
-    private \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper;
+    private \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper;
     private \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper;
     private DescriptionTemplate\BuilderFactory $templateDescriptionBuilderFactory;
     private array $magentoAttributes = [];
 
     public function __construct(
         \M2E\TikTokShop\Model\Template\Description\BuilderFactory $templateDescriptionBuilderFactory,
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper,
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -216,12 +216,17 @@ class Data extends AbstractForm
                     ],
                 ],
                 'create_magento_attribute' => true,
-                'tooltip' => __('Adds small thumbnails that appear under the large Base Image. You can ' .
-                    'add up to 8 additional photos to each Listing on TikTok Shop. <br/><b>Note:</b> ' .
-                    'Text, Multiple Select or Dropdown type Attribute can be used. The value of Attribute must ' .
-                    'contain absolute urls. <br/>In Text type Attribute urls must be separated with comma.' .
-                    '<br/>e.g. http://mymagentostore.com/images/baseimage1.jpg, ' .
-                    'http://mymagentostore.com/images/baseimage2.jpg'),
+                'tooltip' => __(
+                    'Adds small thumbnails that appear under the large Base Image. You can
+                    add up to 8 additional photos to each Listing on %channel_title. <br/><b>Note:</b>
+                    Text, Multiple Select or Dropdown type Attribute can be used. The value of Attribute must
+                    contain absolute urls. <br/>In Text type Attribute urls must be separated with comma.
+                    <br/>e.g. http://mymagentostore.com/images/baseimage1.jpg,
+                    http://mymagentostore.com/images/baseimage2.jpg',
+                    [
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
+                ),
             ]
         )->addCustomAttribute('allowed_attribute_types', 'text,textarea,select,multiselect');
 
@@ -263,7 +268,10 @@ class Data extends AbstractForm
                 ],
                 'value' => $formData[DescriptionResource::COLUMN_TITLE_MODE],
                 'tooltip' => __(
-                    'This is the Title that Buyers will see on TikTok Shop. A good Title ensures better visibility.'
+                    'This is the Title that Buyers will see on %channel_title. A good Title ensures better visibility.',
+                    [
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
                 ),
             ]
         );
@@ -539,7 +547,7 @@ JS
 
         $TikTokShopAttributes = [
             Renderer::TTS_ATTRIBUTE_CODE_TITLE => __('Title'),
-            Renderer::TTS_ATTRIBUTE_CODE_PRICE => __('TikTok Shop Price'),
+            Renderer::TTS_ATTRIBUTE_CODE_PRICE => __(\M2E\TikTokShop\Helper\Module::getChannelTitle() . ' Price'),
             Renderer::TTS_ATTRIBUTE_CODE_QTY => __('QTY'),
         ];
 
@@ -549,7 +557,7 @@ JS
             'custom_inserts_tiktokshop_attribute',
             'select',
             [
-                'label' => __('M2E TikTok Shop Connect'),
+                'label' => __(\M2E\TikTokShop\Helper\Module::getExtensionTitle()),
                 'values' => $TikTokShopAttributes,
                 'after_element_html' => $button->toHtml(),
             ]
@@ -572,13 +580,19 @@ HTML;
             'description_preview_help_block',
             self::HELP_BLOCK,
             [
-                'content' => __('If you would like to preview the Description data for the particular ' .
+                'content' => __(
+                    'If you would like to preview the Description data for the particular ' .
                     'Magento Product, please, provide its ID into the <strong>Magento Product ID</strong> ' .
                     'input and select a <strong>Magento Store View</strong> the values should be taken from. ' .
-                    'As a result you will see the Item Description which will be sent to TikTok Shop basing on ' .
+                    'As a result you will see the Item Description which will be sent to %channel_title basing on ' .
                     'the settings you specified.<br />Also, you can press a <strong>Select Randomly</strong> ' .
-                    'button to allow M2E TikTok Shop Connect to automatically select the most suitable Product for ' .
-                    'its previewing.'),
+                    'button to allow %extension_title to automatically select the most suitable Product for ' .
+                    'its previewing.',
+                    [
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
+                ),
             ]
         );
 

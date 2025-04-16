@@ -43,13 +43,17 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         $this->jsTranslator->add(
             'confirmation_account_delete',
             __(
-                '<p>You are about to delete your TikTok Shop seller account from M2E TikTok Shop Connect. ' .
+                '<p>You are about to delete your %channel_title seller account from %extension_title. ' .
                 'This will remove the account-related Listings and Products from the extension and disconnect the ' .
                 'synchronization. Your listings on the channel will <b>not</b> be affected.</p>' .
                 '<p>Please confirm if you would like to delete the account.</p>' .
-                '<p>Note: once the account is no longer connected to your M2E TikTok Shop Connect, please ' .
+                '<p>Note: once the account is no longer connected to your %extension_title, please ' .
                 'remember to delete it from <a href="%url">M2E Accounts</a></p>',
-                ['url' => \M2E\TikTokShop\Helper\Module\Support::ACCOUNTS_URL]
+                [
+                    'url' => \M2E\Core\Helper\Module\Support::ACCOUNTS_URL,
+                    'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle(),
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                ]
             )
         );
     }

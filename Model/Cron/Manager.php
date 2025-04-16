@@ -135,7 +135,7 @@ class Manager
     {
         $this->registryManager->setValue(
             $key,
-            \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')
+            \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')
         );
     }
 

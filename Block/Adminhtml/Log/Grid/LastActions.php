@@ -49,7 +49,7 @@ abstract class LastActions extends AbstractBlock
 
     public function getEncodedRows()
     {
-        return base64_encode(\M2E\TikTokShop\Helper\Json::encode($this->rows));
+        return base64_encode(\M2E\Core\Helper\Json::encode($this->rows));
     }
 
     public function getEntityId()
@@ -103,11 +103,11 @@ abstract class LastActions extends AbstractBlock
         }
 
         switch ($log['initiator']) {
-            case \M2E\TikTokShop\Helper\Data::INITIATOR_UNKNOWN:
+            case \M2E\Core\Helper\Data::INITIATOR_UNKNOWN:
                 return '';
-            case \M2E\TikTokShop\Helper\Data::INITIATOR_USER:
+            case \M2E\Core\Helper\Data::INITIATOR_USER:
                 return __('Manual');
-            case \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION:
+            case \M2E\Core\Helper\Data::INITIATOR_EXTENSION:
                 return __('Automatic');
         }
 
@@ -287,7 +287,7 @@ abstract class LastActions extends AbstractBlock
             $icon = $this->getIconByType($lastActionRow['type']);
         }
 
-        $this->tip = \M2E\TikTokShop\Helper\Data::escapeHtml($tip);
+        $this->tip = \M2E\Core\Helper\Data::escapeHtml($tip);
         $this->iconSrc = $this->getViewFileUrl('M2E_TikTokShop::images/log_statuses/' . $icon . '.png');
         $this->rows = $rows;
         // ---------------------------------------

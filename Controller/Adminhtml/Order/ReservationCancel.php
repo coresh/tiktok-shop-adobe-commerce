@@ -30,7 +30,7 @@ class ReservationCancel extends AbstractOrder
             $actionSuccessful = false;
 
             foreach ($orders as $order) {
-                $order->getLogService()->setInitiator(\M2E\TikTokShop\Helper\Data::INITIATOR_USER);
+                $order->getLogService()->setInitiator(\M2E\Core\Helper\Data::INITIATOR_USER);
 
                 if ($order->getReserve()->cancel()) {
                     $actionSuccessful = true;

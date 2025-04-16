@@ -12,7 +12,7 @@ class LogService
     private Log\Repository $repository;
 
     private ?int $operationHistoryId = null;
-    private int $initiator = \M2E\TikTokShop\Helper\Data::INITIATOR_UNKNOWN;
+    private int $initiator = \M2E\Core\Helper\Data::INITIATOR_UNKNOWN;
     private int $task = \M2E\TikTokShop\Model\Synchronization\Log::TASK_OTHER;
     private \M2E\TikTokShop\Helper\Module\Exception $exceptionHelper;
 

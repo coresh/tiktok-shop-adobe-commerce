@@ -50,7 +50,7 @@ class AssignProduct extends \M2E\TikTokShop\Controller\Adminhtml\AbstractOrder
         $this->productAssignService->assign(
             $orderItems,
             $magentoProduct->getProduct(),
-            \M2E\TikTokShop\Helper\Data::INITIATOR_USER
+            \M2E\Core\Helper\Data::INITIATOR_USER
         );
 
         $this->setJsonContent([

@@ -19,13 +19,10 @@ class TotalsCollectorList extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Quote\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \Magento\Quote\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory
     ) {
         $this->totalCollectorFactory = $totalCollectorFactory;
         $this->storeManager = $storeManager;
-
-        parent::__construct($helperFactory);
     }
 
     public function aroundGetCollectors($interceptor, \Closure $callback, ...$arguments)

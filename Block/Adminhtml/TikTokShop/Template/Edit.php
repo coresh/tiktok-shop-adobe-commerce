@@ -5,11 +5,11 @@ namespace M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template;
 class Edit extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractContainer
 {
     private \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper;
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
 
     public function __construct(
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Widget $context,
-        \M2E\TikTokShop\Helper\Url $urlHelper,
+        \M2E\Core\Helper\Url $urlHelper,
         \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper,
         array $data = []
     ) {
@@ -42,13 +42,11 @@ class Edit extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractContaine
 
         // ---------------------------------------
         if ($template->getId() && !$isSaveAndClose) {
-            $duplicateHeaderText = \M2E\TikTokShop\Helper\Data::escapeJs(
+            $duplicateHeaderText = \M2E\Core\Helper\Data::escapeJs(
                 (string)__('Add %template_name Policy', ['template_name' => $this->getTemplateName()]),
             );
 
-            $onclickHandler = $nick == \M2E\TikTokShop\Model\TikTokShop\Template\Manager::TEMPLATE_DESCRIPTION
-                ? 'TikTokShopTemplateDescriptionObj'
-                : 'TikTokShopTemplateEditObj';
+            $onclickHandler = 'TikTokShopTemplateEditObj';
 
             $this->buttonList->add('duplicate', [
                 'label' => __('Duplicate'),
@@ -61,7 +59,7 @@ class Edit extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractContaine
             $url = $this->getUrl('*/tiktokshop_template/delete');
             $this->buttonList->add('delete', [
                 'label' => __('Delete'),
-                'onclick' => 'TikTokShopTemplateEditObj.deleteClick(\'' . $url . '\')',
+                'onclick' => $onclickHandler . '.deleteClick(\'' . $url . '\')',
                 'class' => 'delete tiktokshop_delete_button primary',
             ]);
         }
@@ -69,9 +67,14 @@ class Edit extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractContaine
 
         $saveConfirmation = '';
         if ($template->getId()) {
-            $saveConfirmation = \M2E\TikTokShop\Helper\Data::escapeJs(
-                (string)__('<br/><b>Note:</b> All changes you have made will be automatically ' .
-                    'applied to all M2E TikTok Shop Connect Listings where this Policy is used.')
+            $saveConfirmation = \M2E\Core\Helper\Data::escapeJs(
+                (string)__(
+                    '<br/><b>Note:</b> All changes you have made will be automatically
+                    applied to all %extension_title Listings where this Policy is used.',
+                    [
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
+                )
             );
         }
 

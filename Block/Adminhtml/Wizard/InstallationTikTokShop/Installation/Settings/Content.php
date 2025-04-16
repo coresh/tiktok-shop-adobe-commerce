@@ -8,11 +8,9 @@ class Content extends AbstractForm
 {
     private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
     private \M2E\TikTokShop\Model\ShippingProvider\Repository $shippingProviderRepository;
-    private \M2E\TikTokShop\Helper\Magento\Carriers $magentoCarriersHelper;
 
     public function __construct(
         \M2E\TikTokShop\Model\ShippingProvider\Repository $shippingProviderRepository,
-        \M2E\TikTokShop\Helper\Magento\Carriers $magentoCarriersHelper,
         \M2E\TikTokShop\Model\Account\Repository $accountRepository,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Framework\Registry $registry,
@@ -27,7 +25,6 @@ class Content extends AbstractForm
         );
         $this->accountRepository = $accountRepository;
         $this->shippingProviderRepository = $shippingProviderRepository;
-        $this->magentoCarriersHelper = $magentoCarriersHelper;
     }
 
     public function _construct()
@@ -39,9 +36,15 @@ class Content extends AbstractForm
     protected function _prepareLayout()
     {
         $this->getLayout()->getBlock('wizard.help.block')->setContent(
-            __('In this section, you can configure the general settings for the interaction ' .
-                'between M2E TikTok Shop Connect and TikTok Shop Shops.<br><br>Anytime you can change these ' .
-                'settings under <b>TikTok Shop > Configuration > General</b>.')
+            __(
+                'In this section, you can configure the general settings for the interaction ' .
+                'between %extension_title and %channel_title Shops.<br><br>Anytime you can change these ' .
+                'settings under <b>%channel_title > Configuration > General</b>.',
+                [
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                    'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                ]
+            )
         );
 
         parent::_prepareLayout();

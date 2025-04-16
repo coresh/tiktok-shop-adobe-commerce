@@ -18,17 +18,12 @@ class ShipmentFactory
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
-    /** @var \M2E\TikTokShop\Helper\Factory */
-    protected $helperFactory;
-
     //########################################
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
         $this->objectManager = $objectManager;
-        $this->helperFactory = $helperFactory;
     }
 
     //########################################
@@ -55,7 +50,10 @@ class ShipmentFactory
      */
     private function isMsiMode(\Magento\Sales\Api\Data\OrderInterface $order)
     {
-        if (!$this->helperFactory->getObject('Magento')->isMSISupportingVersion()) {
+        /** @var \M2E\Core\Helper\Magento $helper */
+        $helper = $this->objectManager->get(\M2E\Core\Helper\Magento::class);
+
+        if (!$helper->isMSISupportingVersion()) {
             return false;
         }
 

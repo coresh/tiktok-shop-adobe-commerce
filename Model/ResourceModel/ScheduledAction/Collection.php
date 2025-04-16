@@ -15,7 +15,7 @@ class Collection extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\Collec
     public function __construct(
         \M2E\TikTokShop\Model\ResourceModel\Listing $listingResource,
         \M2E\TikTokShop\Model\ResourceModel\Product $listingProductResource,
-        \M2E\TikTokShop\Helper\Magento\Staging $magentoStagingHelper,
+        \M2E\Core\Helper\Magento\Staging $magentoStagingHelper,
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
@@ -67,7 +67,7 @@ class Collection extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\Collec
 
         $this->addFieldToFilter('main_table.action_type', $actionType);
 
-        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+        $now = \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
         $this->getSelect()
              ->reset(\Magento\Framework\DB\Select::COLUMNS)
              ->columns(

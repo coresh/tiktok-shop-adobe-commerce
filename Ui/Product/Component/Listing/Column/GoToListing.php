@@ -7,13 +7,13 @@ namespace M2E\TikTokShop\Ui\Product\Component\Listing\Column;
 class GoToListing extends \Magento\Ui\Component\Listing\Columns\Column
 {
     private \M2E\TikTokShop\Model\Product\Ui\RuntimeStorage $productUiRuntimeStorage;
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
-    private \M2E\TikTokShop\Helper\Magento\Assets $magentoAssets;
+    private \M2E\Core\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Magento\Assets $magentoAssets;
 
     public function __construct(
         \M2E\TikTokShop\Model\Product\Ui\RuntimeStorage $productUiRuntimeStorage,
-        \M2E\TikTokShop\Helper\Url $urlHelper,
-        \M2E\TikTokShop\Helper\Magento\Assets $magentoAssets,
+        \M2E\Core\Helper\Url $urlHelper,
+        \M2E\Core\Helper\Magento\Assets $magentoAssets,
         \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
         \Magento\Framework\View\Element\UiComponentFactory $uiComponentFactory,
         array $components = [],

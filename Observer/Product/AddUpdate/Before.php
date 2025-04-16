@@ -16,14 +16,12 @@ class Before extends AbstractAddUpdate
         \M2E\TikTokShop\Model\Magento\Product\ChangeAttributeTrackerFactory $changeAttributeTrackerFactory,
         \M2E\TikTokShop\Observer\Product\AddUpdate\Before\ProxyFactory $proxyFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \M2E\TikTokShop\Model\Magento\ProductFactory $ourMagentoProductFactory,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \M2E\TikTokShop\Model\Magento\ProductFactory $ourMagentoProductFactory
     ) {
         parent::__construct(
             $listingProductRepository,
             $productFactory,
-            $ourMagentoProductFactory,
-            $helperFactory
+            $ourMagentoProductFactory
         );
 
         $this->proxyFactory = $proxyFactory;
@@ -104,7 +102,7 @@ class Before extends AbstractAddUpdate
     {
         $key = $this->getProductId() . '_' . $this->getStoreId();
         if ($this->isAddingProductProcess()) {
-            $key = \M2E\TikTokShop\Helper\Data::generateUniqueHash();
+            $key = \M2E\Core\Helper\Data::generateUniqueHash();
             $this->getEvent()->getProduct()->setData(self::BEFORE_EVENT_KEY, $key);
         }
 

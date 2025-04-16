@@ -41,7 +41,7 @@ class Dispatcher
         }
 
         $lastUpdate = $this->getLastUpdateDate();
-        $currentDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $currentDate = \M2E\Core\Helper\Date::createCurrentGmt();
 
         if (
             $lastUpdate !== null
@@ -170,7 +170,7 @@ class Dispatcher
         $lastUpdateDate = $this->registryManager->getValue('/servicing/last_update_time/');
 
         if ($lastUpdateDate !== null) {
-            $lastUpdateDate = \M2E\TikTokShop\Helper\Date::createDateGmt($lastUpdateDate);
+            $lastUpdateDate = \M2E\Core\Helper\Date::createDateGmt($lastUpdateDate);
         }
 
         return $lastUpdateDate;
@@ -184,7 +184,7 @@ class Dispatcher
     {
         $this->registryManager->setValue(
             '/servicing/last_update_time/',
-            \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s'),
+            \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s'),
         );
     }
 }

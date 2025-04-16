@@ -358,7 +358,7 @@ if ($block->canDisplayContainer()): ?>
             registry.get('<?= $block->getDependencyJsObject() ?>', function (<?= $block->getDependencyJsObject() ?>) {
                 <?php endif; ?>
 
-                <?= $block->getJsObjectName() ?> = new varienGrid(<?= \M2E\TikTokShop\Helper\Json::encode(
+                <?= $block->getJsObjectName() ?> = new varienGrid(<?= \M2E\Core\Helper\Json::encode(
                     $block->getId()
                 ) ?>, '<?= $block->getGridUrl() ?>', '<?= $block->getVarNamePage() ?>', '<?= $block->getVarNameSort(
                 ) ?>', '<?= $block->getVarNameDir() ?>', '<?= $block->getVarNameFilter() ?>');

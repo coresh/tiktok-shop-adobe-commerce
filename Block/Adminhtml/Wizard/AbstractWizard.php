@@ -50,7 +50,7 @@ abstract class AbstractWizard extends AbstractContainer
         );
 
         $step = $this->wizardHelper->getStep($this->getNick());
-        $steps = \M2E\TikTokShop\Helper\Json::encode(
+        $steps = \M2E\Core\Helper\Json::encode(
             $this->wizardHelper->getWizard($this->getNick())->getSteps()
         );
         $status = $this->wizardHelper->getStatus($this->getNick());

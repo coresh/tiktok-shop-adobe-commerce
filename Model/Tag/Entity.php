@@ -40,14 +40,14 @@ class Entity extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             );
         }
 
-        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+        return \M2E\Core\Helper\Date::createDateGmt(
             $this->getData(TagResource::COLUMN_CREATE_DATE)
         );
     }
 
     public function setCreateDate(\DateTime $createDate): void
     {
-        $timeZone = new \DateTimeZone(\M2E\TikTokShop\Helper\Date::getTimezone()->getDefaultTimezone());
+        $timeZone = new \DateTimeZone(\M2E\Core\Helper\Date::getTimezone()->getDefaultTimezone());
         $createDate->setTimezone($timeZone);
         $this->setData(TagResource::COLUMN_CREATE_DATE, $createDate->format('Y-m-d H:i:s'));
     }

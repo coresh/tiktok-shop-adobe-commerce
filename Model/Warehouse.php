@@ -164,14 +164,14 @@ class Warehouse extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     public function getUpdateDate(): \DateTime
     {
-        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+        return \M2E\Core\Helper\Date::createDateGmt(
             $this->getData(WarehouseResource::COLUMN_UPDATE_DATE),
         );
     }
 
     public function getCreateDate(): \DateTime
     {
-        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+        return \M2E\Core\Helper\Date::createDateGmt(
             $this->getData(WarehouseResource::COLUMN_CREATE_DATE),
         );
     }

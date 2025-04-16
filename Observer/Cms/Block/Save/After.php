@@ -16,11 +16,8 @@ class After extends \M2E\TikTokShop\Observer\AbstractObserver
     public function __construct(
         \M2E\TikTokShop\Model\Template\Description\AffectedListingsProductsFactory $affectedListingsProductsFactory,
         \M2E\TikTokShop\Model\ResourceModel\Template\Description\CollectionFactory $descriptionCollectionFactory,
-        \M2E\TikTokShop\Model\InstructionService $instructionService,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \M2E\TikTokShop\Model\InstructionService $instructionService
     ) {
-        parent::__construct($helperFactory);
-
         $this->instructionService = $instructionService;
         $this->descriptionCollectionFactory = $descriptionCollectionFactory;
         $this->affectedListingsProductsFactory = $affectedListingsProductsFactory;

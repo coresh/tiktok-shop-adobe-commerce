@@ -24,7 +24,12 @@ class Combine extends \M2E\TikTokShop\Model\Magento\Product\Rule\Condition\Combi
 
     protected function getCustomLabel(): string
     {
-        return (string)__('TikTok Shop Connect Values');
+        return (string)__(
+            '%extension_title Values',
+            [
+                'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+            ]
+        );
     }
 
     protected function getCustomOptions(): array

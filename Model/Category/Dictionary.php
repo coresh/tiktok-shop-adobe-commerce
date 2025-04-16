@@ -321,7 +321,7 @@ class Dictionary extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     public function getCreateDate(): \DateTime
     {
-        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+        return \M2E\Core\Helper\Date::createDateGmt(
             $this->getData(DictionaryResource::COLUMN_CREATE_DATE)
         );
     }
@@ -336,7 +336,7 @@ class Dictionary extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     public function getUpdateDate(): \DateTime
     {
-        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+        return \M2E\Core\Helper\Date::createDateGmt(
             $this->getData(DictionaryResource::COLUMN_UPDATE_DATE)
         );
     }

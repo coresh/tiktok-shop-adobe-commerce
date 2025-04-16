@@ -19,7 +19,7 @@ class JsPhpRenderer extends AbstractRenderer
             return '';
         }
 
-        $constants = \M2E\TikTokShop\Helper\Json::encode($this->jsPhp);
+        $constants = \M2E\Core\Helper\Json::encode($this->jsPhp);
 
         return "TikTokShop.php.add({$constants});";
     }

@@ -34,9 +34,15 @@ class Content extends AbstractForm
         $this->getLayout()
              ->getBlock('wizard.help.block')
              ->setContent(
-                 __('Please select Account type and click <strong>Continue</strong> to connect ' .
-                     'your TikTok Shop Account. Once M2E TikTok Shop Connect is authorized to access your account, you\'ll ' .
-                     'be redirected back to the application')
+                 __(
+                     'Please select Account type and click <strong>Continue</strong> to connect ' .
+                     'your %channel_title Account. Once %extension_title is authorized to access your account, you\'ll ' .
+                     'be redirected back to the application',
+                     [
+                         'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                         'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                     ]
+                 )
              );
 
         parent::_prepareLayout();

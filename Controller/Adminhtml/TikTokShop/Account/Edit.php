@@ -46,7 +46,7 @@ class Edit extends AbstractAccount
 
         if ($account && $account->getId()) {
             $headerText = $headerTextEdit;
-            $headerText .= ' "' . \M2E\TikTokShop\Helper\Data::escapeHtml($account->getTitle()) . '"';
+            $headerText .= ' "' . \M2E\Core\Helper\Data::escapeHtml($account->getTitle()) . '"';
         } else {
             $headerText = $headerTextAdd;
         }

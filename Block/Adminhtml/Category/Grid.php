@@ -87,7 +87,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
             $path .= $categoriesCache[$id];
         }
 
-        return \M2E\TikTokShop\Helper\Data::escapeHtml($path);
+        return \M2E\Core\Helper\Data::escapeHtml($path);
     }
 
     public function getMultipleRows($item)

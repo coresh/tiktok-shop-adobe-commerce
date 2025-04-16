@@ -78,7 +78,7 @@ class Clearing
 
     private function getMinTimeByDays(int $days): \DateTime
     {
-        $date = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $date = \M2E\Core\Helper\Date::createCurrentGmt();
         $date->modify('- ' . $days . ' days');
 
         return $date;

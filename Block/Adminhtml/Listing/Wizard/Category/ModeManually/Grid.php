@@ -138,7 +138,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         ]);
 
         $this->addColumn('category', [
-            'header' => __('TikTok Shop Category'),
+            'header' => __(\M2E\TikTokShop\Helper\Module::getChannelTitle() . ' Category'),
             'align' => 'left',
             'width' => '*',
             'index' => 'category',

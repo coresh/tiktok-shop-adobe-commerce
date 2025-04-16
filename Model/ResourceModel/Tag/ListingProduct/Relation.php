@@ -28,7 +28,7 @@ class Relation extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\Abstract
     public function insertTags(array $dataPackage): void
     {
         $queryData = [];
-        $createDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+        $createDate = \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
         foreach ($dataPackage as $listingProductId => $tagIds) {
             foreach ($tagIds as $tagId) {
                 $queryData[] = [

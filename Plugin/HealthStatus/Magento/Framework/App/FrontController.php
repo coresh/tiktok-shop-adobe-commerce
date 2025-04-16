@@ -16,7 +16,6 @@ class FrontController extends \M2E\TikTokShop\Plugin\AbstractPlugin
     private \M2E\TikTokShop\Model\HealthStatus\Notification\Settings $notificationSettings;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \M2E\TikTokShop\Model\HealthStatus\CurrentStatus $healthStatusCurrentStatus,
         \M2E\TikTokShop\Model\HealthStatus\Notification\MessageBuilder $notificationMessageBuilder,
@@ -26,7 +25,6 @@ class FrontController extends \M2E\TikTokShop\Plugin\AbstractPlugin
         $this->healthStatusCurrentStatus = $healthStatusCurrentStatus;
         $this->notificationMessageBuilder = $notificationMessageBuilder;
         $this->notificationSettings = $notificationSettings;
-        parent::__construct($helperFactory);
     }
 
     //########################################

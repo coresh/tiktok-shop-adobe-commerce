@@ -110,7 +110,7 @@
                                             href="<?= $block->getUrl(
                                                 '*/tiktokshop_account/edit',
                                                 ['id' => $block->order->getAccount()->getId()]
-                                            ); ?>" target="_blank"><?= \M2E\TikTokShop\Helper\Data::escapeHtml(
+                                            ); ?>" target="_blank"><?= \M2E\Core\Helper\Data::escapeHtml(
                                                 $block->order->getAccount()->getTitle()
                                             ); ?></a>
 
@@ -171,7 +171,7 @@
                             <td class="label"><?= __('Order Currency'); ?></td>
                             <td class="value">
                                 <strong>
-                                    <?= \M2E\TikTokShop\Helper\Data::escapeHtml(
+                                    <?= \M2E\Core\Helper\Data::escapeHtml(
                                         $block->order->getCurrency()
                                     ); ?>
                                 </strong>
@@ -203,7 +203,7 @@
                         </tr>
                         <tr>
                             <td class="label"><?= __('Payment Method'); ?></td>
-                            <td class="value"><strong><?= \M2E\TikTokShop\Helper\Data::escapeHtml(
+                            <td class="value"><strong><?= \M2E\Core\Helper\Data::escapeHtml(
                                         $block->order->getPaymentMethod()
                                     ); ?></strong></td>
                         </tr>
@@ -259,7 +259,7 @@
                                         <?= __('N/A'); ?>
                                     <?php
                                     } else { ?>
-                                        <?= \M2E\TikTokShop\Helper\Data::escapeHtml(
+                                        <?= \M2E\Core\Helper\Data::escapeHtml(
                                             $block->order->getShippingService()
                                         ); ?>
                                     <?php
@@ -395,7 +395,7 @@
                 </div>
 
                 <div class="fieldset-wrapper-content admin__fieldset-wrapper-content">
-                    <?= \M2E\TikTokShop\Helper\Data::escapeHtml($checkoutMessage); ?>
+                    <?= \M2E\Core\Helper\Data::escapeHtml($checkoutMessage); ?>
                 </div>
 
             </div>

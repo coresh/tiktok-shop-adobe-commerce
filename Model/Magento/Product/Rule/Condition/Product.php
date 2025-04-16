@@ -12,7 +12,7 @@ class Product extends AbstractModel
 
     protected $_customFiltersCache = [];
 
-    private \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper;
+    private \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper;
     private \M2E\TikTokShop\Model\Magento\Product\Rule\Custom\CustomFilterFactory $customFilterFactory;
     private \Magento\Backend\Model\UrlInterface $url;
     private \Magento\Eav\Model\Config $config;
@@ -21,7 +21,7 @@ class Product extends AbstractModel
     private \Magento\Framework\Locale\FormatInterface $localeFormat;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper,
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper,
         \M2E\TikTokShop\Model\Magento\Product\Rule\Custom\CustomFilterFactory $customFilterFactory,
         \Magento\Backend\Model\UrlInterface $url,
         \Magento\Eav\Model\Config $config,
@@ -71,9 +71,9 @@ class Product extends AbstractModel
             if ($attr && $attr->getBackendType() === 'datetime' && !is_int($this->getValue())) {
                 $oldValue = $this->getValue();
                 $this->setValue(
-                    (int)\M2E\TikTokShop\Helper\Date::createDateGmt($this->getValue())->format('U')
+                    (int)\M2E\Core\Helper\Date::createDateGmt($this->getValue())->format('U')
                 );
-                $value = (int)\M2E\TikTokShop\Helper\Date::createDateGmt($object->getData($attrCode))->format('U');
+                $value = (int)\M2E\Core\Helper\Date::createDateGmt($object->getData($attrCode))->format('U');
                 $result = $this->validateAttribute($value);
                 $this->setValue($oldValue);
 
@@ -105,11 +105,11 @@ class Product extends AbstractModel
 
             $attr = $object->getResource()->getAttribute($attrCode);
             if ($attr && $attr->getBackendType() === 'datetime') {
-                $attributeValue = (int)\M2E\TikTokShop\Helper\Date::createDateGmt($attributeValue)->format('U');
+                $attributeValue = (int)\M2E\Core\Helper\Date::createDateGmt($attributeValue)->format('U');
 
                 if (!is_int($this->getValueParsed())) {
                     $this->setValueParsed(
-                        (int)\M2E\TikTokShop\Helper\Date::createDateGmt($this->getValue())->format('U')
+                        (int)\M2E\Core\Helper\Date::createDateGmt($this->getValue())->format('U')
                     );
                 }
             } elseif ($attr && $attr->getFrontendInput() === 'multiselect') {

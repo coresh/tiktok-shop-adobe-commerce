@@ -42,7 +42,10 @@ class CalculateStatusByChannel
             $calculateStatus = \M2E\TikTokShop\Model\Product::STATUS_BLOCKED;
             $actionMessage = new \M2E\TikTokShop\Model\Listing\Log\Record(
                 (string)__(
-                    'Product status was changed on TikTok Shop. Please check the reasons and suggestions for improving the product information on the channel.',
+                    'Product status was changed on %channel_title. Please check the reasons and suggestions for improving the product information on the channel.',
+                    [
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
                 ),
                 \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_INFO,
             );

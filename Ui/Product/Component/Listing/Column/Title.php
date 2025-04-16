@@ -6,11 +6,11 @@ namespace M2E\TikTokShop\Ui\Product\Component\Listing\Column;
 
 class Title extends \Magento\Ui\Component\Listing\Columns\Column
 {
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
     private \M2E\TikTokShop\Model\Product\Ui\RuntimeStorage $productUiRuntimeStorage;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Url $urlHelper,
+        \M2E\Core\Helper\Url $urlHelper,
         \M2E\TikTokShop\Model\Product\Ui\RuntimeStorage $productUiRuntimeStorage,
         \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
         \Magento\Framework\View\Element\UiComponentFactory $uiComponentFactory,

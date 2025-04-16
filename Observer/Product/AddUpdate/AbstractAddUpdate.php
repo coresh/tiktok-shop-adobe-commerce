@@ -10,13 +10,11 @@ abstract class AbstractAddUpdate extends \M2E\TikTokShop\Observer\Product\Abstra
     public function __construct(
         \M2E\TikTokShop\Model\Product\Repository $listingProductRepository,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \M2E\TikTokShop\Model\Magento\ProductFactory $ourMagentoProductFactory,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \M2E\TikTokShop\Model\Magento\ProductFactory $ourMagentoProductFactory
     ) {
         parent::__construct(
             $productFactory,
-            $ourMagentoProductFactory,
-            $helperFactory
+            $ourMagentoProductFactory
         );
         $this->listingProductRepository = $listingProductRepository;
     }

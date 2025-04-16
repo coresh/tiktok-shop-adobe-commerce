@@ -6,14 +6,14 @@ use M2E\TikTokShop\Block\Adminhtml\Log\AbstractGrid;
 
 class View extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractContainer
 {
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
     private string $viewMode;
     private \M2E\TikTokShop\Model\Listing\Ui\RuntimeStorage $uiListingRuntimeStorage;
 
     public function __construct(
         \M2E\TikTokShop\Model\Listing\Ui\RuntimeStorage $uiListingRuntimeStorage,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Widget $context,
-        \M2E\TikTokShop\Helper\Url $urlHelper,
+        \M2E\Core\Helper\Url $urlHelper,
         array $data = []
     ) {
         $this->uiListingRuntimeStorage = $uiListingRuntimeStorage;

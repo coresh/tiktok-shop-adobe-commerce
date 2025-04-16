@@ -13,12 +13,10 @@ abstract class AbstractProduct extends \M2E\TikTokShop\Observer\AbstractObserver
 
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \M2E\TikTokShop\Model\Magento\ProductFactory $ourMagentoProductFactory,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \M2E\TikTokShop\Model\Magento\ProductFactory $ourMagentoProductFactory
     ) {
         $this->productFactory = $productFactory;
         $this->ourMagentoProductFactory = $ourMagentoProductFactory;
-        parent::__construct($helperFactory);
     }
 
     //########################################

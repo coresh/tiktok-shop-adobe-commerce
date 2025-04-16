@@ -10,11 +10,11 @@
     <?php
     foreach ($block->getItems() as $item) : ?>
         <option value="<?php
-        echo \M2E\TikTokShop\Helper\Data::escapeHtml($item['value']) ?>" <?php
+        echo \M2E\Core\Helper\Data::escapeHtml($item['value']) ?>" <?php
                 if ($block->getCurrentViewMode() == $item['value']) :
                 ?>selected="selected"<?php
         endif; ?>><?php
-            echo \M2E\TikTokShop\Helper\Data::escapeHtml($item['label']); ?></option>
+            echo \M2E\Core\Helper\Data::escapeHtml($item['label']); ?></option>
     <?php
     endforeach; ?>
 </select>

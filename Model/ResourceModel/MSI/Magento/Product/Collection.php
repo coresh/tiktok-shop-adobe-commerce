@@ -16,14 +16,14 @@ class Collection extends \M2E\TikTokShop\Model\ResourceModel\Magento\Product\Col
 
     /** @var DefaultStockProviderInterface */
     private $defaultStockResolver;
-    private \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper;
+    private \M2E\Core\Helper\Magento\Store $magentoStoreHelper;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper,
+        \M2E\Core\Helper\Magento\Store $magentoStoreHelper,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \M2E\TikTokShop\Helper\Module\Database\Structure $dbStructureHelper,
-        \M2E\TikTokShop\Helper\Magento\Stock $magentoStockHelper,
-        \M2E\TikTokShop\Helper\Magento\Staging $magentoStagingHelper,
+        \M2E\Core\Helper\Magento\Stock $magentoStockHelper,
+        \M2E\Core\Helper\Magento\Staging $magentoStagingHelper,
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,

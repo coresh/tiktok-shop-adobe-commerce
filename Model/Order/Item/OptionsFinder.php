@@ -43,7 +43,7 @@ class OptionsFinder
      */
     public function setChannelOptions(array $options = [])
     {
-        $this->channelOptions = \M2E\TikTokShop\Helper\Data::toLowerCaseRecursive($options);
+        $this->channelOptions = \M2E\Core\Helper\Data::toLowerCaseRecursive($options);
 
         return $this;
     }
@@ -55,7 +55,7 @@ class OptionsFinder
      */
     public function addChannelOptions(array $options = [])
     {
-        $this->channelOptions = $this->channelOptions + \M2E\TikTokShop\Helper\Data::toLowerCaseRecursive($options);
+        $this->channelOptions = $this->channelOptions + \M2E\Core\Helper\Data::toLowerCaseRecursive($options);
 
         return $this;
     }
@@ -241,7 +241,7 @@ class OptionsFinder
      */
     private function findChannelLabels(array $optionLabels)
     {
-        $optionLabels = \M2E\TikTokShop\Helper\Data::toLowerCaseRecursive($optionLabels);
+        $optionLabels = \M2E\Core\Helper\Data::toLowerCaseRecursive($optionLabels);
 
         foreach ($optionLabels as $label) {
             if (isset($this->channelOptions[$label])) {
@@ -258,7 +258,7 @@ class OptionsFinder
     private function findMagentoValue(array $magentoOptionValues)
     {
         foreach ($magentoOptionValues as $optionValue) {
-            $valueLabels = \M2E\TikTokShop\Helper\Data::toLowerCaseRecursive($optionValue['labels']);
+            $valueLabels = \M2E\Core\Helper\Data::toLowerCaseRecursive($optionValue['labels']);
 
             foreach ((array)$this->channelLabels['labels'] as $channelOptionLabel) {
                 if (in_array($channelOptionLabel, $valueLabels, true)) {

@@ -983,11 +983,11 @@ class Product
      */
     public function isSpecialPriceActual()
     {
-        $fromDate = (int)\M2E\TikTokShop\Helper\Date::createDateGmt($this->getSpecialPriceFromDate())
+        $fromDate = (int)\M2E\Core\Helper\Date::createDateGmt($this->getSpecialPriceFromDate())
                                                     ->format('U');
-        $toDate = (int)\M2E\TikTokShop\Helper\Date::createDateGmt($this->getSpecialPriceToDate())
+        $toDate = (int)\M2E\Core\Helper\Date::createDateGmt($this->getSpecialPriceToDate())
                                                   ->format('U');
-        $currentTimeStamp = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->getTimestamp();
+        $currentTimeStamp = \M2E\Core\Helper\Date::createCurrentGmt()->getTimestamp();
 
         return $currentTimeStamp >= $fromDate && $currentTimeStamp < $toDate &&
             (float)$this->getProduct()->getSpecialPrice() > 0;
@@ -1000,10 +1000,10 @@ class Product
         $fromDate = $this->getProduct()->getSpecialFromDate();
 
         if ($fromDate === null || $fromDate === false || $fromDate == '') {
-            $fromDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt()
+            $fromDate = \M2E\Core\Helper\Date::createCurrentGmt()
                                                    ->format('Y-01-01 00:00:00');
         } else {
-            $fromDate = \M2E\TikTokShop\Helper\Date::createDateGmt($fromDate)
+            $fromDate = \M2E\Core\Helper\Date::createDateGmt($fromDate)
                                                    ->format('Y-m-d 00:00:00');
         }
 
@@ -1015,14 +1015,14 @@ class Product
         $toDate = $this->getProduct()->getSpecialToDate();
 
         if ($toDate === null || $toDate === false || $toDate == '') {
-            $toDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+            $toDate = \M2E\Core\Helper\Date::createCurrentGmt();
             $toDate->modify('+1 year');
             $toDate = $toDate->format('Y-01-01 00:00:00');
         } else {
-            $toDate = \M2E\TikTokShop\Helper\Date::createDateGmt($toDate)
+            $toDate = \M2E\Core\Helper\Date::createDateGmt($toDate)
                                                  ->format('Y-m-d 00:00:00');
 
-            $toDate = \M2E\TikTokShop\Helper\Date::createDateGmt($toDate);
+            $toDate = \M2E\Core\Helper\Date::createDateGmt($toDate);
             $toDate->modify('+1 day');
             $toDate = $toDate->format('Y-m-d 00:00:00');
         }
@@ -1379,7 +1379,7 @@ class Product
                  * vendor/magento/module-eav/Model/Entity/Attribute/Source/Table.php
                  */
                 $value = $attribute->getSource()->getOptionText($value);
-                $value = \M2E\TikTokShop\Helper\Data::deEscapeHtml($value, ENT_QUOTES);
+                $value = \M2E\Core\Helper\Data::deEscapeHtml($value, ENT_QUOTES);
 
                 $value = is_array($value) ? implode(',', $value) : (string)$value;
             }
@@ -1520,7 +1520,7 @@ class Product
             . basename($image->getPath());
 
         if ($fileDriver->isFile($imagePathResized)) {
-            $currentTime = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->getTimestamp();
+            $currentTime = \M2E\Core\Helper\Date::createCurrentGmt()->getTimestamp();
 
             if (filemtime($imagePathResized) + self::THUMBNAIL_IMAGE_CACHE_TIME > $currentTime) {
                 $image->setPath($imagePathResized)

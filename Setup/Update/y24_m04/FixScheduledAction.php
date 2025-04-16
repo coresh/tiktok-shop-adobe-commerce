@@ -31,7 +31,7 @@ class FixScheduledAction extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFe
                 'type' => \M2E\TikTokShop\Model\Magento\Product\ChangeAttributeTracker::INSTRUCTION_TYPE_PRODUCT_DATA_POTENTIALLY_CHANGED,
                 'initiator' => 'variant_migration',
                 'priority' => 100,
-                'create_date' => \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')
+                'create_date' => \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')
             ];
         }
 

@@ -99,7 +99,7 @@ class Dispatcher
 
                     $this->exceptionHelper->process($exception);
 
-                    $result = \M2E\TikTokShop\Helper\Data::STATUS_ERROR;
+                    $result = \M2E\Core\Helper\Data::STATUS_ERROR;
                 }
 
                 $results[] = $result;
@@ -108,7 +108,7 @@ class Dispatcher
 
         $this->tagBuffer->flush();
 
-        return \M2E\TikTokShop\Helper\Data::getMainStatus($results);
+        return \M2E\Core\Helper\Data::getMainStatus($results);
     }
 
     /**
@@ -147,20 +147,20 @@ class Dispatcher
 
                 $result = $processor->getResultStatus();
 
-                if ($result === \M2E\TikTokShop\Helper\Data::STATUS_ERROR) {
+                if ($result === \M2E\Core\Helper\Data::STATUS_ERROR) {
                     $this->tagBuffer->addTag($package->getProduct(), $this->tagFactory->createWithHasErrorCode());
                 }
             } catch (\Throwable $exception) {
                 $this->logListingProductException($package->getProduct(), $exception, $action, $statusChanger);
                 $this->exceptionHelper->process($exception);
 
-                $result = \M2E\TikTokShop\Helper\Data::STATUS_ERROR;
+                $result = \M2E\Core\Helper\Data::STATUS_ERROR;
             }
 
             $results[] = $result;
         }
 
-        return \M2E\TikTokShop\Helper\Data::getMainStatus($results);
+        return \M2E\Core\Helper\Data::getMainStatus($results);
     }
 
     private function createProcessor(
@@ -250,13 +250,13 @@ class Dispatcher
     private function recognizeInitiatorForLogging(int $statusChanger): int
     {
         if ($statusChanger === \M2E\TikTokShop\Model\Product::STATUS_CHANGER_UNKNOWN) {
-            return \M2E\TikTokShop\Helper\Data::INITIATOR_UNKNOWN;
+            return \M2E\Core\Helper\Data::INITIATOR_UNKNOWN;
         }
         if ($statusChanger === \M2E\TikTokShop\Model\Product::STATUS_CHANGER_USER) {
-            return \M2E\TikTokShop\Helper\Data::INITIATOR_USER;
+            return \M2E\Core\Helper\Data::INITIATOR_USER;
         }
 
-        return \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION;
+        return \M2E\Core\Helper\Data::INITIATOR_EXTENSION;
     }
 
     private function recognizeActionForLogging(int $action): int

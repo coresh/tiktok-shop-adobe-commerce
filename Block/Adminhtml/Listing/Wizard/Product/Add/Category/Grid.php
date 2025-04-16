@@ -8,7 +8,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Wizard\AbstractGrid
 {
     private $selectedIds = [];
     private $currentCategoryId = null;
-    private \M2E\TikTokShop\Helper\Magento\Category $magentoCategoryHelper;
+    private \M2E\Core\Helper\Magento\Category $magentoCategoryHelper;
     private \M2E\TikTokShop\Helper\Module\Database\Structure $databaseHelper;
 
     public function __construct(
@@ -18,7 +18,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Wizard\AbstractGrid
         \M2E\TikTokShop\Model\Listing\Ui\RuntimeStorage $uiListingRuntimeStorage,
         \M2E\TikTokShop\Model\ResourceModel\Listing\Wizard $wizardResource,
         \M2E\TikTokShop\Model\ResourceModel\Listing\Wizard\Product $listingWizardProductResource,
-        \M2E\TikTokShop\Helper\Magento\Category $magentoCategoryHelper,
+        \M2E\Core\Helper\Magento\Category $magentoCategoryHelper,
         \M2E\TikTokShop\Model\ResourceModel\Magento\Product\CollectionFactory $magentoProductCollectionFactory,
         \Magento\Catalog\Model\Product\Type $type,
         \M2E\TikTokShop\Helper\Magento\Product $magentoProductHelper,

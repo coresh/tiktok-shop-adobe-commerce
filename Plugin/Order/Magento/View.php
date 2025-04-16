@@ -9,10 +9,8 @@ class View extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
     public function __construct(
         \M2E\TikTokShop\Model\ResourceModel\Order $orderResource,
-        \M2E\TikTokShop\Model\OrderFactory $orderFactory,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \M2E\TikTokShop\Model\OrderFactory $orderFactory
     ) {
-        parent::__construct($helperFactory);
         $this->orderResource = $orderResource;
         $this->orderFactory = $orderFactory;
     }
@@ -53,7 +51,12 @@ class View extends \M2E\TikTokShop\Plugin\AbstractPlugin
         $interceptor->addButton(
             'go_to_tiktokshop_order',
             [
-                'label' => __('Show TikTok Shop Order'),
+                'label' => __(
+                    'Show %channel_title Order',
+                    [
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
+                ),
                 'onclick' => "setLocation('$buttonUrl')",
             ],
             0,

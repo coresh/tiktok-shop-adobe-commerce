@@ -39,7 +39,7 @@ class Log extends \M2E\TikTokShop\Model\Log\AbstractModel
         int $type,
         ?string $detailedDescription = null
     ): self {
-        \M2E\TikTokShop\Helper\Data::validateInitiator($initiator);
+        \M2E\Core\Helper\Data::validateInitiator($initiator);
 
         $this
             ->setData(SyncLogResource::COLUMN_INITIATOR, $initiator)

@@ -43,7 +43,7 @@ class EventDispatcher
 
     private function getPurchaseDate(\M2E\TikTokShop\Model\Order $order): \DateTime
     {
-        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+        return \M2E\Core\Helper\Date::createDateGmt(
             $order->getPurchaseCreateDate()
         );
     }

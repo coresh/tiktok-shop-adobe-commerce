@@ -7,7 +7,7 @@ namespace M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Account;
 class Save extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractAccount
 {
     private \M2E\TikTokShop\Helper\Module\Exception $helperException;
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
     private \M2E\TikTokShop\Model\Account\Update $accountUpdate;
     private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
 
@@ -15,7 +15,7 @@ class Save extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractAccou
         \M2E\TikTokShop\Model\Account\Update $accountUpdate,
         \M2E\TikTokShop\Model\Account\Repository $accountRepository,
         \M2E\TikTokShop\Helper\Module\Exception $helperException,
-        \M2E\TikTokShop\Helper\Url $urlHelper
+        \M2E\Core\Helper\Url $urlHelper
     ) {
         parent::__construct();
 

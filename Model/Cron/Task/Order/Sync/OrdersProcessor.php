@@ -28,7 +28,7 @@ class OrdersProcessor
 
     public function process(): void
     {
-        $toTime = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $toTime = \M2E\Core\Helper\Date::createCurrentGmt();
         $fromTime = $this->prepareFromTime($this->shop, $toTime);
 
         $response = $this->receiveOrdersProcessor->process(
@@ -77,13 +77,13 @@ class OrdersProcessor
         $lastSynchronizationDate = $shop->getOrdersLastSyncDate();
 
         if ($lastSynchronizationDate === null) {
-            $sinceTime = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+            $sinceTime = \M2E\Core\Helper\Date::createCurrentGmt();
         } else {
             $sinceTime = $lastSynchronizationDate;
 
             // Get min date for sync
             // ---------------------------------------
-            $minDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+            $minDate = \M2E\Core\Helper\Date::createCurrentGmt();
             $minDate->modify('-90 days');
             // ---------------------------------------
 
@@ -106,7 +106,7 @@ class OrdersProcessor
         \M2E\TikTokShop\Model\Shop $shop,
         string $date
     ): void {
-        $shop->setOrdersLastSyncDate(\M2E\TikTokShop\Helper\Date::createDateGmt($date));
+        $shop->setOrdersLastSyncDate(\M2E\Core\Helper\Date::createDateGmt($date));
 
         $this->shopRepository->save($shop);
     }

@@ -22,7 +22,7 @@ class GetAccounts extends \M2E\TikTokShop\Controller\Adminhtml\AbstractGeneral
         foreach ($this->accountsRepository->getAll() as $account) {
             $accounts[] = [
                 'id' => $account->getId(),
-                'title' => \M2E\TikTokShop\Helper\Data::escapeHtml($account->getTitle()),
+                'title' => \M2E\Core\Helper\Data::escapeHtml($account->getTitle()),
             ];
         }
 

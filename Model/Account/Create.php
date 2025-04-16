@@ -10,7 +10,7 @@ class Create
     private \M2E\TikTokShop\Model\Warehouse\SynchronizeService $warehouseSynchronizeService;
     private Repository $accountRepository;
     private \M2E\TikTokShop\Model\AccountFactory $accountFactory;
-    private \M2E\TikTokShop\Helper\Magento\Store $storeHelper;
+    private \M2E\Core\Helper\Magento\Store $storeHelper;
     private \M2E\TikTokShop\Model\ShippingProvider\SynchronizeService $shippingProviderSynchronizeService;
     private \M2E\TikTokShop\Model\Shop\UpdateService $shopUpdateService;
 
@@ -21,7 +21,7 @@ class Create
         \M2E\TikTokShop\Model\Warehouse\SynchronizeService $warehouseSynchronizeService,
         \M2E\TikTokShop\Model\ShippingProvider\SynchronizeService $shippingProviderSynchronizeService,
         \M2E\TikTokShop\Model\Account\Repository $accountRepository,
-        \M2E\TikTokShop\Helper\Magento\Store $storeHelper
+        \M2E\Core\Helper\Magento\Store $storeHelper
     ) {
         $this->addProcessor = $addProcessor;
         $this->warehouseSynchronizeService = $warehouseSynchronizeService;
@@ -38,13 +38,9 @@ class Create
 
         $existAccount = $this->findExistAccountByOpenId($response->getAccountOpenId());
         if ($existAccount !== null) {
-            if ($existAccount->isActive()) {
-                throw new \M2E\TikTokShop\Model\Exception(
-                    'An account with the same details has already been added. Please make sure you provide unique information.',
-                );
-            }
-
-            $account = $existAccount;
+            throw new \M2E\TikTokShop\Model\Exception(
+                'An account with the same details has already been added. Please make sure you provide unique information.',
+            );
         } else {
             $account = $this->accountFactory->create();
 

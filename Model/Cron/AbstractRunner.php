@@ -18,7 +18,7 @@ abstract class AbstractRunner
     private \M2E\TikTokShop\Helper\Module\Maintenance $maintenanceHelper;
     private \M2E\TikTokShop\Model\Cron\OperationHistoryFactory $operationHistoryFactory;
     private \M2E\TikTokShop\Model\Cron\Strategy $strategy;
-    private \M2E\TikTokShop\Helper\Client\MemoryLimit $memoryLimit;
+    private \M2E\Core\Helper\Client\MemoryLimit $memoryLimit;
     /** @var \M2E\TikTokShop\Model\Cron\Config */
     private Config $cronConfig;
     /** @var \M2E\TikTokShop\Model\Cron\Manager */
@@ -34,7 +34,7 @@ abstract class AbstractRunner
         \M2E\TikTokShop\Helper\Module $moduleHelper,
         \M2E\TikTokShop\Helper\Module\Maintenance $maintenanceHelper,
         \M2E\TikTokShop\Model\Cron\OperationHistoryFactory $operationHistoryFactory,
-        \M2E\TikTokShop\Helper\Client\MemoryLimit $memoryLimit,
+        \M2E\Core\Helper\Client\MemoryLimit $memoryLimit,
         \M2E\TikTokShop\Model\Cron\Strategy $strategy
     ) {
         $this->storeManager = $storeManager;

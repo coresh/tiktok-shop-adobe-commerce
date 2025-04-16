@@ -10,14 +10,14 @@ class MoveToListing extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
     private \M2E\TikTokShop\Model\Listing\Repository $listingRepository;
     private \M2E\TikTokShop\Model\Product\Repository $productRepository;
     private \M2E\TikTokShop\Model\Listing\AddProductsService $addProductsService;
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
 
     public function __construct(
         \M2E\TikTokShop\Helper\Data\Session $sessionHelper,
         \M2E\TikTokShop\Model\Listing\Repository $listingRepository,
         \M2E\TikTokShop\Model\Product\Repository $productRepository,
         \M2E\TikTokShop\Model\Listing\AddProductsService $addProductsService,
-        \M2E\TikTokShop\Helper\Url $urlHelper,
+        \M2E\Core\Helper\Url $urlHelper,
         \M2E\TikTokShop\Controller\Adminhtml\Context $context
     ) {
         parent::__construct($context);

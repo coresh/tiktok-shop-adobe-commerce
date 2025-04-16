@@ -85,7 +85,7 @@ class AddProductsService
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_PRODUCT_ADDED,
             \M2E\TikTokShop\Model\Listing::INSTRUCTION_INITIATOR_ADDING_PRODUCT,
             70,
-            \M2E\TikTokShop\Helper\Date::createCurrentGmt()->modify('+1 minutes')
+            \M2E\Core\Helper\Date::createCurrentGmt()->modify('+1 minutes')
         );
 
         return $listingProduct;
@@ -162,7 +162,7 @@ class AddProductsService
         if ($this->findExistProduct($targetListing, $listingProduct->getMagentoProductId()) !== null) {
             $this->listingLogService->addProduct(
                 $listingProduct,
-                \M2E\TikTokShop\Helper\Data::INITIATOR_USER,
+                \M2E\Core\Helper\Data::INITIATOR_USER,
                 \M2E\TikTokShop\Model\Listing\Log::ACTION_MOVE_TO_LISTING,
                 null,
                 (string)__('The Product was not moved because it already exists in the selected Listing'),
@@ -184,7 +184,7 @@ class AddProductsService
 
         $this->listingLogService->addProduct(
             $listingProduct,
-            \M2E\TikTokShop\Helper\Data::INITIATOR_USER,
+            \M2E\Core\Helper\Data::INITIATOR_USER,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_MOVE_TO_LISTING,
             null,
             $logMessage,
@@ -201,7 +201,7 @@ class AddProductsService
 
         $this->listingLogService->addListing(
             $sourceListing,
-            \M2E\TikTokShop\Helper\Data::INITIATOR_USER,
+            \M2E\Core\Helper\Data::INITIATOR_USER,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_MOVE_TO_LISTING,
             null,
             $logMessage,

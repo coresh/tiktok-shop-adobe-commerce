@@ -10,11 +10,11 @@ class StockItem
     private \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface $stockStateProvider;
     private \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository;
     private \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage;
-    private \M2E\TikTokShop\Helper\Magento\Stock $magentoStockHelper;
+    private \M2E\Core\Helper\Magento\Stock $magentoStockHelper;
     private bool $stockStatusChanged = false;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Magento\Stock $magentoStockHelper,
+        \M2E\Core\Helper\Magento\Stock $magentoStockHelper,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $indexStockProcessor,
         \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface $stockStateProvider,

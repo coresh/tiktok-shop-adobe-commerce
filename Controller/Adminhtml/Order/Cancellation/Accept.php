@@ -26,7 +26,7 @@ class Accept extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractOrd
         try {
             $order = $this->getOrderFromRequest($this->getRequest());
             $result = $this->acceptCancellationRequest
-                ->process($order, \M2E\TikTokShop\Helper\Data::INITIATOR_USER);
+                ->process($order, \M2E\Core\Helper\Data::INITIATOR_USER);
         } catch (\Throwable $exception) {
             $this->messageManager->addErrorMessage(
                 __('Order Cancellation Request was not accepted. Reason: %reason', [

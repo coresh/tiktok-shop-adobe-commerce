@@ -86,7 +86,7 @@ class UpdateFromChannel
             $this->logService->addRecordToProduct(
                 $record,
                 $product,
-                \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+                \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
                 \M2E\TikTokShop\Model\Listing\Log::ACTION_CHANNEL_CHANGE,
                 $this->getLogActionId(),
             );

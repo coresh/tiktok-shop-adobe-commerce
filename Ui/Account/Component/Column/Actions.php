@@ -50,13 +50,17 @@ class Actions extends \Magento\Ui\Component\Listing\Columns\Column
                     'confirm' => [
                         'title' => __('Confirmation'),
                         'message' => __(
-                            '<p>You are about to delete your TikTok Shop seller account from M2E TikTok Shop Connect. This will remove the
+                            '<p>You are about to delete your %channel_title seller account from %extension_title. This will remove the
 account-related Listings and Products from the extension and disconnect the synchronization.
 Your listings on the channel will <b>not</b> be affected.</p>
 <p>Please confirm if you would like to delete the account.</p>
-<p>Note: once the account is no longer connected to your M2E TikTok Shop Connect, please remember to delete it from
+<p>Note: once the account is no longer connected to your %extension_title, please remember to delete it from
 <a href="%href">M2E Accounts</a></p>',
-                            ['href' => \M2E\TikTokShop\Helper\Module\Support::ACCOUNTS_URL]
+                            [
+                                'href' => \M2E\Core\Helper\Module\Support::ACCOUNTS_URL,
+                                'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                                'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                            ]
                         )
                     ]
                 ];

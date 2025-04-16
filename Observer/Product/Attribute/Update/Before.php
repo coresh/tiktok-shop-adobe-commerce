@@ -7,10 +7,8 @@ class Before extends \M2E\TikTokShop\Observer\AbstractObserver
     private \Magento\Framework\ObjectManagerInterface $objectManager;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
-        parent::__construct($helperFactory);
         $this->objectManager = $objectManager;
     }
 

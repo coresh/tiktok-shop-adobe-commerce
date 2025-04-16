@@ -111,12 +111,6 @@ class AccountHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 ['nullable' => false, 'default' => '[]']
             )
             ->addColumn(
-                AccountResource::COLUMN_IS_ACTIVE,
-                Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => 0]
-            )
-            ->addColumn(
                 AccountResource::COLUMN_UPDATE_DATE,
                 Table::TYPE_DATETIME,
                 null,

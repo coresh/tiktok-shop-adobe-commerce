@@ -50,16 +50,11 @@ class Edit extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractContaine
             return;
         }
 
-        if (
-            $this->account === null
-            || $this->account->isActive()
-        ) {
-            $this->addButton('back', [
-                'label' => __('Back'),
-                'onclick' => 'TikTokShopAccountObj.backClick(\'' . $this->getUrl('*/tiktokshop_account/index') . '\')',
-                'class' => 'back',
-            ]);
-        }
+        $this->addButton('back', [
+            'label' => __('Back'),
+            'onclick' => 'TikTokShopAccountObj.backClick(\'' . $this->getUrl('*/tiktokshop_account/index') . '\')',
+            'class' => 'back',
+        ]);
 
         $saveButtonsProps = [];
         if ($this->account && $this->account->getId()) {

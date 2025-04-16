@@ -47,10 +47,6 @@ class Update
             ->setOrdersSettings($orderSettings)
             ->setInvoiceAndShipmentSettings($invoicesAndShipmentSettings);
 
-        if (!$account->isActive()) {
-            $account->activate();
-        }
-
         $this->accountRepository->save($account);
 
         foreach ($shippingProviderMapping as $warehouseId => $data) {

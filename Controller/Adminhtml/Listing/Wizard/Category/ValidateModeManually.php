@@ -129,8 +129,18 @@ class ValidateModeManually extends AbstractListing
         }
 
         if ($requiredAttributesNotSetCount > 0) {
-            $message .= ' ' . __('Required Attributes are not set for the selected TikTok Shop Category');
+            $message .= ' ' .
+                __(
+                    'Required Attributes are not set for the selected %channel_title Category',
+                    [
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
+                );
         }
+
+        $header = '<br/><b><u>' .
+            __('%extension_title Notes', ['extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()])
+            . ':</u></b><br/><br/>';
 
         $this->setJsonContent([
             'validation' => ($categoryNotSetCount + $requiredAttributesNotSetCount) === 0,

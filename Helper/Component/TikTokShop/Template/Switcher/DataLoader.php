@@ -7,8 +7,8 @@ class DataLoader
     private \Magento\Store\Model\StoreManagerInterface $storeManager;
     private \M2E\TikTokShop\Model\TikTokShop\Template\Manager $templateManager;
     private \M2E\TikTokShop\Model\TikTokShop\Template\ManagerFactory $templateManagerFactory;
-    private \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper;
-    private \M2E\TikTokShop\Helper\Magento\AttributeSet $magentoAttributeSetHelper;
+    private \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper;
+    private \M2E\Core\Helper\Magento\AttributeSet $magentoAttributeSetHelper;
     private \M2E\TikTokShop\Helper\Data\GlobalData $globalData;
     private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
 
@@ -18,8 +18,8 @@ class DataLoader
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \M2E\TikTokShop\Model\TikTokShop\Template\Manager $templateManager,
         \M2E\TikTokShop\Model\TikTokShop\Template\ManagerFactory $templateManagerFactory,
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper,
-        \M2E\TikTokShop\Helper\Magento\AttributeSet $magentoAttributeSetHelper
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper,
+        \M2E\Core\Helper\Magento\AttributeSet $magentoAttributeSetHelper
     ) {
         $this->storeManager = $storeManager;
         $this->templateManager = $templateManager;
@@ -100,7 +100,7 @@ class DataLoader
         $accountId = $sessionData['account_id'] ?? null;
         $storeId = $sessionData['store_id'] ?? null;
         $attributeSets = $this->magentoAttributeSetHelper
-            ->getAll(\M2E\TikTokShop\Helper\Magento\AbstractHelper::RETURN_TYPE_IDS);
+            ->getAll(\M2E\Core\Helper\Magento\AbstractHelper::RETURN_TYPE_IDS);
 
         $templates = [];
 
@@ -133,7 +133,7 @@ class DataLoader
         $accountId = $source->getAccountId();
         $storeId = $source->getStoreId();
         $attributeSets = $this->magentoAttributeSetHelper
-            ->getAll(\M2E\TikTokShop\Helper\Magento\AbstractHelper::RETURN_TYPE_IDS);
+            ->getAll(\M2E\Core\Helper\Magento\AbstractHelper::RETURN_TYPE_IDS);
 
         $templates = [];
 
@@ -174,7 +174,7 @@ class DataLoader
         $accountId = $listingProductFirst->getListing()->getAccountId();
         $storeId = $listingProductFirst->getListing()->getStoreId();
         $attributeSets = $this->magentoAttributeSetHelper
-            ->getFromProducts($productIds, \M2E\TikTokShop\Helper\Magento\AbstractHelper::RETURN_TYPE_IDS);
+            ->getFromProducts($productIds, \M2E\Core\Helper\Magento\AbstractHelper::RETURN_TYPE_IDS);
 
         $templates = [];
 
@@ -232,7 +232,7 @@ class DataLoader
     private function getDataFromTemplate($source, array $params = [])
     {
         $attributeSets = $this->magentoAttributeSetHelper
-            ->getAll(\M2E\TikTokShop\Helper\Magento\AbstractHelper::RETURN_TYPE_IDS);
+            ->getAll(\M2E\Core\Helper\Magento\AbstractHelper::RETURN_TYPE_IDS);
 
         $nick = $this->getTemplateNick($source);
 
@@ -262,7 +262,7 @@ class DataLoader
 
         if (empty($attributeSets)) {
             $attributeSets = $this->magentoAttributeSetHelper
-                ->getAll(\M2E\TikTokShop\Helper\Magento\AbstractHelper::RETURN_TYPE_IDS);
+                ->getAll(\M2E\Core\Helper\Magento\AbstractHelper::RETURN_TYPE_IDS);
         }
 
         return [

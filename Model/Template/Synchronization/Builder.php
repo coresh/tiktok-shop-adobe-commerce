@@ -26,7 +26,7 @@ class Builder extends \M2E\TikTokShop\Model\TikTokShop\Template\AbstractBuilder
     {
         $data = parent::prepareData();
 
-        $this->rawData = \M2E\TikTokShop\Helper\Data::arrayReplaceRecursive($this->getDefaultData(), $this->rawData);
+        $this->rawData = \M2E\Core\Helper\Data::arrayReplaceRecursive($this->getDefaultData(), $this->rawData);
 
         return array_merge(
             $data,

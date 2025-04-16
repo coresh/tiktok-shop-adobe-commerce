@@ -58,20 +58,20 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     {
         $this->setData(
             \M2E\TikTokShop\Model\ResourceModel\Lock\Item::COLUMN_UPDATE_DATE,
-            \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')
+            \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')
         );
     }
 
     public function getUpdateDate(): \DateTime
     {
-        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+        return \M2E\Core\Helper\Date::createDateGmt(
             $this->getData(\M2E\TikTokShop\Model\ResourceModel\Lock\Item::COLUMN_UPDATE_DATE)
         );
     }
 
     public function getCreateDate(): \DateTime
     {
-        return \M2E\TikTokShop\Helper\Date::createDateGmt(
+        return \M2E\Core\Helper\Date::createDateGmt(
             $this->getData(\M2E\TikTokShop\Model\ResourceModel\Lock\Item::COLUMN_CREATE_DATE)
         );
     }

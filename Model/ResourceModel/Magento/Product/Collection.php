@@ -10,13 +10,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     private bool $listingProductMode = false;
     private \M2E\TikTokShop\Helper\Module\Database\Structure $dbStructureHelper;
-    private \M2E\TikTokShop\Helper\Magento\Stock $magentoStockHelper;
-    private \M2E\TikTokShop\Helper\Magento\Staging $magentoStagingHelper;
+    private \M2E\Core\Helper\Magento\Stock $magentoStockHelper;
+    private \M2E\Core\Helper\Magento\Staging $magentoStagingHelper;
 
     public function __construct(
         \M2E\TikTokShop\Helper\Module\Database\Structure $dbStructureHelper,
-        \M2E\TikTokShop\Helper\Magento\Stock $magentoStockHelper,
-        \M2E\TikTokShop\Helper\Magento\Staging $magentoStagingHelper,
+        \M2E\Core\Helper\Magento\Stock $magentoStockHelper,
+        \M2E\Core\Helper\Magento\Staging $magentoStagingHelper,
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,

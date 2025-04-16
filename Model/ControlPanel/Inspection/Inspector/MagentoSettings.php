@@ -24,26 +24,26 @@ class MagentoSettings implements \M2E\Core\Model\ControlPanel\Inspection\Inspect
             );
         }
 
-        if (\M2E\TikTokShop\Helper\Date::getTimezone()->getDefaultTimezone() !== 'UTC') {
+        if (\M2E\Core\Helper\Date::getTimezone()->getDefaultTimezone() !== 'UTC') {
             $issues[] = $this->issueFactory->create(
                 'Non-default Magento timezone set.',
-                \M2E\TikTokShop\Helper\Date::getTimezone()->getDefaultTimezone()
+                \M2E\Core\Helper\Date::getTimezone()->getDefaultTimezone()
             );
         }
 
-        if (\M2E\TikTokShop\Helper\Client\Cache::isApcAvailable()) {
+        if (\M2E\Core\Helper\Client\Cache::isApcAvailable()) {
             $issues[] = $this->issueFactory->create(
                 'APC Cache is enabled.'
             );
         }
 
-        if (\M2E\TikTokShop\Helper\Client\Cache::isMemcachedAvailable()) {
+        if (\M2E\Core\Helper\Client\Cache::isMemcachedAvailable()) {
             $issues[] = $this->issueFactory->create(
                 'Memchached Cache is enabled.'
             );
         }
 
-        if (\M2E\TikTokShop\Helper\Client\Cache::isRedisAvailable()) {
+        if (\M2E\Core\Helper\Client\Cache::isRedisAvailable()) {
             $issues[] = $this->issueFactory->create(
                 'Redis Cache is enabled.'
             );

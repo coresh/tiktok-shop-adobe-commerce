@@ -115,7 +115,7 @@ abstract class AbstractManual
         foreach ($listingsProducts as $listingProduct) {
             $lockManager = $this->lockManagerFactory->create();
             $lockManager->setListingProduct($listingProduct)
-                        ->setInitiator(\M2E\TikTokShop\Helper\Data::INITIATOR_USER)
+                        ->setInitiator(\M2E\Core\Helper\Data::INITIATOR_USER)
                         ->setLogsActionId($this->logsActionId)
                         ->setLogsAction($this->getLogsAction());
 

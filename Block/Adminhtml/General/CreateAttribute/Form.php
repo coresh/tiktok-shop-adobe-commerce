@@ -12,14 +12,14 @@ class Form extends AbstractForm
     protected $allowedTypes = [];
     protected $applyToAllAttributeSets = true;
 
-    /** @var \M2E\TikTokShop\Helper\Magento\AttributeSet */
+    /** @var \M2E\Core\Helper\Magento\AttributeSet */
     protected $magentoAttributeSetHelper;
 
     /** @var \M2E\TikTokShop\Helper\Data */
     private $dataHelper;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Magento\AttributeSet $magentoAttributeSetHelper,
+        \M2E\Core\Helper\Magento\AttributeSet $magentoAttributeSetHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,

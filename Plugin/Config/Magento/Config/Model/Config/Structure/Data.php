@@ -13,11 +13,8 @@ class Data extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
     public function __construct(
         \M2E\TikTokShop\Helper\Module $moduleHelper,
-        \M2E\TikTokShop\Helper\Module\Maintenance $moduleMaintenanceHelper,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \M2E\TikTokShop\Helper\Module\Maintenance $moduleMaintenanceHelper
     ) {
-        parent::__construct($helperFactory);
-
         $this->moduleHelper = $moduleHelper;
         $this->moduleMaintenanceHelper = $moduleMaintenanceHelper;
     }

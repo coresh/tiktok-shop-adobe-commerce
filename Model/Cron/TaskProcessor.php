@@ -111,7 +111,7 @@ class TaskProcessor
 
     private function isPossibleToRun(): bool
     {
-        if ($this->initiator === \M2E\TikTokShop\Helper\Data::INITIATOR_DEVELOPER) {
+        if ($this->initiator === \M2E\Core\Helper\Data::INITIATOR_DEVELOPER) {
             return true;
         }
 

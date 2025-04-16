@@ -18,7 +18,6 @@ class Account extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\AbstractM
     public const COLUMN_OTHER_LISTINGS_MAPPING_MODE = 'other_listings_mapping_mode';
     public const COLUMN_OTHER_LISTINGS_MAPPING_SETTINGS = 'other_listings_mapping_settings';
     public const COLUMN_OTHER_LISTINGS_RELATED_STORES = 'other_listings_related_stores';
-    public const COLUMN_IS_ACTIVE = 'is_active';
     public const COLUMN_UPDATE_DATE = 'update_date';
     public const COLUMN_CREATE_DATE = 'create_date';
 

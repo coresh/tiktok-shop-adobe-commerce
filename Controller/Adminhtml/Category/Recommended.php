@@ -11,12 +11,14 @@ class Recommended extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Abstra
     private \M2E\TikTokShop\Model\Magento\Product\CacheFactory $magentoProductFactory;
     private \M2E\TikTokShop\Model\Product\Repository $listingProductRepository;
     private \M2E\TikTokShop\Model\Magento\Product\Cache $magentoProductModel;
+    private \M2E\TikTokShop\Model\Shop\Repository $shopRepository;
 
     public function __construct(
         \M2E\TikTokShop\Model\Product\Repository $listingProductRepository,
         \M2E\TikTokShop\Model\Category\Recommended $recommendedCategory,
         \M2E\TikTokShop\Model\Listing\Wizard\Repository $listingWizardRepository,
-        \M2E\TikTokShop\Model\Magento\Product\CacheFactory $magentoProductFactory
+        \M2E\TikTokShop\Model\Magento\Product\CacheFactory $magentoProductFactory,
+        \M2E\TikTokShop\Model\Shop\Repository $shopRepository
     ) {
         parent::__construct();
 
@@ -24,6 +26,7 @@ class Recommended extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Abstra
         $this->listingWizardRepository = $listingWizardRepository;
         $this->magentoProductFactory = $magentoProductFactory;
         $this->listingProductRepository = $listingProductRepository;
+        $this->shopRepository = $shopRepository;
     }
 
     public function execute()
@@ -73,6 +76,7 @@ class Recommended extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Abstra
     {
         $result = [];
 
+        $shop = $this->shopRepository->find($shopId);
         $magentoProductName = $this->magentoProductModel->getNameByProductId($magentoProductId);
         $searchResult = $this->recommendedCategory->process($shopId, $magentoProductName);
 
@@ -82,6 +86,7 @@ class Recommended extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Abstra
                 'path' => $searchResult->path,
                 'is_invite' => $searchResult->isInviteOnly,
                 'is_valid' => $searchResult->isValid,
+                'skip_invite' => $shop->getRegion()->isUS()
             ];
         }
 

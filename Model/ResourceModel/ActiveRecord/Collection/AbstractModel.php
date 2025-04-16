@@ -7,10 +7,10 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
 abstract class AbstractModel extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
-    private \M2E\TikTokShop\Helper\Magento\Staging $magentoStagingHelper;
+    private \M2E\Core\Helper\Magento\Staging $magentoStagingHelper;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Magento\Staging $magentoStagingHelper,
+        \M2E\Core\Helper\Magento\Staging $magentoStagingHelper,
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,

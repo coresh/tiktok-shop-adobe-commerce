@@ -28,7 +28,7 @@ class ProductAssignService
             $orderItem->setMagentoProductId((int)$magentoProduct->getId());
             $this->orderItemRepository->save($orderItem);
 
-            if ($initiator === \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION) {
+            if ($initiator === \M2E\Core\Helper\Data::INITIATOR_EXTENSION) {
                 continue;
             }
 
@@ -66,7 +66,7 @@ class ProductAssignService
             $this->orderItemRepository->save($orderItem);
 
             if (!isset($orders[$orderItem->getOrder()->getId()])) {
-                $orderItem->getOrder()->getLogService()->setInitiator(\M2E\TikTokShop\Helper\Data::INITIATOR_USER);
+                $orderItem->getOrder()->getLogService()->setInitiator(\M2E\Core\Helper\Data::INITIATOR_USER);
                 $orderItem->getOrder()->addSuccessLog(
                     'Item "%title%" was Unlinked.',
                     [

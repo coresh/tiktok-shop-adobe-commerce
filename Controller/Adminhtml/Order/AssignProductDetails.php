@@ -41,7 +41,7 @@ class AssignProductDetails extends AbstractOrder
             $this->detailsAssignService->assign(
                 $orderItems,
                 $optionsData,
-                \M2E\TikTokShop\Helper\Data::INITIATOR_USER
+                \M2E\Core\Helper\Data::INITIATOR_USER
             );
         } catch (\Throwable $exception) {
             $this->setJsonContent(['error' => $exception->getMessage()]);

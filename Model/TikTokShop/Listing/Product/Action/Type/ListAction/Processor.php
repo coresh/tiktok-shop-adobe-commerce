@@ -84,7 +84,6 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
         /** @var Response $responseObj */
         $responseObj = $this->responseFactory->create(
             $this->getProduct(),
-            $this->getActionConfigurator(),
             $this->getVariantSettings(),
             $this->requestData,
             $this->getParams(),
@@ -163,11 +162,13 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
 
         $newBrandId = $listingProduct->getOnlineBrandId();
         $newBrandName = $listingProduct->getOnlineBrandName();
+        $channelTitle = \M2E\TikTokShop\Helper\Module::getChannelTitle();
 
         if (!empty($newBrandId)) {
             $message = sprintf(
-                'Brand "%s" was assigned to the Product on TikTok Shop',
-                $newBrandName
+                'Brand "%s" was assigned to the Product on %s',
+                $newBrandName,
+                $channelTitle
             );
             $this->addActionLogMessage(\M2E\Core\Model\Response\Message::createSuccess($message));
         }

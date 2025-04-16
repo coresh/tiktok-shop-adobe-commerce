@@ -9,12 +9,10 @@ class DeleteAfter extends \M2E\TikTokShop\Observer\AbstractObserver
     private \M2E\TikTokShop\Model\Order\Item\Repository $orderItemRepository;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \M2E\TikTokShop\Model\Order\Repository $orderRepository,
         \M2E\TikTokShop\Model\Order\Change\Repository $orderChangeRepository,
         \M2E\TikTokShop\Model\Order\Item\Repository $orderItemRepository
     ) {
-        parent::__construct($helperFactory);
         $this->orderRepository = $orderRepository;
         $this->orderChangeRepository = $orderChangeRepository;
         $this->orderItemRepository = $orderItemRepository;

@@ -10,17 +10,12 @@ class DocumentFactory
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
-    /** @var \M2E\TikTokShop\Helper\Factory */
-    protected $helperFactory;
-
     //########################################
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
         $this->objectManager = $objectManager;
-        $this->helperFactory = $helperFactory;
     }
 
     //########################################
@@ -39,7 +34,10 @@ class DocumentFactory
 
     private function resolveFactory()
     {
-        if (version_compare($this->helperFactory->getObject('Magento')->getVersion(), '2.2.0', '<')) {
+        /** @var \M2E\Core\Helper\Magento $helper */
+        $helper = $this->objectManager->get(\M2E\Core\Helper\Magento::class);
+
+        if (version_compare($helper->getVersion(), '2.2.0', '<')) {
             return $this->objectManager->get(\Magento\Sales\Model\Order\ShipmentFactory::class);
         }
 

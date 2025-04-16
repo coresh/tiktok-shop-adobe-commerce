@@ -32,8 +32,9 @@ class Title extends Column
             $sellerName = $row['seller_name'];
             $regionNames = $row['shop_region_codes'] ? $this->getRegionNames($row['shop_region_codes']) : '';
 
-            $html = sprintf('<p>%s</p>', \M2E\TikTokShop\Helper\Data::escapeHtml($accountTitle));
-            $html .= $this->renderLine((string)\__('Seller Name'), $sellerName);
+            $html = sprintf('<p>%s</p>', \M2E\Core\Helper\Data::escapeHtml($accountTitle));
+
+            $html .= !empty($sellerName) ? $this->renderLine((string)\__('Seller Name'), $sellerName) : '';
             $html .= $this->renderLine((string)\__('Region(-s)'), $regionNames);
 
             $row['title'] = $html;
@@ -47,7 +48,7 @@ class Title extends Column
         return sprintf(
             '<p style="margin: 0"><b>%s</b>: %s</p>',
             $label,
-            \M2E\TikTokShop\Helper\Data::escapeHtml($value)
+            \M2E\Core\Helper\Data::escapeHtml($value)
         );
     }
 

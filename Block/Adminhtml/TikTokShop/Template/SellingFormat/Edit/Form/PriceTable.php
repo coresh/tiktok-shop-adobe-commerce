@@ -12,14 +12,14 @@ class PriceTable extends AbstractBlock
     /** @var \Magento\Framework\Locale\CurrencyInterface */
     protected $currency;
 
-    /** @var \M2E\TikTokShop\Helper\Magento\Attribute */
+    /** @var \M2E\Core\Helper\Magento\Attribute */
     public $magentoAttributeHelper;
     private \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper;
 
     public function __construct(
         \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper,
         \Magento\Framework\Locale\CurrencyInterface $currency,
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper,
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         array $data = []
     ) {
@@ -50,7 +50,7 @@ class PriceTable extends AbstractBlock
      */
     public function getFixedPriceModifierAttributes($fixedPriceModifierString)
     {
-        $fixedPriceModifier = \M2E\TikTokShop\Helper\Json::decode($fixedPriceModifierString);
+        $fixedPriceModifier = \M2E\Core\Helper\Json::decode($fixedPriceModifierString);
         if (!is_array($fixedPriceModifier) || empty($fixedPriceModifier)) {
             return [];
         }

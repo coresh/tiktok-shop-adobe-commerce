@@ -8,8 +8,14 @@ class View extends AbstractView
 {
     protected function _toHtml()
     {
-        $message = (string)__('This Log contains information about the actions applied to ' .
-            'M2E TikTok Shop Connect Listings and related Items.');
+        $message = (string)__(
+            'This Log contains information about the actions applied to ' .
+            '%extension_title Listings and related Items.',
+            [
+                'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+            ]
+        );
+
         $helpBlock = $this
             ->getLayout()
             ->createBlock(\M2E\TikTokShop\Block\Adminhtml\HelpBlock::class)

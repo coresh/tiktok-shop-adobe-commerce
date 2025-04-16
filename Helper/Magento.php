@@ -226,7 +226,7 @@ class Magento
      */
     public function isCronWorking(): bool
     {
-        $minDateTime = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $minDateTime = \M2E\Core\Helper\Date::createCurrentGmt();
         $minDateTime->modify('-1 day');
         $minDateTime = $minDateTime->format('Y-m-d H:i:s');
 

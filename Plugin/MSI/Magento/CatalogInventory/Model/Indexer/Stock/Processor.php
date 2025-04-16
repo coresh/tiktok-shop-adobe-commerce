@@ -12,11 +12,9 @@ class Processor extends \M2E\TikTokShop\Plugin\AbstractPlugin
     protected $indexerRegistry;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \M2E\TikTokShop\Helper\Data\GlobalData $globalData,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
     ) {
-        parent::__construct($helperFactory);
         $this->globalData = $globalData;
         $this->indexerRegistry = $indexerRegistry;
     }
@@ -25,7 +23,12 @@ class Processor extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
     protected function canExecute(): bool
     {
-        if (!$this->getHelper('Magento')->isMSISupportingVersion()) {
+        /** @var \M2E\Core\Helper\Magento $helper */
+        $magentoHelper = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\Core\Helper\Magento::class
+        );
+
+        if (!$magentoHelper->isMSISupportingVersion()) {
             return false;
         }
 

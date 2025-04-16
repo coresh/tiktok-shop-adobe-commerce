@@ -27,7 +27,7 @@ class PromotionSyncTask implements \M2E\Core\Model\Cron\TaskHandlerInterface
     public function process($context): void
     {
         $context->getSynchronizationLog()->setTask(\M2E\TikTokShop\Model\Synchronization\Log::TASK_OTHER);
-        $context->getSynchronizationLog()->setInitiator(\M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION);
+        $context->getSynchronizationLog()->setInitiator(\M2E\Core\Helper\Data::INITIATOR_EXTENSION);
 
         $permittedAccounts = $this->accountRepository->getAll();
         if (empty($permittedAccounts)) {

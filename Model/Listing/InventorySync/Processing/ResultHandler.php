@@ -62,7 +62,7 @@ class ResultHandler implements \M2E\TikTokShop\Model\Processing\PartialResultHan
         $this->shop = $shop;
 
         if (isset($params['current_date'])) {
-            $this->fromDate = \M2E\TikTokShop\Helper\Date::createDateGmt($params['current_date']);
+            $this->fromDate = \M2E\Core\Helper\Date::createDateGmt($params['current_date']);
         }
     }
 

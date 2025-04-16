@@ -36,11 +36,11 @@ abstract class AbstractRealtime extends \M2E\TikTokShop\Model\TikTokShop\Listing
             \M2E\TikTokShop\Model\Product::STATUS_CHANGER_USER,
         );
 
-        if ($result === \M2E\TikTokShop\Helper\Data::STATUS_ERROR) {
+        if ($result === \M2E\Core\Helper\Data::STATUS_ERROR) {
             return Result::createError($this->getLogActionId());
         }
 
-        if ($result === \M2E\TikTokShop\Helper\Data::STATUS_WARNING) {
+        if ($result === \M2E\Core\Helper\Data::STATUS_WARNING) {
             return Result::createWarning($this->getLogActionId());
         }
 

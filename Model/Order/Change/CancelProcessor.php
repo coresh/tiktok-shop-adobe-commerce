@@ -60,7 +60,7 @@ class CancelProcessor
 
             if ($order->isBuyerCancellationRequest()) {
                 try {
-                    $this->buyerRequestAccept->process($order, \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION);
+                    $this->buyerRequestAccept->process($order, \M2E\Core\Helper\Data::INITIATOR_EXTENSION);
                 } catch (\Throwable $exception) {
                     $this->removeChange($change);
 

@@ -168,7 +168,7 @@ class ProductLogService
     {
         $this->listingLogService->addProduct(
             $product,
-            \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+            \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_PROMOTION,
             null,
             $message,

@@ -74,7 +74,7 @@ class Tree extends \M2E\TikTokShop\Block\Adminhtml\Magento\Category\AbstractCate
     {
         $rootArray = $this->_getNodeJson($this->getRoot($parentNodeCategory, 0));
 
-        return \M2E\TikTokShop\Helper\Json::encode($rootArray['children'] ?? []);
+        return \M2E\Core\Helper\Json::encode($rootArray['children'] ?? []);
     }
 
     public function _getNodeJson($node, $level = 0)

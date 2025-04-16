@@ -88,7 +88,7 @@ class Debugger
             self::$datePointCollect[$label] = [];
         }
 
-        self::$datePointCollect[$label] = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        self::$datePointCollect[$label] = \M2E\Core\Helper\Date::createCurrentGmt();
     }
 
     private static function mergeCollectDataWithDatePoints(array $collectData): array

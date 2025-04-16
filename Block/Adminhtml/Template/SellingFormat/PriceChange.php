@@ -7,7 +7,7 @@ class PriceChange extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractBlock
     /** @var string */
     protected $_template = 'template/selling_format/price_change.phtml';
 
-    /** @var \M2E\TikTokShop\Helper\Magento\Attribute */
+    /** @var \M2E\Core\Helper\Magento\Attribute */
     public $magentoAttributeHelper;
     /** @var array */
     private $allAttributes;
@@ -15,12 +15,12 @@ class PriceChange extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractBlock
     private $attributesByInputTypes;
 
     /**
-     * @param \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper
+     * @param \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper
      * @param \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context
      * @param array $data
      */
     public function __construct(
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper,
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         array $data = []
     ) {
@@ -41,7 +41,7 @@ class PriceChange extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractBlock
      */
     public function getPriceModifierAttributes(string $priceModifierString): array
     {
-        $priceModifier = \M2E\TikTokShop\Helper\Json::decode($priceModifierString);
+        $priceModifier = \M2E\Core\Helper\Json::decode($priceModifierString);
         if (!is_array($priceModifier) || empty($priceModifier)) {
             return [];
         }

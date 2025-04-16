@@ -49,6 +49,8 @@ class AfterGetToken extends AbstractAccount
                     [
                         'id' => $account->getId(),
                         '_current' => true,
+                        'tab' => \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Account\Edit\Tabs::TAB_ID_INVOICES_AND_SHIPMENTS,
+                        'trigger_validation' => true
                     ],
                 );
             }

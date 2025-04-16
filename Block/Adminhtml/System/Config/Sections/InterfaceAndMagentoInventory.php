@@ -76,9 +76,14 @@ class InterfaceAndMagentoInventory extends \M2E\TikTokShop\Block\Adminhtml\Syste
                     1 => __('Show'),
                 ],
                 'value' => $this->configurationHelper->getViewShowBlockNoticesMode(),
-                'tooltip' => __('<p>Choose whether you want the help information to be available at the top of ' .
-                    'each M2E TikTok Shop Connect Page.</p><br><p><strong>Please note</strong>, it does not disable the ' .
-                    'help-tips (the icons with the additional information next to the main options).</p>'),
+                'tooltip' => __(
+                    '<p>Choose whether you want the help information to be available at the top of ' .
+                    'each %extension_title Page.</p><br><p><strong>Please note</strong>, it does not disable the ' .
+                    'help-tips (the icons with the additional information next to the main options).</p>',
+                    [
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
+                ),
             ]
         );
 
@@ -111,9 +116,15 @@ class InterfaceAndMagentoInventory extends \M2E\TikTokShop\Block\Adminhtml\Syste
                     1 => __('Allow'),
                 ],
                 'value' => $this->configurationHelper->isEnableProductForceQtyMode(),
-                'tooltip' => __('Choose whether M2E TikTok Shop Connect is allowed to List Products with unlimited ' .
+                'tooltip' => __(
+                    'Choose whether %extension_title is allowed to List Products with unlimited ' .
                     'stock or that are temporarily out of stock.<br><b>Disallow</b> is the recommended setting ' .
-                    'for TikTok Shop Integration.'),
+                    'for %channel_title Integration.',
+                    [
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
+                ),
             ]
         );
 
@@ -144,13 +155,17 @@ class InterfaceAndMagentoInventory extends \M2E\TikTokShop\Block\Adminhtml\Syste
                 ],
                 'value' => $this->configurationHelper
                     ->getMagentoAttributePriceTypeConvertingMode(),
-                'tooltip' => __('<p>Choose whether Magento Price Attribute values should be converted ' .
-                    'automatically. With this option enabled, M2E TikTok Shop Connect will provide currency conversion ' .
-                    'based on Magento Currency Settings.</p><p><strong>For example</strong>, the Item Price is set ' .
-                    'to be taken from Magento Price Attribute (e.g. 5 USD).<br>If this Item is listed on Shop ' .
-                    'with a different Base Currency (e.g. GBP), the currency conversion is performed automatically ' .
-                    'based on the set exchange rate (e.g. 1 USD = 0.82 GBP).<br>The Item will be available on Channel ' .
-                    'at the Price of 4.1 GBP.</p>'),
+                'tooltip' => __(
+                    '<p>Set this option to "Yes" to activate currency conversion for price values ' .
+                    'from custom Magento Attributes (conversion for standard Magento Price attributes is automatic).</p>' .
+                    '<p>Once enabled, M2E will convert prices according to your Magento Currency Settings. <strong>For example</strong>, ' .
+                    'M2E handles the conversion using the established exchange rate (e.g., 1 USD = 0.82 GBP). If a product\'s ' .
+                    'price is set to 5 USD in a Magento Attribute, it will be listed at 4.1 GBP on %channel_title UK, where GBP is' .
+                    'the base currency.</p>',
+                    [
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
+                ),
             ]
         );
 

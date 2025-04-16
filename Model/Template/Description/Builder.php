@@ -15,7 +15,7 @@ class Builder extends \M2E\TikTokShop\Model\TikTokShop\Template\AbstractBuilder
 
         $defaultData = $this->getDefaultData();
 
-        $data = \M2E\TikTokShop\Helper\Data::arrayReplaceRecursive($defaultData, $data);
+        $data = \M2E\Core\Helper\Data::arrayReplaceRecursive($defaultData, $data);
 
         if (isset($this->rawData[DescriptionResource::COLUMN_TITLE_MODE])) {
             $data[DescriptionResource::COLUMN_TITLE_MODE]

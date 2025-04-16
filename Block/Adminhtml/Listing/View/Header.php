@@ -7,12 +7,12 @@ namespace M2E\TikTokShop\Block\Adminhtml\Listing\View;
 class Header extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractBlock
 {
     protected $_template = 'listing/view/header.phtml';
-    private \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper;
+    private \M2E\Core\Helper\Magento\Store $magentoStoreHelper;
     private \M2E\TikTokShop\Model\Listing\Ui\RuntimeStorage $uiListingRuntimeStorage;
 
     public function __construct(
         \M2E\TikTokShop\Model\Listing\Ui\RuntimeStorage $uiListingRuntimeStorage,
-        \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper,
+        \M2E\Core\Helper\Magento\Store $magentoStoreHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         array $data = []
     ) {

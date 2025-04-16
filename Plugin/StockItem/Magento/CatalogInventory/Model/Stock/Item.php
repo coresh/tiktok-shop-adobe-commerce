@@ -8,11 +8,9 @@ class Item extends \M2E\TikTokShop\Plugin\AbstractPlugin
     protected $eventManager;
 
     public function __construct(
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \Magento\Framework\Event\ManagerInterface $eventManager
     ) {
         $this->eventManager = $eventManager;
-        parent::__construct($helperFactory);
     }
 
     //########################################
@@ -23,7 +21,12 @@ class Item extends \M2E\TikTokShop\Plugin\AbstractPlugin
             return false;
         }
 
-        return version_compare($this->getHelper('Magento')->getVersion(), '2.2.0', '<');
+        /** @var \M2E\Core\Helper\Magento $helper */
+        $magentoHelper = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\Core\Helper\Magento::class
+        );
+
+        return version_compare($magentoHelper->getVersion(), '2.2.0', '<');
     }
 
     //########################################

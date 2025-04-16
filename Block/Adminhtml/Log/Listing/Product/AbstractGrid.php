@@ -168,7 +168,7 @@ abstract class AbstractGrid extends \M2E\TikTokShop\Block\Adminhtml\Log\Listing\
             $value = $this->filterManager->truncate($value, ['length' => 50]);
         }
 
-        $value = \M2E\TikTokShop\Helper\Data::escapeHtml($value);
+        $value = \M2E\Core\Helper\Data::escapeHtml($value);
         $productId = (int)$row->getData('product_id');
 
         $urlData = [
@@ -204,7 +204,7 @@ abstract class AbstractGrid extends \M2E\TikTokShop\Block\Adminhtml\Log\Listing\
 
         $url = $this->getUrl('catalog/product/edit', ['id' => $row->getData('product_id')]);
         $value = '<a target="_blank" href="' . $url . '" target="_blank">' .
-            \M2E\TikTokShop\Helper\Data::escapeHtml($value) .
+            \M2E\Core\Helper\Data::escapeHtml($value) .
             '</a><br/>ID: ' . $row->getData('product_id');
 
         return $value;

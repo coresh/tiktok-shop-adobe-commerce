@@ -9,7 +9,7 @@
 if (($title = $block->getData('title'))) { ?>
     <div class="entry-edit" id="magento_block_template_description_preview" style="padding: 5px;">
         <h2 style="color: maroon; margin-bottom: 5px;"><?php
-            echo \M2E\TikTokShop\Helper\Data::escapeHtml($title); ?></h2>
+            echo \M2E\Core\Helper\Data::escapeHtml($title); ?></h2>
         <hr/><?php
         echo $block->getData('description'); ?>
     </div>

@@ -28,11 +28,11 @@ class Reserve
 
     /** @var PlaceReservationsForSalesEventInterface $placeReserve */
     protected $placeReserve;
-    private \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper;
+    private \M2E\Core\Helper\Magento\Store $magentoStoreHelper;
 
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper
+        \M2E\Core\Helper\Magento\Store $magentoStoreHelper
     ) {
         $this->salesEventFactory = $objectManager->get(SalesEventInterfaceFactory::class);
         $this->salesChannelFactory = $objectManager->get(SalesChannelInterfaceFactory::class);

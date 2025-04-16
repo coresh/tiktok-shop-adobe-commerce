@@ -14,10 +14,10 @@ class Builder extends \Magento\Framework\DataObject
     private \Magento\CatalogInventory\Model\Indexer\Stock\Processor $indexStockProcessor;
     private \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration;
     private \Magento\Catalog\Model\Product $product;
-    private \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper;
+    private \M2E\Core\Helper\Magento\Store $magentoStoreHelper;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper,
+        \M2E\Core\Helper\Magento\Store $magentoStoreHelper,
         \Magento\Framework\Filesystem\DriverPool $driverPool,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Store\Model\StoreFactory $storeFactory,

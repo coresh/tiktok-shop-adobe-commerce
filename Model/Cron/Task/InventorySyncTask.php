@@ -38,12 +38,12 @@ class InventorySyncTask implements \M2E\Core\Model\Cron\TaskHandlerInterface
     public function process($context): void
     {
         $context->getSynchronizationLog()->setTask(\M2E\TikTokShop\Model\Synchronization\Log::TASK_OTHER_LISTINGS);
-        $context->getSynchronizationLog()->setInitiator(\M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION);
+        $context->getSynchronizationLog()->setInitiator(\M2E\Core\Helper\Data::INITIATOR_EXTENSION);
 
         // ----------------------------------------
 
-        $currentDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
-        foreach ($this->accountRepository->findActiveWithEnabledInventorySync() as $account) {
+        $currentDate = \M2E\Core\Helper\Date::createCurrentGmt();
+        foreach ($this->accountRepository->findWithEnabledInventorySync() as $account) {
             foreach ($account->getShops() as $shop) {
                 if (
                     $shop->getInventoryLastSyncDate() !== null

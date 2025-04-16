@@ -118,7 +118,7 @@ class Processor
 
     private function deleteInstructionsOlderThenWeek(): void
     {
-        $greaterThenDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $greaterThenDate = \M2E\Core\Helper\Date::createCurrentGmt();
         $greaterThenDate->modify('-7 day');
 
         $this->instructionRepository->removeOld($greaterThenDate);

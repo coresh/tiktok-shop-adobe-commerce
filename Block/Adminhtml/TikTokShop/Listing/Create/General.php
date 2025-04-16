@@ -39,10 +39,15 @@ class General extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractConta
         $helpBlock = $this->getLayout()->createBlock(\M2E\TikTokShop\Block\Adminhtml\HelpBlock::class);
         $helpBlock->addData(
             [
-                'content' => __('<p>It is necessary to select an TikTok Shop Account ' .
+                'content' => __(
+                    '<p>It is necessary to select an %channel_title Account ' .
                     '(existing or create a new one) as well as choose a Shop that you are going to sell ' .
                     'Magento Products on.</p><br><p>It is also important to specify a Store View in accordance with ' .
-                    'which Magento Attribute values will be used in the Listing settings.</p>'),
+                    'which Magento Attribute values will be used in the Listing settings.</p>',
+                    [
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
+                ),
                 'style' => 'margin-top: 30px',
             ]
         );

@@ -118,14 +118,19 @@ JS
                 ]
             );
 
-        $helpContent = __('<p><strong>To comply with EU regulations</strong>, please provide the ' .
+        $helpContent = __(
+            '<p><strong>To comply with EU regulations</strong>, please provide the ' .
             '<strong>Manufacturer</strong> and <strong>Responsible Person</strong> details for your products.</p><br>' .
             '<ul><li>The <strong>Manufacturer</strong> is the entity that produces the product.</li>' .
             '<li>The <strong>Responsible Person</strong> is the individual or company within ' .
             'the EU responsible for ensuring product compliance and safety.</li></ul><br>' .
             '<p>On this page, you will find a list of <strong>Manufacturers already created</strong> for the ' .
-            'respective TikTok Shop account. To add a new Manufacturer and their EU Responsible Person, ' .
-            'click <strong>Create New</strong>.</p>');
+            'respective %channel_title account. To add a new Manufacturer and their EU Responsible Person, ' .
+            'click <strong>Create New</strong>.</p>',
+            [
+                'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+            ]
+        );
 
         $helpBlock = $this
             ->getLayout()

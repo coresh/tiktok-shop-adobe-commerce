@@ -55,8 +55,7 @@ class Account extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             ->setData(AccountResource::COLUMN_SERVER_HASH, $serverHash)
             ->setUnmanagedListingSettings($unmanagedListingsSettings)
             ->setOrdersSettings($orderSettings)
-            ->setInvoiceAndShipmentSettings($invoicesAndShipmentSettings)
-            ->setData(AccountResource::COLUMN_IS_ACTIVE, 0);
+            ->setInvoiceAndShipmentSettings($invoicesAndShipmentSettings);
 
         return $this;
     }
@@ -66,18 +65,6 @@ class Account extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public function getId(): int
     {
         return (int)parent::getId();
-    }
-
-    public function isActive(): bool
-    {
-        return (bool)$this->getData(AccountResource::COLUMN_IS_ACTIVE);
-    }
-
-    public function activate(): self
-    {
-        $this->setData(AccountResource::COLUMN_IS_ACTIVE, 1);
-
-        return $this;
     }
 
     /**
@@ -267,7 +254,7 @@ class Account extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     {
         $value = $this->getData(AccountResource::COLUMN_CREATE_DATE);
 
-        return \M2E\TikTokShop\Helper\Date::createDateGmt($value);
+        return \M2E\Core\Helper\Date::createDateGmt($value);
     }
 
     public function hasAnyEuShop(): bool

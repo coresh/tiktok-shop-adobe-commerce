@@ -65,7 +65,7 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     private ResourceModel\Order\Item\CollectionFactory $orderItemCollectionFactory;
     private \M2E\TikTokShop\Helper\Module\Logger $loggerHelper;
     private \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper;
-    private \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper;
+    private \M2E\Core\Helper\Magento\Store $magentoStoreHelper;
     private \M2E\TikTokShop\Model\Account\Repository $accountRepository;
     private \M2E\TikTokShop\Model\Warehouse\Repository $warehouseRepository;
     private Order\Item\Repository $orderItemRepository;
@@ -90,7 +90,7 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         \M2E\TikTokShop\Model\ResourceModel\Order\Note\CollectionFactory $orderNoteCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Order\Change\CollectionFactory $orderChangeCollectionFactory,
         \M2E\TikTokShop\Model\Order\Item\Repository $orderItemRepository,
-        \M2E\TikTokShop\Helper\Magento\Store $magentoStoreHelper,
+        \M2E\Core\Helper\Magento\Store $magentoStoreHelper,
         \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper,
         \M2E\TikTokShop\Helper\Module\Logger $loggerHelper,
         \M2E\TikTokShop\Helper\Module\Exception $exceptionHelper,
@@ -501,7 +501,7 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             $magentoOrderId = $this->getMagentoOrderId();
 
             if (empty($magentoOrderId)) {
-                $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+                $now = \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
                 $this->addData([
                     'magento_order_id' => $this->magentoOrder->getId(),
                     'magento_order_creation_failure' => self::MAGENTO_ORDER_CREATION_FAILED_NO,
@@ -541,7 +541,7 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
             $this->_eventManager->dispatch('m2e_tts_order_place_failure', ['order' => $this]);
 
-            $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
+            $now = \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s');
             $this->addData([
                 'magento_order_creation_failure' => self::MAGENTO_ORDER_CREATION_FAILED_YES,
                 'magento_order_creation_fails_count' => $this->getMagentoOrderCreationFailsCount() + 1,
@@ -576,6 +576,7 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     {
         $storeId = $this->getStoreId() ? $this->getStoreId() : $this->getAssociatedStoreId();
         $store = $this->storeManager->getStore($storeId);
+        $extensionTitle = \M2E\TikTokShop\Helper\Module::getExtensionTitle();
 
         if ($store->getId() === null) {
             throw new \M2E\TikTokShop\Model\Exception('Store does not exist.');
@@ -587,15 +588,15 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
         if (!$store->getConfig('payment/tiktokshoppayment/active')) {
             throw new \M2E\TikTokShop\Model\Exception(
-                'Payment method "M2E TikTok Shop Connect Payment" is disabled under
-                <i>Stores > Settings > Configuration > Sales > Payment Methods > M2E TikTok Shop Connect Payment.</i>'
+                "Payment method \"$extensionTitle Payment\" is disabled under
+                <i>Stores > Settings > Configuration > Sales > Payment Methods > $extensionTitle Payment.</i>"
             );
         }
 
         if (!$store->getConfig('carriers/tiktokshopshipping/active')) {
             throw new \M2E\TikTokShop\Model\Exception(
-                'Shipping method "M2E TikTok Shop Connect Shipping" is disabled under
-                <i>Stores > Settings > Configuration > Sales > Shipping Methods > M2E TikTok Shop Connect Shipping.</i>'
+                "Shipping method \"$extensionTitle Shipping\" is disabled under
+                <i>Stores > Settings > Configuration > Sales > Shipping Methods > $extensionTitle Shipping.</i>"
             );
         }
     }

@@ -10,11 +10,9 @@ class Bunch extends \M2E\TikTokShop\Observer\AbstractObserver
     private $magentoProduct;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \M2E\TikTokShop\PublicServices\Product\SqlChange $publicService,
         \Magento\Catalog\Model\Product $magentoProduct
     ) {
-        parent::__construct($helperFactory);
         $this->publicService = $publicService;
         $this->magentoProduct = $magentoProduct;
     }

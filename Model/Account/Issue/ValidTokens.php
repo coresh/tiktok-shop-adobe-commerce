@@ -115,9 +115,12 @@ class ValidTokens implements \M2E\TikTokShop\Model\Issue\LocatorInterface
     private function getIssue(string $accountName): Issue
     {
         $text = \__(
-            "The token of TikTok Shop account \"%account_name\" is no longer valid.
-         Please edit your TikTok Shop account and get a new token.",
-            ['account_name' => $accountName],
+            "The token of %channel_title account \"%account_name\" is no longer valid.
+         Please edit your %channel_title account and get a new token.",
+            [
+                'account_name' => $accountName,
+                'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+            ],
         );
 
         return $this->issueFactory->createErrorDataObject($accountName, (string)$text, null);

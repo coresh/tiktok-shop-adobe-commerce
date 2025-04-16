@@ -150,13 +150,17 @@ class Tabs extends \M2E\TikTokShop\Block\Adminhtml\Magento\Tabs\AbstractTabs
         $this->jsTranslator->add(
             'confirmation_account_delete',
             __(
-                '<p>You are about to delete your TikTok Shop seller account from M2E TikTok Shop Connect. ' .
+                '<p>You are about to delete your %channel_title seller account from %extension_title. ' .
                 'This will remove the account-related Listings and Products from the extension and disconnect ' .
                 'the synchronization. Your listings on the channel will <b>not</b> be affected.</p>' .
                 '<p>Please confirm if you would like to delete the account.</p><p>Note: once the account is no ' .
-                'longer connected to your M2E TikTok Shop Connect, please remember to delete it from ' .
+                'longer connected to your %extension_title, please remember to delete it from ' .
                 '<a href="%url">M2E Accounts</a></p>',
-                ['url' => \M2E\TikTokShop\Helper\Module\Support::ACCOUNTS_URL]
+                [
+                    'url' => \M2E\Core\Helper\Module\Support::ACCOUNTS_URL,
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                    'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                ]
             ),
         );
 
@@ -164,8 +168,11 @@ class Tabs extends \M2E\TikTokShop\Block\Adminhtml\Magento\Tabs\AbstractTabs
             [
                 'Be attentive! By Deleting Account you delete all information on it from M2E TikTok Shop Connect Server. '
                 . 'This will cause inappropriate work of all Accounts\' copies.' => __(
-                    'Be attentive! By Deleting Account you delete all information on it from M2E TikTok Shop Connect Server. '
+                    'Be attentive! By Deleting Account you delete all information on it from %extension_title Server. '
                     . 'This will cause inappropriate work of all Accounts\' copies.',
+                    [
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
                 ),
                 'No Customer entry is found for specified ID.' => __(
                     'No Customer entry is found for specified ID.',

@@ -8,12 +8,12 @@ define([
 
     window.TikTokShopAccount = Class.create(Common, {
 
-        afterRefreshData: undefined,
+        triggerValidation: undefined,
 
         // ---------------------------------------
 
-        initialize: function (id, afterRefreshData) {
-            this.afterRefreshData = afterRefreshData
+        initialize: function (id, triggerValidation) {
+            this.triggerValidation = triggerValidation
 
             jQuery.validator.addMethod('TikTokShop-account-customer-id', function (value) {
 
@@ -112,7 +112,7 @@ define([
                 $('order_number_example-note').previous().remove();
             }
 
-            if (this.afterRefreshData) {
+            if (this.triggerValidation) {
                 this.isValidForm();
             }
         },

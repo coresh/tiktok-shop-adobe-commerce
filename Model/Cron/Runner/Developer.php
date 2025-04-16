@@ -17,7 +17,7 @@ class Developer extends AbstractRunner
 
     public function getInitiator(): int
     {
-        return \M2E\TikTokShop\Helper\Data::INITIATOR_DEVELOPER;
+        return \M2E\Core\Helper\Data::INITIATOR_DEVELOPER;
     }
 
     /**

@@ -46,6 +46,7 @@ class GetChildCategories extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop
         }
 
         $categories = $this->getCategories($shop, $parentCategoryId);
+        $skipInviteInviteOnly = $shop->getRegion()->isUS();
 
         $response = [];
         foreach ($categories as $category) {
@@ -54,6 +55,7 @@ class GetChildCategories extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop
                 'title' => $category->getTitle(),
                 'is_leaf' => (int)$category->isLeaf(),
                 'invite_only' => (int)$category->isInviteOnly(),
+                'skip_invite' => (int)$skipInviteInviteOnly
             ];
         }
 

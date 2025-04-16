@@ -16,23 +16,18 @@ class CategoryMode extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Sele
     public const MODE_ATTRIBUTE = 3;
     public const MODE_TITLE = 10;
 
-    /** @var \M2E\TikTokShop\Helper\Factory */
-    protected $helperFactory;
-
     public function __construct(
         Renderer\CssRenderer $css,
         Renderer\JsPhpRenderer $jsPhp,
         Renderer\JsRenderer $js,
         Renderer\JsTranslatorRenderer $jsTranslatorRenderer,
         Renderer\JsUrlRenderer $jsUrlRenderer,
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\DB\Helper $resourceHelper,
         array $data = []
     ) {
         parent::__construct($context, $resourceHelper, $data);
 
-        $this->helperFactory = $helperFactory;
         $this->css = $css;
         $this->jsPhp = $jsPhp;
         $this->js = $js;
@@ -47,7 +42,7 @@ class CategoryMode extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Sele
         $value = $this->getValue();
 
         $titleValue = !empty($value['title']) ? $value['title'] : '';
-        $isAjax = \M2E\TikTokShop\Helper\Json::encode($this->getRequest()->isAjax());
+        $isAjax = \M2E\Core\Helper\Json::encode($this->getRequest()->isAjax());
         $modeTitle = self::MODE_TITLE;
 
         $this->js->add(

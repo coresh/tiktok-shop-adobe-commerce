@@ -18,11 +18,8 @@ class Quote extends \M2E\TikTokShop\Observer\AbstractObserver
         \M2E\TikTokShop\Model\Listing\LogService $listingLogService,
         \M2E\TikTokShop\Model\Magento\Product\ChangeAttributeTrackerFactory $changeAttributeTrackerFactory,
         \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
     ) {
-        parent::__construct($helperFactory);
-
         $this->changeAttributeTrackerFactory = $changeAttributeTrackerFactory;
         $this->stockItemFactory = $stockItemFactory;
         $this->stockRegistry = $stockRegistry;
@@ -194,7 +191,7 @@ class Quote extends \M2E\TikTokShop\Observer\AbstractObserver
 
         $this->listingLogService->addProduct(
             $affectedProduct->getProduct(),
-            \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+            \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
             $action,
             null,
             $description,

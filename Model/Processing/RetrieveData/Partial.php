@@ -24,7 +24,7 @@ class Partial
 
     public function process(): void
     {
-        $borderData = \M2E\TikTokShop\Helper\Date::createCurrentGmt()
+        $borderData = \M2E\Core\Helper\Date::createCurrentGmt()
                                                  ->modify('+ 5 minutes');
 
         foreach ($this->repository->findPartialForDownloadData($borderData) as $processing) {

@@ -51,8 +51,8 @@ class CreateLicense extends \M2E\TikTokShop\Controller\Adminhtml\Wizard\Abstract
         $licenseData = [];
         foreach ($requiredKeys as $key) {
             if ($tempValue = $this->getRequest()->getParam($key)) {
-                $licenseData[$key] = \M2E\TikTokShop\Helper\Data::escapeJs(
-                    \M2E\TikTokShop\Helper\Data::escapeHtml($tempValue)
+                $licenseData[$key] = \M2E\Core\Helper\Data::escapeJs(
+                    \M2E\Core\Helper\Data::escapeHtml($tempValue)
                 );
                 continue;
             }
@@ -102,7 +102,10 @@ class CreateLicense extends \M2E\TikTokShop\Controller\Adminhtml\Wizard\Abstract
             $this->exceptionHelper->process($e);
 
             $message = __(
-                'License Creation is failed. Please contact M2E TikTok Shop Connect Support for resolution.'
+                'License Creation is failed. Please contact %extension_title Support for resolution.',
+                [
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                ]
             );
 
             $this->setJsonContent([

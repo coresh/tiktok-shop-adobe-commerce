@@ -10,11 +10,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {
     use Traits\RendererTrait;
 
-    /** @var \M2E\TikTokShop\Helper\Factory */
-    protected $helperFactory;
-
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         Renderer\CssRenderer $css,
         Renderer\JsPhpRenderer $jsPhp,
         Renderer\JsRenderer $js,
@@ -29,7 +25,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
         $this->js = $js;
         $this->jsTranslator = $jsTranslatorRenderer;
         $this->jsUrl = $jsUrlRenderer;
-        $this->helperFactory = $helperFactory;
         parent::__construct($context, $jsonEncoder, $data);
     }
 
@@ -88,7 +83,7 @@ JS
         $style = '';
         foreach ($actions as $columnName => $value) {
             if (array_key_exists('only_remap_product', $value) && $value['only_remap_product']) {
-                $additionalData = (array)\M2E\TikTokShop\Helper\Json::decode($row->getData('additional_data'));
+                $additionalData = (array)\M2E\Core\Helper\Json::decode($row->getData('additional_data'));
                 $style = $value['style'] ?? '';
                 if (!isset($additionalData[Listing_Product::MOVING_LISTING_OTHER_SOURCE_KEY])) {
                     unset($actions[$columnName]);
@@ -245,10 +240,5 @@ HTML;
         }
 
         return parent::_transformActionData($action, $actionCaption, $row);
-    }
-
-    protected function getHelper($helper, array $arguments = [])
-    {
-        return $this->helperFactory->getObject($helper, $arguments);
     }
 }

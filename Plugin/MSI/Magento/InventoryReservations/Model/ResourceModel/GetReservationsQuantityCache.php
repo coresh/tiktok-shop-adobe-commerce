@@ -15,11 +15,8 @@ class GetReservationsQuantityCache extends \M2E\TikTokShop\Plugin\AbstractPlugin
     private $getReservationsQuantity;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
-        parent::__construct($helperFactory);
-
         $this->getReservationsQuantity = $objectManager->get(GetReservationsQuantity::class);
     }
 
@@ -32,7 +29,13 @@ class GetReservationsQuantityCache extends \M2E\TikTokShop\Plugin\AbstractPlugin
     {
         [$sku, $stockId] = $arguments;
         $key = 'released_reservation_product_' . $sku . '_' . $stockId;
-        if ($this->getHelper('Data\GlobalData')->getValue($key)) {
+
+        /** @var \M2E\TikTokShop\Helper\Data\GlobalData $helper */
+        $helper = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\TikTokShop\Helper\Data\GlobalData::class
+        );
+
+        if ($helper->getValue($key)) {
             return $this->getReservationsQuantity->execute($sku, $stockId);
         }
 

@@ -75,12 +75,13 @@ class ShipmentService
             $order->addErrorLog(
                 'Missing <a href="%url%" target="_blank">Shipping Carrier Mapping</a>. ' .
                 'Please ensure the shipping carrier mapping is correctly configured to synchronize ' .
-                'order shipping data with TikTok Shop',
+                'order shipping data with %channel_title%',
                 [
                     '!url' => $this->urlInterface->getUrl('m2e_tiktokshop/tiktokshop_account/edit', [
                         'id' => $order->getAccountId(),
                         'tab' => 'invoices_and_shipments',
                     ]),
+                    '!channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle(),
                 ]
             );
 
@@ -94,7 +95,12 @@ class ShipmentService
             $trackingDetails->getCarrierCode()
         );
         if ($shippingProviderId === null) {
-            $order->addErrorLog('Failed to map Magento Shipping Carrier to TikTok Shop Shipping Carrier.');
+            $order->addErrorLog(
+                sprintf(
+                    'Failed to map Magento Shipping Carrier to %s Shipping Carrier.',
+                    \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                )
+            );
 
             $this->removeExistOrderChange($order, $existOrderChange);
 

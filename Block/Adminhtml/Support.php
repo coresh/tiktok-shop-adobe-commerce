@@ -21,19 +21,23 @@ class Support extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractBlock
             'no_collapse' => true,
             'no_hide' => true,
             'content' => __(
-                '<p>Have any questions regarding the use of M2E TikTok Shop Connect, its functionality, ' .
+                '<p>Have any questions regarding the use of %extension_title, its functionality, ' .
                 'technical aspects, or billing? You can always find answers in our ' .
-                '<a href="%1" target="_blank" class="external-link">documentation</a> or ' .
-                '<a href="%2" target="_blank" class="external-link">Knowledge Base</a> created specifically ' .
-                'for M2E TikTok Shop Connect clients. There is also a ' .
-                '<a href="%3" target="_blank" class="external-link">YouTube channel</a> with helpful video ' .
+                '<a href="%integration" target="_blank" class="external-link">documentation</a> or ' .
+                '<a href="%support" target="_blank" class="external-link">Knowledge Base</a> created specifically ' .
+                'for %extension_title clients. There is also a ' .
+                '<a href="%youtube" target="_blank" class="external-link">YouTube channel</a> with helpful video ' .
                 'guides.</p> <p>In case you cannot find a solution to your problem within the ' .
-                'available resources, feel free to reach out to M2E TikTok Shop Connect Support Team by clicking ' .
+                'available resources, feel free to reach out to %extension_title Support Team by clicking ' .
                 'Contact Us. If your subscription plan does not include a ticket system, you will receive an ' .
                 'email with the plan\'s terms in response to your request.</p>',
-                'https://docs-m2.m2epro.com/tiktok-magento-integration',
-                'https://help.m2epro.com/en/support/solutions/9000117126',
-                'https://www.youtube.com/watch?v=qNZ7Jkt-fts'
+                [
+                    'integration' => 'https://docs-m2.m2epro.com/tiktok-magento-integration',
+                    'support' => 'https://help.m2epro.com/en/support/solutions/9000117126',
+                    'youtube' => 'https://www.youtube.com/watch?v=qNZ7Jkt-fts',
+                    'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle(),
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                ]
             ),
         ]);
 
@@ -42,7 +46,7 @@ class Support extends \M2E\TikTokShop\Block\Adminhtml\Magento\AbstractBlock
 
     public function toHtml()
     {
-        $summaryInfo = \M2E\TikTokShop\Helper\Json::encode(
+        $summaryInfo = \M2E\Core\Helper\Json::encode(
             $this->moduleSupportHelper->getSummaryInfo()
         );
 

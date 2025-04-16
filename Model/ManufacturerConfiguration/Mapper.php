@@ -49,7 +49,7 @@ class Mapper
                     'information is missing. Please ensure that all product manufacturers are properly ' .
                     'specified in the <a href="%link" target="_blank">GPSR settings</a> section',
                     [
-                        'link' => $this->url->getUrl('*/settings/index/', [
+                        'link' => $this->url->getUrl('m2e_tiktokshop/settings/index/', [
                             'activeTab' => \M2E\TikTokShop\Block\Adminhtml\Settings\Tabs::TAB_ID_GPSR,
                         ]),
                     ]

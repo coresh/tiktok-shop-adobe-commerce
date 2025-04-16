@@ -25,7 +25,12 @@ class QuoteItemQtyList extends \M2E\TikTokShop\Plugin\AbstractPlugin
         $quoteId = $arguments[2];
         $itemQty = &$arguments[3];
 
-        if ($this->getHelper('Data\GlobalData')->getValue(Builder::PROCESS_QUOTE_ID) == $quoteId) {
+        /** @var \M2E\TikTokShop\Helper\Data\GlobalData $helper */
+        $helper = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\TikTokShop\Helper\Data\GlobalData::class
+        );
+
+        if ($helper->getValue(Builder::PROCESS_QUOTE_ID) == $quoteId) {
             empty($quoteItemId) && $itemQty = 0;
         }
 

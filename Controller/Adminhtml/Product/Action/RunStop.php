@@ -28,16 +28,27 @@ class RunStop extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Listing\Ab
     public function execute()
     {
         $products = $this->productRepository->massActionSelectedProducts($this->massActionFilter);
+        $channelTitle = \M2E\TikTokShop\Helper\Module::getChannelTitle();
 
         if ($this->isRealtimeAction($products)) {
             ['result' => $result] = $this->actionService->runStop($products);
             if ($result === 'success') {
                 $this->getMessageManager()->addSuccessMessage(
-                    __('"Stopping Selected Items On TikTok Shop" task has completed.'),
+                    __(
+                        '"Stopping Selected Items On %channel_title" task has completed.',
+                        [
+                            'channel_title' => $channelTitle
+                        ]
+                    ),
                 );
             } else {
                 $this->getMessageManager()->addErrorMessage(
-                    __('"Stopping Selected Items On TikTok Shop" task has completed with errors.'),
+                    __(
+                        '"Stopping Selected Items On %channel_title" task has completed with errors.',
+                        [
+                            'channel_title' => $channelTitle
+                        ]
+                    ),
                 );
             }
 
@@ -47,7 +58,12 @@ class RunStop extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Listing\Ab
         $this->actionService->scheduleStop($products);
 
         $this->getMessageManager()->addSuccessMessage(
-            __('"Stopping Selected Items On TikTok Shop" task has completed.'),
+            __(
+                '"Stopping Selected Items On %channel_title" task has completed.',
+                [
+                    'channel_title' => $channelTitle
+                ]
+            ),
         );
 
         return $this->redirectToGrid();

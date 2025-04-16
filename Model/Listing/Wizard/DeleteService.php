@@ -18,7 +18,7 @@ class DeleteService
 
     public function removeOld(): void
     {
-        $borderDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt()
+        $borderDate = \M2E\Core\Helper\Date::createCurrentGmt()
                                                  ->modify(sprintf('- %d days', self::LIFETIME_ONE_WEEK_IN_DAYS));
 
         foreach ($this->wizardRepository->findOldCompleted($borderDate) as $wizard) {

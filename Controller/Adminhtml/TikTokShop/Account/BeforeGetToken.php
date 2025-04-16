@@ -43,8 +43,11 @@ class BeforeGetToken extends AbstractAccount
         } catch (\Exception $exception) {
             $this->helperException->process($exception);
             $error = __(
-                'The TikTok Shop token obtaining is currently unavailable.<br/>Reason: %error_message',
-                ['error_message' => $exception->getMessage()]
+                'The %channel_title token obtaining is currently unavailable.<br/>Reason: %error_message',
+                [
+                    'error_message' => $exception->getMessage(),
+                    'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                ]
             );
 
             $this->messageManager->addError($error);

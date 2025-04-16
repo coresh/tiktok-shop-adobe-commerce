@@ -63,7 +63,6 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
         /** @var Response $responseObj */
         $responseObj = $this->responseFactory->create(
             $this->getProduct(),
-            $this->getActionConfigurator(),
             $this->getVariantSettings(),
             $this->requestData,
             $this->getParams(),

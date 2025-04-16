@@ -43,7 +43,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
 
     protected function _prepareCollection()
     {
-        $failedProducts = \M2E\TikTokShop\Helper\Json::decode($this->getRequest()->getParam('failed_products'));
+        $failedProducts = \M2E\Core\Helper\Json::decode($this->getRequest()->getParam('failed_products'));
 
         /** @var \M2E\TikTokShop\Model\ResourceModel\Magento\Product\Collection $collection */
         $collection = $this->magentoProductCollectionFactory->create()
@@ -114,7 +114,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
 
     public function callbackColumnTitle($value, $row, $column, $isExport)
     {
-        $value = '<div style="margin-left: 3px">' . \M2E\TikTokShop\Helper\Data::escapeHtml($value);
+        $value = '<div style="margin-left: 3px">' . \M2E\Core\Helper\Data::escapeHtml($value);
 
         $tempSku = $row->getData('sku');
         if ($tempSku === null) {
@@ -123,14 +123,14 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
         }
 
         $value .= '<br/><strong>' . __('SKU') . ':</strong> ';
-        $value .= \M2E\TikTokShop\Helper\Data::escapeHtml($tempSku) . '</div>';
+        $value .= \M2E\Core\Helper\Data::escapeHtml($tempSku) . '</div>';
 
         return $value;
     }
 
     public function callbackColumnType($value, $row, $column, $isExport)
     {
-        return '<div style="margin-left: 3px">' . \M2E\TikTokShop\Helper\Data::escapeHtml($value) . '</div>';
+        return '<div style="margin-left: 3px">' . \M2E\Core\Helper\Data::escapeHtml($value) . '</div>';
     }
 
     protected function callbackFilterTitle($collection, $column)

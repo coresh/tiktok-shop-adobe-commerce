@@ -114,7 +114,7 @@ class Builder extends \M2E\TikTokShop\Model\TikTokShop\Template\AbstractBuilder
 
         $fixedPriceModifierData = $this->getFixedPriceModifierData();
         if ($fixedPriceModifierData !== null) {
-            $data['fixed_price_modifier'] = \M2E\TikTokShop\Helper\Json::encode($fixedPriceModifierData);
+            $data['fixed_price_modifier'] = \M2E\Core\Helper\Json::encode($fixedPriceModifierData);
         }
 
         if (isset($this->rawData['fixed_price_custom_attribute'])) {

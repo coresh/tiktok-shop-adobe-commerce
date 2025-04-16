@@ -25,7 +25,7 @@ class Module
     private Data\Cache\Runtime $runtimeCache;
     private Data\Cache\Permanent $permanentCache;
     private Magento $magentoHelper;
-    private Client $clientHelper;
+    private \M2E\Core\Helper\Client $clientHelper;
     private \M2E\TikTokShop\Model\Module $module;
     private \M2E\TikTokShop\Model\Module\Environment $moduleEnv;
 
@@ -41,7 +41,7 @@ class Module
         \M2E\TikTokShop\Helper\Data\Cache\Runtime $runtimeCache,
         \M2E\TikTokShop\Helper\Data\Cache\Permanent $permanentCache,
         \M2E\TikTokShop\Helper\Magento $magentoHelper,
-        \M2E\TikTokShop\Helper\Client $clientHelper
+        \M2E\Core\Helper\Client $clientHelper
     ) {
         $this->config = $config;
         $this->registry = $registry;
@@ -203,5 +203,20 @@ class Module
     public function clearCache(): void
     {
         $this->permanentCache->removeAllValues();
+    }
+
+    public static function getExtensionTitle(): string
+    {
+        return 'M2E TikTok Shop Connect';
+    }
+
+    public static function getChannelTitle(): string
+    {
+        return 'TikTok Shop';
+    }
+
+    public static function getMenuRootNodeLabel(): string
+    {
+        return (string)__('TikTok Shop');
     }
 }

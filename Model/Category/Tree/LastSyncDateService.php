@@ -22,14 +22,14 @@ class LastSyncDateService
             return null;
         }
 
-        return \M2E\TikTokShop\Helper\Date::createDateGmt($date);
+        return \M2E\Core\Helper\Date::createDateGmt($date);
     }
 
     public function touch(\M2E\TikTokShop\Model\Shop $shop): void
     {
         $this->registry->setValue(
             $this->prepareRegistryKey($shop),
-            \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')
+            \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s')
         );
     }
 

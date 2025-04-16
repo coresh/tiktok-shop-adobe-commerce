@@ -6,12 +6,12 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 class Render extends \Magento\Backend\Block\Template implements RendererInterface
 {
-    private \M2E\TikTokShop\Helper\Magento\Carriers $magentoCarriersHelper;
+    private \M2E\Core\Helper\Magento\Carriers $magentoCarriersHelper;
     private \M2E\TikTokShop\Model\ShippingProvider\Repository $shippingProviderRepository;
 
     public function __construct(
         \M2E\TikTokShop\Model\ShippingProvider\Repository $shippingProviderRepository,
-        \M2E\TikTokShop\Helper\Magento\Carriers $magentoCarriersHelper,
+        \M2E\Core\Helper\Magento\Carriers $magentoCarriersHelper,
         \Magento\Backend\Block\Template\Context $context,
         array $data = [],
         ?\Magento\Framework\Json\Helper\Data $jsonHelper = null,

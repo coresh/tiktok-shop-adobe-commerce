@@ -8,11 +8,11 @@ class View extends AbstractContainer
 {
     /** @var \M2E\TikTokShop\Helper\Data\GlobalData */
     private $globalDataHelper;
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
 
     public function __construct(
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Widget $context,
-        \M2E\TikTokShop\Helper\Url $urlHelper,
+        \M2E\Core\Helper\Url $urlHelper,
         \M2E\TikTokShop\Helper\Data\GlobalData $globalDataHelper,
         array $data = []
     ) {

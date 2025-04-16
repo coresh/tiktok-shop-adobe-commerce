@@ -145,7 +145,7 @@ HTML;
                     $columnInfo['repair_mode'] = self::FIX_COLUMN;
                 }
 
-                $repairInfo = \M2E\TikTokShop\Helper\Json::encode($columnInfo);
+                $repairInfo = \M2E\Core\Helper\Json::encode($columnInfo);
                 $input = "<input type='checkbox' name='repair_info[]' value='" . $repairInfo . "'>";
                 $html .= <<<HTML
 <tr>

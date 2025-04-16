@@ -6,7 +6,7 @@ namespace M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder;
 
 abstract class AbstractDataBuilder
 {
-    private \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper;
+    private \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper;
 
     private \M2E\TikTokShop\Model\Product $listingProduct;
     private \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Configurator $configurator;
@@ -16,7 +16,7 @@ abstract class AbstractDataBuilder
     private \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings $variantSettings;
     private int $action;
 
-    public function __construct(\M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper)
+    public function __construct(\M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper)
     {
         $this->magentoAttributeHelper = $magentoAttributeHelper;
     }

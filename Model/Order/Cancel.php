@@ -24,7 +24,7 @@ class Cancel
             return;
         }
 
-        \M2E\TikTokShop\Helper\Data::validateInitiator($initiator);
+        \M2E\Core\Helper\Data::validateInitiator($initiator);
 
         $this->changeCreateService->create(
             (int)$order->getId(),

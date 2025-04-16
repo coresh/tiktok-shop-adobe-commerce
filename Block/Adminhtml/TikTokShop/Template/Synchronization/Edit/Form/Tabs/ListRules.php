@@ -72,16 +72,20 @@ class ListRules extends AbstractTab
             [
                 'content' => __(
                     '<p><strong>List Action</strong> - this Action can be executed for each ' .
-                    'Item in M2E TikTok Shop Connect Listings which has <strong>Not Listed</strong> ' .
+                    'Item in %extension_title Listings which has <strong>Not Listed</strong> ' .
                     'Status and which Settings meet the List Condition. If an Item was not initially Listed for ' .
                     'some reason, automatic synchronization will attempt to list it again only if there is a ' .
                     'change of Product Status, Stock Availability or Quantity in Magento.</p><br>' .
-                    '<p><strong>Note:</strong> M2E TikTok Shop Connect Listings Synchronization must be enabled in ' .
-                    'Synchronization <strong>(TikTok Shop Integration > Configuration > Settings > Synchronization)' .
+                    '<p><strong>Note:</strong> %extension_title Listings Synchronization must be enabled in ' .
+                    'Synchronization <strong>(%channel_title Integration > Configuration > Settings > Synchronization)' .
                     '</strong>. Otherwise, Synchronization Policy Rules will not take effect.</p><br>' .
                     '<p>More detailed information about how to work with this Page you can find ' .
                     '<a href="%url" target="_blank" class="external-link">here</a>.</p>',
-                    ['url' => 'https://docs-m2.m2epro.com/list-rules-for-tiktok-shop-listings'],
+                    [
+                        'url' => 'https://docs-m2.m2epro.com/list-rules-for-tiktok-shop-listings',
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ],
                 ),
             ]
         );
@@ -127,10 +131,15 @@ class ListRules extends AbstractTab
                     0 => __('Any'),
                     1 => __('Enabled'),
                 ],
-                'tooltip' => __('<p><strong>Enabled:</strong> List Items on TikTok Shop automatically ' .
+                'tooltip' => __(
+                    '<p><strong>Enabled:</strong> List Items on %channel_title automatically ' .
                     'if they have status Enabled in Magento Product. (Recommended)</p>' .
-                    '<p><strong>Any:</strong> List Items with any Magento Product status on TikTok Shop ' .
-                    'automatically</p>'),
+                    '<p><strong>Any:</strong> List Items with any Magento Product status on %channel_title ' .
+                    'automatically</p>',
+                    [
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    ]
+                ),
             ]
         );
 

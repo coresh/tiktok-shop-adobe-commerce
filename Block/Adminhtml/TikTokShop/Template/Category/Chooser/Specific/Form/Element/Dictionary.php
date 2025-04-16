@@ -13,10 +13,10 @@ class Dictionary extends \Magento\Framework\Data\Form\Element\AbstractElement
     use \M2E\TikTokShop\Block\Adminhtml\Traits\BlockTrait;
 
     public \Magento\Framework\View\LayoutInterface $layout;
-    private \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper;
+    private \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Magento\Attribute $magentoAttributeHelper,
+        \M2E\Core\Helper\Magento\Attribute $magentoAttributeHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
@@ -178,20 +178,17 @@ class Dictionary extends \Magento\Framework\Data\Form\Element\AbstractElement
             ],
             \M2E\TikTokShop\Model\TikTokShop\Template\Category::VALUE_MODE_TTS_RECOMMENDED => [
                 'value' => \M2E\TikTokShop\Model\TikTokShop\Template\Category::VALUE_MODE_TTS_RECOMMENDED,
-                'label' => __('TikTok Shop Recommended'),
+                'label' => __(\M2E\TikTokShop\Helper\Module::getChannelTitle() . ' Recommended'),
             ],
             \M2E\TikTokShop\Model\TikTokShop\Template\Category::VALUE_MODE_CUSTOM_ATTRIBUTE => [
                 'value' => \M2E\TikTokShop\Model\TikTokShop\Template\Category::VALUE_MODE_CUSTOM_ATTRIBUTE,
                 'label' => __('Custom Attribute'),
             ],
-        ];
-
-        if ($specific['is_customized']) {
-            $values[\M2E\TikTokShop\Model\TikTokShop\Template\Category::VALUE_MODE_CUSTOM_VALUE] = [
+            \M2E\TikTokShop\Model\TikTokShop\Template\Category::VALUE_MODE_CUSTOM_VALUE => [
                 'value' => \M2E\TikTokShop\Model\TikTokShop\Template\Category::VALUE_MODE_CUSTOM_VALUE,
                 'label' => __('Custom Value'),
-            ];
-        }
+            ],
+        ];
 
         if ($specific['required']) {
             $values[\M2E\TikTokShop\Model\TikTokShop\Template\Category::VALUE_MODE_NONE] = [
@@ -199,10 +196,6 @@ class Dictionary extends \Magento\Framework\Data\Form\Element\AbstractElement
                 'value' => '',
                 'style' => 'display: none',
             ];
-        }
-
-        if (!$specific['is_customized']) {
-            unset($values[\M2E\TikTokShop\Model\TikTokShop\Template\Category::VALUE_MODE_CUSTOM_ATTRIBUTE]);
         }
 
         if ($specific['type'] === \M2E\TikTokShop\Model\TikTokShop\Template\Category::RENDER_TYPE_TEXT) {

@@ -45,7 +45,7 @@ class Initiator implements \M2E\TikTokShop\Model\Processing\PartialInitiatorInte
             'account_id' => $this->account->getId(),
             'shop_id' => $this->shop->getId(),
             'from_date' => $this->fromDate === null ? null : $this->fromDate->format('Y-m-d H:i:s'),
-            'current_date' => \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s'),
+            'current_date' => \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s'),
         ];
     }
 

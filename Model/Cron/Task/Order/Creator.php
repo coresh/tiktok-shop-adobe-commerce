@@ -42,12 +42,12 @@ class Creator extends \Magento\Framework\DataObject
         $account = $shop->getAccount();
 
         $accountCreateDate = clone $account->getCreateData();
-        $boundaryCreationDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt()->modify('-90 days');
+        $boundaryCreationDate = \M2E\Core\Helper\Date::createCurrentGmt()->modify('-90 days');
 
         $orders = [];
         foreach ($ordersData as $tikTokOrderData) {
             try {
-                $orderCreateDate = \M2E\TikTokShop\Helper\Date::createDateGmt($tikTokOrderData['create_date']);
+                $orderCreateDate = \M2E\Core\Helper\Date::createDateGmt($tikTokOrderData['create_date']);
 
                 if (!$this->isNeedCreateOrderByCreateDate($orderCreateDate, $accountCreateDate, $boundaryCreationDate)) {
                     continue;
@@ -97,10 +97,10 @@ class Creator extends \Magento\Framework\DataObject
     {
         if ($order->canCreateMagentoOrder()) {
             try {
-                $order->getLogService()->setInitiator(\M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION);
-
+                $order->getLogService()->setInitiator(\M2E\Core\Helper\Data::INITIATOR_EXTENSION);
+                $extensionTitle = \M2E\TikTokShop\Helper\Module::getExtensionTitle();
                 $order->addInfoLog(
-                    'Magento order creation rules are met. M2E TikTok Shop Connect will attempt to create Magento order.',
+                    "Magento order creation rules are met. $extensionTitle will attempt to create Magento order.",
                     [],
                     [],
                     true

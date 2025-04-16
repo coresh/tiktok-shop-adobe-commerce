@@ -106,7 +106,7 @@ abstract class AbstractGrid extends \M2E\TikTokShop\Block\Adminhtml\Log\Abstract
             $collection->addFieldToFilter('main_table.order_id', (int)$orderId);
         }
 
-        $backToDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $backToDate = \M2E\Core\Helper\Date::createCurrentGmt();
         $backToDate->modify('- 1 days');
 
         if ($this->getRequest()->getParam('magento_order_failed')) {
@@ -140,7 +140,7 @@ abstract class AbstractGrid extends \M2E\TikTokShop\Block\Adminhtml\Log\Abstract
         ]);
 
         $this->addColumn('channel_order_id', [
-            'header' => __('TikTok Shop Order #'),
+            'header' => __(\M2E\TikTokShop\Helper\Module::getChannelTitle() . ' Order #'),
             'align' => 'left',
             'sortable' => false,
             'index' => 'channel_order_id',
@@ -190,7 +190,7 @@ abstract class AbstractGrid extends \M2E\TikTokShop\Block\Adminhtml\Log\Abstract
     {
         $url = $this->getUrl('*/tiktokshop_order/view', ['id' => $row->getData('order_id')]);
 
-        return '<a href="' . $url . '" target="_blank">' . \M2E\TikTokShop\Helper\Data::escapeHtml(
+        return '<a href="' . $url . '" target="_blank">' . \M2E\Core\Helper\Data::escapeHtml(
             $row->getData('tts_order_id')
         ) . '</a>';
     }
@@ -205,7 +205,7 @@ abstract class AbstractGrid extends \M2E\TikTokShop\Block\Adminhtml\Log\Abstract
         } else {
             $url = $this->getUrl('sales/order/view', ['order_id' => $magentoOrderId]);
             $result = '<a href="' . $url . '" target="_blank">'
-                . \M2E\TikTokShop\Helper\Data::escapeHtml($magentoOrderNumber) . '</a>';
+                . \M2E\Core\Helper\Data::escapeHtml($magentoOrderNumber) . '</a>';
         }
 
         return "<span style='min-width: 110px; display: block;'>{$result}</span>";

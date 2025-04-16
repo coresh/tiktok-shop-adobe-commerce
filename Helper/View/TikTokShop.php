@@ -21,22 +21,6 @@ class TikTokShop
     // ----------------------------------------
 
     /**
-     * @return \Magento\Framework\Phrase|mixed|string
-     */
-    public static function getTitle(): string
-    {
-        return (string)__('TikTok Shop Integration');
-    }
-
-    /**
-     * @return \Magento\Framework\Phrase|mixed|string
-     */
-    public static function getMenuRootNodeLabel(): string
-    {
-        return self::getTitle();
-    }
-
-    /**
      * @return string
      */
     public static function getWizardInstallationNick(): string

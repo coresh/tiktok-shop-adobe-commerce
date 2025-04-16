@@ -41,7 +41,7 @@ class Finder
         array $listingProductFilters = []
     ): \M2E\TikTokShop\Model\Product\AffectedProduct\Collection {
         $filters = [$listingFilters, $listingProductFilters];
-        $cacheKey = __METHOD__ . $magentoProductId . sha1(\M2E\TikTokShop\Helper\Json::encode($filters));
+        $cacheKey = __METHOD__ . $magentoProductId . sha1(\M2E\Core\Helper\Json::encode($filters));
         $cacheValue = $this->runtimeCache->getValue($cacheKey);
 
         if ($cacheValue !== null) {

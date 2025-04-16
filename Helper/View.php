@@ -79,7 +79,7 @@ class View
 
     public function getModifiedLogMessage($logMessage)
     {
-        return \M2E\TikTokShop\Helper\Data::escapeHtml(
+        return \M2E\Core\Helper\Data::escapeHtml(
             \M2E\TikTokShop\Helper\Module\Log::decodeDescription($logMessage),
             ['a'],
             ENT_NOQUOTES

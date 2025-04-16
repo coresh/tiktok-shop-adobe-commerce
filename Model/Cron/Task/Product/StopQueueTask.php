@@ -32,7 +32,7 @@ class StopQueueTask implements \M2E\Core\Model\Cron\TaskHandlerInterface
 
     private function deleteOldProcessedItems(): void
     {
-        $borderDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $borderDate = \M2E\Core\Helper\Date::createCurrentGmt();
         $borderDate->modify('- ' . self::MAX_PROCESSED_LIFETIME_HOURS_INTERVAL . ' hours');
 
         $this->repository->deleteCompletedAfterBorderDate($borderDate);

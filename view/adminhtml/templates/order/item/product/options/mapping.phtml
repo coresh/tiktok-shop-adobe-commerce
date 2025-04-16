@@ -49,11 +49,11 @@
                         <label>
                         <span style="font-weight: bold; font-style: italic;">
                             <?php
-                            echo \M2E\TikTokShop\Helper\Data::escapeHtml($channelOption['label']); ?>:
+                            echo \M2E\Core\Helper\Data::escapeHtml($channelOption['label']); ?>:
                         </span>
                             <span>
                             &nbsp;<?php
-                                echo \M2E\TikTokShop\Helper\Data::escapeHtml($channelOption['value']); ?>
+                                echo \M2E\Core\Helper\Data::escapeHtml($channelOption['value']); ?>
                         </span>
                         </label>
                     </dt>
@@ -70,7 +70,7 @@
     <br/>
 
     <h4><?php
-        echo \M2E\TikTokShop\Helper\Data::escapeHtml($block->getProductTypeHeader()) ?></h4>
+        echo \M2E\Core\Helper\Data::escapeHtml($block->getProductTypeHeader()) ?></h4>
 
     <div>
 
@@ -81,7 +81,7 @@
                 <dt>
                     <label>
                         <span style="color: #eb5202">*</span>&nbsp;<?php
-                        echo \M2E\TikTokShop\Helper\Data::escapeHtml($option['label']); ?>
+                        echo \M2E\Core\Helper\Data::escapeHtml($option['label']); ?>
                     </label>
                 </dt>
                 <dd style="border-bottom: 1px solid #E7E7E7; margin: 5px 0 15px; padding: 0 0 12px;">
@@ -103,12 +103,12 @@
                                 $selected = $block->isMagentoOptionSelected($option, $value);
                                 ?>
                                 <option value="<?php
-                                echo \M2E\TikTokShop\Helper\Data::escapeHtml($optionValue); ?>" <?php
+                                echo \M2E\Core\Helper\Data::escapeHtml($optionValue); ?>" <?php
                                         if ($selected) :
                                         ?>selected="selected"<?php
                                 endif; ?>>
                                     <?php
-                                    echo \M2E\TikTokShop\Helper\Data::escapeHtml($optionLabel); ?>
+                                    echo \M2E\Core\Helper\Data::escapeHtml($optionLabel); ?>
                                 </option>
                             <?php
                             endforeach; ?>

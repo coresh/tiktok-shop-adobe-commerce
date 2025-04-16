@@ -30,11 +30,16 @@ class ModuleControlPopup extends \M2E\TikTokShop\Block\Adminhtml\Magento\Abstrac
         if ($isModuleDisabled) {
             $confirmContent = __('Are you sure ?');
         } else {
-            $confirmContent = __('<p>In case you confirm the Module disabling, the M2E TikTok Shop Connect ' .
-                'dynamic tasks run by Cron will be stopped and the M2E TikTok Shop Connect Interface will be blocked.</p>' .
+            $confirmContent = __(
+                '<p>In case you confirm the Module disabling, the %extension_title ' .
+                'dynamic tasks run by Cron will be stopped and the %extension_title Interface will be blocked.</p>' .
                 '<p><b>Note</b>: You can re-enable it anytime you would like by clicking on the ' .
                 '<strong>Proceed</strong> button for <strong>Enable Module and ' .
-                'Automatic Synchronization</strong> option.</p>');
+                'Automatic Synchronization</strong> option.</p>',
+                [
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                ]
+            );
         }
 
         $html = <<<HTML

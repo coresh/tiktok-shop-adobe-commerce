@@ -40,10 +40,13 @@ class SystemLogs extends IssueType
             $result->setTaskResult(TaskResult::STATE_WARNING);
             $result->setTaskMessage(
                 __(
-                    'M2E TikTok Shop Connect has recorded <b>%1</b> messages to the System Log during the ' .
-                    'last hour. <a target="_blank" href="%2">Click here</a> for the details.',
-                    $exceptionsCount,
-                    $this->urlBuilder->getUrl('m2e_tiktokshop/synchronization_log/index'),
+                    '%extension_title has recorded <b>%count</b> messages to the System Log during the ' .
+                    'last hour. <a target="_blank" href="%url">Click here</a> for the details.',
+                    [
+                        'count' => $exceptionsCount,
+                        'url' => $this->urlBuilder->getUrl('m2e_tiktokshop/synchronization_log/index'),
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
                 )
             );
         }
@@ -52,10 +55,13 @@ class SystemLogs extends IssueType
             $result->setTaskResult(TaskResult::STATE_CRITICAL);
             $result->setTaskMessage(
                 __(
-                    'M2E TikTok Shop Connect has recorded <b>%1</b> messages to the System Log ' .
-                    'during the last hour. <a href="%2">Click here</a> for the details.',
-                    $exceptionsCount,
-                    $this->urlBuilder->getUrl('m2e_tiktokshop/synchronization_log/index'),
+                    '%extension_title has recorded <b>%count</b> messages to the System Log ' .
+                    'during the last hour. <a href="%url">Click here</a> for the details.',
+                    [
+                        'count' => $exceptionsCount,
+                        'url' => $this->urlBuilder->getUrl('m2e_tiktokshop/synchronization_log/index'),
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
                 )
             );
         }
@@ -65,7 +71,7 @@ class SystemLogs extends IssueType
 
     private function getExceptionsCountByOneHourBackInterval(): int
     {
-        $date = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $date = \M2E\Core\Helper\Date::createCurrentGmt();
         $date->modify('- ' . self::SEE_TO_BACK_INTERVAL . ' seconds');
 
         return $this->systemLogRepository->findExceptionsCountByBackInterval($date);

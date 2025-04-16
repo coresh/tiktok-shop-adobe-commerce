@@ -134,7 +134,7 @@ abstract class AbstractBase extends Action
         try {
             $result = parent::dispatch($request);
         } catch (\Throwable $exception) {
-            if ($request->getControllerName() === \M2E\TikTokShop\Helper\Module\Support::SUPPORT_CONTROLLER_NAME) {
+            if ($request->getControllerName() === 'support') {
                 $this->getRawResult()->setContents($exception->getMessage());
 
                 return $this->getRawResult();
@@ -185,9 +185,12 @@ abstract class AbstractBase extends Action
 
         if ($moduleHelper->isDisabled()) {
             $message = __(
-                'M2E TikTok Shop Connect is disabled. Inventory and Order synchronization is not running. ' .
+                '%extension_title is disabled. Inventory and Order synchronization is not running. ' .
                 'The Module interface is unavailable.<br>' .
-                'You can enable the Module under <i>Stores > Settings > Configuration > M2E TikTok Shop Connect > Module</i>.'
+                'You can enable the Module under <i>Stores > Settings > Configuration > %extension_title > Module</i>.',
+                [
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                ]
             );
             $this->getMessageManager()->addNotice($message);
 
@@ -196,7 +199,7 @@ abstract class AbstractBase extends Action
 
         if ($this->isAjax($request) && !$this->_auth->isLoggedIn()) {
             $this->getRawResult()->setContents(
-                \M2E\TikTokShop\Helper\Json::encode([
+                \M2E\Core\Helper\Json::encode([
                     'ajaxExpired' => 1,
                     'ajaxRedirect' => $this->redirect->getRefererUrl(),
                 ])
@@ -281,7 +284,7 @@ abstract class AbstractBase extends Action
         $this->resultPage = $this->resultPageFactory->create();
         $this->resultPage->addHandle($this->getLayoutType());
 
-        $this->resultPage->getConfig()->getTitle()->set(__('TikTok Shop'));
+        $this->resultPage->getConfig()->getTitle()->set(__(\M2E\TikTokShop\Helper\Module::getChannelTitle()));
     }
 
     // ---------------------------------------
@@ -364,7 +367,7 @@ abstract class AbstractBase extends Action
             $this->generalBlockWasAppended = true;
         }
 
-        $this->setAjaxContent(\M2E\TikTokShop\Helper\Json::encode($data), false);
+        $this->setAjaxContent(\M2E\Core\Helper\Json::encode($data), false);
     }
 
     // ---------------------------------------

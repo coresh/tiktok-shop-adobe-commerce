@@ -19,12 +19,10 @@ class Delete extends \M2E\TikTokShop\Plugin\AbstractPlugin
     public function __construct(
         \M2E\TikTokShop\Model\Product\Repository $productRepository,
         \M2E\TikTokShop\Model\Listing\LogService $listingLogService,
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \M2E\TikTokShop\Model\MSI\AffectedProducts $msiAffectedProducts,
         \M2E\TikTokShop\PublicServices\Product\SqlChange $publicService,
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
-        parent::__construct($helperFactory);
         $this->msiAffectedProducts = $msiAffectedProducts;
         $this->publicService = $publicService;
         $this->stockRepository = $objectManager->get(\Magento\InventoryApi\Api\StockRepositoryInterface::class);
@@ -89,12 +87,15 @@ class Delete extends \M2E\TikTokShop\Plugin\AbstractPlugin
     ) {
         $this->listingLogService->addListing(
             $listing,
-            \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+            \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_UNKNOWN,
             null,
             \M2E\TikTokShop\Helper\Module\Log::encodeDescription(
-                'Source set was changed in the "%stock%" Stock used for M2E TikTok Shop Connect Listing.',
-                ['!stock' => $stock->getName()]
+                'Source set was changed in the "%stock%" Stock used for %extension_title% Listing.',
+                [
+                    '!stock' => $stock->getName(),
+                    '!extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                ]
             ),
             \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_INFO
         );

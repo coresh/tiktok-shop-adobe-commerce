@@ -119,7 +119,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractGrid
 
     public function callbackColumnTitle($value, $row, $column, $isExport)
     {
-        $title = \M2E\TikTokShop\Helper\Data::escapeHtml($value);
+        $title = \M2E\Core\Helper\Data::escapeHtml($value);
         $url = $this->viewHelper->getUrl(
             $row,
             'listing',
@@ -173,10 +173,16 @@ HTML;
         if ($this->canDisplayContainer()) {
             $helpBlockHtml = $this->getLayout()->createBlock(\M2E\TikTokShop\Block\Adminhtml\HelpBlock::class)->setData(
                 [
-                    'content' => __('Item(s) can be moved to a Listing within the same TikTok Shop Account and Shop.<br> ' .
-                        'You can select an existing M2E TikTok Shop Connect Listing or create a new one.<br><br>' .
+                    'content' => __(
+                        'Item(s) can be moved to a Listing within the same %channel_title Account and Shop.<br> ' .
+                        'You can select an existing %extension_title Listing or create a new one.<br><br>' .
                         '<strong>Note:</strong> Once the Items are moved, they will be updated based ' .
-                        'on the new Listing settings.'),
+                        'on the new Listing settings.',
+                        [
+                            'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                            'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                        ]
+                    ),
                 ]
             )->toHtml();
         }

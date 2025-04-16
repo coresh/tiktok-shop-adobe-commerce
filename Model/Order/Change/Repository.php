@@ -139,7 +139,7 @@ class Repository
             ['eq' => $account->getId()],
         );
 
-        $hourAgo = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $hourAgo = \M2E\Core\Helper\Date::createCurrentGmt();
         $hourAgo->modify('-1 hour');
 
         $collection->addFieldToFilter(
@@ -176,7 +176,7 @@ class Repository
                 OrderChangeResource::COLUMN_PROCESSING_ATTEMPT_COUNT => new \Zend_Db_Expr(
                     'processing_attempt_count + ' . $increment
                 ),
-                OrderChangeResource::COLUMN_PROCESSING_ATTEMPT_DATE => \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format(
+                OrderChangeResource::COLUMN_PROCESSING_ATTEMPT_DATE => \M2E\Core\Helper\Date::createCurrentGmt()->format(
                     'Y-m-d H:i:s'
                 ),
             ],

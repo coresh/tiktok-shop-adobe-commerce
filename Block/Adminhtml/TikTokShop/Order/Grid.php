@@ -14,7 +14,7 @@ class Grid extends AbstractGrid
     private \M2E\TikTokShop\Model\ResourceModel\Order\Item\CollectionFactory $orderItemCollectionFactory;
     private \M2E\TikTokShop\Model\ResourceModel\Order\Note\CollectionFactory $orderNoteCollectionFactory;
     private \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Order\StatusHelper $orderStatusHelper;
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
     private \M2E\TikTokShop\Model\Currency $currency;
     private \M2E\TikTokShop\Model\Order\Log\ServiceFactory $orderLogServiceFactory;
     private \M2E\TikTokShop\Model\Order\Item\Repository $orderItemRepository;
@@ -22,7 +22,7 @@ class Grid extends AbstractGrid
     public function __construct(
         \M2E\TikTokShop\Model\Order\Item\Repository $orderItemRepository,
         \M2E\TikTokShop\Model\Order\Log\ServiceFactory $orderLogServiceFactory,
-        \M2E\TikTokShop\Helper\Url $urlHelper,
+        \M2E\Core\Helper\Url $urlHelper,
         \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Order\StatusHelper $orderStatusHelper,
         \M2E\TikTokShop\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Sales\Model\ResourceModel\Order $magentoOrderResource,
@@ -307,7 +307,7 @@ class Grid extends AbstractGrid
 
         if ($magentoOrderId !== null) {
             if (!empty($value)) {
-                $magentoOrderNumber = \M2E\TikTokShop\Helper\Data::escapeHtml($value);
+                $magentoOrderNumber = \M2E\Core\Helper\Data::escapeHtml($value);
                 $orderUrl = $this->getUrl('sales/order/view', ['order_id' => $magentoOrderId]);
                 $returnString = '<a href="' . $orderUrl . '" target="_blank">' . $magentoOrderNumber . '</a>';
             } else {
@@ -461,7 +461,7 @@ HTML;
 
             $skuHtml = '';
             if ($item->getSku()) {
-                $sku = \M2E\TikTokShop\Helper\Data::escapeHtml($item->getSku());
+                $sku = \M2E\Core\Helper\Data::escapeHtml($item->getSku());
                 if ($product !== null) {
                     $sku = sprintf(
                         '<a href="%s" target="_blank">%s</a>',
@@ -485,7 +485,7 @@ HTML;
 
             $itemLines[] = sprintf(
                 '%s<br><small>%s%s</small>',
-                \M2E\TikTokShop\Helper\Data::escapeHtml($item->getChannelProductTitle()),
+                \M2E\Core\Helper\Data::escapeHtml($item->getChannelProductTitle()),
                 $skuHtml,
                 $qtyPurchasedHtml
             );
@@ -501,8 +501,8 @@ HTML;
 
     public function callbackColumnBuyer($value, \M2E\TikTokShop\Model\Order $row, $column, $isExport)
     {
-        $returnString = \M2E\TikTokShop\Helper\Data::escapeHtml($row->getBuyerName()) . '<br/>';
-        $returnString .= \M2E\TikTokShop\Helper\Data::escapeHtml($row->getBuyerUserId());
+        $returnString = \M2E\Core\Helper\Data::escapeHtml($row->getBuyerName()) . '<br/>';
+        $returnString .= \M2E\Core\Helper\Data::escapeHtml($row->getBuyerUserId());
 
         return $returnString;
     }
@@ -614,7 +614,7 @@ JS
 
         $tempGridIds = [];
         $tempGridIds[] = $this->getId();
-        $tempGridIds = \M2E\TikTokShop\Helper\Json::encode($tempGridIds);
+        $tempGridIds = \M2E\Core\Helper\Json::encode($tempGridIds);
 
         $this->jsPhp->addConstants(
             \M2E\TikTokShop\Helper\Data::getClassConstants(\M2E\TikTokShop\Model\Log\AbstractModel::class)

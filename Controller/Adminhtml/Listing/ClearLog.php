@@ -7,11 +7,11 @@ namespace M2E\TikTokShop\Controller\Adminhtml\Listing;
 class ClearLog extends \M2E\TikTokShop\Controller\Adminhtml\AbstractListing
 {
     private \M2E\TikTokShop\Model\Listing\Log\Repository $repository;
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
 
     public function __construct(
         \M2E\TikTokShop\Model\Listing\Log\Repository $repository,
-        \M2E\TikTokShop\Helper\Url $urlHelper
+        \M2E\Core\Helper\Url $urlHelper
     ) {
         parent::__construct();
 

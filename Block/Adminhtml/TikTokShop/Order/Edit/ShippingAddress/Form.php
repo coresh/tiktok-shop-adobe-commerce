@@ -92,7 +92,7 @@ class Form extends AbstractForm
                 'name' => 'recipient_name',
                 'label' => __('Recipient Name'),
                 'value' => isset($address['recipient_name'])
-                    ? \M2E\TikTokShop\Helper\Data::escapeHtml($address['recipient_name']) : '',
+                    ? \M2E\Core\Helper\Data::escapeHtml($address['recipient_name']) : '',
                 'required' => true,
             ]
         );
@@ -104,7 +104,7 @@ class Form extends AbstractForm
                 'name' => 'street[0]',
                 'label' => __('Street Address'),
                 'value' => isset($address['street'][0])
-                    ? \M2E\TikTokShop\Helper\Data::escapeHtml($address['street'][0]) : '',
+                    ? \M2E\Core\Helper\Data::escapeHtml($address['street'][0]) : '',
                 'required' => true,
             ]
         );
@@ -116,7 +116,7 @@ class Form extends AbstractForm
                 'name' => 'street[1]',
                 'label' => '',
                 'value' => isset($address['street'][1])
-                    ? \M2E\TikTokShop\Helper\Data::escapeHtml($address['street'][1]) : '',
+                    ? \M2E\Core\Helper\Data::escapeHtml($address['street'][1]) : '',
             ]
         );
 
@@ -184,7 +184,7 @@ class Form extends AbstractForm
             'formSubmit'
         );
 
-        $this->js->add("TikTokShop.formData.region = '" . \M2E\TikTokShop\Helper\Data::escapeJs($regionCode) . "';");
+        $this->js->add("TikTokShop.formData.region = '" . \M2E\Core\Helper\Data::escapeJs($regionCode) . "';");
 
         $this->js->add(
             <<<JS

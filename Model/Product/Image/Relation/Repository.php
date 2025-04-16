@@ -54,7 +54,7 @@ class Repository
         $entity = $this->relationEntityFactory->create();
         $entity->setListingProductId($listingProductId);
         $entity->setImageId($imageId);
-        $entity->setCreateDate(\M2E\TikTokShop\Helper\Date::createCurrentGmt());
+        $entity->setCreateDate(\M2E\Core\Helper\Date::createCurrentGmt());
 
         $this->create($entity);
     }

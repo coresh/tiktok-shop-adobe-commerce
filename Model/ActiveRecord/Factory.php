@@ -7,19 +7,14 @@ namespace M2E\TikTokShop\Model\ActiveRecord;
  */
 class Factory
 {
-    /** @var \M2E\TikTokShop\Helper\Factory */
-    protected $helperFactory;
-
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
     //########################################
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
-        $this->helperFactory = $helperFactory;
         $this->objectManager = $objectManager;
     }
 

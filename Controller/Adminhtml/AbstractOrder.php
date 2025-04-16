@@ -21,7 +21,7 @@ abstract class AbstractOrder extends AbstractMain
         }
 
         foreach ($optionsData as $optionId => $optionData) {
-            $optionData = \M2E\TikTokShop\Helper\Json::decode($optionData);
+            $optionData = \M2E\Core\Helper\Json::decode($optionData);
 
             if (!isset($optionData['value_id']) || !isset($optionData['product_ids'])) {
                 return [];

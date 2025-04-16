@@ -4,19 +4,10 @@ namespace M2E\TikTokShop\Observer;
 
 abstract class AbstractObserver implements \Magento\Framework\Event\ObserverInterface
 {
-    /** @var \M2E\TikTokShop\Helper\Factory */
-    private $helperFactory;
-
     /**
      * @var null|\Magento\Framework\Event\Observer
      */
     private $eventObserver = null;
-
-    public function __construct(
-        \M2E\TikTokShop\Helper\Factory $helperFactory
-    ) {
-        $this->helperFactory = $helperFactory;
-    }
 
     public function execute(\Magento\Framework\Event\Observer $observer): void
     {
@@ -39,11 +30,6 @@ abstract class AbstractObserver implements \Magento\Framework\Event\ObserverInte
         } catch (\Throwable $exception) {
             $this->getObjectManager()->get(\M2E\TikTokShop\Helper\Module\Exception::class)->process($exception);
         }
-    }
-
-    protected function getHelper($helperName)
-    {
-        return $this->helperFactory->getObject($helperName);
     }
 
     protected function canProcess(): bool

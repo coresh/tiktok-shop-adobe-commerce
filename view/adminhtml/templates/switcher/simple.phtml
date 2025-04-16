@@ -32,7 +32,7 @@ if ($items = $block->getItems()) : ?>
             if ($block->hasDefaultOption()) : ?>
                 <option value="<?php
                 echo $block->getDefaultOptionValue(); ?>"><?php
-                    echo \M2E\TikTokShop\Helper\Data::escapeHtml($block->getDefaultOptionName()); ?></option>
+                    echo \M2E\Core\Helper\Data::escapeHtml($block->getDefaultOptionName()); ?></option>
             <?php
             endif; ?>
 

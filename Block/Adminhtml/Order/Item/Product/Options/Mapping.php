@@ -142,11 +142,16 @@ class Mapping extends AbstractContainer
         $this->setChild(
             'product_mapping_options_help_block',
             $this->getLayout()->createBlock(\M2E\TikTokShop\Block\Adminhtml\HelpBlock::class)->setData([
-                'content' => __('As M2E TikTok Shop Connect was not able to find appropriate Option in Magento Product ' .
+                'content' => __(
+                    'As %extension_title was not able to find appropriate Option in Magento Product ' .
                     'you are supposed find and Link it manualy.<br/>If you want to use the same Settings for the ' .
                     'similar subsequent Orders, select appropriate check-box at the bottom. <br/><br/>' .
                     '<b>Note:</b> Magento Order can be only created when all Products of Order are found ' .
-                    'in Magento Catalog.'),
+                    'in Magento Catalog.',
+                    [
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    ]
+                ),
             ])
         );
 

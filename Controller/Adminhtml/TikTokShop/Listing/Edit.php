@@ -40,8 +40,11 @@ class Edit extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractListi
         );
         $this->getResultPage()->getConfig()->getTitle()->prepend(
             __(
-                'Edit M2E TikTok Shop Connect Listing "%listing_title" Settings',
-                ['listing_title' => $listing->getTitle()]
+                'Edit %extension_title Listing "%listing_title" Settings',
+                [
+                    'listing_title' => $listing->getTitle(),
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                ]
             ),
         );
 

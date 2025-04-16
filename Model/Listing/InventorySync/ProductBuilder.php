@@ -119,10 +119,10 @@ class ProductBuilder
         }
 
         $availableIdentifierTypes = [
-            \M2E\TikTokShop\Helper\Data\Product\Identifier::EAN,
-            \M2E\TikTokShop\Helper\Data\Product\Identifier::GTIN,
-            \M2E\TikTokShop\Helper\Data\Product\Identifier::ISBN,
-            \M2E\TikTokShop\Helper\Data\Product\Identifier::UPC,
+            \M2E\Core\Helper\Data\Product\Identifier::EAN,
+            \M2E\Core\Helper\Data\Product\Identifier::GTIN,
+            \M2E\Core\Helper\Data\Product\Identifier::ISBN,
+            \M2E\Core\Helper\Data\Product\Identifier::UPC,
         ];
 
         if (!in_array($type, $availableIdentifierTypes)) {

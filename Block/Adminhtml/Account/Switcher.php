@@ -24,7 +24,7 @@ class Switcher extends \M2E\TikTokShop\Block\Adminhtml\Switcher
 
     protected function loadItems(): void
     {
-        $accounts = $this->accountRepository->getAll(true);
+        $accounts = $this->accountRepository->getAll();
 
         if (count($accounts) < 2) {
             $this->hasDefaultOption = false;

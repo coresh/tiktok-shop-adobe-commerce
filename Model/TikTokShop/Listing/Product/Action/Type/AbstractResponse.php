@@ -50,16 +50,6 @@ abstract class AbstractResponse
 
     // ---------------------------------------
 
-    public function setConfigurator(\M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Configurator $object): void
-    {
-        $this->configurator = $object;
-    }
-
-    protected function getConfigurator(): \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Configurator
-    {
-        return $this->configurator;
-    }
-
     public function setVariantsSettings(\M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings $variantSettings): void
     {
         $this->variantSettings = $variantSettings;

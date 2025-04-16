@@ -33,7 +33,7 @@ class Change extends \M2E\TikTokShop\Block\Adminhtml\System\Config\Sections
 
         $fieldSet = $form->addFieldset('change_license', ['legend' => '', 'collapsable' => false]);
 
-        $key = \M2E\TikTokShop\Helper\Data::escapeHtml($this->licenseService->get()->getKey());
+        $key = \M2E\Core\Helper\Data::escapeHtml($this->licenseService->get()->getKey());
         $fieldSet->addField(
             'new_license_key',
             'text',

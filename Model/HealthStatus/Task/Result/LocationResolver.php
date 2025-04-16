@@ -47,7 +47,7 @@ class LocationResolver extends \M2E\TikTokShop\Model\AbstractModel
 
     private function usingMap(Task\AbstractModel $task): ?array
     {
-        $key = \M2E\TikTokShop\Helper\Client::getClassName($task);
+        $key = \M2E\Core\Helper\Client::getClassName($task);
 
         return $this->getMap()[$key] ?? null;
     }

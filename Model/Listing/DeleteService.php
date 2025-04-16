@@ -52,7 +52,7 @@ class DeleteService
 
         $this->listingLogService->addListing(
             $listing,
-            \M2E\TikTokShop\Helper\Data::INITIATOR_UNKNOWN,
+            \M2E\Core\Helper\Data::INITIATOR_UNKNOWN,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_DELETE_LISTING,
             null,
             (string)__('Listing was deleted'),
@@ -65,7 +65,7 @@ class DeleteService
     private function deleteProducts(\M2E\TikTokShop\Model\Listing $listing): void
     {
         foreach ($listing->getProducts() as $listingProduct) {
-            $this->productDeleteService->process($listingProduct, \M2E\TikTokShop\Helper\Data::INITIATOR_UNKNOWN);
+            $this->productDeleteService->process($listingProduct, \M2E\Core\Helper\Data::INITIATOR_UNKNOWN);
         }
     }
 }

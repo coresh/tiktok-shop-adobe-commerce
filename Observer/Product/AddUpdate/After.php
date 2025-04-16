@@ -27,15 +27,13 @@ class After extends AbstractAddUpdate
         \Magento\Store\Model\StoreManager                                   $storeManager,
         \Magento\Catalog\Model\ProductFactory                               $productFactory,
         \M2E\TikTokShop\Model\Magento\ProductFactory                        $ourMagentoProductFactory,
-        \M2E\TikTokShop\Helper\Factory                                      $helperFactory,
         \Magento\Framework\ObjectManagerInterface                           $objectManager,
         \M2E\TikTokShop\Model\Magento\Product\ChangeAttributeTrackerFactory $changeAttributeTrackerFactory
     ) {
         parent::__construct(
             $listingProductRepository,
             $productFactory,
-            $ourMagentoProductFactory,
-            $helperFactory
+            $ourMagentoProductFactory
         );
 
         $this->eavConfig = $eavConfig;
@@ -454,7 +452,7 @@ class After extends AbstractAddUpdate
 
         $this->listingLogService->addProduct(
             $affectedProduct->getProduct(),
-            \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+            \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
             $action,
             null,
             $description,

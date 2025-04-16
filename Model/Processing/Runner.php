@@ -66,7 +66,7 @@ class Runner
         string $hash,
         SingleInitiatorInterface $initiator
     ): \M2E\TikTokShop\Model\Processing {
-        $expireDate = \M2E\TikTokShop\Helper\Date::createCurrentGmt()
+        $expireDate = \M2E\Core\Helper\Date::createCurrentGmt()
                                                  ->modify('+ ' . self::MAX_LIFETIME . ' seconds');
 
         if ($initiator instanceof PartialInitiatorInterface) {

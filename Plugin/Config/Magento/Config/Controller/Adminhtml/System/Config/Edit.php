@@ -11,7 +11,12 @@ class Edit extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
     protected function canExecute(): bool
     {
-        if ($this->helperFactory->getObject('Module\Maintenance')->isEnabled()) {
+        /** @var \M2E\TikTokShop\Helper\Module\Maintenance $maintenanceHelper */
+        $maintenanceHelper = \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \M2E\TikTokShop\Helper\Module\Maintenance::class
+        );
+
+        if ($maintenanceHelper->isEnabled()) {
             return false;
         }
 

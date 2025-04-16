@@ -6,10 +6,10 @@ class Edit extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractContaine
 {
     private ?\M2E\TikTokShop\Model\Listing $listing = null;
     private \M2E\TikTokShop\Model\Listing\Repository $listingRepository;
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
 
     public function __construct(
-        \M2E\TikTokShop\Helper\Url $urlHelper,
+        \M2E\Core\Helper\Url $urlHelper,
         \M2E\TikTokShop\Model\Listing\Repository $listingRepository,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Widget $context,
         array $data = []

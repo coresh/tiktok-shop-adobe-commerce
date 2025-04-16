@@ -15,10 +15,9 @@ class After extends \M2E\TikTokShop\Observer\StockItem\AbstractStockItem
         \M2E\TikTokShop\Model\Listing\LogService $listingLogService,
         \Magento\Framework\Registry $registry,
         \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
-        \M2E\TikTokShop\Helper\Factory $helperFactory,
         \M2E\TikTokShop\Model\Magento\Product\ChangeAttributeTrackerFactory $changeProcessorFactory
     ) {
-        parent::__construct($registry, $stockItemFactory, $helperFactory);
+        parent::__construct($registry, $stockItemFactory);
 
         $this->changeAttributeTrackerFactory = $changeProcessorFactory;
         $this->listingLogService = $listingLogService;
@@ -149,7 +148,7 @@ class After extends \M2E\TikTokShop\Observer\StockItem\AbstractStockItem
 
         $this->listingLogService->addProduct(
             $affectedProduct->getProduct(),
-            \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+            \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
             $action,
             null,
             $description,

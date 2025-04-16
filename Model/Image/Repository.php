@@ -75,7 +75,7 @@ class Repository
 
     public function save(\M2E\TikTokShop\Model\Image $image): \M2E\TikTokShop\Model\Image
     {
-        $now = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+        $now = \M2E\Core\Helper\Date::createCurrentGmt();
         if ($image->isObjectNew()) {
             $image->setCreateDate($now);
         }

@@ -5,7 +5,7 @@ namespace M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Template;
 class Save extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractTemplate
 {
     private \M2E\TikTokShop\Helper\Module\Wizard $wizardHelper;
-    private \M2E\TikTokShop\Helper\Url $urlHelper;
+    private \M2E\Core\Helper\Url $urlHelper;
     private \M2E\TikTokShop\Model\Template\Synchronization\SaveService $synchronizationSaveService;
     private \M2E\TikTokShop\Model\Template\Description\SaveService $descriptionSaveService;
     private \M2E\TikTokShop\Model\Template\SellingFormat\SaveService $sellingFormatSaveService;
@@ -15,7 +15,7 @@ class Save extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractTempl
         \M2E\TikTokShop\Model\Template\Synchronization\SaveService $synchronizationSaveService,
         \M2E\TikTokShop\Model\Template\Description\SaveService $descriptionSaveService,
         \M2E\TikTokShop\Helper\Module\Wizard $wizardHelper,
-        \M2E\TikTokShop\Helper\Url $urlHelper,
+        \M2E\Core\Helper\Url $urlHelper,
         \M2E\TikTokShop\Model\TikTokShop\Template\Manager $templateManager
     ) {
         parent::__construct($templateManager);
@@ -41,8 +41,8 @@ class Save extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractTempl
                     $templates[] = [
                         'nick' => $nick,
                         'id' => (int)$template->getId(),
-                        'title' => \M2E\TikTokShop\Helper\Data::escapeJs(
-                            \M2E\TikTokShop\Helper\Data::escapeHtml($template->getTitle())
+                        'title' => \M2E\Core\Helper\Data::escapeJs(
+                            \M2E\Core\Helper\Data::escapeHtml($template->getTitle())
                         ),
                     ];
                 }

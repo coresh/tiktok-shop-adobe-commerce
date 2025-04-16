@@ -35,10 +35,11 @@ class Popup extends AbstractContainer
     private function getHelpHtml(): string
     {
         $helpText = __(
-            'M2E TikTok Shop Connect provides an automatic order synchronization as basic functionality.
+            '%extension_title provides an automatic order synchronization as basic functionality.
 Use manual order import as an alternative only in <a href="%url" target="_blank">these cases</a>.',
             [
                 'url' => 'https://help.m2epro.com/support/solutions/articles/9000199899',
+                'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
             ]
         );
 

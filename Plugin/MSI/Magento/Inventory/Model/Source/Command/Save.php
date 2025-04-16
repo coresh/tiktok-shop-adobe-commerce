@@ -27,10 +27,8 @@ class Save extends \M2E\TikTokShop\Plugin\AbstractPlugin
         \M2E\TikTokShop\Model\Listing\LogService $listingLogService,
         \M2E\TikTokShop\Model\MSI\AffectedProducts $msiAffectedProducts,
         \M2E\TikTokShop\PublicServices\Product\SqlChange $publicService,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \M2E\TikTokShop\Helper\Factory $helperFactory
+        \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
-        parent::__construct($helperFactory);
         $this->sourceRepo = $objectManager->get(\Magento\Inventory\Model\SourceRepository::class);
         $this->msiAffectedProducts = $msiAffectedProducts;
         $this->publicService = $publicService;
@@ -100,7 +98,7 @@ class Save extends \M2E\TikTokShop\Plugin\AbstractPlugin
     ) {
         $this->listingLogService->addListing(
             $listing,
-            \M2E\TikTokShop\Helper\Data::INITIATOR_EXTENSION,
+            \M2E\Core\Helper\Data::INITIATOR_EXTENSION,
             \M2E\TikTokShop\Model\Listing\Log::ACTION_UNKNOWN,
             null,
             \M2E\TikTokShop\Helper\Module\Log::encodeDescription(

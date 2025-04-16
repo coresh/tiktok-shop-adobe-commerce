@@ -95,7 +95,7 @@ class Repository
                 InstructionResource::COLUMN_PRIORITY => $instructionData['priority'],
                 InstructionResource::COLUMN_SKIP_UNTIL => (isset($instructionData['skip_until']) ?
                     $instructionData['skip_until']->format('Y-m-d H:i:s') : null),
-                InstructionResource::COLUMN_CREATE_DATE => \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s'),
+                InstructionResource::COLUMN_CREATE_DATE => \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s'),
             ];
         }
 
@@ -217,7 +217,7 @@ class Repository
     private function addSkipUntilFilter(InstructionResource\Collection $collection, ?\DateTime $excludeUntil): void
     {
         if ($excludeUntil === null) {
-            $excludeUntil = \M2E\TikTokShop\Helper\Date::createCurrentGmt();
+            $excludeUntil = \M2E\Core\Helper\Date::createCurrentGmt();
         }
 
         $columName = InstructionResource::COLUMN_SKIP_UNTIL;

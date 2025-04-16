@@ -17,10 +17,10 @@ abstract class AbstractModel extends \Magento\Framework\Model\ResourceModel\Db\A
         /** @var ActiveRecordAbstract $object */
 
         if ($object->isObjectNew()) {
-            $object->setData('create_date', \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s'));
+            $object->setData('create_date', \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s'));
         }
 
-        $object->setData('update_date', \M2E\TikTokShop\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s'));
+        $object->setData('update_date', \M2E\Core\Helper\Date::createCurrentGmt()->format('Y-m-d H:i:s'));
 
         $result = parent::_beforeSave($object);
 

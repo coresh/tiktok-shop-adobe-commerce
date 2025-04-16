@@ -46,7 +46,7 @@ abstract class AbstractGrid extends \M2E\TikTokShop\Block\Adminhtml\Magento\Prod
 
         // ---------------------------------------
         $this->jsTranslator->addTranslations([
-            'Are you sure you want to create empty Listing?' => \M2E\TikTokShop\Helper\Data::escapeJs(
+            'Are you sure you want to create empty Listing?' => \M2E\Core\Helper\Data::escapeJs(
                 (string)__('Are you sure you want to create empty Listing?')
             ),
         ]);
