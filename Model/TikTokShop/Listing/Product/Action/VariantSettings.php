@@ -20,6 +20,11 @@ class VariantSettings
         $this->variants[$variantId] = $action;
     }
 
+    public function hasVariantId(int $variantId): bool
+    {
+        return isset($this->variants[$variantId]);
+    }
+
     // ----------------------------------------
 
     public function hasAddAction(): bool

@@ -28,7 +28,8 @@ class VariantValidator
 
         foreach ($product->getVariants() as $variant) {
             if (
-                $variantSettings->isSkipAction($variant->getId())
+                !$variantSettings->hasVariantId($variant->getId())
+                || $variantSettings->isSkipAction($variant->getId())
                 || $variantSettings->isStopAction($variant->getId())
             ) {
                 continue;

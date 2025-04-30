@@ -86,6 +86,15 @@ class VariantSettingsBuilder
     {
         $result = new VariantSettings();
         foreach ($variantData as $variantId => $data) {
+            $action = $data['action'];
+            $currentStatus = $data['current_status'];
+            if (
+                $action === VariantSettings::ACTION_SKIP
+                && $currentStatus === \M2E\TikTokShop\Model\Product::STATUS_NOT_LISTED
+            ) {
+                continue;
+            }
+
             $result->add($variantId, $data['action']);
         }
 

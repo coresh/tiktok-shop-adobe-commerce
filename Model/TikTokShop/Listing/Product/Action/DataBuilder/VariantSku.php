@@ -53,7 +53,10 @@ class VariantSku extends AbstractDataBuilder
         $skuItems = new \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\DataBuilder\VariantSku\Collection();
 
         foreach ($variants as $variant) {
-            if ($variantSettings->isSkipAction($variant->getId())) {
+            if (
+                !$variantSettings->hasVariantId($variant->getId())
+                || $variantSettings->isSkipAction($variant->getId())
+            ) {
                 continue;
             }
 

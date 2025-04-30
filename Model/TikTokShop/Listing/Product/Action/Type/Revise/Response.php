@@ -94,7 +94,10 @@ class Response extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\T
         }
 
         foreach ($variants as $variant) {
-            if ($this->getVariantSettings()->isSkipAction($variant->getId())) {
+            if (
+                !$this->getVariantSettings()->hasVariantId($variant->getId())
+                || $this->getVariantSettings()->isSkipAction($variant->getId())
+            ) {
                 continue;
             }
 
