@@ -18,8 +18,11 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
         ValidatorFactory $actionValidatorFactory,
         RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
-        \M2E\TikTokShop\Model\Connector\Client\Single $serverClient
+        \M2E\TikTokShop\Model\Connector\Client\Single $serverClient,
+        \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\TagManager $tagManager
     ) {
+        parent::__construct($tagManager);
+
         $this->serverClient = $serverClient;
         $this->actionValidatorFactory = $actionValidatorFactory;
         $this->requestFactory = $requestFactory;

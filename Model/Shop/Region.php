@@ -14,11 +14,13 @@ class Region
     public const REGION_DE = 'DE';
     public const REGION_FR = 'FR';
     public const REGION_IT = 'IT';
+    public const REGION_BR = 'BR';
 
     public const CURRENCY_EUR = 'EUR';
     public const CURRENCY_USD = 'USD';
     public const CURRENCY_GBP = 'GBP';
     public const CURRENCY_MXN = 'MXN';
+    public const CURRENCY_BRL = 'BRL';
 
     public const SIZE_DIMENSION_CENTIMETER = 'CENTIMETER';
     public const SIZE_DIMENSION_INCH = 'INCH';

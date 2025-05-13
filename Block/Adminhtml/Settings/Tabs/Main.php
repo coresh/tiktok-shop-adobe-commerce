@@ -374,11 +374,11 @@ HTML
             case ConfigurationHelper::DIMENSION_TYPE_WEIGHT:
                 return (string)__("The package weight must be a positive number. ( kg (UK), lb (US))");
             case ConfigurationHelper::DIMENSION_TYPE_LENGTH:
-                return (string)__("The package length needs to be a whole number that's not negative. (cm (UK), inch (US))");
+                return (string)__("The package length needs to be a whole number that's not negative. Possible Units: US: CENTIMETER, INCH, Other  regions: CENTIMETER");
             case ConfigurationHelper::DIMENSION_TYPE_WIDTH:
-                return (string)__("The package width needs to be a whole number that's not negative. (cm (UK), inch (US))");
+                return (string)__("The package width needs to be a whole number that's not negative. Possible Units: US: CENTIMETER, INCH, Other regions: CENTIMETER");
             case ConfigurationHelper::DIMENSION_TYPE_HEIGHT:
-                return (string)__("The package height needs to be a whole number that's not negative. (cm (UK), inch (US))");
+                return (string)__("The package height needs to be a whole number that's not negative. Possible Units: US: CENTIMETER, INCH, Other regions: CENTIMETER");
         }
 
         return 'N/A';

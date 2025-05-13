@@ -42,10 +42,6 @@ class ResponsiblePersonUpdate extends AbstractManufacturerConfiguration
             $post['country_code'],
             $post['local_number'],
             $post['address_1'],
-            empty($post['address_2']) ? null : $post['address_2'],
-            empty($post['district']) ? null : $post['district'],
-            $post['city'],
-            $post['province'],
             $post['postal_code'],
             $post['country'],
         );

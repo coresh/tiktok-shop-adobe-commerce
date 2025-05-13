@@ -82,9 +82,11 @@ class Config implements \M2E\Core\Model\Setup\Upgrade\Entity\ConfigInterface
                 \M2E\TikTokShop\Setup\Update\y25_m03\CheckConfigs::class,
                 \M2E\TikTokShop\Setup\Update\y25_m03\FixResponsiblePersonIds::class,
                 \M2E\TikTokShop\Setup\Update\y25_m03\AddManufacturerConfiguration::class,
+                \M2E\TikTokShop\Setup\Update\y25_m03\AddAuditFailedReasonsColumnToProduct::class,
             ],
             'y25_m04' => [
                 \M2E\TikTokShop\Setup\Update\y25_m04\RemoveIsActiveFlagFromAccount::class,
+                \M2E\TikTokShop\Setup\Update\y25_m04\WarehouseUpdates::class,
             ],
         ];
     }

@@ -81,6 +81,7 @@ class Response extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\T
                 ->setOnlineCurrentPrice($this->getOnlinePriceForVariant($variantSkuSellerSku))
                 ->setOnlineImage($this->getOnlineImageForVariant($variantSkuSellerSku))
                 ->setOnlineIdentifier($this->getOnlineIdentifierForVariant($variantSkuSellerSku))
+                ->setOnlineWarehouseId($this->getOnlineWarehouseForVariant($variantSkuSellerSku))
                 ->changeStatusToListed();
 
             $this->productRepository->saveVariantSku($variant);
@@ -106,11 +107,11 @@ class Response extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\T
 
     // ----------------------------------------
 
-    private function getWarehouseForVariant(string $sku): int
+    private function getOnlineWarehouseForVariant(string $sku): string
     {
         $metadata = $this->getRequestMetaData()[DataBuilder\VariantSku::NICK];
 
-        return $metadata[$sku]['warehouse_id'];
+        return $metadata[$sku]['online_warehouse'] ?? 'N/A';
     }
 
     private function getOnlineSkuForVariant(string $sku): string

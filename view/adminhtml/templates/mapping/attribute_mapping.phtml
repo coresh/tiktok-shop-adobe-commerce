@@ -1,0 +1,42 @@
+<?php
+
+/** @var \M2E\TikTokShop\Block\Adminhtml\Mapping\Tabs\AttributeMapping $block */
+
+echo $block
+    ->getLayout()
+    ->createBlock(\M2E\TikTokShop\Block\Adminhtml\HelpBlock::class)
+    ->setData([
+        'content' => (string)__(
+            'On this page, the attribute mapping demonstrates the connection between your channel
+                category attributes and the corresponding Magento Product attributes. This mapping guarantees that
+                the correct Magento attributes are consistently associated with each category attribute. You can edit
+                 the saved mapping if a different Magento value is more appropriate for a certain category parameter.'
+        ),
+    ])->toHtml();
+?>
+
+<form method="post" novalidate="novalidate" enctype="multipart/form-data">
+    <table class="data-grid">
+        <thead>
+        <tr>
+            <th class="data-grid-th tts_channel_attribute"><?= __(
+                    '%channel_title Attribute',
+                    [
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle(),
+                    ]
+                ) ?></th>
+            <th class="data-grid-th"><?= __('Magento Attribute') ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        foreach ($block->getMappedAttributes() as $mappedAttribute) : ?>
+            <tr>
+                <td><?= $mappedAttribute->getChannelAttributeTitle() ?></td>
+                <td><?= $block->makeMagentoAttributesDropDownHtml($mappedAttribute) ?></td>
+            </tr>
+        <?php
+        endforeach; ?>
+        </tbody>
+    </table>
+</form>

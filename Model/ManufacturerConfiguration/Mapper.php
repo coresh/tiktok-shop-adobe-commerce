@@ -6,6 +6,9 @@ namespace M2E\TikTokShop\Model\ManufacturerConfiguration;
 
 class Mapper
 {
+    public const BRAND_MISSING = 1;
+    public const GPSR_MISSING = 2;
+
     /** @var \M2E\TikTokShop\Model\ManufacturerConfiguration\BrandNameResolver */
     private BrandNameResolver $brandNameResolver;
     /** @var \M2E\TikTokShop\Model\ManufacturerConfiguration\Repository */
@@ -36,8 +39,13 @@ class Mapper
 
         $resolverResult = $this->brandNameResolver->resolve($product);
         if ($resolverResult->isFail()) {
-            return MapperResult::newFail((string)__("Product was not listed: " .
-                "the required attribute 'Brand' is missing."));
+            return MapperResult::newFail(
+                (string)__(
+                    "Product was not listed: " .
+                    "the required attribute 'Brand' is missing."
+                ),
+                self::BRAND_MISSING
+            );
         }
 
         $manufacturerConfiguration = $this->manufacturerConfigurationRepository
@@ -53,7 +61,8 @@ class Mapper
                             'activeTab' => \M2E\TikTokShop\Block\Adminhtml\Settings\Tabs::TAB_ID_GPSR,
                         ]),
                     ]
-                )
+                ),
+                self::GPSR_MISSING
             );
         }
 

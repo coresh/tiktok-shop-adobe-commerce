@@ -970,4 +970,24 @@ class Product extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
         return (int)$value;
     }
+
+    public function setAuditFailedReasons(array $auditFailedReasons): self
+    {
+        $this->setData(
+            ListingProductResource::COLUMN_AUDIT_FAILED_REASONS,
+            json_encode($auditFailedReasons, JSON_THROW_ON_ERROR)
+        );
+
+        return $this;
+    }
+
+    public function getAuditFailedReasons(): array
+    {
+        $value = $this->getData(ListingProductResource::COLUMN_AUDIT_FAILED_REASONS);
+        if (empty($value)) {
+            return [];
+        }
+
+        return json_decode($value, true);
+    }
 }

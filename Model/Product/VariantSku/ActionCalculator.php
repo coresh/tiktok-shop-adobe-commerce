@@ -70,7 +70,10 @@ class ActionCalculator
 
         if (
             $syncPolicy->isStopWhenQtyCalculatedHasValue()
-            && $this->isProductHasCalculatedQtyForStop($variant, (int)$syncPolicy->getStopWhenQtyCalculatedHasValueMin())
+            && $this->isProductHasCalculatedQtyForStop(
+                $variant,
+                (int)$syncPolicy->getStopWhenQtyCalculatedHasValueMin()
+            )
         ) {
             return true;
         }
@@ -110,6 +113,14 @@ class ActionCalculator
             $variant->getProduct()->getMagentoProduct()->isConfigurableType()
             && $syncPolicy->isReviseUpdateImages()
             && $this->isChangedImage($variant)
+        ) {
+            return true;
+        }
+
+        $listing = $variant->getListing();
+        if (
+            $listing->hasWarehouse()
+            && $variant->getOnlineWarehouseId() !== $listing->getWarehouse()->getWarehouseId()
         ) {
             return true;
         }
@@ -189,7 +200,10 @@ class ActionCalculator
 
         if (
             $syncPolicy->isListWhenQtyCalculatedHasValue()
-            && !$this->isProductHasCalculatedQtyForListRevise($variant, (int)$syncPolicy->getListWhenQtyCalculatedHasValue())
+            && !$this->isProductHasCalculatedQtyForListRevise(
+                $variant,
+                (int)$syncPolicy->getListWhenQtyCalculatedHasValue()
+            )
         ) {
             return VariantSettings::ACTION_SKIP;
         }
@@ -227,7 +241,10 @@ class ActionCalculator
 
         if (
             $syncPolicy->isRelistWhenQtyCalculatedHasValue()
-            && !$this->isProductHasCalculatedQtyForListRevise($variant, (int)$syncPolicy->getRelistWhenQtyCalculatedHasValueMin())
+            && !$this->isProductHasCalculatedQtyForListRevise(
+                $variant,
+                (int)$syncPolicy->getRelistWhenQtyCalculatedHasValueMin()
+            )
         ) {
             return VariantSettings::ACTION_SKIP;
         }

@@ -22,6 +22,7 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
     private \M2E\TikTokShop\Model\Product\CalculateStatusByChannel $calculateStatusByChannel;
 
     public function __construct(
+        \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\TagManager $tagManager,
         ValidatorFactory $actionValidatorFactory,
         RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
@@ -34,6 +35,8 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
         \M2E\TikTokShop\Model\InstructionService $instructionService,
         \M2E\TikTokShop\Model\Product\CalculateStatusByChannel $calculateStatusByChannel
     ) {
+        parent::__construct($tagManager);
+
         $this->serverClient = $serverClient;
         $this->tagBuffer = $tagBuffer;
         $this->tagFactory = $tagFactory;

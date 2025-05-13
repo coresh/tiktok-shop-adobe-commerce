@@ -14,11 +14,14 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
     private \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\RequestData $requestData;
 
     public function __construct(
+        \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\TagManager $tagManager,
         ValidatorFactory $actionValidatorFactory,
         RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
         \M2E\TikTokShop\Model\Connector\Client\Single $serverClient
     ) {
+        parent::__construct($tagManager);
+
         $this->serverClient = $serverClient;
         $this->actionValidatorFactory = $actionValidatorFactory;
         $this->requestFactory = $requestFactory;

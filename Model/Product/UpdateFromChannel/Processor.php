@@ -283,6 +283,7 @@ class Processor
         }
 
         $this->updateProductListingQuality();
+        $this->updateAuditFailedReasons();
 
         return true;
     }
@@ -383,5 +384,15 @@ class Processor
 
         $this->tagBuffer->addTags($this->product, $tags);
         $this->tagBuffer->flush();
+    }
+
+    private function updateAuditFailedReasons()
+    {
+        $auditFailedReasons = $this->channelProduct->getAuditFailedReasons();
+        if ($this->channelProduct->getStatus() !== \M2E\TikTokShop\Model\Product::STATUS_BLOCKED) {
+            $auditFailedReasons = [];
+        }
+
+        $this->product->setAuditFailedReasons($auditFailedReasons);
     }
 }

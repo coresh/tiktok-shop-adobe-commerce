@@ -127,11 +127,8 @@ class RecalculateVariantProduct
             return;
         }
 
-        $warehouseId = $listing->getShop()->getDefaultWarehouse()->getId();
-
         $variantSku = $this->variantSkuFactory->create();
-
-        $variantSku->init($ttsParentProduct, $magentoProductId, $warehouseId);
+        $variantSku->init($ttsParentProduct, $magentoProductId);
         $this->productRepository->saveVariantSku($variantSku);
 
         if ($ttsParentProduct->isStatusListed()) {

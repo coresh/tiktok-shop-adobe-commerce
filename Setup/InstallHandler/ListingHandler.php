@@ -70,6 +70,12 @@ class ListingHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 ['unsigned' => true, 'nullable' => false]
             )
             ->addColumn(
+                ListingResource::COLUMN_WAREHOUSE_ID,
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false]
+            )
+            ->addColumn(
                 ListingResource::COLUMN_TEMPLATE_DESCRIPTION_ID,
                 Table::TYPE_INTEGER,
                 null,

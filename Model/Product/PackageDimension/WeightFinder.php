@@ -37,7 +37,11 @@ class WeightFinder extends AbstractDimensionFinder
         }
 
         if (count($childWeights) === 0) {
-            throw new PackageDimensionException((string)__('Package Weight is missing. To list the Product, please make sure that the Package settings are correct.'));
+            throw new PackageDimensionException(
+                (string)__('Package Weight is missing. To list the Product, please make sure that the Package settings are correct.'),
+                [],
+                \M2E\TikTokShop\Model\Product\PackageDimension\PackageDimensionException::CODE_WEIGHT_MISSING
+            );
         }
 
         krsort($childWeights, SORT_NUMERIC);

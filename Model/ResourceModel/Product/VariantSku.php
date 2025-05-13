@@ -12,6 +12,7 @@ class VariantSku extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\Abstra
     public const COLUMN_SKU_ID = 'sku_id';
     public const COLUMN_WAREHOUSE_ID = 'warehouse_id';
     public const COLUMN_STATUS = 'status';
+    public const COLUMN_ONLINE_WAREHOUSE_ID = 'online_warehouse_id';
     public const COLUMN_ONLINE_SKU = 'online_sku';
     public const COLUMN_ONLINE_PRICE = 'online_price';
     public const COLUMN_ONLINE_QTY = 'online_qty';

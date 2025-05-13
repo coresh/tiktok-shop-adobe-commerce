@@ -14,11 +14,13 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Grid
     /** @var \M2E\TikTokShop\Model\ResourceModel\Listing\CollectionFactory */
     private $listingCollectionFactory;
     private \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection;
+    private \M2E\TikTokShop\Model\ResourceModel\Warehouse $warehouseResource;
 
     public function __construct(
         \M2E\TikTokShop\Model\ResourceModel\Product $listingProductResource,
         \M2E\TikTokShop\Model\ResourceModel\Account $accountResource,
         \M2E\TikTokShop\Model\ResourceModel\Shop $shopResource,
+        \M2E\TikTokShop\Model\ResourceModel\Warehouse $warehouseResource,
         \M2E\TikTokShop\Helper\View $viewHelper,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Backend\Helper\Data $backendHelper,
@@ -36,6 +38,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Grid
         $this->urlHelper = $urlHelper;
         $this->listingCollectionFactory = $listingCollectionFactory;
         $this->regionCollection = $regionCollection;
+        $this->warehouseResource = $warehouseResource;
     }
 
     /**
@@ -95,6 +98,17 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Grid
             [
                 'shop_name' => \M2E\TikTokShop\Model\ResourceModel\Shop::COLUMN_SHOP_NAME,
                 'shop_region_code' => \M2E\TikTokShop\Model\ResourceModel\Shop::COLUMN_REGION,
+            ]
+        );
+        $collection->getSelect()->joinLeft(
+            ['warehouse' => $this->warehouseResource->getMainTable()],
+            sprintf(
+                'warehouse.%s = main_table.%s',
+                \M2E\TikTokShop\Model\ResourceModel\Warehouse::COLUMN_ID,
+                \M2E\TikTokShop\Model\ResourceModel\Listing::COLUMN_WAREHOUSE_ID
+            ),
+            [
+                'warehouse_name' => \M2E\TikTokShop\Model\ResourceModel\Warehouse::COLUMN_NAME,
             ]
         );
 
@@ -201,6 +215,13 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\Grid
                 ],
             ],
 
+            'editWarehouse' => [
+                'caption' => __('Warehouse'),
+                'group' => 'edit_actions',
+                'field' => 'id',
+                'onclick_action' => 'EditListingWarehouseViewObj.openPopup',
+            ],
+
             'viewLogs' => [
                 'caption' => __('Logs & Events'),
                 'group' => 'other',
@@ -275,7 +296,7 @@ HTML;
         $accountTitle = $row->getData('account_title');
         $shopTitle = $row->getData('shop_name');
         $shopRegionTitle = $this->regionCollection->getByCode($row->getData('shop_region_code'))->getLabel();
-
+        $warehouseName = $row->getData('warehouse_name') ?? 'N/A';
         $storeModel = $this->_storeManager->getStore($row->getStoreId());
         $storeView = $this->_storeManager->getWebsite($storeModel->getWebsiteId())->getName();
         if (strtolower($storeView) != 'admin') {
@@ -289,12 +310,14 @@ HTML;
         $shop = __('Shop');
         $shopRegion = __('Region');
         $store = __('Magento Store View');
+        $warehouse = __('Warehouse');
 
         $value .= <<<HTML
 <div>
     <span style="font-weight: bold">$account</span>: <span style="color: #505050">$accountTitle</span><br/>
     <span style="font-weight: bold">$shop</span>: <span style="color: #505050">$shopTitle</span><br/>
     <span style="font-weight: bold">$shopRegion</span>: <span style="color: #505050">$shopRegionTitle</span><br/>
+    <span style="font-weight: bold">$warehouse</span>: <span style="color: #505050">$warehouseName</span><br/>
     <span style="font-weight: bold">$store</span>: <span style="color: #505050">$storeView</span>
 </div>
 HTML;
@@ -344,6 +367,9 @@ HTML;
         $this->jsUrl->add($this->getUrl('*/tiktokshop_listing_edit/selectStoreView'), 'listing/selectStoreView');
         $this->jsUrl->add($this->getUrl('*/tiktokshop_listing_edit/saveStoreView'), 'listing/saveStoreView');
 
+        $this->jsUrl->add($this->getUrl('*/tiktokshop_listing_edit/warehouse'), 'listing/edit/warehouse');
+        $this->jsUrl->add($this->getUrl('*/tiktokshop_listing_edit/saveWarehouse'), 'listing/edit/saveWarehouse');
+
         $this->jsTranslator->add('Edit Listing Title', __('Edit Listing Title'));
         $this->jsTranslator->add('Edit Listing Store View', __('Edit Listing Store View'));
         $this->jsTranslator->add('Listing Title', __('Listing Title'));
@@ -362,10 +388,12 @@ HTML;
             <<<JS
     require([
         'TikTokShop/Listing/EditTitle',
-        'TikTokShop/Listing/EditStoreView'
+        'TikTokShop/Listing/EditStoreView',
+        'TikTokShop/Listing/EditWarehouse'
     ], function(){
         window.EditListingTitleObj = new ListingEditListingTitle('{$this->getId()}');
         window.EditListingStoreViewObj = new ListingEditListingStoreView('{$this->getId()}');
+        window.EditListingWarehouseViewObj = new ListingEditListingWarehouse('{$this->getId()}');
     });
 JS
         );

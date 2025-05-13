@@ -68,4 +68,29 @@ class Repository
 
         return $collection->getSize();
     }
+
+    /**
+     * @return string[]
+     */
+    public function getAllCustomAttributeIds(): array
+    {
+        $collection = $this->attributeCollectionFactory->create();
+        $collection->addFieldToFilter(
+            AttributeResource::COLUMN_VALUE_MODE,
+            \M2E\TikTokShop\Model\Category\CategoryAttribute::VALUE_MODE_CUSTOM_ATTRIBUTE
+        );
+
+        $collection->removeAllFieldsFromSelect();
+
+        $collection->addFieldToSelect(AttributeResource::COLUMN_ATTRIBUTE_ID);
+        $collection->distinct(true);
+
+        $result = [];
+        /** @var \M2E\TikTokShop\Model\Category\CategoryAttribute $item */
+        foreach ($collection->getItems() as $item) {
+            $result[] = $item->getAttributeId();
+        }
+
+        return $result;
+    }
 }

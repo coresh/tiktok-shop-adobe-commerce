@@ -61,7 +61,6 @@ class ResponsiblePersonService
      * @param \M2E\TikTokShop\Model\Channel\ResponsiblePerson $responsiblePerson
      *
      * @return void
-     * @throws \M2E\TikTokShop\Model\Exception
      * @throws \M2E\Core\Model\Exception\Connection
      * @throws \M2E\TikTokShop\Model\Exception\Connection\UnableUpdateData
      */

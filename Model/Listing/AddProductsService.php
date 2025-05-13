@@ -48,15 +48,16 @@ class AddProductsService
             return null;
         }
 
-        if (!$listing->getShop()->hasDefaultWarehouse()) {
-            throw new \M2E\TikTokShop\Model\Exception\Logic('Product cannot be added because the default warehouse was not found.');
+        if (!$listing->hasWarehouse()) {
+            throw new \M2E\TikTokShop\Model\Exception\Logic(
+                'Product cannot be added because the warehouse was not found.'
+            );
         }
 
         $listingProduct = $this->createProductService->create(
             $listing,
             $ourMagentoProduct,
             $categoryDictionaryId,
-            $listing->getShop()->getDefaultWarehouse()->getId(),
             $unmanagedProduct,
         );
 
@@ -178,7 +179,7 @@ class AddProductsService
         $logMessage = (string)__(
             'Item was moved from Listing %previous_listing_name.',
             [
-                'previous_listing_name' => $sourceListing->getTitle()
+                'previous_listing_name' => $sourceListing->getTitle(),
             ],
         );
 

@@ -94,7 +94,7 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractList
             $this->setSessionValue('account_id', (int)$post['account_id']);
             $this->setSessionValue('shop_id', (int)$post['shop_id']);
             $this->setSessionValue('store_id', (int)$post['store_id']);
-
+            $this->setSessionValue('warehouse_id', (int)$post['warehouse_id']);
             $this->_redirect('*/*/index', ['_current' => true, 'step' => 2]);
 
             return;
@@ -114,7 +114,8 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractList
     {
         if (
             $this->getSessionValue('account_id') === null ||
-            $this->getSessionValue('shop_id') === null
+            $this->getSessionValue('shop_id') === null ||
+            $this->getSessionValue('warehouse_id') === null
         ) {
             $this->clearSession();
             $this->_redirect('*/*/index', ['_current' => true, 'step' => 1]);
@@ -177,7 +178,7 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractList
             $this->_redirect(
                 '*/listing_wizard/index',
                 [
-                    'id' => $wizard->getId()
+                    'id' => $wizard->getId(),
                 ]
             );
 

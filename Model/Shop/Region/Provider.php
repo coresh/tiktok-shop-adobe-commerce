@@ -86,6 +86,15 @@ class Provider
                 new PackageWeightRestrictions(30, 'kg'),
                 new ProductPriceRestrictions(0.01, 6300)
             ),
+            new Region(
+                Region::REGION_BR,
+                (string)__('Brazil'),
+                Region::CURRENCY_BRL,
+                Region::SIZE_DIMENSION_CENTIMETER,
+                Region::WEIGHT_DIMENSION_KILOGRAM,
+                new PackageWeightRestrictions(30, 'kg'),
+                new ProductPriceRestrictions(0.05, 10000)
+            ),
         ];
     }
 }

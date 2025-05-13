@@ -25,6 +25,7 @@ class Product
     private \M2E\TikTokShop\Model\Listing\InventorySync\Channel\ProductSkuCollection $variantCollection;
     private \M2E\TikTokShop\Model\Listing\InventorySync\Channel\ListingQuality $listingQuality;
     private bool $isNotForSale;
+    private array $auditFailedReasons;
 
     public function __construct(
         int $accountId,
@@ -38,7 +39,8 @@ class Product
         array $responsiblePersonIds,
         ProductSkuCollection $variantCollection,
         ListingQuality $listingQuality,
-        bool $isNotForSale
+        bool $isNotForSale,
+        array $auditFailedReasons
     ) {
         $this->accountId = $accountId;
         $this->shopId = $shopId;
@@ -52,6 +54,7 @@ class Product
         $this->variantCollection = $variantCollection;
         $this->listingQuality = $listingQuality;
         $this->isNotForSale = $isNotForSale;
+        $this->auditFailedReasons = $auditFailedReasons;
     }
 
     public function getCategoryId(): ?string
@@ -112,6 +115,11 @@ class Product
     public function isNotForSale(): bool
     {
         return $this->isNotForSale;
+    }
+
+    public function getAuditFailedReasons(): array
+    {
+        return $this->auditFailedReasons;
     }
 
     // ----------------------------------------

@@ -28,8 +28,11 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
         \M2E\TikTokShop\Model\TikTokShop\TagFactory $tagFactory,
         \M2E\TikTokShop\Model\Connector\Client\Single $serverClient,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type\ImageResponseHandler $imageResponseHandler,
-        \Magento\Framework\Locale\CurrencyInterface $localeCurrency
+        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
+        \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\TagManager $tagManager
     ) {
+        parent::__construct($tagManager);
+
         $this->loggerFactory = $loggerFactory;
         $this->serverClient = $serverClient;
         $this->actionValidatorFactory = $actionValidatorFactory;

@@ -492,16 +492,24 @@ class Repository
 
     public function findIdsByListingId(int $listingId): array
     {
-        if (empty($listingId)) {
-            return [];
-        }
-
         $select = $this->listingProductResource->getConnection()
-                       ->select()
-                       ->from($this->listingProductResource->getMainTable(), 'id')
-                       ->where('listing_id = ?', $listingId);
+                                               ->select()
+                                               ->from($this->listingProductResource->getMainTable(), 'id')
+                                               ->where('listing_id = ?', $listingId);
 
         return array_column($select->query()->fetchAll(), 'id');
+    }
+
+    public function findActiveIdsByListingId(int $listingId): array
+    {
+        $select = $this->listingProductResource
+            ->getConnection()
+            ->select()
+            ->from($this->listingProductResource->getMainTable(), ListingProductResource::COLUMN_ID)
+            ->where(ListingProductResource::COLUMN_LISTING_ID . ' = ?', $listingId)
+            ->where(VariantSkuResource::COLUMN_STATUS . ' = ?', \M2E\TikTokShop\Model\Product::STATUS_LISTED);
+
+        return array_column($select->query()->fetchAll(), ListingProductResource::COLUMN_ID);
     }
 
     public function updateLastBlockingErrorDate(array $listingProductIds, \DateTime $dateTime): void

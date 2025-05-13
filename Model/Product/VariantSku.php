@@ -12,12 +12,10 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
     private int $calculatedQty;
 
     private \M2E\TikTokShop\Model\Product $product;
-    private \M2E\TikTokShop\Model\Warehouse $warehouse;
 
     private \M2E\TikTokShop\Model\Magento\Product\CacheFactory $magentoProductFactory;
     /** @var \M2E\TikTokShop\Model\Product\Repository */
     private Repository $productRepository;
-    private \M2E\TikTokShop\Model\Warehouse\Repository $warehouseRepository;
     /** @var \M2E\TikTokShop\Model\Product\PriceCalculatorFactory */
     private PriceCalculatorFactory $priceCalculatorFactory;
     /** @var \M2E\TikTokShop\Model\Product\QtyCalculatorFactory */
@@ -27,7 +25,6 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
 
     public function __construct(
         \M2E\TikTokShop\Model\Magento\Product\CacheFactory $magentoProductFactory,
-        \M2E\TikTokShop\Model\Warehouse\Repository $warehouseRepository,
         Repository $productRepository,
         \M2E\TikTokShop\Model\Product\PriceCalculatorFactory $priceCalculatorFactory,
         \M2E\TikTokShop\Model\Product\QtyCalculatorFactory $qtyCalculatorFactory,
@@ -39,7 +36,6 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
 
         $this->magentoProductFactory = $magentoProductFactory;
         $this->productRepository = $productRepository;
-        $this->warehouseRepository = $warehouseRepository;
         $this->priceCalculatorFactory = $priceCalculatorFactory;
         $this->qtyCalculatorFactory = $qtyCalculatorFactory;
         $this->productPromotionService = $productPromotionService;
@@ -51,12 +47,11 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
         $this->_init(VariantSkuResource::class);
     }
 
-    public function init(\M2E\TikTokShop\Model\Product $product, int $magentoProductId, ?int $warehouseId): self
+    public function init(\M2E\TikTokShop\Model\Product $product, int $magentoProductId): self
     {
         $this
             ->setData(VariantSkuResource::COLUMN_PRODUCT_ID, $product->getId())
-            ->setMagentoProductId($magentoProductId)
-            ->setWarehouseId($warehouseId);
+            ->setMagentoProductId($magentoProductId);
 
         $product->addVariant($this);
         $this->initProduct($product);
@@ -74,8 +69,7 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
             ->setOnlineQty($unmanagedVariantProduct->getQty())
             ->setOnlineCurrentPrice($unmanagedVariantProduct->getCurrentPrice())
             ->setStatus($unmanagedVariantProduct->getStatus())
-            ->setOnlineIdentifier($unmanagedVariantProduct->getIdentifier())
-            ->setWarehouseId($unmanagedVariantProduct->getWarehouseId());
+            ->setOnlineIdentifier($unmanagedVariantProduct->getIdentifier());
 
         return $this;
     }
@@ -116,16 +110,6 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
         }
 
         return $this->magentoProduct;
-    }
-
-    public function getWarehouse(): \M2E\TikTokShop\Model\Warehouse
-    {
-        /** @psalm-suppress RedundantPropertyInitializationCheck */
-        if (isset($this->warehouse)) {
-            return $this->warehouse;
-        }
-
-        return $this->warehouse = $this->warehouseRepository->get($this->getWarehouseId());
     }
 
     // ----------------------------------------
@@ -226,21 +210,16 @@ class VariantSku extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel implem
         return (string)$this->getData(VariantSkuResource::COLUMN_SKU_ID);
     }
 
-    public function hasWarehouse(): bool
+    public function setOnlineWarehouseId(?string $value): self
     {
-        return $this->getWarehouseId() !== 0;
-    }
-
-    public function setWarehouseId(?int $value): self
-    {
-        $this->setData(VariantSkuResource::COLUMN_WAREHOUSE_ID, $value);
+        $this->setData(VariantSkuResource::COLUMN_ONLINE_WAREHOUSE_ID, $value);
 
         return $this;
     }
 
-    public function getWarehouseId(): int
+    public function getOnlineWarehouseId(): ?string
     {
-        return (int)$this->getData(VariantSkuResource::COLUMN_WAREHOUSE_ID);
+        return $this->getData(VariantSkuResource::COLUMN_ONLINE_WAREHOUSE_ID);
     }
 
     public function setOnlineSku(string $value): self

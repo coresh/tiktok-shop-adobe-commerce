@@ -36,11 +36,7 @@ class UpdateCommand implements \M2E\Core\Model\Connector\CommandInterface
                 ],
                 'address' => [
                     'street_address_line1' => $this->responsiblePerson->streetAddressLine1,
-                    'street_address_line2' => $this->responsiblePerson->streetAddressLine2,
-                    'district' => $this->responsiblePerson->district,
-                    'city' => $this->responsiblePerson->city,
                     'postal_code' => $this->responsiblePerson->postalCode,
-                    'province' => $this->responsiblePerson->province,
                     'country' => $this->responsiblePerson->country,
                 ],
             ],

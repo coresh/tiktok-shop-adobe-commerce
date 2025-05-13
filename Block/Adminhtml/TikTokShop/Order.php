@@ -64,7 +64,8 @@ class Order extends AbstractContainer
                 'settings specified in <br> <strong>Account Settings (%channel_title Integration ' .
                 '> Configuration > Accounts)</strong>. </p>',
                 [
-                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                    'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
+                    'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
                 ]
             ),
         ]);

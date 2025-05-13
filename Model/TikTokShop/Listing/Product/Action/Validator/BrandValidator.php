@@ -17,7 +17,7 @@ class BrandValidator implements ValidatorInterface
     public function validate(
         \M2E\TikTokShop\Model\Product $product,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Configurator $configurator
-    ): ?string {
+    ): ?ValidatorMessage {
         if (
             !$product->getCategoryDictionary()->isRequiredManufacturer()
             && !$product->getCategoryDictionary()->isRequiredResponsiblePerson()
@@ -31,9 +31,26 @@ class BrandValidator implements ValidatorInterface
 
         $mapperResult = $this->manufacturerConfigurationMapper->execute($product);
         if ($mapperResult->isFail()) {
-            return $mapperResult->getFailMessage();
+            return new ValidatorMessage(
+                $mapperResult->getFailMessage(),
+                $this->mapErrorCode($mapperResult->getCode())
+            );
         }
 
         return null;
+    }
+
+    private function mapErrorCode(int $mapperErrorCode): string
+    {
+        switch ($mapperErrorCode) {
+            case \M2E\TikTokShop\Model\ManufacturerConfiguration\Mapper::BRAND_MISSING:
+                return \M2E\TikTokShop\Model\Tag\ValidatorIssues::ERROR_MISSING_BRAND;
+
+            case \M2E\TikTokShop\Model\ManufacturerConfiguration\Mapper::GPSR_MISSING:
+                return \M2E\TikTokShop\Model\Tag\ValidatorIssues::ERROR_MISSING_GPSR_INFO;
+
+            default:
+                return \M2E\TikTokShop\Model\Tag\ValidatorIssues::NOT_USER_ERROR;
+        }
     }
 }

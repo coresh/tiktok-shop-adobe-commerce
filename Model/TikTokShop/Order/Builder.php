@@ -216,6 +216,7 @@ class Builder extends \Magento\Framework\DataObject
     private function createOrUpdateItems(): void
     {
         $this->order->resetItems();
+        $orderItems = [];
         foreach ($this->items as $orderItemData) {
             $itemBuilder = $this->orderItemBuilderFactory->create();
 
@@ -229,7 +230,10 @@ class Builder extends \Magento\Framework\DataObject
                 );
                 $this->noteCreateService->process($this->order, $note);
             }
+
+            $orderItems[] = $item;
         }
+        $this->order->setItems($orderItems);
     }
 
     // ---------------------------------------

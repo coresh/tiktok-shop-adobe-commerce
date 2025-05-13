@@ -39,10 +39,6 @@ class GetCommand implements \M2E\Core\Model\Connector\CommandInterface
                     $responsiblePersonData['phone_number']['country_code'],
                     $responsiblePersonData['phone_number']['local_number'],
                     $responsiblePersonData['address']['street_address_line1'],
-                    $responsiblePersonData['address']['street_address_line2'],
-                    $responsiblePersonData['address']['district'],
-                    $responsiblePersonData['address']['city'],
-                    $responsiblePersonData['address']['province'],
                     $responsiblePersonData['address']['postal_code'],
                     $responsiblePersonData['address']['country'],
                 )

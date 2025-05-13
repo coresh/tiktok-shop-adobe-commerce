@@ -20,6 +20,11 @@ class Inventory
         return $this->quantity;
     }
 
+    public function getWarehouseId(): string
+    {
+        return $this->warehouseId;
+    }
+
     public function toArray(): array
     {
         return [

@@ -66,6 +66,14 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
             ]
         );
 
+        $form->addField(
+            'warehouse_id',
+            'hidden',
+            [
+                'value' => $formData['warehouse_id'],
+            ]
+        );
+
         $fieldset = $form->addFieldset(
             'selling_settings',
             [

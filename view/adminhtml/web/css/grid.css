@@ -101,6 +101,10 @@ td.help_line .hl_footer {
     width: 110px;
 }
 
+.grid-listing-column-status {
+    width: 135px;
+}
+
 .grid-listing-column-entity_id {
     width: 110px;
 }

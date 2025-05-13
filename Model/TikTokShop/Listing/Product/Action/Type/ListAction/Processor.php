@@ -22,6 +22,7 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
     private \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type\GlobalProductHandler $globalProductHandler;
 
     public function __construct(
+        \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\TagManager $tagManager,
         ValidatorFactory $actionValidatorFactory,
         RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
@@ -33,6 +34,8 @@ class Processor extends \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Type\GlobalProductHandler $globalProductHandler
     ) {
+        parent::__construct($tagManager);
+
         $this->serverClient = $serverClient;
         $this->tagBuffer = $tagBuffer;
         $this->tagFactory = $tagFactory;

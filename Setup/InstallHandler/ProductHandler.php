@@ -200,6 +200,12 @@ class ProductHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 ['default' => null]
             )
             ->addColumn(
+                ListingProductResource::COLUMN_AUDIT_FAILED_REASONS,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['default' => null]
+            )
+            ->addColumn(
                 ListingProductResource::COLUMN_MANUFACTURER_CONFIG_ID,
                 Table::TYPE_SMALLINT,
                 null,
@@ -268,16 +274,16 @@ class ProductHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 50
             )
             ->addColumn(
-                ListingProductVariantResource::COLUMN_WAREHOUSE_ID,
-                Table::TYPE_INTEGER,
-                null,
-                ['unsigned' => true]
-            )
-            ->addColumn(
                 ListingProductVariantResource::COLUMN_STATUS,
                 Table::TYPE_SMALLINT,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => 0]
+            )
+            ->addColumn(
+                ListingProductVariantResource::COLUMN_ONLINE_WAREHOUSE_ID,
+                Table::TYPE_TEXT,
+                255,
+                ['default' => null]
             )
             ->addColumn(
                 ListingProductVariantResource::COLUMN_ONLINE_SKU,
@@ -330,7 +336,6 @@ class ProductHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
             ->addIndex('product_id', ListingProductVariantResource::COLUMN_PRODUCT_ID)
             ->addIndex('magento_product_id', ListingProductVariantResource::COLUMN_MAGENTO_PRODUCT_ID)
             ->addIndex('sku_id', ListingProductVariantResource::COLUMN_SKU_ID)
-            ->addIndex('warehouse_id', ListingProductVariantResource::COLUMN_WAREHOUSE_ID)
             ->addIndex('online_qty', ListingProductVariantResource::COLUMN_ONLINE_QTY)
             ->addIndex('online_price', ListingProductVariantResource::COLUMN_ONLINE_PRICE)
             ->setOption('type', 'INNODB')

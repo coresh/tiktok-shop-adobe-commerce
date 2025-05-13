@@ -6,6 +6,7 @@ define([
 
         accounts: null,
         selectedAccountId: null,
+        selectedShopId: null,
 
         // ---------------------------------------
 
@@ -57,11 +58,24 @@ define([
                         var response = JSON.parse(transport.responseText);
                         if (response.result) {
                             self.refreshShops(response.shops);
-                            return;
+
+                            if (_.isNull(self.selectedShopId)) {
+                                return;
+                            }
+                            self.updateWarehouses(self.selectedShopId);
+                        } else {
+                            throw response.message;
                         }
-                        throw response.message;
                     }
                 })
+            });
+
+            $('shop_id').observe('change', function () {
+                let selectedShopId = $('shop_id').value;
+                if (_.isNull(selectedShopId)) {
+                    return;
+                }
+                self.updateWarehouses(selectedShopId);
             });
 
             self.renderAccounts();
@@ -74,6 +88,32 @@ define([
             shops.each(function (shop) {
                 select.append(new Option(shop.shop_name, shop.id))
             })
+            this.selectedShopId = $('shop_id').value;
+        },
+
+        updateWarehouses: function (shop_id) {
+            const self = this;
+            new Ajax.Request(TikTokShop.url.get('tiktokshop_warehouse/getWarehousesForShop'), {
+                method: 'post',
+                parameters: {shop_id: shop_id},
+                onSuccess: function (transport) {
+                    var response = JSON.parse(transport.responseText);
+                    if (response.result) {
+                        self.refreshWarehouses(response.warehouses);
+                    } else {
+                        throw response.message;
+                    }
+                }
+            })
+        },
+
+        refreshWarehouses: function (warehouses) {
+            var select = jQuery('#warehouse_id');
+            select.find('option').remove();
+
+            warehouses.each(function (warehouses) {
+                select.append(new Option(warehouses.label, warehouses.value))
+            })
         },
 
         renderAccounts: function (callback) {
@@ -84,6 +124,7 @@ define([
             let accountLabelEl = $('account_label');
             let accountSelectEl = $('account_id');
             let shopSelectField = $('shop_id').up('.field');
+            let warehouseSelectField = $('warehouse_id').up('.field');
 
             new Ajax.Request(TikTokShop.url.get('general/getAccounts'), {
                 method: 'get',
@@ -110,6 +151,7 @@ define([
                         accountLabelEl.show();
                         accountSelectEl.hide();
                         shopSelectField.hide();
+                        warehouseSelectField.hide();
                         return;
                     }
 
@@ -148,6 +190,7 @@ define([
                         accountSelectEl.dispatchEvent(new Event('change'));
                         accountSelectEl.hide();
                         shopSelectField.show();
+                        warehouseSelectField.show();
                     } else if (isAccountsChanged) {
                         self.selectedAccountId = _.last(accounts).id;
 
@@ -155,6 +198,7 @@ define([
                         accountSelectEl.show();
                         accountSelectEl.dispatchEvent(new Event('change'));
                         shopSelectField.show();
+                        warehouseSelectField.show();
                     }
 
                     accountSelectEl.setValue(self.selectedAccountId);

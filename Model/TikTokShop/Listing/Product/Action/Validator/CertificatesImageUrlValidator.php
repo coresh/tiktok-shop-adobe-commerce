@@ -26,16 +26,19 @@ class CertificatesImageUrlValidator implements ValidatorInterface
     public function validate(
         \M2E\TikTokShop\Model\Product $product,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Configurator $configurator
-    ): ?string {
+    ): ?ValidatorMessage {
         $certificates = $this->getDictionaryCertificates($product);
         foreach ($certificates as $certificate) {
             if (
                 $certificate->isRequired()
                 && !$this->isCertificateValid($product, $certificate->getId())
             ) {
-                return (string)__(
-                    'An invalid image URL is set for the Product Certificate "%1"',
-                    $certificate->getName()
+                return new ValidatorMessage(
+                    (string)__(
+                        'An invalid image URL is set for the Product Certificate "%1"',
+                        $certificate->getName()
+                    ),
+                    \M2E\TikTokShop\Model\Tag\ValidatorIssues::ERROR_INVALID_CERTIFICATE_IMAGE_URL
                 );
             }
         }

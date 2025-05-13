@@ -658,3 +658,8 @@ button.action * {
 .m2e-suggest-dropdown-wrapper .ui-menu-item._active {
     background-color: lightgrey;
 }
+
+
+.tts_channel_attribute {
+    width: 45%;
+}

@@ -39,9 +39,12 @@ class VariantValidator
         }
 
         if (count($variantsWithoutSkipped) > self::VARIATION_COUNT_MAXIMUM) {
-            $messages[] = sprintf(
-                'The number of product variations cannot exceed %s.',
-                self::VARIATION_COUNT_MAXIMUM
+            $messages[] = new ValidatorMessage(
+                sprintf(
+                    'The number of product variations cannot exceed %s.',
+                    self::VARIATION_COUNT_MAXIMUM
+                ),
+                \M2E\TikTokShop\Model\Tag\ValidatorIssues::ERROR_VARIATIONS_EXCEED_LIMIT
             );
 
             return $messages;

@@ -72,3 +72,10 @@
 #manufacturerConfigurationGrid .grid-listing-column-action {
     width: 150px;
 }
+
+.tts-manufacturer-empty-text {
+    width: 81%;
+    line-height: 2;
+    margin: 0 auto;
+    text-align: center;
+}

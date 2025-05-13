@@ -96,6 +96,7 @@ class Collection
                 'online_price' => $item->getPrice()->getAmount(),
                 'online_qty' => $itemTotalQty,
                 'online_image' => $imageHash,
+                'online_warehouse' => $this->getWarehouseId($item),
             ];
 
             if ($item->getIdentifier() !== null) {
@@ -107,5 +108,15 @@ class Collection
         }
 
         return $onlineData;
+    }
+
+    private function getWarehouseId(Item $item): string
+    {
+        foreach ($item->getInventories() as $inventory) {
+            $result = $inventory->getWarehouseId();
+            break;
+        }
+
+        return $result ?? 'N/A';
     }
 }

@@ -107,6 +107,17 @@ JS;
         ]);
     }
 
+    public function getEmptyText()
+    {
+        return (string)__(
+            '<div class="tts-manufacturer-empty-text">
+            Use the <strong>‘Add New’</strong> button to provide address and contact information for the Manufacturer of your products,
+            along with details of the Responsible Person if needed. For the Title, use the Magento product
+            Brand that corresponds to the Manufacturer.
+        </div>'
+        );
+    }
+
     public function callbackColumnAccount($value, $row, $column, $isExport)
     {
         if (empty($value)) {

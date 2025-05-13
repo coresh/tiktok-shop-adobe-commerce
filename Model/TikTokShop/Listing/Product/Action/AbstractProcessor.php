@@ -9,6 +9,7 @@ abstract class AbstractProcessor
     /** @var \M2E\Core\Model\Response\Message[] */
     private array $storedActionLogMessages = [];
 
+    private \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\TagManager $tagManager;
     private Logger $actionLogger;
     private \M2E\TikTokShop\Model\Product\LockManager $lockManager;
     private \M2E\TikTokShop\Model\Product $product;
@@ -18,6 +19,12 @@ abstract class AbstractProcessor
     /** @var \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings */
     private VariantSettings $variantSettings;
     private int $statusChanger;
+
+    public function __construct(
+        \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\TagManager $tagManager
+    ) {
+        $this->tagManager = $tagManager;
+    }
 
     public function process(): void
     {
@@ -89,10 +96,17 @@ abstract class AbstractProcessor
         );
 
         foreach ($productActionValidator->getMessages() as $message) {
+            $message = \M2E\Core\Model\Response\Message::createError($message->getText());
             $this->addActionLogMessage($message);
         }
 
-        return $validationResult;
+        if ($validationResult) {
+            return true;
+        }
+
+        $this->tagManager->addErrorTags($this->product, $productActionValidator->getMessages());
+
+        return false;
     }
 
     abstract protected function getActionValidator(): Type\ValidatorInterface;

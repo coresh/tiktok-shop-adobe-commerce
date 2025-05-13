@@ -26,14 +26,17 @@ class SizeChartImageUrlValidator implements ValidatorInterface
     public function validate(
         \M2E\TikTokShop\Model\Product $product,
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Configurator $configurator
-    ): ?string {
+    ): ?ValidatorMessage {
         $sizeChart = $this->getSizeChartByDictionaryId($product);
         if (
             $sizeChart !== null
             && $sizeChart->isRequired()
             && !$this->isSizeChartValid($product)
         ) {
-            return (string)__('An invalid image URL is set for the Product Size Chart');
+            return new ValidatorMessage(
+                (string)__('An invalid image URL is set for the Product Size Chart'),
+                \M2E\TikTokShop\Model\Tag\ValidatorIssues::ERROR_INVALID_SIZE_CHART_IMAGE_URL
+            );
         }
 
         return null;

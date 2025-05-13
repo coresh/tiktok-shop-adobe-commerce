@@ -26,7 +26,6 @@ class CreateService
         \M2E\TikTokShop\Model\Listing $listing,
         \M2E\TikTokShop\Model\Magento\Product $m2eMagentoProduct,
         int $categoryDictionaryId,
-        ?int $warehouseId,
         ?\M2E\TikTokShop\Model\UnmanagedProduct $unmanagedProduct = null
     ): \M2E\TikTokShop\Model\Product {
         $this->checkSupportedMagentoType($m2eMagentoProduct);
@@ -44,15 +43,15 @@ class CreateService
         }
 
         $this->listingProductRepository->create($listingProduct);
-        $variants = $this->createVariants($warehouseId, $listingProduct, $m2eMagentoProduct, $unmanagedProduct);
+        $variants = $this->createVariants($listingProduct, $m2eMagentoProduct, $unmanagedProduct);
 
         $this->listingProductRepository->createVariantsSku($variants);
         $this->listingProductRepository->save($listingProduct->recalculateOnlineDataByVariants());
+
         return $listingProduct;
     }
 
     private function createVariants(
-        ?int $warehouseId,
         \M2E\TikTokShop\Model\Product $listingProduct,
         \M2E\TikTokShop\Model\Magento\Product $m2eMagentoProduct,
         ?\M2E\TikTokShop\Model\UnmanagedProduct $unmanagedProduct
@@ -71,7 +70,6 @@ class CreateService
                 $this->createVariantEntity(
                     $listingProduct,
                     $m2eMagentoProduct,
-                    $warehouseId,
                     $unmanagedVariants[$m2eMagentoProduct->getProductId()] ?? null
                 ),
             ];
@@ -82,7 +80,6 @@ class CreateService
             $variants[] = $this->createVariantEntity(
                 $listingProduct,
                 $child,
-                $warehouseId,
                 $unmanagedVariants[$child->getProductId()] ?? null
             );
         }
@@ -93,11 +90,10 @@ class CreateService
     private function createVariantEntity(
         \M2E\TikTokShop\Model\Product $listingProduct,
         \M2E\TikTokShop\Model\Magento\Product $m2eMagentoProduct,
-        ?int $warehouseId,
         ?\M2E\TikTokShop\Model\UnmanagedProduct\VariantSku $variant = null
     ): VariantSku {
         $variantSku = $this->variantSkuFactory->create();
-        $variantSku->init($listingProduct, $m2eMagentoProduct->getProductId(), $warehouseId);
+        $variantSku->init($listingProduct, $m2eMagentoProduct->getProductId());
 
         if ($variant !== null) {
             $variantSku->fillFromUnmanagedVariant($variant);

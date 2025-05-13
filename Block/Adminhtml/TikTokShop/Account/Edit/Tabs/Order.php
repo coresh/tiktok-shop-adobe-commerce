@@ -280,7 +280,7 @@ for an item that does <b>not</b> belong to the %extension_title Listing.',
                 'name' => 'magento_orders_settings[number][prefix][prefix]',
                 'label' => __('General Prefix'),
                 'value' => $orderSettings->getMagentoOrdersNumberRegularPrefix(),
-                'maxlength' => 5,
+                'maxlength' => 10,
             ]
         );
 

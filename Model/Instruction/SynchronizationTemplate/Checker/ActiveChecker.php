@@ -185,7 +185,7 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
     protected function getForceRevise(): array
     {
         return [
-            \M2E\TikTokShop\Model\Product::INSTRUCTION_TYPE_VARIANT_SKU_REMOVED
+            \M2E\TikTokShop\Model\Product::INSTRUCTION_TYPE_VARIANT_SKU_REMOVED,
         ];
     }
 
@@ -206,6 +206,7 @@ class ActiveChecker extends \M2E\TikTokShop\Model\Instruction\SynchronizationTem
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_STATUS_CHANGED,
             \M2E\TikTokShop\PublicServices\Product\SqlChange::INSTRUCTION_TYPE_QTY_CHANGED,
             \M2E\TikTokShop\Model\Product\InspectDirectChanges::INSTRUCTION_TYPE,
+            \M2E\TikTokShop\Model\Listing::INSTRUCTION_TYPE_CHANGE_WAREHOUSE,
         ];
     }
 

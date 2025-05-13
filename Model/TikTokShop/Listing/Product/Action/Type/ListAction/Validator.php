@@ -28,13 +28,23 @@ class Validator implements \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Acti
         \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings $variantSettings
     ): bool {
         if (!$product->isListable()) {
-            $this->addErrorMessage((string)__('Item is Listed or not available'));
+            $this->addErrorMessage(
+                new Action\Validator\ValidatorMessage(
+                    (string)__('Item is Listed or not available'),
+                    \M2E\TikTokShop\Model\Tag\ValidatorIssues::NOT_USER_ERROR
+                )
+            );
 
             return false;
         }
 
         if (!$actionConfigurator->isVariantsAllowed()) {
-            $this->addErrorMessage((string)__('The product was not listed because it has no associated products.'));
+            $this->addErrorMessage(
+                new Action\Validator\ValidatorMessage(
+                    (string)__('The product was not listed because it has no associated products.'),
+                    \M2E\TikTokShop\Model\Tag\ValidatorIssues::ERROR_NO_ASSOCIATED_PRODUCTS_LIST
+                )
+            );
 
             return false;
         }

@@ -16,6 +16,8 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
     /** @var \M2E\TikTokShop\Model\Listing\Repository */
     private Listing\Repository $listingRepository;
     private \M2E\TikTokShop\Model\Shop\Region\AddAccountButtonOptionsProvider $addAccountButtonOptionsProvider;
+    private \M2E\TikTokShop\Model\Warehouse\Repository $warehouseRepository;
+    private \M2E\TikTokShop\Model\Warehouse\WarehouseOptionProvider $warehouseOptionProvider;
 
     public function __construct(
         \M2E\TikTokShop\Model\Listing\Repository $listingRepository,
@@ -28,6 +30,8 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
         \M2E\TikTokShop\Helper\Data $dataHelper,
         \M2E\TikTokShop\Helper\Data\Session $sessionDataHelper,
         \M2E\TikTokShop\Model\Shop\Region\AddAccountButtonOptionsProvider $addAccountButtonOptionsProvider,
+        \M2E\TikTokShop\Model\Warehouse\Repository $warehouseRepository,
+        \M2E\TikTokShop\Model\Warehouse\WarehouseOptionProvider $warehouseOptionProvider,
         array $data = []
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
@@ -39,6 +43,8 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
         $this->accountRepository = $accountRepository;
         $this->listingRepository = $listingRepository;
         $this->addAccountButtonOptionsProvider = $addAccountButtonOptionsProvider;
+        $this->warehouseRepository = $warehouseRepository;
+        $this->warehouseOptionProvider = $warehouseOptionProvider;
     }
 
     protected function _prepareForm()
@@ -77,7 +83,7 @@ class Form extends \M2E\TikTokShop\Block\Adminhtml\Magento\Form\AbstractForm
                     your %channel_title Listings.',
                     [
                         'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
-                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                        'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle(),
                     ]
                 ),
             ]
@@ -186,11 +192,26 @@ HTML
                     'Choose the Shop you want to list on using this %extension_title
                     Listing. Currency will be set automatically based on the Shop you choose.',
                     [
-                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
                     ]
                 ),
                 'field_extra_attributes' => 'style="margin-bottom: 0px"',
-                'required' => $shopData['is_required']
+                'required' => $shopData['is_required'],
+            ]
+        );
+
+        $warehouseData = $this->getWarehouseData((int)$shopData['active_shop_id']);
+        $fieldset->addField(
+            'warehouse_id',
+            self::SELECT,
+            [
+                'name' => 'warehouse_id',
+                'label' => __('Warehouse'),
+                'value' => $warehouseData['active_warehouse_id'],
+                'values' => $warehouseData['warehouses'],
+                'tooltip' => __('Select the warehouse where the products added to this Listing are stored.'),
+                'field_extra_attributes' => 'style="margin-bottom: 0px"',
+                'required' => $warehouseData['is_required'],
             ]
         );
 
@@ -219,7 +240,7 @@ HTML
                     Listing. Please remember that Attribute values from the selected Store View will
                     be used in the Listing.',
                     [
-                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
                     ]
                 ),
                 'display_default_store_mode' => StoreSwitcher::DISPLAY_DEFAULT_STORE_MODE_DOWN,
@@ -307,7 +328,7 @@ HTML
             return [
                 'is_required' => 0,
                 'active_shop_id' => 0,
-                'shops' => []
+                'shops' => [],
             ];
         }
 
@@ -361,6 +382,10 @@ HTML
             ),
             'tiktokshop_account/newAction'
         );
+        $this->jsUrl->add(
+            $this->getUrl('*/tiktokshop_warehouse/getWarehousesForShop'),
+            'tiktokshop_warehouse/getWarehousesForShop'
+        );
 
         $this->jsUrl->add(
             $this->getUrl(
@@ -406,5 +431,37 @@ JS
         $sessionData = $this->sessionDataHelper->getValue(Listing::CREATE_LISTING_SESSION_DATA);
 
         return $sessionData[$key] ?? null;
+    }
+
+    /**
+     * @return array{
+     *    is_required: bool,
+     *    active_warehouse_id: int,
+     *    warehouses: array
+     * }
+     */
+    private function getWarehouseData(int $shopId): array
+    {
+        $warehouses = $this->warehouseOptionProvider->getOptionsByShopId($shopId);
+
+        if ($warehouses === []) {
+            return [
+                'is_required' => false,
+                'active_warehouse_id' => 0,
+                'warehouses' => [],
+            ];
+        }
+
+        $data = [
+            'is_required' => count($warehouses) > 1,
+            'active_warehouse_id' => reset($warehouses)['value'],
+            'warehouses' => $warehouses,
+        ];
+
+        if ($requestShopId = $this->getRequest()->getParam('warehouse_id')) {
+            $data['active_warehouse_id'] = (int)$requestShopId;
+        }
+
+        return $data;
     }
 }

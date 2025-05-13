@@ -148,12 +148,7 @@ class VariantSku extends AbstractDataBuilder
             )
         );
 
-        if ($variant->hasWarehouse()) {
-            $ttsWarehouseId = $variant->getWarehouse()->getWarehouseId();
-        } else {
-            $ttsWarehouseId = $this->getListingProduct()->getShop()->getDefaultWarehouse()->getWarehouseId();
-        }
-
+        $ttsWarehouseId = $variant->getListing()->getWarehouse()->getWarehouseId();
         $item->addInventory(
             $this->itemPartFactory->createInventory($ttsWarehouseId, $qty)
         );

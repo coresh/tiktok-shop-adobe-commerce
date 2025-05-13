@@ -35,6 +35,10 @@
              parent="M2E_TikTokShop::configuration" title="Categories"
              action="m2e_tiktokshop/tiktokshop_template_category/index"
              resource="M2E_TikTokShop::configuration_categories"/>
+        <add id="M2E_TikTokShop::configuration_mapping" module="M2E_TikTokShop" sortOrder="25"
+             parent="M2E_TikTokShop::configuration" title="Mapping"
+             action="m2e_tiktokshop/mapping/index"
+             resource="M2E_TikTokShop::configuration_mapping"/>
         <add id="M2E_TikTokShop::configuration_accounts" title="Accounts" module="M2E_TikTokShop" sortOrder="30"
              parent="M2E_TikTokShop::configuration" action="m2e_tiktokshop/tiktokshop_account/index"
              resource="M2E_TikTokShop::configuration_accounts"/>

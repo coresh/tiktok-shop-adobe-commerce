@@ -41,10 +41,6 @@ class ResponsiblePersonPopup extends \M2E\TikTokShop\Block\Adminhtml\Magento\For
             'country_code' => $this->responsiblePerson->phoneCountryCode,
             'local_number' => $this->responsiblePerson->phoneLocalNumber,
             'address_line_1' => $this->responsiblePerson->streetAddressLine1,
-            'address_line_2' => $this->responsiblePerson->streetAddressLine2,
-            'district' => $this->responsiblePerson->district,
-            'city' => $this->responsiblePerson->city,
-            'province' => $this->responsiblePerson->province,
             'postal_code' => $this->responsiblePerson->postalCode,
             'country' => $this->responsiblePerson->country,
         ] : [];
@@ -125,53 +121,9 @@ class ResponsiblePersonPopup extends \M2E\TikTokShop\Block\Adminhtml\Magento\For
             'text',
             [
                 'name' => 'responsible_person[address_1]',
-                'label' => __('Address Line 1'),
+                'label' => __('Address Line'),
                 'required' => true,
                 'value' => $formData['address_line_1'],
-            ]
-        );
-
-        $fieldSet->addField(
-            'address2',
-            'text',
-            [
-                'name' => 'responsible_person[address_2]',
-                'label' => __('Address Line 2'),
-                'required' => false,
-                'value' => $formData['address_line_2'],
-            ]
-        );
-
-        $fieldSet->addField(
-            'district',
-            'text',
-            [
-                'name' => 'responsible_person[district]',
-                'label' => __('District'),
-                'required' => false,
-                'value' => $formData['district'],
-            ]
-        );
-
-        $fieldSet->addField(
-            'city',
-            'text',
-            [
-                'name' => 'responsible_person[city]',
-                'label' => __('City'),
-                'required' => true,
-                'value' => $formData['city'],
-            ]
-        );
-
-        $fieldSet->addField(
-            'province',
-            'text',
-            [
-                'name' => 'responsible_person[province]',
-                'label' => __('Province'),
-                'required' => true,
-                'value' => $formData['province'],
             ]
         );
 

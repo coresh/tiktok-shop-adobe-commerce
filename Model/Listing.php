@@ -25,10 +25,14 @@ class Listing extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public const INSTRUCTION_TYPE_CHANGE_LISTING_STORE_VIEW = 'change_listing_store_view';
     public const INSTRUCTION_INITIATOR_CHANGED_LISTING_STORE_VIEW = 'changed_listing_store_view';
 
+    public const INSTRUCTION_TYPE_CHANGE_WAREHOUSE = 'change_listing_warehouse';
+    public const INSTRUCTION_INITIATOR_CHANGED_LISTING_WAREHOUSE = 'changed_listing_warehouse';
+
     public const CREATE_LISTING_SESSION_DATA = 'tts_listing_create';
 
     private ?\M2E\TikTokShop\Model\Account $account = null;
     private ?\M2E\TikTokShop\Model\Shop $shop = null;
+    private ?\M2E\TikTokShop\Model\Warehouse $warehouse = null;
     private \M2E\TikTokShop\Model\Template\SellingFormat $templateSellingFormat;
     private \M2E\TikTokShop\Model\Template\Synchronization $templateSynchronization;
     private \M2E\TikTokShop\Model\Template\Description $templateDescription;
@@ -39,6 +43,7 @@ class Listing extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     private \M2E\TikTokShop\Model\Template\SellingFormat\Repository $sellingFormatTemplateRepository;
     private \M2E\TikTokShop\Model\Template\Description\Repository $descriptionTemplateRepository;
     private \M2E\TikTokShop\Model\Template\Synchronization\Repository $synchronizationTemplateRepository;
+    private \M2E\TikTokShop\Model\Warehouse\Repository $warehouseRepository;
 
     public function __construct(
         \M2E\TikTokShop\Model\Product\Repository $listingProductRepository,
@@ -49,6 +54,7 @@ class Listing extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         \M2E\TikTokShop\Model\Template\Synchronization\Repository $synchronizationTemplateRepository,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \M2E\TikTokShop\Model\Warehouse\Repository $warehouseRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -66,6 +72,7 @@ class Listing extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->sellingFormatTemplateRepository = $sellingFormatTemplateRepository;
         $this->descriptionTemplateRepository = $descriptionTemplateRepository;
         $this->synchronizationTemplateRepository = $synchronizationTemplateRepository;
+        $this->warehouseRepository = $warehouseRepository;
     }
 
     // ----------------------------------------
@@ -97,6 +104,17 @@ class Listing extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         }
 
         return $this->shop = $this->shopRepository->get($this->getShopId());
+    }
+
+    // ----------------------------------------
+
+    public function getWarehouse(): \M2E\TikTokShop\Model\Warehouse
+    {
+        if ($this->warehouse !== null) {
+            return $this->warehouse;
+        }
+
+        return $this->warehouse = $this->warehouseRepository->get($this->getWarehouseId());
     }
 
     // ----------------------------------------
@@ -178,6 +196,23 @@ class Listing extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public function getShopId(): int
     {
         return (int)$this->getData(ListingResource::COLUMN_SHOP_ID);
+    }
+
+    public function hasWarehouse(): bool
+    {
+        return $this->getWarehouseId() !== null;
+    }
+
+    public function getWarehouseId(): ?int
+    {
+        return $this->getData(ListingResource::COLUMN_WAREHOUSE_ID)
+            ? (int)$this->getData(ListingResource::COLUMN_WAREHOUSE_ID)
+            : null;
+    }
+
+    public function setWarehouseId(int $warehouseId): self
+    {
+        return $this->setData(ListingResource::COLUMN_WAREHOUSE_ID, $warehouseId);
     }
 
     public function getStoreId(): int

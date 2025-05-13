@@ -217,6 +217,14 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         $this->itemsCollection = null;
     }
 
+    /**
+     * @param \M2E\TikTokShop\Model\Order\Item[] $items
+     */
+    public function setItems(array $items): void
+    {
+        $this->items = $items;
+    }
+
     public function getItems(): array
     {
         /** @psalm-suppress RedundantPropertyInitializationCheck */
@@ -552,6 +560,8 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             $message = 'Magento Order was not created. Reason: %msg%';
             if ($exception instanceof \M2E\TikTokShop\Model\Order\Exception\ProductCreationDisabled) {
                 $this->addInfoLog($message, ['msg' => $exception->getMessage()], [], true);
+            } elseif ($exception instanceof \M2E\TikTokShop\Model\Order\Exception\ShippingAddressRegionInvalidException) {
+                $this->addErrorLog($message, ['msg' => $exception->getMessage()]);
             } else {
                 $this->exceptionHelper->process($exception);
                 $this->addErrorLog($message, ['msg' => $exception->getMessage()]);

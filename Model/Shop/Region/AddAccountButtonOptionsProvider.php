@@ -26,6 +26,11 @@ class AddAccountButtonOptionsProvider
                 'id' => 'mexico',
                 'label' => (string)__('Mexico'),
                 'region_code' => \M2E\TikTokShop\Model\Shop\Region::REGION_MX
+            ],
+            [
+                'id' => 'brazil',
+                'label' => (string)__('Brazil'),
+                'region_code' => \M2E\TikTokShop\Model\Shop\Region::REGION_BR
             ]
         ];
     }

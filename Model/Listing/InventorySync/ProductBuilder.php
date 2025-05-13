@@ -70,7 +70,8 @@ class ProductBuilder
                 $unmanagedItem['responsible_person_ids'],
                 $ttsProductVariantCollection,
                 $listingQuality,
-                $unmanagedItem['is_not_for_sale']
+                $unmanagedItem['is_not_for_sale'],
+                $this->parseAuditFailedReasons($unmanagedItem['audit_failed_reasons'] ?? [])
             );
 
             $result->add($ttsProduct);
@@ -130,5 +131,26 @@ class ProductBuilder
         }
 
         return new \M2E\TikTokShop\Model\Product\VariantSku\Identifier($code, $type);
+    }
+
+    private function parseAuditFailedReasons(array $auditFailedReasons): array
+    {
+        if (empty($auditFailedReasons)) {
+            return $auditFailedReasons;
+        }
+
+        $result = [];
+        foreach ($auditFailedReasons as $auditFailedReason) {
+            if (empty($auditFailedReason['reasons'])) {
+                continue;
+            }
+
+            $result[] = [
+                'position' => $auditFailedReason['position'],
+                'reasons' => $auditFailedReason['reasons'],
+            ];
+        }
+
+        return $result;
     }
 }

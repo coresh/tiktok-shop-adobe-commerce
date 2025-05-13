@@ -13,7 +13,7 @@ interface ValidatorInterface
     ): bool;
 
     /**
-     * @return \M2E\Core\Model\Response\Message[]
+     * @return \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Validator\ValidatorMessage[]
      */
     public function getMessages(): array;
 }

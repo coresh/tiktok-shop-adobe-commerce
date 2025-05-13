@@ -9,11 +9,17 @@ use M2E\TikTokShop\Model\Category\CategoryAttribute;
 class DictionaryMapper
 {
     private \M2E\TikTokShop\Model\Category\Attribute\Repository $attributeRepository;
+    private \M2E\TikTokShop\Model\AttributeMapping\GeneralService $generalService;
+
+    /** @var \M2E\Core\Model\AttributeMapping\Pair[] */
+    private array $generalAttributeMapping;
 
     public function __construct(
-        \M2E\TikTokShop\Model\Category\Attribute\Repository $attributeRepository
+        \M2E\TikTokShop\Model\Category\Attribute\Repository $attributeRepository,
+        \M2E\TikTokShop\Model\AttributeMapping\GeneralService $generalService
     ) {
         $this->attributeRepository = $attributeRepository;
+        $this->generalService = $generalService;
     }
 
     /**
@@ -26,9 +32,11 @@ class DictionaryMapper
             CategoryAttribute::ATTRIBUTE_TYPE_PRODUCT,
         ]);
 
+        $generalMappingAttributes = $this->getGeneralAttributesMappingByAttributeId();
+
         $attributes = [];
         foreach ($dictionary->getProductAttributes() as $productAttribute) {
-            $item = $this->map($productAttribute, $savedAttributes);
+            $item = $this->map($productAttribute, $savedAttributes, $generalMappingAttributes);
 
             if ($item['required']) {
                 array_unshift($attributes, $item);
@@ -49,9 +57,11 @@ class DictionaryMapper
             CategoryAttribute::ATTRIBUTE_TYPE_SIZE_CHART,
         ]);
 
+        $generalMappingAttributes = $this->getGeneralAttributesMappingByAttributeId();
+
         $attributes = [];
         foreach ($dictionary->getBrandAndSizeChartAttributes() as $virtualAttribute) {
-            $item = $this->map($virtualAttribute, $savedAttributes);
+            $item = $this->map($virtualAttribute, $savedAttributes, $generalMappingAttributes);
 
             if ($item['required']) {
                 array_unshift($attributes, $item);
@@ -71,9 +81,11 @@ class DictionaryMapper
             CategoryAttribute::ATTRIBUTE_TYPE_CERTIFICATE,
         ]);
 
+        $generalMappingAttributes = $this->getGeneralAttributesMappingByAttributeId();
+
         $certificationAttributes = [];
         foreach ($dictionary->getCertificationsAttributes() as $certificationAttribute) {
-            $item = $this->map($certificationAttribute, $savedAttributes);
+            $item = $this->map($certificationAttribute, $savedAttributes, $generalMappingAttributes);
             $attributeVariants = $this->getCertificateAttributeVariants($certificationAttribute, $savedAttributes);
 
             if ($item['required']) {
@@ -88,9 +100,17 @@ class DictionaryMapper
         return $this->sortAttributesByTitle($certificationAttributes);
     }
 
+    /**
+     * @param \M2E\TikTokShop\Model\Category\Dictionary\AbstractAttribute $attribute
+     * @param \M2E\TikTokShop\Model\Category\CategoryAttribute[] $savedAttributes
+     * @param \M2E\Core\Model\AttributeMapping\Pair[] $generalMappingAttributes
+     *
+     * @return array
+     */
     private function map(
         \M2E\TikTokShop\Model\Category\Dictionary\AbstractAttribute $attribute,
-        array $savedAttributes
+        array $savedAttributes,
+        array $generalMappingAttributes = []
     ): array {
         $item = [
             'id' => $attribute->getId(),
@@ -107,17 +127,24 @@ class DictionaryMapper
         ];
 
         $existsAttribute = $savedAttributes[$attribute->getId()] ?? null;
-        if ($existsAttribute) {
+        $generalMapping = $generalMappingAttributes[$attribute->getId()] ?? null;
+        if (
+            $existsAttribute !== null
+            || $generalMapping !== null
+        ) {
             $item['template_attribute'] = [
-                'id' => $existsAttribute->getAttributeId(),
-                'template_category_id' => $existsAttribute->getId(),
+                'id' => $existsAttribute ? $existsAttribute->getAttributeId() : null,
+                'template_category_id' => $existsAttribute ? $existsAttribute->getId() : null,
                 'mode' => '1',
-                'attribute_title' => $existsAttribute->getAttributeId(),
-                'value_mode' => $existsAttribute->getValueMode(),
-                'value_tiktokshop_recommended' => $existsAttribute->getRecommendedValue(),
-                'value_custom_value' => $existsAttribute->getCustomValue(),
-                'value_custom_attribute' => $existsAttribute->getCustomAttributeValue(),
-            ];
+                'attribute_title' => $existsAttribute ? $existsAttribute->getAttributeId() : $attribute->getName(),
+                'value_mode' => $existsAttribute !== null
+                    ? $existsAttribute->getValueMode()
+                    : ($generalMapping !== null ? \M2E\TikTokShop\Model\Category\CategoryAttribute::VALUE_MODE_CUSTOM_ATTRIBUTE : \M2E\TikTokShop\Model\Category\CategoryAttribute::VALUE_MODE_NONE),
+                'value_tiktokshop_recommended' => $existsAttribute ? $existsAttribute->getRecommendedValue() : null,
+                'value_custom_value' => $existsAttribute ? $existsAttribute->getCustomValue() : null,
+                'value_custom_attribute' => $existsAttribute !== null
+                    ? $existsAttribute->getCustomAttributeValue()
+                    : ($generalMapping !== null ? $generalMapping->getMagentoAttributeCode() : null),            ];
         }
 
         foreach ($attribute->getValues() as $value) {
@@ -168,15 +195,17 @@ class DictionaryMapper
         \M2E\TikTokShop\Model\Category\Dictionary\Attribute\CertificateAttribute $attribute,
         array $savedAttributes
     ): array {
-        $variants = [];
+        $generalMappingAttributes = $this->getGeneralAttributesMappingByAttributeId();
 
+        $variants = [];
         foreach ($savedAttributes as $savedAttribute) {
             if ($this->isMatchingAttribute($attribute, $savedAttribute)) {
                 $modifiedAttribute = clone $attribute;
                 $modifiedAttribute->setId($savedAttribute->getAttributeId());
                 $variants[] = $this->map(
                     $modifiedAttribute,
-                    [$savedAttribute->getAttributeId() => $savedAttribute]
+                    [$savedAttribute->getAttributeId() => $savedAttribute],
+                    $generalMappingAttributes
                 );
             }
         }
@@ -193,5 +222,23 @@ class DictionaryMapper
 
         return $savedId !== $attribute->getId()
             && $cleanedId === $attribute->getId();
+    }
+
+    /**
+     * @return \M2E\Core\Model\AttributeMapping\Pair[]
+     */
+    private function getGeneralAttributesMappingByAttributeId(): array
+    {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
+        if (isset($this->generalAttributeMapping)) {
+            return $this->generalAttributeMapping;
+        }
+
+        $result = [];
+        foreach ($this->generalService->getAll() as $item) {
+            $result[$item->getChannelAttributeCode()] = $item;
+        }
+
+        return $this->generalAttributeMapping = $result;
     }
 }
