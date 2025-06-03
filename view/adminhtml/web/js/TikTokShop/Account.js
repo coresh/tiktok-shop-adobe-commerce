@@ -2,7 +2,6 @@ define([
     'Magento_Ui/js/modal/modal',
     'mage/validation',
     'TikTokShop/Common',
-    'extjs/ext-tree-checkbox',
     'mage/adminhtml/form'
 ], function (modal) {
 

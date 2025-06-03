@@ -332,6 +332,22 @@ for an item that does <b>not</b> belong to the %extension_title Listing.',
                     'an alternative one to create an order in Magento.'),
             ]
         );
+
+        $shipByDateFieldset->addField(
+            'shipping_information_import_shipping_fee_platform_discount',
+            'select',
+            [
+                'name' => 'magento_orders_settings[shipping_information][import_shipping_fee_platform_discount]',
+                'label' => __('Import Shipping Fee Platform Discount'),
+                'values' => [
+                    0 => __('No'),
+                    1 => __('Yes'),
+                ],
+                'value' => (int)$orderSettings->isImportShippingFeePlatformDiscount(),
+                'tooltip' => __('When enabled, the shipping cost paid by the TikTok Shop platform will be ' .
+                    'included in the order total, reflecting the full cost regardless of any platform discounts.')
+            ]
+        );
         //endregion
 
         //region Customer Settings

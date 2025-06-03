@@ -1363,7 +1363,9 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         }
 
         $shippingPrice = $this->getPaymentDetails()['shipping_fee'] ?? 0.0;
-        $shippingPrice += $this->getPaymentDetails()['shipping_fee_platform_discount'] ?? 0.0;
+        if ($this->account->getOrdersSettings()->isImportShippingFeePlatformDiscount()) {
+            $shippingPrice += $this->getPaymentDetails()['shipping_fee_platform_discount'] ?? 0.0;
+        }
 
         return (float)$shippingPrice;
     }

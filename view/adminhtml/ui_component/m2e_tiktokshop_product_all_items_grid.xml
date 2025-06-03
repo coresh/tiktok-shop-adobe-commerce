@@ -399,6 +399,16 @@
             </argument>
         </column>
 
+        <column name="shop_currency">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" translate="true" xsi:type="string">Currency</item>
+                    <item name="sortOrder" xsi:type="number">95</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+
         <column name="product_status" class="M2E\TikTokShop\Ui\Product\Component\Listing\Column\Status">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

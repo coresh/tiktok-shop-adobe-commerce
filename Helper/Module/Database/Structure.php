@@ -374,16 +374,6 @@ class Structure
             $tablesModels[$tableName] = $className;
         }
 
-        $coreTables = [
-            \M2E\Core\Helper\Module\Database\Tables::TABLE_NAME_SETUP => \M2E\Core\Model\ResourceModel\Setup::class,
-            \M2E\Core\Helper\Module\Database\Tables::TABLE_NAME_CONFIG => \M2E\Core\Model\ResourceModel\Config::class,
-            \M2E\Core\Helper\Module\Database\Tables::TABLE_NAME_REGISTRY => \M2E\Core\Model\ResourceModel\Registry::class,
-        ];
-
-        foreach ($coreTables as $coreTableName => $modelName) {
-            $tablesModels[$coreTableName] = $modelName;
-        }
-
         $this->runtimeCacheHelper->setValue(__METHOD__, $tablesModels);
 
         return $tablesModels;

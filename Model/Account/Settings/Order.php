@@ -66,6 +66,7 @@ class Order
     private array $shippingInformation = [
         'ship_by_date' => true,
         'shipping_address_region_override' => true,
+        'import_shipping_fee_platform_discount' => true,
     ];
 
     private array $qtyReservation = [
@@ -100,7 +101,7 @@ class Order
     private array $orderStatusMapping = [
         'mode' => self::ORDERS_STATUS_MAPPING_MODE_DEFAULT,
         'processing' => self::ORDERS_STATUS_MAPPING_PROCESSING,
-        'shipped' => self::ORDERS_STATUS_MAPPING_SHIPPED
+        'shipped' => self::ORDERS_STATUS_MAPPING_SHIPPED,
     ];
 
     // ----------------------------------------
@@ -189,6 +190,11 @@ class Order
     public function isRegionOverrideRequired(): bool
     {
         return (bool)$this->shippingInformation['shipping_address_region_override'];
+    }
+
+    public function isImportShippingFeePlatformDiscount(): bool
+    {
+        return (bool)$this->shippingInformation['import_shipping_fee_platform_discount'];
     }
 
     // ----------------------------------------
@@ -466,6 +472,10 @@ class Order
 
         if (isset($shippingInformation['shipping_address_region_override'])) {
             $shippingInformation['shipping_address_region_override'] = (bool)(int)$shippingInformation['shipping_address_region_override'];
+        }
+
+        if (isset($shippingInformation['import_shipping_fee_platform_discount'])) {
+            $shippingInformation['import_shipping_fee_platform_discount'] = (bool)(int)$shippingInformation['import_shipping_fee_platform_discount'];
         }
 
         return $shippingInformation;

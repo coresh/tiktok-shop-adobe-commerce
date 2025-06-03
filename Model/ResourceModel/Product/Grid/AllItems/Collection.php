@@ -40,6 +40,7 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
     private bool $isGetAllItemsFromFilter = false;
     private \M2E\TikTokShop\Model\ResourceModel\Promotion\Product $promotionProductResource;
     private \M2E\TikTokShop\Model\ResourceModel\Promotion $promotionResource;
+    private \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection;
 
     public function __construct(
         ProductResource $listingProductResource,
@@ -52,6 +53,7 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
         \M2E\TikTokShop\Model\ResourceModel\Magento\Product\CollectionFactory $magentoProductCollectionFactory,
         \M2E\TikTokShop\Model\ResourceModel\Promotion\Product $promotionProductResource,
         \M2E\TikTokShop\Model\ResourceModel\Promotion $promotionResource,
+        \M2E\TikTokShop\Model\Shop\RegionCollection $regionCollection,
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
     ) {
         parent::__construct($entityFactory);
@@ -65,6 +67,7 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
         $this->tagResource = $tagResource;
         $this->promotionProductResource = $promotionProductResource;
         $this->promotionResource = $promotionResource;
+        $this->regionCollection = $regionCollection;
         $this->prepareCollection();
     }
 
@@ -116,6 +119,7 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
             [
                 'shop_' . ShopResource::COLUMN_REGION => ShopResource::COLUMN_REGION,
                 'shop_' . ShopResource::COLUMN_SHOP_NAME => ShopResource::COLUMN_SHOP_NAME,
+                'shop_currency' => $this->createShopCurrencyExpression('shop'),
             ],
         );
 
@@ -167,7 +171,7 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
             true,
             false
         )"
-            )
+            ),
         ]);
     }
 
@@ -341,5 +345,25 @@ class Collection extends \Magento\Framework\Data\Collection implements SearchRes
     public function getTotalCount(): int
     {
         return $this->wrappedCollection->getSize();
+    }
+
+    private function createShopCurrencyExpression(string $shopTableAlias): string
+    {
+        $expressionParts = [];
+        foreach ($this->regionCollection->getAll() as $region) {
+            $expressionParts[] = sprintf(
+                "WHEN `%s`.`%s` = '%s' THEN '%s'",
+                $shopTableAlias,
+                ShopResource::COLUMN_REGION,
+                $region->getRegionCode(),
+                $region->getCurrency()
+            );
+        }
+
+        $currencyExpression = new \Magento\Framework\DB\Sql\Expression(
+            sprintf('(CASE %s END)', implode(' ', $expressionParts))
+        );
+
+        return (string)$currencyExpression;
     }
 }
