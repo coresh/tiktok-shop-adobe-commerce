@@ -26,10 +26,10 @@ $isEmptyWarehouse = true;
 <table id="shipping-mapping-grid" class="data-grid">
     <thead>
     <tr class="headings">
-        <th class="data-grid-th"><?= __('Shop') ?></th>
-        <th class="data-grid-th"><?= __('Warehouse') ?></th>
-        <th class="data-grid-th"><?= __('Magento Carrier') ?></th>
-        <th class="data-grid-th"><?= __('TikTok Shop Carrier') ?></th>
+        <th class="data-grid-th"><?= /* @noEscape */ __('Shop') ?></th>
+        <th class="data-grid-th"><?= /* @noEscape */ __('Warehouse') ?></th>
+        <th class="data-grid-th"><?= /* @noEscape */ __('Magento Carrier') ?></th>
+        <th class="data-grid-th"><?= /* @noEscape */ __('TikTok Shop Carrier') ?></th>
     </tr>
     </thead>
     <tbody>
@@ -40,7 +40,7 @@ $isEmptyWarehouse = true;
         foreach ($shop->getWarehouses() as $warehouse) : ?>
             <?php
             foreach ($this->getMagentoCarriers() as $key => $magentoCarrier) : ?>
-                <?= $this->renderTableRow($key, $shop, $warehouse, $magentoCarrier) ?>
+                <?= /* @noEscape */ $this->renderTableRow($key, $shop, $warehouse, $magentoCarrier) ?>
             <?php
             endforeach; ?>
         <?php
@@ -52,5 +52,5 @@ $isEmptyWarehouse = true;
 <?php endif; ?>
 
 <?php if ($isEmptyWarehouse) : ?>
-    <p><?= __('To view available warehouses and shipping carriers, please refresh your account data.') ?></p>
+    <p><?= /* @noEscape */ __('To view available warehouses and shipping carriers, please refresh your account data.') ?></p>
 <?php endif; ?>

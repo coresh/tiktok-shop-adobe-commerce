@@ -5,17 +5,17 @@
 ?>
 
 <div class="TikTokShop-box-style" style="margin-top: 11px; padding: 10px 15px;">
-    <?= __('Selected Products: ') ?><span id="total_products_count">0</span>
+    <?= /* @noEscape */ __('Selected Products: ') ?><span id="total_products_count">0</span>
     <br/>
-    <?= __('Selected Categories: ') ?><span id="total_categories_count">0</span>
+    <?= /* @noEscape */ __('Selected Categories: ') ?><span id="total_categories_count">0</span>
 
     <span id="view_categories_summary">
-        (<a href="javascript:" onclick="saveSelectedProducts(showCategoriesSummary)"><?= __('View') ?></a>)
+        (<a href="javascript:" onclick="saveSelectedProducts(showCategoriesSummary)"><?= /* @noEscape */ __('View') ?></a>)
     </span>
 </div>
 
 <div class="content-header" style="padding-top: 10px;">
-    <h3 class="icon-head head-categories" style="margin-bottom: 10px;"><?= __('Categories'); ?></h3>
+    <h3 class="icon-head head-categories" style="margin-bottom: 10px;"><?= /* @noEscape */ __('Categories'); ?></h3>
 </div>
 
 <div class="categories-side-col">
@@ -24,14 +24,14 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
     require([
         'Magento_Ui/js/modal/modal',
         'jquery',
         'jstree'
     ], function (modal, $) {
         let tree;
-        let treeInfo = <?= $block->getInfoJson() ?>;
+        let treeInfo = <?= /* @noEscape */ $block->getInfoJson() ?>;
 
         createNodeByConfig = function (config) {
             return {
@@ -58,7 +58,7 @@
         };
 
         categoryClick = function (node, event) {
-            const gridObj = window['<?php echo $block->getGridId() ?>JsObject'];
+            const gridObj = window['<?php /* @noEscape */ echo $block->getGridId() ?>JsObject'];
 
             saveSelectedProducts(function (transport) {
 
@@ -86,8 +86,8 @@
         };
 
         saveSelectedProducts = function (callback) {
-            const gridObj = window['<?php echo $block->getGridId() ?>JsObject'];
-            const massGridObj = window['<?php echo $block->getGridId() ?>_massactionJsObject'];
+            const gridObj = window['<?php /* @noEscape */ echo $block->getGridId() ?>JsObject'];
+            const massGridObj = window['<?php /* @noEscape */ echo $block->getGridId() ?>_massactionJsObject'];
 
             const checkedString = massGridObj['checkedString'];
             const initialCheckedString = massGridObj['initialCheckedString'];
@@ -95,8 +95,7 @@
             massGridObj['checkedString'] = '';
             massGridObj['initialCheckedString'] = '';
 
-            new Ajax.Request('<?php echo $block->getUrl('*/*/saveProductsAndGetInfo', ['_current' => true]
-            ) ?>', {
+            new Ajax.Request('<?php /* @noEscape */ echo $block->getUrl('*/*/saveProductsAndGetInfo', ['_current' => true]) ?>', {
                 method: 'post',
                 parameters: {
                     checked_ids: checkedString,
@@ -112,10 +111,10 @@
         };
 
         showCategoriesSummary = function () {
-            const gridObj = window['<?= $block->getGridId() ?>JsObject'];
-            const massGridObj = window['<?= $block->getGridId() ?>_massactionJsObject'];
+            const gridObj = window['<?= /* @noEscape */ $block->getGridId() ?>JsObject'];
+            const massGridObj = window['<?= /* @noEscape */ $block->getGridId() ?>_massactionJsObject'];
 
-            new Ajax.Request('<?= $block->getUrl('*/*/getCategoriesSummaryHtml', ['_current' => true]); ?>', {
+            new Ajax.Request('<?= /* @noEscape */ $block->getUrl('*/*/getCategoriesSummaryHtml', ['_current' => true]); ?>', {
                 method: 'get',
                 parameters: {
                     categories_ids: getExpandedCategoriesIds().join(',')
@@ -129,10 +128,10 @@
                     popup.html(transport.responseText);
 
                     const modalOptions = {
-                        title: '<?= __('Categories of selected Magento Products') ?>',
+                        title: '<?= /* @noEscape */ __('Categories of selected Magento Products') ?>',
                         type: 'slide',
                         closed: function () {
-                            const url = '<?= $block->getUrl('*/*/getTreeInfo', ['_current' => true]); ?>';
+                            const url = '<?= /* @noEscape */ $block->getUrl('*/*/getTreeInfo', ['_current' => true]); ?>';
                             new Ajax.Request(url, {
                                 method: 'get',
                                 onSuccess: function (transport) {
@@ -169,7 +168,7 @@
         };
 
         $(document).ready(function () {
-            const categoryData = <?= $block->getTreeJson() ?>;
+            const categoryData = <?= /* @noEscape */ $block->getTreeJson() ?>;
 
             tree = $('#tree-div').jstree({
                 'core': {

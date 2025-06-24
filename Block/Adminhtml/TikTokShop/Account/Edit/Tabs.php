@@ -19,7 +19,7 @@ class Tabs extends \M2E\TikTokShop\Block\Adminhtml\Magento\Tabs\AbstractTabs
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \M2E\TikTokShop\Model\Account $account = null,
+        ?\M2E\TikTokShop\Model\Account $account = null,
         array $data = []
     ) {
         $this->account = $account;

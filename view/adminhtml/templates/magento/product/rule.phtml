@@ -17,7 +17,7 @@ $_element = $block->getElement();
 
 <div class="rule-tree">
     <div id="<?php
-    echo $_element->getHtmlId(); ?>">
+  /* @noEscape */ echo $_element->getHtmlId(); ?>">
         <?php
         echo $_element->getChildrenHtml() ?>
     </div>
@@ -44,7 +44,7 @@ $_element = $block->getElement();
         };
 
         window.<?php echo $_element->getHtmlId() ?> = new VarienRulesForm('<?php echo $_element->getHtmlId(
-        ) ?>', '<?php /* @escapeNotVerified */ echo $block->getNewChildUrl() ?>');
+        ) ?>', '<?php /* @noEscape */ echo $block->getNewChildUrl() ?>');
         <?php if ($_element->getReadonly()) : ?>
         <?php echo $_element->getHtmlId() ?>.
         setReadonly(true);

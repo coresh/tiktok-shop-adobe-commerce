@@ -11,7 +11,7 @@ if (($title = $block->getData('title'))) { ?>
         <h2 style="color: maroon; margin-bottom: 5px;"><?php
             echo \M2E\Core\Helper\Data::escapeHtml($title); ?></h2>
         <hr/><?php
-        echo $block->getData('description'); ?>
+      /* @noEscape */ echo $block->getData('description'); ?>
     </div>
 
 <?php

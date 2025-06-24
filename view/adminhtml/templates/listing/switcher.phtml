@@ -17,14 +17,14 @@
     <ul>
         <li style="background: #eaeaea;">
             <a href="<?php
-            echo $block->getUrl($block->getAddListingUrl()) ?>">
+          /* @noEscape */ echo $block->getUrl($block->getAddListingUrl()) ?>">
                 <span style="font-weight: bold; font-size: 12px; font-style: italic; color: #ea7601;">+ <?php
-                    echo $block->__('Add New Listing') ?></span>
+                  /* @noEscape */ echo $block->__('Add New Listing') ?></span>
             </a>
         </li>
     </ul>
 </div>
-<script type="text/javascript">
+<script>
     TikTokShop.addListingVisible = false;
 
     Event.observe(window, 'load', function () {

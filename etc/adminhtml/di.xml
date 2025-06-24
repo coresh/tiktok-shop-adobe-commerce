@@ -131,4 +131,14 @@
         </arguments>
     </type>
 
+    <!-- Dashboard -->
+
+    <type name="M2E\Core\Model\Dashboard\DashboardDefinitionCollection">
+        <arguments>
+            <argument name="definitions" xsi:type="array">
+                <item name="m2e_tiktokshop" xsi:type="object">M2E\TikTokShop\Model\Dashboard\DashboardDefinition</item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>

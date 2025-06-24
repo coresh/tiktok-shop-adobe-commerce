@@ -10,6 +10,11 @@
         <add id="M2E_TikTokShop::tts" title="TikTok Shop" module="M2E_TikTokShop" sortOrder="31"
              dependsOnModule="M2E_TikTokShop" resource="M2E_TikTokShop::tts"/>
 
+        <!-- Dashboard -->
+
+        <add id="M2E_TikTokShop::overview" module="M2E_TikTokShop" sortOrder="5" parent="M2E_TikTokShop::tts" title="Overview" resource="M2E_TikTokShop::tts"/>
+        <add id="M2E_TikTokShop::tts_dashboard" title="Dashboard" module="M2E_TikTokShop" sortOrder="10" parent="M2E_TikTokShop::overview" action="m2e_tiktokshop/dashboard/index" resource="M2E_TikTokShop::tts"/>
+
         <!-- Listing -->
 
         <add id="M2E_TikTokShop::listings" module="M2E_TikTokShop" sortOrder="10" parent="M2E_TikTokShop::tts"

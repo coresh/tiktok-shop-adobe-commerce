@@ -8,9 +8,9 @@
 
 <div class="TikTokShop-page-help-link TikTokShop-field-tooltip-to-right admin__field-tooltip">
     <a class="admin__field-tooltip-action" href="<?php
-    echo $block->getPageHelpLink(); ?>" target="_blank"></a>
+  /* @noEscape */ echo $block->getPageHelpLink(); ?>" target="_blank"></a>
     <div class="admin__field-tooltip-content">
         <?php
-        echo $block->__('Click here to get help for this page.'); ?>
+      /* @noEscape */ echo $block->__('Click here to get help for this page.'); ?>
     </div>
 </div>

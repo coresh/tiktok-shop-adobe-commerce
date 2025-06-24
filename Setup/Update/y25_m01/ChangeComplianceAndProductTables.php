@@ -19,7 +19,8 @@ class ChangeComplianceAndProductTables extends \M2E\Core\Model\Setup\Upgrade\Ent
         $this->updateProductResponsiblePersonIdsColumn();
     }
 
-    private function changeComplianceColumnResponsiblePersonIds(): void {
+    private function changeComplianceColumnResponsiblePersonIds(): void
+    {
         $modifier = $this->createTableModifier(
             Tables::PREFIX . 'template_compliance'
         );
@@ -37,7 +38,8 @@ class ChangeComplianceAndProductTables extends \M2E\Core\Model\Setup\Upgrade\Ent
         $modifier->commit();
     }
 
-    private function changeProductColumnResponsiblePersonIds(): void {
+    private function changeProductColumnResponsiblePersonIds(): void
+    {
         $modifier = $this->createTableModifier(
             Tables::TABLE_NAME_PRODUCT
         );
@@ -55,7 +57,8 @@ class ChangeComplianceAndProductTables extends \M2E\Core\Model\Setup\Upgrade\Ent
         $modifier->commit();
     }
 
-    private function updateComplianceResponsiblePersonIdsColumn(): void {
+    private function updateComplianceResponsiblePersonIdsColumn(): void
+    {
         $templateComplianceTableName = $this->getFullTableName(Tables::PREFIX . 'template_compliance');
         $select = $this
             ->getConnection()
@@ -80,7 +83,8 @@ class ChangeComplianceAndProductTables extends \M2E\Core\Model\Setup\Upgrade\Ent
         }
     }
 
-    private function updateProductResponsiblePersonIdsColumn(): void {
+    private function updateProductResponsiblePersonIdsColumn(): void
+    {
         $productTableName = $this->getFullTableName(Tables::TABLE_NAME_PRODUCT);
         $select = $this
             ->getConnection()

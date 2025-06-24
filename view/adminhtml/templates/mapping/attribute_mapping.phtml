@@ -19,21 +19,21 @@ echo $block
     <table class="data-grid">
         <thead>
         <tr>
-            <th class="data-grid-th tts_channel_attribute"><?= __(
+            <th class="data-grid-th tts_channel_attribute"><?= /* @noEscape */ __(
                     '%channel_title Attribute',
                     [
                         'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle(),
                     ]
                 ) ?></th>
-            <th class="data-grid-th"><?= __('Magento Attribute') ?></th>
+            <th class="data-grid-th"><?= /* @noEscape */ __('Magento Attribute') ?></th>
         </tr>
         </thead>
         <tbody>
         <?php
         foreach ($block->getMappedAttributes() as $mappedAttribute) : ?>
             <tr>
-                <td><?= $mappedAttribute->getChannelAttributeTitle() ?></td>
-                <td><?= $block->makeMagentoAttributesDropDownHtml($mappedAttribute) ?></td>
+                <td><?= /* @noEscape */ $mappedAttribute->getChannelAttributeTitle() ?></td>
+                <td><?= /* @noEscape */ $block->makeMagentoAttributesDropDownHtml($mappedAttribute) ?></td>
             </tr>
         <?php
         endforeach; ?>

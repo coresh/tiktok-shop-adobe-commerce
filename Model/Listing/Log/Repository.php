@@ -7,10 +7,13 @@ namespace M2E\TikTokShop\Model\Listing\Log;
 class Repository
 {
     private \M2E\TikTokShop\Model\ResourceModel\Listing\Log $resource;
+    private \M2E\TikTokShop\Model\ResourceModel\Listing\Log\CollectionFactory $listingLogCollectionFactory;
 
     public function __construct(
-        \M2E\TikTokShop\Model\ResourceModel\Listing\Log $resource
+        \M2E\TikTokShop\Model\ResourceModel\Listing\Log                   $resource,
+        \M2E\TikTokShop\Model\ResourceModel\Listing\Log\CollectionFactory $listingLogCollectionFactory
     ) {
+        $this->listingLogCollectionFactory = $listingLogCollectionFactory;
         $this->resource = $resource;
     }
 
@@ -66,5 +69,31 @@ class Repository
                 $this->resource->getMainTable(),
                 ['account_id = ?' => $accountId],
             );
+    }
+
+    public function getCountErrorsByDateRange(
+        ?\DateTimeInterface $from = null,
+        ?\DateTimeInterface $to = null
+    ): int {
+        $listingLogCollection = $this->listingLogCollectionFactory->create();
+        $listingLogCollection->skipIncorrectAccounts();
+        $select = $listingLogCollection->getSelect();
+        $select->reset('columns');
+        $select->columns('COUNT(*)');
+        $select->where('main_table.type = ?', \M2E\TikTokShop\Model\Log\AbstractModel::TYPE_ERROR);
+
+        if ($from !== null && $to !== null) {
+            $select->where(
+                sprintf(
+                    "main_table.create_date BETWEEN '%s' AND '%s'",
+                    $from->format('Y-m-d H:i:s'),
+                    $to->format('Y-m-d H:i:s')
+                )
+            );
+        }
+
+        $select->group(['main_table.listing_product_id', 'main_table.description']);
+
+        return $listingLogCollection->getSize();
     }
 }

@@ -24,35 +24,19 @@ class Wizard
     private $activeRecordFactory;
     /** @var \Magento\Framework\App\ResourceConnection */
     private $resourceConnection;
-    /** @var \Magento\Framework\Code\NameBuilder */
-    private $nameBuilder;
-    /** @var \Magento\Framework\View\LayoutInterface */
-    private $layout;
     /** @var \M2E\TikTokShop\Helper\Module\Database\Structure */
     private $moduleDatabaseStructureHelper;
     /** @var \M2E\TikTokShop\Helper\Data\Cache\Permanent */
     private $permanentCache;
 
-    /**
-     * @param \Magento\Framework\Code\NameBuilder $nameBuilder
-     * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \M2E\TikTokShop\Model\ActiveRecord\Factory $activeRecordFactory
-     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
-     * @param \M2E\TikTokShop\Helper\Module\Database\Structure $moduleDatabaseStructureHelper
-     * @param \M2E\TikTokShop\Helper\Data\Cache\Permanent $permanentCache
-     */
     public function __construct(
-        \Magento\Framework\Code\NameBuilder $nameBuilder,
-        \Magento\Framework\View\LayoutInterface $layout,
         \M2E\TikTokShop\Model\ActiveRecord\Factory $activeRecordFactory,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \M2E\TikTokShop\Helper\Module\Database\Structure $moduleDatabaseStructureHelper,
         \M2E\TikTokShop\Helper\Data\Cache\Permanent $permanentCache
     ) {
-        $this->nameBuilder = $nameBuilder;
         $this->activeRecordFactory = $activeRecordFactory;
         $this->resourceConnection = $resourceConnection;
-        $this->layout = $layout;
         $this->moduleDatabaseStructureHelper = $moduleDatabaseStructureHelper;
         $this->permanentCache = $permanentCache;
     }
@@ -281,27 +265,6 @@ class Wizard
         }
 
         return $wizards;
-    }
-
-    /**
-     * @param $block
-     * @param $nick
-     */
-    public function createBlock($block, $nick = '')
-    {
-        return $this->layout->createBlock(
-            $this->nameBuilder->buildClassName([
-                'M2E',
-                'TikTokShop',
-                'Block',
-                'Adminhtml',
-                'Wizard',
-                $nick,
-                $block,
-            ]),
-            '',
-            ['data' => ['nick' => $nick]]
-        );
     }
 
     /**

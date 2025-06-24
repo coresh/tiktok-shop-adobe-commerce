@@ -9,8 +9,8 @@
         'TikTokShop/Category/Chooser'
     ], () => {
         window.TikTokShopCategoryChooserObj = new TikTokShopCategoryChooser(
-            <?= $block->getShopId() ?>,
-            <?= $block->getAccountId() ?>
+            <?= /* @noEscape */ $block->getShopId() ?>,
+            <?= /* @noEscape */ $block->getAccountId() ?>
         );
     });
 </script>
@@ -22,8 +22,8 @@
                 "components": {
                     "category_search": {
                         "component": "M2E_TikTokShop/js/Category/Chooser/Tabs/Search",
-                        "searchUrl": "<?= $block->getSearchUrl() ?>",
-                        "shopId": <?= $block->getShopId() ?>
+                        "searchUrl": "<?= /* @noEscape */ $block->getSearchUrl() ?>",
+                        "shopId": <?= /* @noEscape */ $block->getShopId() ?>
                     }
                 }
             }

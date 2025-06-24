@@ -31,9 +31,9 @@
         <?php if ($block->isChecked()) :
         ?>checked="checked"<?php
     endif; ?>
-        onclick="setLocation('<?php echo $block->getFilterUrl(); ?>');"
+        onclick="setLocation('<?php /* @noEscape */ echo $block->getFilterUrl(); ?>');"
     >
     <label for="switcher_show_products_others_listings_filter" class="admin__field-label">
-        <span><?php echo __('Show Products present in other M2E Listings'); ?></span>
+        <span><?php /* @noEscape */ echo __('Show Products present in other M2E Listings'); ?></span>
     </label>
 </div>

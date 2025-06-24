@@ -7,35 +7,35 @@
 <div id='category_info_messaged_container'></div>
 
 <div class="control-value">
-    <?= __('You need to choose Categories for Products in order to list them on TikTok Shop.') ?>
+    <?= /* @noEscape */ __('You need to choose Categories for Products in order to list them on TikTok Shop.') ?>
 </div>
 
 <div style="padding-top: 3px; font-weight: normal">
-    <?= __('Products will be Listed using the same TikTok Shop Category.') ?>
+    <?= /* @noEscape */ __('Products will be Listed using the same TikTok Shop Category.') ?>
 </div>
 
 <div style="margin: 7px 52px">
-    <b><?= __('Category') ?></b>:
+    <b><?= /* @noEscape */ __('Category') ?></b>:
     <span id="category_path" style="font-style: italic; color: #808080">Not selected</span>
-    &nbsp;<a href="javascript:void(0);" id="edit_category"><?= __('Edit') ?></a>
+    &nbsp;<a href="javascript:void(0);" id="edit_category"><?= /* @noEscape */ __('Edit') ?></a>
     <br>
     <div id="attributes_wrapper" class="hidden">
-        <b><?= __('Attributes') ?></b>:
+        <b><?= /* @noEscape */ __('Attributes') ?></b>:
         <span id="attributes_required" class="required hidden">*</span>
         <span id="attributes_counts" style="font-style: italic; color: #808080">0/0</span>
-        &nbsp<a href="javascript:void(0);" id="edit_attributes"><?= __('Edit') ?></a>
+        &nbsp<a href="javascript:void(0);" id="edit_attributes"><?= /* @noEscape */ __('Edit') ?></a>
     </div>
 </div>
 <label style="margin: 0 52px; display: none;" class="mage-error" id="same_product_type_error">
-    <?= __('Please select Category.') ?>
+    <?= /* @noEscape */ __('Please select Category.') ?>
 </label>
 
 <script>
     require([
         'TikTokShop/Category/Chooser'
     ], function() {
-        <?php if($block->getSelectedCategory() !== null): ?>
-        TikTokShopCategoryChooserObj.setSelectedCategory(<?= $block->getSelectedCategory() ?>);
+        <?php if ($block->getSelectedCategory() !== null): ?>
+        TikTokShopCategoryChooserObj.setSelectedCategory(<?= /* @noEscape */ $block->getSelectedCategory() ?>);
         TikTokShopCategoryChooserObj.confirmCategory()
         <?php endif; ?>
         TikTokShopCategoryChooserObj.initObservers();

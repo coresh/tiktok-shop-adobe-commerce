@@ -17,10 +17,10 @@
         <?php
         endif; ?>
         onclick="setLocation('<?php
-        echo $block->getFilterUrl(); ?>');"
+      /* @noEscape */ echo $block->getFilterUrl(); ?>');"
     >
     <label for="only_unique_messages_filter" class="admin__field-label">
         <span><?php
-            echo $block->getTitle(); ?></span>
+          /* @noEscape */ echo $block->getTitle(); ?></span>
     </label>
 </div>

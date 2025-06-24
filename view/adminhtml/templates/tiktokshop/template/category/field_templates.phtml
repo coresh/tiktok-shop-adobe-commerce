@@ -22,19 +22,19 @@ $attributes = $block->getAvailableAttributes();
                 value="<?php
                 echo \M2E\M2ePro\Model\Amazon\Template\ProductType::FIELD_NOT_CONFIGURED; ?>"
                 style="color: grey;"><?php
-                echo $block->__('Not Selected'); ?></option>
+              /* @noEscape */ echo $block->__('Not Selected'); ?></option>
             <option
                 value="<?php
                 echo \M2E\M2ePro\Model\Amazon\Template\ProductType::FIELD_CUSTOM_VALUE; ?>"
                 style="color: black;">
                 <?php
-                echo $block->__('Custom Value'); ?></option>
+              /* @noEscape */ echo $block->__('Custom Value'); ?></option>
             <option
                 value="<?php
                 echo \M2E\M2ePro\Model\Amazon\Template\ProductType::FIELD_CUSTOM_ATTRIBUTE; ?>"
                 style="color: black;">
                 <?php
-                echo $block->__('Custom Attribute'); ?></option>
+              /* @noEscape */ echo $block->__('Custom Attribute'); ?></option>
         </select>
 
         <div class="m2epro-field-tooltip admin__field-tooltip ">
@@ -51,13 +51,13 @@ $attributes = $block->getAvailableAttributes();
                     class="select admin__control-select product_type_setting_element"
                     style="display: none;">
                 <option value="0" selected="selected"><?php
-                    echo __('None'); ?></option>
+                  /* @noEscape */ echo __('None'); ?></option>
                 %additional_attribute_options%
                 <optgroup label="Magento Attributes" class="M2ePro-custom-attribute-optgroup">
                     <?php
                     foreach ($attributes as $attribute) : ?>
                         <option value="<?php
-                        echo $attribute['code']; ?>">
+                      /* @noEscape */ echo $attribute['code']; ?>">
                         <?php
                         echo $block->escapeHtml($attribute['label']); ?>
                     </option>
@@ -71,27 +71,27 @@ $attributes = $block->getAvailableAttributes();
 
 <div id="template_image_option" style="display: none;">
     <option value="image"><?php
-        echo __('Product Base Image'); ?></option>
+      /* @noEscape */ echo __('Product Base Image'); ?></option>
 </div>
 
 <div id="template_images_optgroup" style="display: none;">
     <optgroup label="<?php
-    echo __('Product Images'); ?>">
+  /* @noEscape */ echo __('Product Images'); ?>">
         <option value="1">1</option>
         <option value="2"><?php
-            echo __('Up to 2'); ?></option>
+          /* @noEscape */ echo __('Up to 2'); ?></option>
         <option value="3"><?php
-            echo __('Up to 3'); ?></option>
+          /* @noEscape */ echo __('Up to 3'); ?></option>
         <option value="4"><?php
-            echo __('Up to 4'); ?></option>
+          /* @noEscape */ echo __('Up to 4'); ?></option>
         <option value="5"><?php
-            echo __('Up to 5'); ?></option>
+          /* @noEscape */ echo __('Up to 5'); ?></option>
         <option value="6"><?php
-            echo __('Up to 6'); ?></option>
+          /* @noEscape */ echo __('Up to 6'); ?></option>
         <option value="7"><?php
-            echo __('Up to 7'); ?></option>
+          /* @noEscape */ echo __('Up to 7'); ?></option>
         <option value="8"><?php
-            echo __('Up to 8'); ?></option>
+          /* @noEscape */ echo __('Up to 8'); ?></option>
     </optgroup>
 </div>
 

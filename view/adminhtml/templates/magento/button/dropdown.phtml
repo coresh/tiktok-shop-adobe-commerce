@@ -17,37 +17,37 @@ echo $block->getAttributesHtml(); ?>>
     <?php
     if ($block->hasSplit()): ?>
         <button <?php
-        echo $block->getToggleAttributesHtml() ?> style="position: static; padding-left: 2rem;">
+      /* @noEscape */ echo $block->getToggleAttributesHtml() ?> style="position: static; padding-left: 2rem;">
             <span style="position: static;
                          display: inline;
                          visibility: visible;">
                 <?php
-                echo $block->escapeHtml($block->getLabel()); ?>
+              /* @noEscape */ echo $block->escapeHtml($block->getLabel()); ?>
             </span>
         </button>
 
         <?php
         if (!$block->getDisabled()): ?>
             <ul class="dropdown-menu" <?php
-            /* @escapeNotVerified */
+            /* @noEscape */
             echo $block->getUiId("dropdown-menu"); ?>>
                 <?php
                 foreach ($block->getOptions() as $key => $option): ?>
                     <li>
                     <span <?php
-                    echo $block->getOptionAttributesHtml($key, $option); ?>>
+                  /* @noEscape */ echo $block->getOptionAttributesHtml($key, $option); ?>>
                         <?php
-                        echo $block->escapeHtml($option['label']); ?>
+                      /* @noEscape */ echo $block->escapeHtml($option['label']); ?>
                     </span>
                         <?php
                         if (isset($option['hint'])): ?>
                             <div class="tooltip" <?php
-                            /* @escapeNotVerified */
+                            /* @noEscape */
                             echo $block->getUiId('item', $key, 'tooltip'); ?>>
                                 <a href="<?php
-                                echo $block->escapeHtml($option['hint']['href']) ?>" class="help">
+                              /* @noEscape */ echo $block->escapeHtml($option['hint']['href']) ?>" class="help">
                                     <?php
-                                    echo $block->escapeHtml($option['hint']['label']) ?>
+                                  /* @noEscape */ echo $block->escapeHtml($option['hint']['label']) ?>
                                 </a>
                             </div>
                         <?php

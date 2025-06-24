@@ -26,7 +26,6 @@ class MigrateRegistryToCore extends \M2E\Core\Model\Setup\Upgrade\Entity\Abstrac
                            ->from($newTable, ['key'])
                            ->where('`key` = ?', $row['key'])
                            ->where('`extension_name` = ?', \M2E\TikTokShop\Helper\Module::IDENTIFIER)
-
             );
 
             if (!$exists) {

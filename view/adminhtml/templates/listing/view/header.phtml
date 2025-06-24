@@ -55,7 +55,7 @@
             <li>
                 <label>
                 <span class="label">
-                    <?php echo __('Listing'); ?>:&nbsp;
+                    <?php /* @noEscape */ echo __('Listing'); ?>:&nbsp;
                 </span>
                     <span class="value">
                     <?php echo $escaper->escapeHtml($block->getProfileTitle()); ?>
@@ -67,7 +67,7 @@
         <li>
             <label>
                 <span class="label">
-                    <?php echo __('Account'); ?>:&nbsp;
+                    <?php /* @noEscape */ echo __('Account'); ?>:&nbsp;
                 </span>
                 <span class="value">
                     <?php echo $escaper->escapeHtml($block->getAccountTitle()); ?>
@@ -77,7 +77,7 @@
         <li>
             <label>
                 <span class="label">
-                    <?php echo $block->__('Shop'); ?>:&nbsp;
+                    <?php /* @noEscape */ echo $block->__('Shop'); ?>:&nbsp;
                 </span>
                 <span class="value">
                     <?php echo $escaper->escapeHtml($block->getShopName()); ?>
@@ -87,7 +87,7 @@
         <li>
             <label>
                 <span class="label">
-                    <?php echo __('Magento Store View'); ?>:&nbsp;
+                    <?php /* @noEscape */ echo __('Magento Store View'); ?>:&nbsp;
                 </span>
                 <span class="value">
                     <?php echo $escaper->escapeHtml($block->getStoreViewBreadcrumb(false)); ?>

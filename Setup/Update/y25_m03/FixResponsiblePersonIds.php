@@ -15,7 +15,8 @@ class FixResponsiblePersonIds extends \M2E\Core\Model\Setup\Upgrade\Entity\Abstr
         $this->changeProductColumnResponsiblePersonIds();
     }
 
-    private function changeComplianceColumnResponsiblePersonIds(): void {
+    private function changeComplianceColumnResponsiblePersonIds(): void
+    {
         $modifier = $this->createTableModifier(
             Tables::PREFIX . 'template_compliance'
         );
@@ -31,7 +32,8 @@ class FixResponsiblePersonIds extends \M2E\Core\Model\Setup\Upgrade\Entity\Abstr
         $modifier->commit();
     }
 
-    private function changeProductColumnResponsiblePersonIds(): void {
+    private function changeProductColumnResponsiblePersonIds(): void
+    {
         $modifier = $this->createTableModifier(
             Tables::TABLE_NAME_PRODUCT
         );

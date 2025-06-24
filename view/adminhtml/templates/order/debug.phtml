@@ -12,7 +12,7 @@
         <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
             <strong class="admin__collapsible-title">
                 <span><?php
-                    echo $block->__('Store Debug Information'); ?></span>
+                  /* @noEscape */ echo $block->__('Store Debug Information'); ?></span>
             </strong>
         </div>
 
@@ -27,7 +27,7 @@
                         <tr>
                             <td class="label">Tax Calculation Method Based On:</td>
                             <td class="value"><?php
-                                echo $block->getData('store_tax_calculation_algorithm') ?></td>
+                              /* @noEscape */ echo $block->getData('store_tax_calculation_algorithm') ?></td>
                         </tr>
                     <?php
                     endif; ?>
@@ -35,28 +35,28 @@
                     <tr>
                         <td class="label">Tax Calculation Based On:</td>
                         <td class="value"><?php
-                            echo ucfirst($block->getData('store_tax_calculation_based_on')) ?> Address
+                            /* @noEscape */ echo ucfirst($block->getData('store_tax_calculation_based_on')) ?> Address
                         </td>
                     </tr>
 
                     <tr>
                         <td class="label">Catalog Prices:</td>
                         <td class="value"><?php
-                            echo $block->getData('product_price_includes_tax') ? 'Including Tax' :
+                          /* @noEscape */ echo $block->getData('product_price_includes_tax') ? 'Including Tax' :
                                 'Excluding Tax' ?></td>
                     </tr>
 
                     <tr>
                         <td class="label">Shipping Prices:</td>
                         <td class="value"><?php
-                            echo $block->getData('shipping_price_includes_tax') ? 'Including Tax' :
+                          /* @noEscape */ echo $block->getData('shipping_price_includes_tax') ? 'Including Tax' :
                                 'Excluding Tax' ?></td>
                     </tr>
 
                     <tr>
                         <td class="label">Store Shipping Tax Class:</td>
                         <td class="value"><?php
-                            echo $block->getData('store_shipping_tax_class') != '' ?
+                          /* @noEscape */ echo $block->getData('store_shipping_tax_class') != '' ?
                                 $block->getData('store_shipping_tax_class') : 'None' ?></td>
                     </tr>
 
@@ -65,7 +65,7 @@
                         <tr>
                             <td class="label">Store Shipping Tax Rate:</td>
                             <td class="value"><?php
-                                echo $block->getData('store_shipping_tax_rate'); ?>%
+                              /* @noEscape */ echo $block->getData('store_shipping_tax_rate'); ?>%
                             </td>
                         </tr>
                     <?php
@@ -81,15 +81,14 @@
                                 'order_id' => $block->getRequest()->getParam('id'),
                             ]); ?>
                             <a href="<?php
-                            echo $url; ?>" target="_blank">Build Quote</a>
+                          /* @noEscape */ echo $url; ?>" target="_blank">Build Quote</a>
                         </td>
                         <td class="value">
                             <?php
-                            $deleteUrl = $block->getUrl('*/*/delete', ['id' => $block->getRequest()->getParam('id')]
-                            ); ?>
+                            $deleteUrl = $block->getUrl('*/*/delete', ['id' => $block->getRequest()->getParam('id')]); ?>
                             <a href="javascript:void(0);"
                                onclick="if (!confirm('Are you sure?')) return; setLocation('<?php
-                               echo $deleteUrl; ?>')">Delete Order</a>
+                             /* @noEscape */ echo $deleteUrl; ?>')">Delete Order</a>
                         </td>
                     </tr>
 

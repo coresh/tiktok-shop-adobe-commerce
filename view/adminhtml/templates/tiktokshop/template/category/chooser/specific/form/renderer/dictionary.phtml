@@ -7,21 +7,21 @@ $element = $this->getElement();
 ?>
 
 <table
-    data-specific-scope="<?= $element->getId() ?>"
+    data-specific-scope="<?= /* @noEscape */ $element->getId() ?>"
     class="specific-table data-grid data-grid-not-hovered"
     style="width: 100%"
 >
     <thead>
     <tr class="headings">
-        <th class="data-grid-th" style="width: 30%;"><?= __('Name'); ?></th>
-        <th class="data-grid-th" style="width: 30%;"><?= __('Mode'); ?></th>
-        <th class="data-grid-th" style="width: 40%;"><?= __('Value'); ?></th>
+        <th class="data-grid-th" style="width: 30%;"><?= /* @noEscape */ __('Name'); ?></th>
+        <th class="data-grid-th" style="width: 30%;"><?= /* @noEscape */ __('Mode'); ?></th>
+        <th class="data-grid-th" style="width: 40%;"><?= /* @noEscape */ __('Value'); ?></th>
     </tr>
     </thead>
     <tbody>
     <?php
     foreach ($element->getSpecifics() as $index => $specific) { ?>
-        <tr style="height: 25px;" class="<?= $element->getAdditionalClass($specific); ?>">
+        <tr style="height: 25px;" class="<?= /* @noEscape */ $element->getAdditionalClass($specific); ?>">
             <td style="vertical-align:top;">
                 <?php
                 echo $element->getAttributeIdHiddenHtml($index, $specific); ?>
@@ -34,7 +34,7 @@ $element = $this->getElement();
                 <?php
                 echo $element->getAttributeTitleLabelHtml($index, $specific); ?>
                 <?php
-                echo $element->getTitleTooltip($specific); ?>
+              /* @noEscape */ echo $element->getTitleTooltip($specific); ?>
             </td>
             <td style="vertical-align:top;">
                 <?php

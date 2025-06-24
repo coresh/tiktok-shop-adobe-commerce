@@ -26,12 +26,7 @@ class Config extends \M2E\TikTokShop\Plugin\AbstractPlugin
 
     protected function canExecute(): bool
     {
-        /** @var \M2E\TikTokShop\Helper\Module $helper */
-        $helper = \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \M2E\TikTokShop\Helper\Module::class
-        );
-
-        return $helper->areImportantTablesExist();
+        return $this->isModuleTablesExist();
     }
 
     public function aroundGetMenu(\Magento\Backend\Model\Menu\Config $interceptor, \Closure $callback, ...$arguments)

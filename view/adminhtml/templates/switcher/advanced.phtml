@@ -9,10 +9,9 @@ $controllerName = $block->getData('controller_name') ? $block->getData('controll
 
 <?php
 if ($items = $block->getItems()) : ?>
-
     <div class="switcher store-switcher big-size">
         <span class="store-switcher-label"><?php
-            echo $block->getLabel(); ?>:</span>
+          /* @noEscape */ echo $block->getLabel(); ?>:</span>
         <div class="actions dropdown closable">
             <button
                 type="button"
@@ -21,14 +20,14 @@ if ($items = $block->getItems()) : ?>
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 id="<?php
-                echo $block->getParamName(); ?>_switcher"
+              /* @noEscape */ echo $block->getParamName(); ?>_switcher"
             >
                 <?php
                 if ($block->getSelectedParam() === null && $block->hasDefaultOption()) : ?>
                     <?php
-                    echo $block->getDefaultOptionName(); ?>
+                  /* @noEscape */ echo $block->getDefaultOptionName(); ?>
                 <?php
-                else : ?>
+                else: ?>
                     <?php
                     foreach ($items as $item) : ?>
                         <?php
@@ -36,7 +35,7 @@ if ($items = $block->getItems()) : ?>
                             <?php
                             if ($block->getSelectedParam() == $nestedItem['value']) : ?>
                                 <?php
-                                echo $nestedItem['label'] ?>
+                              /* @noEscape */ echo $nestedItem['label'] ?>
                                 <?php
                                 break 2; ?>
                             <?php
@@ -54,13 +53,13 @@ if ($items = $block->getItems()) : ?>
                     <li class="store-switcher-all">
                         <a
                             href="<?php
-                            echo $block->getUrl(
+                          /* @noEscape */ echo $block->getUrl(
                                 "*/{$controllerName}/*",
                                 ['_current' => true, $block->getParamName() => null]
                             ); ?>"
                         >
                             <?php
-                            echo $block->getDefaultOptionName() ?>
+                          /* @noEscape */ echo $block->getDefaultOptionName() ?>
                         </a>
                     </li>
                 <?php
@@ -74,13 +73,13 @@ if ($items = $block->getItems()) : ?>
                             <li class="store-switcher-all">
                                 <a
                                     href="<?php
-                                    echo $block->getUrl(
+                                  /* @noEscape */ echo $block->getUrl(
                                         "*/{$controllerName}/*",
                                         ['_current' => true, $block->getParamName() => $nestedItem['value']]
                                     ); ?>"
                                 >
                                     <?php
-                                    echo $nestedItem['label'] ?>
+                                  /* @noEscape */ echo $nestedItem['label'] ?>
                                 </a>
                             </li>
                         <?php

@@ -36,6 +36,10 @@ class Config extends \M2E\TikTokShop\Plugin\AbstractPlugin
      */
     protected function canExecute(): bool
     {
+        if (!$this->isModuleTablesExist()) {
+            return false;
+        }
+
         if ($this->moduleMaintenanceHelper->isEnabled()) {
             return false;
         }

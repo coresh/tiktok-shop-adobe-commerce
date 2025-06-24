@@ -10,13 +10,13 @@ $element = $this->getElement();
 
 <?php foreach ($element->getSavedResponsiblePersons() as $index => $value) : ?>
     <div class="admin__field field field-responsible_person_id with-addon required _required">
-        <label class="label admin__field-label" for="responsible_person_id_<?= $index ?>"">
-            <span><?= __('Responsible Person') ?></span>
+        <label class="label admin__field-label" for="responsible_person_id_<?= /* @noEscape */ $index ?>"">
+            <span><?= /* @noEscape */ __('Responsible Person') ?></span>
         </label>
         <div class="admin__field-control control">
-            <?= $element->renderAttributesDropdown($index) ?>
+            <?= /* @noEscape */ $element->renderAttributesDropdown($index) ?>
             <span class="actions" <?= empty($value) ? 'style="display:none"' : '' ?>>
-                <?= $element->createButtonsBlock(
+                <?= /* @noEscape */ $element->createButtonsBlock(
                     [
                         $element->renderResponsiblePersonLinksHtml(true, $index),
                         $element->renderResponsiblePersonLinksHtml(false, $index),
@@ -32,7 +32,7 @@ $element = $this->getElement();
 <div class="admin__field add_row_wrapper field with-addon" <?= empty($element->getAccountId()) ? 'style="display:none"' : '' ?>>
     <label class="label admin__field-label"></label>
     <div class="admin__field-control control">
-        <?= $element->renderAddRowButton() ?>
+        <?= /* @noEscape */ $element->renderAddRowButton() ?>
     </div>
 </div>
 

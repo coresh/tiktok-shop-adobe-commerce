@@ -13,18 +13,18 @@ $searchTooltip = __('Enter keywords in marketplace-specific language. Use plural
         <div id="selected_product_type_container">
             <div style="vertical-align: middle;">
                 <strong><?php
-                    echo $block->__('Product Type'); ?></strong>
+                  /* @noEscape */ echo $block->__('Product Type'); ?></strong>
 
                 <span style="vertical-align: middle; padding-left: 5px">
                     <span id="search_popup_selected_product_type_title"></span>
-                    <span id="search_popup_product_type_not_selected" style="color: grey;"><?= $block->__(
+                    <span id="search_popup_product_type_not_selected" style="color: grey;"><?= /* @noEscape */ $block->__(
                             'Not Selected'
                         ) ?></span>
                 </span>
 
                 <a style="vertical-align: middle; padding-left: 5px"
                    href="javascript:void(0)" id="product_type_reset_link"><?php
-                    echo $block->__('Reset'); ?></a>
+                  /* @noEscape */ echo $block->__('Reset'); ?></a>
             </div>
         </div>
     </div>
@@ -39,11 +39,11 @@ $searchTooltip = __('Enter keywords in marketplace-specific language. Use plural
                     aria-expanded="true">
                     <a href="#productTypeChooserTabs_search_content"
                        id="productTypeChooserTabs_search" title="<?php
-                    echo $block->__('Search'); ?>"
+                  /* @noEscape */ echo $block->__('Search'); ?>"
                        onclick="TemplateCategorySearchObj.onClickPopupTab(this);"
                        class="tab-item-link ui-tabs-anchor" data-tab-type="" role="presentation" tabindex="-1">
                         <span><?php
-                            echo $block->__('Search'); ?></span>
+                          /* @noEscape */ echo $block->__('Search'); ?></span>
                     </a>
                 </li>
 
@@ -53,11 +53,11 @@ $searchTooltip = __('Enter keywords in marketplace-specific language. Use plural
                     aria-expanded="false">
                     <a href="#productTypeChooserTabs_browse_content"
                        id="productTypeChooserTabs_browse" title="<?php
-                    echo $block->__('Browse'); ?>"
+                  /* @noEscape */ echo $block->__('Browse'); ?>"
                        onclick="TemplateCategorySearchObj.onClickPopupTab(this);"
                        class="tab-item-link ui-tabs-anchor" data-tab-type="" role="presentation" tabindex="-1">
                         <span><?php
-                            echo $block->__('Browse'); ?></span>
+                          /* @noEscape */ echo $block->__('Browse'); ?></span>
                     </a>
                 </li>
             </ul>
@@ -72,24 +72,24 @@ $searchTooltip = __('Enter keywords in marketplace-specific language. Use plural
             <div class="chooser_input_container">
                 <input id="product_type_search_query" type="text"
                        placeholder="<?php
-                       echo $block->__('Enter keywords separated by commas'); ?>">
+                     /* @noEscape */ echo $block->__('Enter keywords separated by commas'); ?>">
 
                 <div class="m2epro-field-tooltip admin__field-tooltip ">
                     <a class="admin__field-tooltip-action" href="javascript://"></a>
-                    <div class="admin__field-tooltip-content"><?= $searchTooltip ?></div>
+                    <div class="admin__field-tooltip-content"><?= /* @noEscape */ $searchTooltip ?></div>
                 </div>
 
                 <button class="action primary"
                         onclick="TemplateCategorySearchObj.applySearchFilter()"
                         style="margin-left: 7rem;">
                     <?php
-                    echo $block->__('Search'); ?>
+                  /* @noEscape */ echo $block->__('Search'); ?>
                 </button>
 
                 <a onclick="TemplateCategorySearchObj.resetSearchFilter()"
                    style="margin-left: 2rem;">
                     <?php
-                    echo $block->__('Reset'); ?>
+                  /* @noEscape */ echo $block->__('Reset'); ?>
                 </a>
             </div>
 
@@ -109,13 +109,13 @@ $searchTooltip = __('Enter keywords in marketplace-specific language. Use plural
             <div class="chooser_input_container">
                 <input id="product_type_browse_query" type="text"
                        placeholder="<?php
-                       echo $block->__('Enter product type name'); ?>"
+                     /* @noEscape */ echo $block->__('Enter product type name'); ?>"
                        onkeyup="TemplateCategorySearchObj.applyBrowseFilter();">
 
                 <a onclick="TemplateCategorySearchObj.resetBrowseFilter()"
                    style="margin-left: 2rem;">
                     <?php
-                    echo $block->__('Reset'); ?>
+                  /* @noEscape */ echo $block->__('Reset'); ?>
                 </a>
             </div>
 
@@ -135,13 +135,13 @@ $searchTooltip = __('Enter keywords in marketplace-specific language. Use plural
             <div class="chooser_input_container">
                 <input id="product_type_browse_query" type="text"
                        placeholder="<?php
-                       echo $block->__('Enter product type name'); ?>"
+                     /* @noEscape */ echo $block->__('Enter product type name'); ?>"
                        onkeyup="TemplateCategorySearchObj.applyBrowseFilter();">
 
                 <a onclick="TemplateCategorySearchObj.resetBrowseFilter()"
                    style="margin-left: 2rem;">
                     <?php
-                    echo $block->__('Reset'); ?>
+                  /* @noEscape */ echo $block->__('Reset'); ?>
                 </a>
             </div>
 

@@ -8,20 +8,19 @@
 
 <?php
 if ($items = $block->getItems()) : ?>
-
     <div class="switcher">
 
         <label for="<?php
-        echo $block->getParamName(); ?>_switcher"><?php
-            echo $block->getLabel(); ?></label>
+      /* @noEscape */ echo $block->getParamName(); ?>_switcher"><?php
+          /* @noEscape */ echo $block->getLabel(); ?></label>
 
         <select
             id="<?php
-            echo $block->getParamName(); ?>_switcher"
+          /* @noEscape */ echo $block->getParamName(); ?>_switcher"
             name="<?php
-            echo $block->getParamName(); ?>_switcher"
+          /* @noEscape */ echo $block->getParamName(); ?>_switcher"
             onchange="<?php
-            echo $block->getSwitchCallbackName() ?>.call(this);"
+          /* @noEscape */ echo $block->getSwitchCallbackName() ?>.call(this);"
             class="admin__control-select"
             <?php
             if ($block->hasIsDisabled()) :
@@ -31,18 +30,17 @@ if ($items = $block->getItems()) : ?>
             <?php
             if ($block->hasDefaultOption()) : ?>
                 <option value="<?php
-                echo $block->getDefaultOptionValue(); ?>"><?php
+              /* @noEscape */ echo $block->getDefaultOptionValue(); ?>"><?php
                     echo \M2E\Core\Helper\Data::escapeHtml($block->getDefaultOptionName()); ?></option>
             <?php
             endif; ?>
 
             <?php
             foreach ($items as $item) : ?>
-
                 <?php
                 if (count($items) > 1) : ?>
                     <optgroup label="<?php
-                    echo $item['label'] ?>">
+                  /* @noEscape */ echo $item['label'] ?>">
                 <?php
                 endif; ?>
 
@@ -50,14 +48,14 @@ if ($items = $block->getItems()) : ?>
                 foreach ($item['value'] as $nestedItem) : ?>
                     <option
                         value="<?php
-                        echo $nestedItem['value'] ?>"
+                      /* @noEscape */ echo $nestedItem['value'] ?>"
                         <?php
                         if ($block->getSelectedParam() == $nestedItem['value']) {
                             echo ' selected="selected"';
                         } ?>
                     >
                         <?php
-                        echo $nestedItem['label'] ?>
+                      /* @noEscape */ echo $nestedItem['label'] ?>
                     </option>
                 <?php
                 endforeach; ?>
@@ -80,10 +78,10 @@ if ($items = $block->getItems()) : ?>
         endif; ?>
     </div>
 
-    <script type="text/javascript">
+    <script>
 
-        <?php echo $block->getSwitchCallbackName() ?> = function () {
-            <?php echo $block->getSwitchCallback() ?>
+        <?php /* @noEscape */ echo $block->getSwitchCallbackName() ?> = function () {
+            <?php /* @noEscape */ echo $block->getSwitchCallback() ?>
         }
 
     </script>

@@ -24,23 +24,23 @@
 
 <div id="product_options_mapping_content" class="hor-scroll" style="">
 
-    <?= $block->getChildHtml('product_mapping_options_help_block'); ?>
+    <?= /* @noEscape */ $block->getChildHtml('product_mapping_options_help_block'); ?>
 
     <input
         type="hidden" name="order_item_ids" class="form-element"
         value="<?= $escaper->escapeHtmlAttr($block->getOrderItemsIdsAsString()) ?>"/>
 
-    <h4><?= __('Channel Options') ?></h4>
+    <h4><?= /* @noEscape */ __('Channel Options') ?></h4>
 
     <div style="border-bottom: 1px solid #E7E7E7; padding: 5px 5px;">
 
         <?php
         if (empty($block->getData('channel_options'))) : ?>
             <span style="font-style: italic;">
-                <?= __('No Channel Options are available.'); ?>
+                <?= /* @noEscape */ __('No Channel Options are available.'); ?>
             </span>
         <?php
-        else : ?>
+        else: ?>
             <dl>
 
                 <?php
@@ -90,7 +90,7 @@
                         echo (int)$option['option_id']; ?>]"
                                 class="form-element select admin__control-select required-entry">
                             <option value="" class="empty"><?php
-                                echo $block->__('Select Option...'); ?></option>
+                              /* @noEscape */ echo $block->__('Select Option...'); ?></option>
                             <?php
                             foreach ($option['values'] as $value) : ?>
                                 <?php

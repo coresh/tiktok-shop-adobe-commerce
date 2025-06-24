@@ -7,19 +7,19 @@
 <div class="fieldset-wrapper">
     <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
         <strong class="admin__collapsible-title">
-            <span><?= __('Buyer Cancellation Request') ?></span>
+            <span><?= /* @noEscape */ __('Buyer Cancellation Request') ?></span>
         </strong>
     </div>
     <table class="order-info form-list">
         <tr>
-            <td class="label"><?= __('Cancellation Reason') ?></td>
-            <td><p><?= $block->getBuyerCancellationRequestReason() ?></p></td>
+            <td class="label"><?= /* @noEscape */ __('Cancellation Reason') ?></td>
+            <td><p><?= /* @noEscape */ $block->getBuyerCancellationRequestReason() ?></p></td>
         </tr>
         <tr>
-            <td class="label"><?= __('Action') ?></td>
+            <td class="label"><?= /* @noEscape */ __('Action') ?></td>
             <td>
-                <button class="primary buyer-cancellation-accept"><?= __('Accept') ?></button>
-                <button class="primary buyer-cancellation-decline"><?= __('Decline') ?></button>
+                <button class="primary buyer-cancellation-accept"><?= /* @noEscape */ __('Accept') ?></button>
+                <button class="primary buyer-cancellation-decline"><?= /* @noEscape */ __('Decline') ?></button>
             </td>
         </tr>
     </table>

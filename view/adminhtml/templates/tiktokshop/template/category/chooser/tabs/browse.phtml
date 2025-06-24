@@ -42,6 +42,6 @@ require([
 </style>
 
 <div id="chooser_browser">
-    <div id="chooser_browser-message_wrapper"><?= $block->getInviteOnlyNotice() ?></div>
+    <div id="chooser_browser-message_wrapper"><?= /* @noEscape */ $block->getInviteOnlyNotice() ?></div>
     <div id="chooser_browser-selects"></div>
 </div>

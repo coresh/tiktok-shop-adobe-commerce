@@ -5,13 +5,12 @@
 ?>
 <?php
 if (!empty($tabs)): ?>
-
-    <div class="admin__page-nav" data-role="container" id="<?= $block->escapeHtmlAttr($block->getId()) ?>">
+    <div class="admin__page-nav" data-role="container" id="<?= /* @noEscape */ $block->escapeHtmlAttr($block->getId()) ?>">
         <?php
         if ($block->getTitle()): ?>
             <div class="admin__page-nav-title" data-role="title" <?= /* @noEscape */
             $block->getUiId('title') ?>>
-                <strong><?= $block->escapeHtml($block->getTitle()) ?></strong>
+                <strong><?= /* @noEscape */ $block->escapeHtml($block->getTitle()) ?></strong>
                 <span data-role="title-messages" class="admin__page-nav-title-messages"></span>
             </div>
         <?php
@@ -38,25 +37,25 @@ if (!empty($tabs)): ?>
                     $block->getTabUrl($_tab) ?>
 
                 <li class="admin__page-nav-item no-display"
-                    id="<?= $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_item"
+                    id="<?= /* @noEscape */ $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_item"
                     <?= /* @noEscape */
                     $block->getUiId('tab', 'item', $_tab->getId()) ?>>
-                    <a href="<?= $block->escapeUrl($_tabHref) ?>"
-                       id="<?= $block->escapeHtmlAttr($block->getTabId($_tab)) ?>"
-                       name="<?= $block->escapeHtmlAttr($block->getTabId($_tab, false)) ?>"
-                       title="<?= $block->escapeHtmlAttr($block->getTabTitle($_tab)) ?>"
-                       class="admin__page-nav-link <?= $block->escapeHtmlAttr($_tabClass) ?>"
-                       data-tab-type="<?= $block->escapeHtmlAttr($_tabType) ?>"
+                    <a href="<?= /* @noEscape */ $block->escapeUrl($_tabHref) ?>"
+                       id="<?= /* @noEscape */ $block->escapeHtmlAttr($block->getTabId($_tab)) ?>"
+                       name="<?= /* @noEscape */ $block->escapeHtmlAttr($block->getTabId($_tab, false)) ?>"
+                       title="<?= /* @noEscape */ $block->escapeHtmlAttr($block->getTabTitle($_tab)) ?>"
+                       class="admin__page-nav-link <?= /* @noEscape */ $block->escapeHtmlAttr($_tabClass) ?>"
+                       data-tab-type="<?= /* @noEscape */ $block->escapeHtmlAttr($_tabType) ?>"
                         <?= /* @noEscape */
                         $block->getUiId('tab', 'link', $_tab->getId()) ?>>
 
-                        <span><?= $block->escapeHtml($block->getTabLabel($_tab)) ?></span>
+                        <span><?= /* @noEscape */ $block->escapeHtml($block->getTabLabel($_tab)) ?></span>
 
                         <span class="admin__page-nav-item-messages" data-role="item-messages">
                        <span class="admin__page-nav-item-message _changed">
                            <span class="admin__page-nav-item-message-icon"></span>
                            <span class="admin__page-nav-item-message-tooltip">
-                               <?= $block->escapeHtml(
+                               <?= /* @noEscape */ $block->escapeHtml(
                                    __(
                                        'Changes have been made to this section that have not been saved.'
                                    )
@@ -66,7 +65,7 @@ if (!empty($tabs)): ?>
                        <span class="admin__page-nav-item-message _error">
                            <span class="admin__page-nav-item-message-icon"></span>
                            <span class="admin__page-nav-item-message-tooltip">
-                               <?= $block->escapeHtml(
+                               <?= /* @noEscape */ $block->escapeHtml(
                                    __(
                                        'This tab contains invalid data. Please resolve this before saving.'
                                    )
@@ -81,7 +80,7 @@ if (!empty($tabs)): ?>
                        </span>
                    </span>
                     </a>
-                    <div id="<?= $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_content"
+                    <div id="<?= /* @noEscape */ $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_content"
                         <?= /* @noEscape */
                         $block->getUiId('tab', 'content', $_tab->getId()) ?>>
                         <?= /* @noEscape */

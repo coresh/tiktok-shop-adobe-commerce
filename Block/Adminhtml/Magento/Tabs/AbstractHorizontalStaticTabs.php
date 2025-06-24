@@ -26,7 +26,7 @@ abstract class AbstractHorizontalStaticTabs extends \M2E\TikTokShop\Block\Adminh
         string $tabId,
         string $content,
         string $url,
-        string $title = null
+        ?string $title = null
     ): void {
         $this->tabs[$tabId] = [
             'content' => $content,

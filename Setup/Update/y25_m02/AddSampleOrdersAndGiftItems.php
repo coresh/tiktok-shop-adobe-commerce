@@ -11,7 +11,6 @@ use Magento\Framework\DB\Ddl\Table;
 
 class AddSampleOrdersAndGiftItems extends \M2E\Core\Model\Setup\Upgrade\Entity\AbstractFeature
 {
-
     public function execute(): void
     {
         $modifier = $this->createTableModifier(TablesHelper::TABLE_NAME_ORDER);

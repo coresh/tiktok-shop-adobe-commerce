@@ -154,7 +154,7 @@ $selectedCategory = $block->getSelectedCategory();
         <tr>
             <td style="vertical-align: middle;">
                 <strong id="category_title_container">
-                    <?= __('Category'); ?>
+                    <?= /* @noEscape */ __('Category'); ?>
                 </strong>
 
                 <span id="selected_category_path" style="vertical-align: middle; padding-left: 5px">
@@ -165,7 +165,7 @@ $selectedCategory = $block->getSelectedCategory();
                 <a href="javascript:void(0)" id="category_reset_link" <?php
                 if (empty($selectedCategory)) : ?>style="display: none"<?php
                 endif; ?>
-                   onclick="TikTokShopCategoryChooserObj.unSelectCategory()"><?= __('Reset') ?></a>
+                   onclick="TikTokShopCategoryChooserObj.unSelectCategory()"><?= /* @noEscape */ __('Reset') ?></a>
             </td>
 
         </tr>

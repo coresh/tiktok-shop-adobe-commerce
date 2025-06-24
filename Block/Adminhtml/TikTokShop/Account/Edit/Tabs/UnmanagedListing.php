@@ -15,7 +15,7 @@ class UnmanagedListing extends AbstractForm
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Template $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \M2E\TikTokShop\Model\Account $account = null,
+        ?\M2E\TikTokShop\Model\Account $account = null,
         array $data = []
     ) {
         $this->magentoAttributeHelper = $magentoAttributeHelper;

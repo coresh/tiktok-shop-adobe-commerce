@@ -19,12 +19,12 @@ echo $block->getLayout()->createBlock(\M2E\TikTokShop\Block\Adminhtml\HelpBlock:
 <div class="pagination_container page-main-actions">
     <div class="product_title">
         <h2><?php
-            echo $block->getData('title'); ?> (ID: <?php
-            echo $block->getData('magento_product_id'); ?>)</h2>
+          /* @noEscape */ echo $block->getData('title'); ?> (ID: <?php
+          /* @noEscape */ echo $block->getData('magento_product_id'); ?>)</h2>
     </div>
 </div>
 
 <div class="description_container">
     <?php
-    echo $block->getData('description'); ?>
+  /* @noEscape */ echo $block->getData('description'); ?>
 </div>

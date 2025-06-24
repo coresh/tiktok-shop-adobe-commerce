@@ -18,7 +18,7 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
 
     protected $_infoBlockType = \M2E\TikTokShop\Block\Adminhtml\Magento\Payment\Info::class;
 
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return true;
     }

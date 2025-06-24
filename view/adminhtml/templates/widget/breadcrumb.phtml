@@ -20,7 +20,7 @@ $id = $containerIdPrefix ? $containerIdPrefix . '_breadcrumb_container' : 'bread
     }
 
     .breadcrumb {
-        width: <?php echo $width; ?>%;
+        width: <?php /* @noEscape */ echo $width; ?>%;
         padding: 12px 0;
         color: #aaa;
         font-size: 14px;
@@ -52,24 +52,24 @@ $id = $containerIdPrefix ? $containerIdPrefix . '_breadcrumb_container' : 'bread
 </style>
 
 <div id="<?php
-echo $id; ?>" <?php
-echo $containerStyles ? 'style="' . $containerStyles . '"' : ''; ?>>
+/* @noEscape */ echo $id; ?>" <?php
+/* @noEscape */ echo $containerStyles ? 'style="' . $containerStyles . '"' : ''; ?>>
 
     <?php
     foreach ($block->getSteps() as $step) : ?>
         <div id="step_<?php
-        echo $step['id']; ?>" class="breadcrumb <?php
+      /* @noEscape */ echo $step['id']; ?>" class="breadcrumb <?php
         if ($block->getSelectedStep() === $step['id']) {
             echo 'selected';
         } ?>">
 
         <span>
             <?php
-            echo $step['title'] ?>:
+          /* @noEscape */ echo $step['title'] ?>:
         </span>
             <span>
             <?php
-            echo $step['description'] ?>
+          /* @noEscape */ echo $step['description'] ?>
         </span>
 
         </div>

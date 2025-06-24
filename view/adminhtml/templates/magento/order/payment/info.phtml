@@ -9,15 +9,15 @@
 <table>
     <?php if ($block->getPaymentMethod() != '') : ?>
         <tr>
-            <td style="width: 200px;"><label><?= __('Payment Method'); ?>:</label></td>
-            <td><strong><?= $block->escapeHtml($block->getPaymentMethod()); ?></strong></td>
+            <td style="width: 200px;"><label><?= /* @noEscape */ __('Payment Method'); ?>:</label></td>
+            <td><strong><?= /* @noEscape */ $block->escapeHtml($block->getPaymentMethod()); ?></strong></td>
         </tr>
     <?php endif; ?>
 
     <?php if ($block->getChannelOrderId() != '') : ?>
         <tr>
-            <td style="width: 200px;"><?= __('TikTok Shop Order ID') ?>:</td>
-            <td><strong><?= $block->escapeHtml($block->getChannelOrderId()); ?></strong></td>
+            <td style="width: 200px;"><?= /* @noEscape */ __('TikTok Shop Order ID') ?>:</td>
+            <td><strong><?= /* @noEscape */ $block->escapeHtml($block->getChannelOrderId()); ?></strong></td>
         </tr>
     <?php endif; ?>
 </table>

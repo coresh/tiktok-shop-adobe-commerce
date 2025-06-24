@@ -33,8 +33,8 @@ class Factory
         string $nick,
         \M2E\TikTokShop\Model\Product $product,
         int $action,
-        \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Configurator $configurator = null,
-        \M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings $variantSettings = null,
+        ?\M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\Configurator $configurator = null,
+        ?\M2E\TikTokShop\Model\TikTokShop\Listing\Product\Action\VariantSettings $variantSettings = null,
         array $params = [],
         array $cacheData = []
     ): AbstractDataBuilder {

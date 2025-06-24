@@ -6,21 +6,21 @@
 <form id="order_note_popup" action="javascript:void(0);" method="post">
     <?php
     if ($block->hasNote()) : ?>
-        <input type="hidden" name="note_id" value="<?= $block->getNote()->getId(); ?>"/>
+        <input type="hidden" name="note_id" value="<?= /* @noEscape */ $block->getNote()->getId(); ?>"/>
     <?php
     endif; ?>
 
     <?php
     if ($block->hasOrderId()) : ?>
-        <input type="hidden" name="order_id" value="<?= $block->getOrderId(); ?>"/>
+        <input type="hidden" name="order_id" value="<?= /* @noEscape */ $block->getOrderId(); ?>"/>
     <?php
     endif; ?>
 
     <div style="float: right; margin-top: 20px; margin-bottom: 12px;">
-        <label for="note"><?= __('Description') ?><span class="required">*</span></label><br/>
+        <label for="note"><?= /* @noEscape */ __('Description') ?><span class="required">*</span></label><br/>
         <textarea id="note" name="note" class="textarea required-entry"
                   style="resize: none; width: 535px; height: 100px;">
-            <?= $block->hasNote() ? $block->getNote()->getNote() : ''; ?>
+            <?= /* @noEscape */ $block->hasNote() ? $block->getNote()->getNote() : ''; ?>
         </textarea>
     </div>
 </form>
