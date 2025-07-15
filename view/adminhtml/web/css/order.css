@@ -59,3 +59,7 @@ table.order-info tr {
     width: 260px;
     word-break: break-word;
 }
+
+.tts-return-request-table {
+    margin-top: 20px;
+}

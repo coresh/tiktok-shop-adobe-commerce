@@ -25,8 +25,6 @@ class Issue
     public function getMessage(): string
     {
         switch ($this->type) {
-            case 'PRODUCT_QUANTITY_LIMIT':
-                return 'Product was not listed. The daily limit of 500 listings for new sellers has been exceeded';
             case 'RETURN_WAREHOUSE':
                 return 'Product was not listed. The Return Warehouse information must be specified for this Shop in the Seller Center.';
             case 'SHOP_TAX':

@@ -88,6 +88,9 @@ class Config implements \M2E\Core\Model\Setup\Upgrade\Entity\ConfigInterface
                 \M2E\TikTokShop\Setup\Update\y25_m04\RemoveIsActiveFlagFromAccount::class,
                 \M2E\TikTokShop\Setup\Update\y25_m04\WarehouseUpdates::class,
             ],
+            'y25_m05' => [
+                \M2E\TikTokShop\Setup\Update\y25_m05\ModifyOrderItemTable::class,
+            ],
         ];
     }
 }

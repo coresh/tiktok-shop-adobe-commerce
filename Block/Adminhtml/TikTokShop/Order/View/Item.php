@@ -304,8 +304,17 @@ class Item extends AbstractGrid
         if ($taxDetails === []) {
             return '0%';
         }
+
         $taxSum = array_sum(array_column($taxDetails, 'amount'));
-        $rate = round($taxSum / $row->getOriginalPrice() * 100, 2);
+        $itemPrice = $row->getOriginalPrice();
+        if (
+            empty($taxSum)
+            || empty($itemPrice)
+        ) {
+            return '0%';
+        }
+
+        $rate = round($taxSum / $itemPrice * 100, 2);
 
         return sprintf('%s%%', $rate);
     }

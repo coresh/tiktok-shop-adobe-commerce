@@ -298,4 +298,16 @@ JS
             ->createBlock(CancellationRequest::class, '', ['order' => $this->order])
             ->toHtml();
     }
+
+    public function renderReturnRequestBlock(): string
+    {
+        if (!$this->order->hasOrderReturnRequestedItemInPendingStatus()) {
+            return '';
+        }
+
+        return $this
+            ->getLayout()
+            ->createBlock(ReturnRequest::class, '', ['order' => $this->order])
+            ->toHtml();
+    }
 }

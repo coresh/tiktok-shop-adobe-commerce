@@ -173,6 +173,18 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractList
                 return;
             }
 
+            if (!$listing->getShop()->hasDefaultWarehouse()) {
+                $this->getMessageManager()->addErrorMessage(
+                    __(
+                        'The Product(s) cannot be added because the default warehouse is not configured.' .
+                        ' Please ensure that warehouses are set up for the selected Shop in TikTok Shop Seller Center' .
+                        ' and use "Update Access Data" in M2E Pro to synchronize the updates.'
+                    )
+                );
+
+                return $this->_redirect('*/tiktokshop_listing/view', ['id' => $listing->getId()]);
+            }
+
             $wizard = $this->createModel->process($listing, \M2E\TikTokShop\Model\Listing\Wizard::TYPE_GENERAL);
 
             $this->_redirect(

@@ -24,8 +24,11 @@ class Item extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\AbstractMode
     public const COLUMN_SELLER_DISCOUNT = 'seller_discount';
     public const COLUMN_TAX_DETAILS = 'tax_details';
     public const COLUMN_TRACKING_DETAILS = 'tracking_details';
-    public const COLUMN_BUYER_REQUEST_REFUND_RETURN = 'buyer_request_refund_return';
     public const COLUMN_CANCEL_REASON = 'cancel_reason';
+    public const COLUMN_BUYER_REQUEST_REFUND = 'buyer_request_refund';
+    public const COLUMN_BUYER_REQUEST_RETURN = 'buyer_request_return';
+    public const COLUMN_REFUND_RETURN_ID = 'refund_return_id';
+    public const COLUMN_REFUND_RETURN_STATUS = 'refund_return_status';
     public const COLUMN_SHIPPING_IN_PROGRESS = 'shipping_in_progress';
     public const COLUMN_IS_GIFT = 'is_gift';
     public const COLUMN_UPDATE_DATE = 'update_date';

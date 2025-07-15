@@ -3,6 +3,7 @@
 namespace M2E\TikTokShop\Model\Order;
 
 use M2E\TikTokShop\Model\ResourceModel\Order\Item as OrderItemResource;
+use M2E\TikTokShop\Model\Order\ReturnRequest\Status as ReturnRequestStatus;
 
 class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 {
@@ -806,28 +807,118 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         return (string)$this->getData(OrderItemResource::COLUMN_CANCEL_REASON);
     }
 
-    public function isBuyerRequestRefundReturn(): bool
+    public function isBuyerRequestReturn(): bool
     {
-        return (bool)$this->getData(OrderItemResource::COLUMN_BUYER_REQUEST_REFUND_RETURN);
+        return (bool)$this->getData(OrderItemResource::COLUMN_BUYER_REQUEST_RETURN);
     }
 
-    public function setBuyerRequestRefundReturnStatus(bool $status): self
+    public function setBuyerRequestReturn(bool $status): self
     {
-        $this->setData(OrderItemResource::COLUMN_BUYER_REQUEST_REFUND_RETURN, (int)$status);
+        $this->setData(OrderItemResource::COLUMN_BUYER_REQUEST_RETURN, (int)$status);
 
         return $this;
     }
 
-    public function isChangedColumnBuyerRequestRefundReturn(): bool
+    public function isChangedBuyerRequestReturn(): bool
     {
-        $oldValue = (bool)$this->getOrigData(OrderItemResource::COLUMN_BUYER_REQUEST_REFUND_RETURN);
-        $newValue = $this->isBuyerRequestRefundReturn();
+        $oldValue = (bool)$this->getOrigData(OrderItemResource::COLUMN_BUYER_REQUEST_RETURN);
+        $newValue = $this->isBuyerRequestReturn();
 
         if ($oldValue && !$newValue) {
             return false;
         }
 
         return $oldValue !== $newValue;
+    }
+
+    public function isReturnRequestedProcessPossible(): bool
+    {
+        return $this->isBuyerRequestReturn() && $this->isRefundReturnStatusPending();
+    }
+
+    public function setBuyerRequestRefund(bool $status): self
+    {
+        $this->setData(OrderItemResource::COLUMN_BUYER_REQUEST_REFUND, (int)$status);
+
+        return $this;
+    }
+
+    public function setRefundReturnId(?string $id): self
+    {
+        $this->setData(OrderItemResource::COLUMN_REFUND_RETURN_ID, $id);
+
+        return $this;
+    }
+
+    public function isChangedBuyerRequestRefund(): bool
+    {
+        $oldValue = (bool)$this->getOrigData(OrderItemResource::COLUMN_BUYER_REQUEST_REFUND);
+        $newValue = $this->isBuyerRequestRefund();
+
+        if ($oldValue && !$newValue) {
+            return false;
+        }
+
+        return $oldValue !== $newValue;
+    }
+
+    public function isBuyerRequestRefund(): bool
+    {
+        return (bool)$this->getData(OrderItemResource::COLUMN_BUYER_REQUEST_REFUND);
+    }
+
+    public function getRefundReturnId(): ?string
+    {
+        return $this->getData(OrderItemResource::COLUMN_REFUND_RETURN_ID);
+    }
+
+    public function hasRefundReturnId(): bool
+    {
+        return $this->getRefundReturnId() !== null;
+    }
+
+    public function setRefundReturnStatus(?string $status): self
+    {
+        $this->setData(OrderItemResource::COLUMN_REFUND_RETURN_STATUS, $status);
+
+        return $this;
+    }
+
+    public function getRefundReturnStatus(): string
+    {
+        return (string)$this->getData(OrderItemResource::COLUMN_REFUND_RETURN_STATUS);
+    }
+
+    public function isChangedRefundReturnStatus(): bool
+    {
+        $oldValue = $this->getOrigData(OrderItemResource::COLUMN_REFUND_RETURN_STATUS);
+        $newValue = $this->getRefundReturnStatus();
+
+        if ($oldValue && !$newValue) {
+            return false;
+        }
+
+        return $oldValue !== $newValue;
+    }
+
+    private function isRefundReturnStatusPending(): bool
+    {
+        return $this->getRefundReturnStatus() === ReturnRequestStatus::RETURN_OR_REFUND_REQUEST_PENDING;
+    }
+
+    public function isRefundReturnStatusBuyerShippedItem(): bool
+    {
+        return $this->getRefundReturnStatus() === ReturnRequestStatus::BUYER_SHIPPED_ITEM;
+    }
+
+    public function isRefundReturnStatusRequestCancel(): bool
+    {
+        return $this->getRefundReturnStatus() === ReturnRequestStatus::RETURN_OR_REFUND_REQUEST_CANCEL;
+    }
+
+    public function isRefundReturnStatusRequestComplete(): bool
+    {
+        return $this->getRefundReturnStatus() === ReturnRequestStatus::RETURN_OR_REFUND_REQUEST_COMPLETE;
     }
 
     //region shipping_in_progress column

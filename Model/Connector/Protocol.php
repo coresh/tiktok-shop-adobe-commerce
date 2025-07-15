@@ -7,7 +7,7 @@ namespace M2E\TikTokShop\Model\Connector;
 class Protocol implements \M2E\Core\Model\Connector\ProtocolInterface
 {
     public const COMPONENT_NAME = 'TikTokShop';
-    public const COMPONENT_VERSION = 14;
+    public const COMPONENT_VERSION = 15;
 
     public function getComponent(): string
     {

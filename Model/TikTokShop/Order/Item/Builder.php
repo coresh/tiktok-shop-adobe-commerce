@@ -43,9 +43,11 @@ class Builder
             ->setPlatformDiscount((float)$rawChannelData['platform_discount'])
             ->setSellerDiscount((float)$rawChannelData['seller_discount']);
 
-        $orderItem->setBuyerRequestRefundReturnStatus($this->getIsBuyerRequestRefundReturn($rawChannelData));
-
         $orderItem->setCancelReason($this->getCancelReason($rawChannelData));
+        $orderItem->setBuyerRequestReturn($this->getIsBuyerRequestReturn($rawChannelData));
+        $orderItem->setBuyerRequestRefund($this->getIsBuyerRequestRefund($rawChannelData));
+        $orderItem->setRefundReturnId($rawChannelData['refund_return_id'] ?? null);
+        $orderItem->setRefundReturnStatus($rawChannelData['refund_return_status'] ?? null);
 
         $orderItem->setTaxDetails($this->getTaxDetails($rawChannelData));
         $orderItem->setTrackingDetails($this->getTrackingDetails($rawChannelData));
@@ -102,21 +104,30 @@ class Builder
         ];
     }
 
-    private function getIsBuyerRequestRefundReturn(array $rawData): bool
+    private function getCancelReason(array $rawData): ?string
     {
-        if (!array_key_exists('is_buyer_request_refund_return', $rawData)) {
+        if (!array_key_exists('cancel_reason', $rawData)) {
+            return null;
+        }
+
+        return (string)$rawData['cancel_reason'];
+    }
+
+    private function getIsBuyerRequestReturn(array $rawData): bool
+    {
+        if (!array_key_exists('is_buyer_request_return', $rawData)) {
             return false;
         }
 
-        return (bool)$rawData['is_buyer_request_refund_return'];
+        return (bool)$rawData['is_buyer_request_return'];
     }
 
-    private function getCancelReason(array $rawData): ?string
+    private function getIsBuyerRequestRefund(array $rawData): bool
     {
-        if ($this->getIsBuyerRequestRefundReturn($rawData)) {
-            return (string)$rawData['cancel_reason'];
+        if (!array_key_exists('is_buyer_request_refund', $rawData)) {
+            return false;
         }
 
-        return null;
+        return (bool)$rawData['is_buyer_request_refund'];
     }
 }

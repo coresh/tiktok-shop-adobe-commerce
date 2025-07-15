@@ -375,7 +375,14 @@ class Grid extends AbstractGrid
         $back = $this->urlHelper->makeBackUrlParam('*/tiktokshop_order/index');
         $itemUrl = $this->getUrl('*/tiktokshop_order/view', ['id' => $row->getId(), 'back' => $back]);
 
-        $returnString = sprintf('<a href="%s">%s</a>', $itemUrl, $row->getTtsOrderId());
+        $returnString = '';
+
+        if ($row->hasOrderReturnRequestedItemInPendingStatus()) {
+            $text = __('Return requested');
+            $returnString .= sprintf('<br/><span style="color: red;">%s</span><br/>', $text);
+        }
+
+        $returnString .= sprintf('<a href="%s">%s</a>', $itemUrl, $row->getTtsOrderId());
 
         /** @var \M2E\TikTokShop\Model\Order\Note[] $notes */
         $notes = $this->notesCollection->getItemsByColumnValue('order_id', $row->getId());

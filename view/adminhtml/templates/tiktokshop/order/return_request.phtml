@@ -1,0 +1,45 @@
+<?php
+
+/** @var \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Order\View\ReturnRequest $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+
+<?php
+$orderId = $block->getOrderId();
+
+$acceptUrl = $block->getUrl('*/order_returnRequest/accept', ['order_id' => $orderId]);
+$declineUrl = $block->getUrl('*/order_returnRequest/decline', ['order_id' => $orderId]);
+$getDeclineReasonsUrl = $block->getUrl('*/order_returnRequest/getDeclineReasons', ['order_id' => $orderId]);
+
+?>
+
+<div class="fieldset-wrapper">
+    <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
+        <strong class="admin__collapsible-title">
+            <span><?= $escaper->escapeHtml(__('Buyer Return Request')) ?></span>
+        </strong>
+    </div>
+    <table class="order-info form-list tts-return-request-table">
+        <tr>
+            <td class="label"><?= $escaper->escapeHtml(__('Action')) ?></td>
+            <td>
+                <button class="primary tts-buyer-return-accept"><?= $escaper->escapeHtml(__('Accept')) ?></button>
+                <button class="primary tts-buyer-return-decline"><?= $escaper->escapeHtml(__('Decline')) ?></button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "TikTokShop/Order/OrderReturn": {
+            "acceptUrl": "<?= $escaper->escapeJsQuote($acceptUrl) ?>",
+            "declineUrl": "<?= $escaper->escapeJsQuote($declineUrl) ?>",
+            "getDeclineReasonsUrl": "<?= $escaper->escapeJsQuote($getDeclineReasonsUrl) ?>",
+            "acceptSelector": ".tts-buyer-return-accept",
+            "declineSelector": ".tts-buyer-return-decline"
+        }
+    }
+}
+</script>

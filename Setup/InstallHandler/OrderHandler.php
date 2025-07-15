@@ -396,10 +396,28 @@ class OrderHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 ['default' => null]
             )
             ->addColumn(
-                OrderItemResource::COLUMN_BUYER_REQUEST_REFUND_RETURN,
+                OrderItemResource::COLUMN_BUYER_REQUEST_REFUND,
                 Table::TYPE_SMALLINT,
                 null,
                 ['default' => 0]
+            )
+            ->addColumn(
+                OrderItemResource::COLUMN_BUYER_REQUEST_RETURN,
+                Table::TYPE_SMALLINT,
+                null,
+                ['default' => 0]
+            )
+            ->addColumn(
+                OrderItemResource::COLUMN_REFUND_RETURN_ID,
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => true, 'default' => null]
+            )
+            ->addColumn(
+                OrderItemResource::COLUMN_REFUND_RETURN_STATUS,
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => true, 'default' => null]
             )
             ->addColumn(
                 OrderItemResource::COLUMN_CANCEL_REASON,

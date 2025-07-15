@@ -1550,4 +1550,15 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     {
         return (bool)$this->getData(OrderResource::COLUMN_IS_SAMPLE);
     }
+
+    public function hasOrderReturnRequestedItemInPendingStatus(): bool
+    {
+        foreach ($this->getItems() as $orderItem) {
+            if ($orderItem->isReturnRequestedProcessPossible()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

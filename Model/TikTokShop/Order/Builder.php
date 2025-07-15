@@ -13,7 +13,9 @@ class Builder extends \Magento\Framework\DataObject
 
     private const UPDATE_BUYER_CANCELLATION_REQUEST = 'update_buyer_cancellation_request';
     private const UPDATE_BUYER_REQUEST_RETURN_FOR_ITEM = 'update_buyer_request_return_for_item';
+    private const UPDATE_BUYER_REQUEST_REFUND_FOR_ITEM = 'update_buyer_refund_return_for_item';
     private const UPDATE_CANCELLATION_WAS_CONFIRMED_ON_CHANNEL = 'cancellation_was_confirmed_on_channel';
+    private const UPDATE_REFUND_RETURN_STATUS = 'update_refund_return_status';
 
     private \M2E\TikTokShop\Model\Shop $shop;
     private \M2E\TikTokShop\Model\Order $order;
@@ -21,8 +23,8 @@ class Builder extends \Magento\Framework\DataObject
     private array $items = [];
     private array $updates = [];
 
-    private array $orderLogsForOrderItems = [];
-    private array $magentoOrderNotesForOrderItems = [];
+    private array $orderLogs = [];
+    private array $magentoOrderNotes = [];
 
     // ----------------------------------------
 
@@ -35,6 +37,8 @@ class Builder extends \Magento\Framework\DataObject
     private \M2E\TikTokShop\Model\TikTokShop\Order\AddressParserFactory $addressParserFactory;
     private \M2E\TikTokShop\Model\Order\CreditMemo $creditMemo;
     private \M2E\TikTokShop\Model\Order\Note\Create $noteCreateService;
+    private \M2E\TikTokShop\Model\Order\Log\Service $orderLogService;
+    private \M2E\TikTokShop\Model\Order\Cancel $cancel;
 
     public function __construct(
         AddressParserFactory $addressParserFactory,
@@ -44,7 +48,9 @@ class Builder extends \Magento\Framework\DataObject
         \M2E\TikTokShop\Model\TikTokShop\Order\StatusResolver $statusResolver,
         \M2E\TikTokShop\Model\OrderFactory $orderFactory,
         \M2E\TikTokShop\Model\Order\CreditMemo $creditMemo,
-        \M2E\TikTokShop\Model\Order\Note\Create $noteCreateService
+        \M2E\TikTokShop\Model\Order\Note\Create $noteCreateService,
+        \M2E\TikTokShop\Model\Order\Log\Service $orderLogService,
+        \M2E\TikTokShop\Model\Order\Cancel $cancel
     ) {
         parent::__construct();
         $this->orderFactory = $orderFactory;
@@ -55,6 +61,8 @@ class Builder extends \Magento\Framework\DataObject
         $this->addressParserFactory = $addressParserFactory;
         $this->creditMemo = $creditMemo;
         $this->noteCreateService = $noteCreateService;
+        $this->orderLogService = $orderLogService;
+        $this->cancel = $cancel;
     }
 
     public function initialize(
@@ -197,7 +205,10 @@ class Builder extends \Magento\Framework\DataObject
         $this->createOrUpdateOrder();
         $this->createOrUpdateItems();
 
-        $this->checkOrderItemUpdates();
+        $this->checkOrderItemReturnUpdates();
+        $this->checkOrderItemRefundUpdates();
+        $this->checkOrderItemRefundReturnStatusUpdates();
+        $this->checkOrderCancelNeeded();
 
         if ($this->isNew()) {
             $this->processNew();
@@ -352,19 +363,121 @@ class Builder extends \Magento\Framework\DataObject
         }
     }
 
-    private function checkOrderItemUpdates()
+    private function checkOrderItemReturnUpdates(): void
     {
-        foreach ($this->order->getItems() as $orderItem) {
-            if ($orderItem->isChangedColumnBuyerRequestRefundReturn()) {
-                $this->updates[] = self::UPDATE_BUYER_REQUEST_RETURN_FOR_ITEM;
+        $orderItems = $this->order->getItems();
+        $totalItems = count($orderItems);
+        foreach ($orderItems as $orderItem) {
+            if (!$orderItem->isChangedBuyerRequestReturn()) {
+                continue;
+            }
 
+            if ($totalItems > 1 && !$orderItem->isChangedBuyerRequestReturn() && $orderItem->isBuyerRequestReturn()) {
+                continue;
+            }
+
+            $message = (string)__(
+                'Customer has requested a return. Reason provided: %reason.',
+                ['reason' => $orderItem->getCancelReason()]
+            );
+
+            $this->updates[] = self::UPDATE_BUYER_REQUEST_RETURN_FOR_ITEM;
+
+            $this->orderLogs[$this->order->getId()] = $message;
+            $this->magentoOrderNotes[$this->order->getId()] = $message;
+        }
+    }
+
+    private function checkOrderItemRefundUpdates(): void
+    {
+        $orderItems = $this->order->getItems();
+        $totalItems = count($orderItems);
+        foreach ($orderItems as $orderItem) {
+            if (!$orderItem->isChangedBuyerRequestRefund()) {
+                continue;
+            }
+
+            if ($totalItems > 1 && !$orderItem->isChangedBuyerRequestRefund() && $orderItem->isBuyerRequestRefund()) {
+                continue;
+            }
+
+            $message = (string)__(
+                'Customer has requested refund. Reason provided: %reason.',
+                ['reason' => $orderItem->getCancelReason()]
+            );
+
+            $this->updates[] = self::UPDATE_BUYER_REQUEST_REFUND_FOR_ITEM;
+
+            $this->orderLogs[$this->order->getId()] = $message;
+            $this->magentoOrderNotes[$this->order->getId()] = $message;
+        }
+    }
+
+    private function checkOrderItemRefundReturnStatusUpdates(): void
+    {
+        $orderItems = $this->order->getItems();
+        $totalItems = count($orderItems);
+
+        foreach ($orderItems as $orderItem) {
+            if (!$orderItem->isChangedRefundReturnStatus()) {
+                continue;
+            }
+
+            $this->updates[] = self::UPDATE_REFUND_RETURN_STATUS;
+
+            $message = null;
+            $refundReturnStatus = $orderItem->getRefundReturnStatus();
+
+            if ($orderItem->isRefundReturnStatusBuyerShippedItem()) {
+                $isMultipleItems = $totalItems > 1;
+                $isStatusLogged = isset($this->orderLogs[$refundReturnStatus]);
+
+                if ($isMultipleItems && !$isStatusLogged) {
+                    $message = (string)__(
+                        'Buyer has shipped the return package of the Item %name. Tracking number successfully uploaded.',
+                        ['name' => $orderItem->getChannelProductTitle()]
+                    );
+                } else {
+                    $message = (string)__(
+                        'Buyer has shipped the return package. Tracking number successfully uploaded.'
+                    );
+                }
+            } elseif ($orderItem->isRefundReturnStatusRequestCancel()) {
                 $message = (string)__(
-                    'Customer has requested return of the Item %name. Return reason: %reason.',
-                    ['name' => $orderItem->getChannelProductTitle(), 'reason' => $orderItem->getCancelReason()]
+                    'Return request was cancelled by the buyer or %channel_title.',
+                    ['channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()]
                 );
+            } elseif ($orderItem->isRefundReturnStatusRequestComplete()) {
+                $message = (string)__(
+                    'Return or refund request successfully completed.'
+                );
+            }
 
-                $this->orderLogsForOrderItems[$orderItem->getMagentoProductId()] = $message;
-                $this->magentoOrderNotesForOrderItems[$orderItem->getMagentoProductId()] = $message;
+            if ($message !== null) {
+                $this->orderLogs[$refundReturnStatus] = $message;
+                $this->magentoOrderNotes[$refundReturnStatus] = $message;
+            }
+        }
+    }
+
+    private function checkOrderCancelNeeded(): void
+    {
+        $orderItems = $this->order->getItems();
+
+        if ($this->order->getMagentoOrder() === null) {
+            return;
+        }
+
+        $isCreditMemoExist = $this->order->getMagentoOrder()->hasCreditmemos();
+
+        if (!$isCreditMemoExist) {
+            return;
+        }
+
+        foreach ($orderItems as $orderItem) {
+            if ($orderItem->isRefundReturnStatusBuyerShippedItem()) {
+                $this->cancel->process($this->order, \M2E\Core\Helper\Data::INITIATOR_USER);
+                break;
             }
         }
     }
@@ -403,10 +516,12 @@ class Builder extends \Magento\Framework\DataObject
         }
 
         if (
-            $this->hasUpdate(self::UPDATE_BUYER_REQUEST_RETURN_FOR_ITEM)
-            && !empty($this->orderLogsForOrderItems)
+            ($this->hasUpdate(self::UPDATE_BUYER_REQUEST_RETURN_FOR_ITEM)
+                || $this->hasUpdate(self::UPDATE_REFUND_RETURN_STATUS)
+                || $this->hasUpdate(self::UPDATE_BUYER_REQUEST_REFUND_FOR_ITEM))
+            && !empty($this->orderLogs)
         ) {
-            foreach ($this->orderLogsForOrderItems as $logText) {
+            foreach ($this->orderLogs as $logText) {
                 $this->order->addInfoLog($logText);
             }
         }
@@ -432,10 +547,13 @@ class Builder extends \Magento\Framework\DataObject
         }
 
         if (
+            (
             $this->hasUpdate(self::UPDATE_BUYER_REQUEST_RETURN_FOR_ITEM)
-            && !empty($this->magentoOrderNotesForOrderItems)
+            || $this->hasUpdate(self::UPDATE_REFUND_RETURN_STATUS)
+            || $this->hasUpdate(self::UPDATE_BUYER_REQUEST_REFUND_FOR_ITEM))
+            && !empty($this->magentoOrderNotes)
         ) {
-            $magentoOrderUpdater->updateComments(array_values($this->magentoOrderNotesForOrderItems));
+            $magentoOrderUpdater->updateComments(array_values($this->magentoOrderNotes));
         }
 
         $proxy = $this->order->getProxy();

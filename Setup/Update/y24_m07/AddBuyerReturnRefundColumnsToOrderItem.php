@@ -13,7 +13,7 @@ class AddBuyerReturnRefundColumnsToOrderItem extends \M2E\Core\Model\Setup\Upgra
         $modifier = $this->createTableModifier(Tables::TABLE_NAME_ORDER_ITEM);
 
         $modifier->addColumn(
-            \M2E\TikTokShop\Model\ResourceModel\Order\Item::COLUMN_BUYER_REQUEST_REFUND_RETURN,
+            'buyer_request_refund_return',
             'SMALLINT',
             '0',
             \M2E\TikTokShop\Model\ResourceModel\Order\Item::COLUMN_TRACKING_DETAILS
@@ -23,7 +23,7 @@ class AddBuyerReturnRefundColumnsToOrderItem extends \M2E\Core\Model\Setup\Upgra
             \M2E\TikTokShop\Model\ResourceModel\Order\Item::COLUMN_CANCEL_REASON,
             'VARCHAR(255)',
             null,
-            \M2E\TikTokShop\Model\ResourceModel\Order\Item::COLUMN_BUYER_REQUEST_REFUND_RETURN
+            'buyer_request_refund_return'
         );
     }
 }
