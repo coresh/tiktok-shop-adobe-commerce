@@ -17,12 +17,12 @@ class Processor
      * @param \M2E\TikTokShop\Model\Order $order
      * @param string $reason
      *
-     * @return \M2E\Core\Model\Connector\Response\Message[] not success messages
-     * @throws \M2E\TikTokShop\Model\Exception
+     * @return \M2E\TikTokShop\Model\TikTokShop\Connector\Order\Cancel\Response
      * @throws \M2E\Core\Model\Exception\Connection
+     * @throws \M2E\Core\Model\Exception\Connection\SystemError
      * @throws \M2E\TikTokShop\Model\Order\Exception\UnableCancel
      */
-    public function process(\M2E\TikTokShop\Model\Order $order, string $reason): array
+    public function process(\M2E\TikTokShop\Model\Order $order, string $reason): \M2E\TikTokShop\Model\TikTokShop\Connector\Order\Cancel\Response
     {
         $requestOrder = new Order($order->getTtsOrderId());
         foreach ($order->getItems() as $item) {
@@ -46,12 +46,7 @@ class Processor
             $reason,
         );
 
-        /** @var \M2E\Core\Model\Connector\Response $response */
-        $response = $this->singleClient->process($command);
-
-        return array_merge(
-            $response->getMessageCollection()->getErrors(),
-            $response->getMessageCollection()->getWarnings(),
-        );
+        /** @var \M2E\TikTokShop\Model\TikTokShop\Connector\Order\Cancel\Response $response */
+        return $this->singleClient->process($command);
     }
 }

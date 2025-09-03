@@ -79,7 +79,13 @@ class CancelProcessor
             $this->changeRepository->incrementAttemptCount([$change->getId()]);
 
             try {
-                $notSuccessMessages = $this->connectorProcessor->process($order, $reason);
+                $response = $this->connectorProcessor->process($order, $reason);
+                $isRefund = $response->isRefund();
+
+                $notSuccessMessages = array_merge(
+                    $response->getMessagesCollection()->getErrors(),
+                    $response->getMessagesCollection()->getWarnings()
+                );
             } catch (\M2E\TikTokShop\Model\Order\Exception\UnableCancel $e) {
                 $this->removeChange($change);
 
@@ -88,8 +94,17 @@ class CancelProcessor
 
             $this->removeChange($change);
 
+            $channelTitle = \M2E\TikTokShop\Helper\Module::getChannelTitle();
             if (empty($notSuccessMessages)) {
-                $order->addSuccessLog('Order is canceled. Status is updated on TikTokShop.');
+                $template = $isRefund
+                    ? 'Order has been refunded. Status updated on %channel_title%.'
+                    : 'Order is canceled. Status is updated on %channel_title%.';
+
+                $message = strtr($template, [
+                    '%channel_title%' => $channelTitle,
+                ]);
+
+                $order->addSuccessLog($message);
 
                 continue;
             }
@@ -97,8 +112,11 @@ class CancelProcessor
             foreach ($notSuccessMessages as $message) {
                 if ($message->isError()) {
                     $order->addErrorLog(
-                        'TikTokShop order was not cancelled. Reason: %msg%',
-                        ['msg' => $message->getText()],
+                        '%channel_title% order was not cancelled. Reason: %msg%',
+                        [
+                            'msg' => $message->getText(),
+                            'channel_title' => $channelTitle,
+                        ],
                     );
                 } else {
                     $order->addWarningLog($message->getText());

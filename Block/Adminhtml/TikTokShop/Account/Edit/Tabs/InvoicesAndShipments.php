@@ -95,10 +95,10 @@ class InvoicesAndShipments extends AbstractForm
         $fieldset = $form->addFieldset(
             'shipments_carrier_mapping',
             [
-                'legend' => __('Shipment Carrier Mapping'),
+                'legend' => __('Shipping Carrier Mapping'),
                 'collapsable' => false,
-                'tooltip' => __('Enable to automatically create shipment for the Magento order when the ' .
-                    'associated order on Channel is shipped.'),
+                'tooltip' => __('Link TikTok Shop carriers to the shipping services in Magento ' .
+                    'to ensure that the correct shipping service is used for each order.'),
             ]
         );
 

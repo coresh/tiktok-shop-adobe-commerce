@@ -29,9 +29,6 @@
                     <item name="storageConfig" xsi:type="array">
                         <item name="indexField" xsi:type="string">product_id</item>
                     </item>
-                    <item name="filter_url_params" xsi:type="array">
-                        <item name="error_code" xsi:type="string">*</item>
-                    </item>
                 </item>
             </argument>
         </argument>
@@ -44,7 +41,7 @@
             </item>
         </argument>
 
-        <filters name="listing_filters">
+        <filters name="listing_filters" class="M2E\Core\Ui\Component\FiltersWithAppliedFilters">
 
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -268,7 +265,7 @@
             </settings>
         </exportButton>
 
-        <bookmark name="bookmarks"/>
+        <bookmark name="bookmarks" class="M2E\Core\Ui\Component\BookmarkWithAppliedFilters" />
 
         <paging name="listing_paging"/>
 

@@ -10,11 +10,12 @@ class Index extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\Template\Abs
     {
         $this->getResultPage()
              ->getConfig()
-             ->getTitle()->prepend(__('Categories'));
+             ->getTitle()
+             ->prepend(__('Categories'));
 
-        $content = $this->getLayout()->createBlock(
-            \M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Category::class
-        );
+        $content = $this
+            ->getLayout()
+            ->createBlock(\M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Category::class);
         $this->addContent($content);
 
         return $this->getResultPage();

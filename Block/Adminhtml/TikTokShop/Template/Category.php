@@ -9,7 +9,6 @@ class Category extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractCont
         parent::_construct();
 
         $this->setId('tikTokShopTemplateCategory');
-        $this->_controller = 'adminhtml_tikTokShop_template_category';
 
         $this->buttonList->remove('back');
         $this->buttonList->remove('reset');
@@ -24,6 +23,12 @@ class Category extends \M2E\TikTokShop\Block\Adminhtml\Magento\Grid\AbstractCont
 
     protected function _prepareLayout()
     {
+        $gridBlock = $this
+            ->getLayout()
+            ->createBlock(\M2E\TikTokShop\Block\Adminhtml\TikTokShop\Template\Category\Grid::class);
+
+        $this->setChild('grid', $gridBlock);
+
         $url = $this->getUrl('*/tiktokshop_category/update');
         $this->addButton('update', [
             'label' => __('Update Category Data'),

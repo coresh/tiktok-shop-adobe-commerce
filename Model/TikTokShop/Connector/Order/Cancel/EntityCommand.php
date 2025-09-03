@@ -49,6 +49,12 @@ class EntityCommand implements \M2E\Core\Model\Connector\CommandInterface
 
     public function parseResponse(\M2E\Core\Model\Connector\Response $response): object
     {
-        return $response;
+        $data = $response->getResponseData();
+        $isRefund = $data['refunded'] ?? false;
+
+        return new \M2E\TikTokShop\Model\TikTokShop\Connector\Order\Cancel\Response(
+            $isRefund,
+            $response->getMessageCollection()
+        );
     }
 }

@@ -35,7 +35,7 @@ class TikTokShopProductId extends Column
 
             $url = \M2E\TikTokShop\Model\Product::getProductLinkOnChannel($ttsProductId, $shopRegion);
 
-            $row['tiktokshop_product_id'] = sprintf('<a href="%s" target="_blank">%s</a>', $url, $ttsProductId);
+            $row['tts_product_id'] = sprintf('<a href="%s" target="_blank">%s</a>', $url, $ttsProductId);
         }
 
         return $dataSource;
