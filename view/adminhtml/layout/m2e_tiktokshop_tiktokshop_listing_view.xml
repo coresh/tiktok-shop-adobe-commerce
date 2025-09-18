@@ -25,6 +25,7 @@
 
         <referenceContainer name="content">
             <block class="M2E\TikTokShop\Block\Adminhtml\Category\Chooser\Prepare"/>
+            <block class="M2E\TikTokShop\Block\Adminhtml\Category\Attributes\Validation\Popup"/>
 
             <container name="m2e.tiktokshop.listing.header">
                 <block class="M2E\TikTokShop\Block\Adminhtml\Listing\View\Header">

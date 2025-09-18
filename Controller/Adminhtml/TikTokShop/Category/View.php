@@ -33,6 +33,12 @@ class View extends \M2E\TikTokShop\Controller\Adminhtml\TikTokShop\AbstractCateg
             throw new \M2E\TikTokShop\Model\Exception\Logic('Category not found');
         }
 
+        $this->addContent(
+            $this->getLayout()->createBlock(
+                \M2E\TikTokShop\Block\Adminhtml\Category\Attributes\Validation\Popup::class
+            ),
+        );
+
         $block = $this->viewFactory->create($this->getLayout(), $dictionary);
         $this->addContent($block);
         $this->getResultPage()->getConfig()->getTitle()->prepend(__('Edit Category'));

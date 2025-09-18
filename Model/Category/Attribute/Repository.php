@@ -93,4 +93,37 @@ class Repository
 
         return $result;
     }
+
+    /**
+     * @param int $dictionaryId
+     *
+     * @return CategoryAttribute[]
+     */
+    public function getAttributesWithCustomValue(int $dictionaryId): array
+    {
+        $collection = $this->attributeCollectionFactory->create();
+        $collection->addFieldToFilter(
+            AttributeResource::COLUMN_CATEGORY_DICTIONARY_ID,
+            ['eq' => $dictionaryId]
+        );
+
+        $collection->addFieldToFilter(
+            AttributeResource::COLUMN_VALUE_MODE,
+            CategoryAttribute::VALUE_MODE_CUSTOM_ATTRIBUTE
+        );
+
+        $collection->addFieldToFilter(
+            AttributeResource::COLUMN_ATTRIBUTE_TYPE,
+            [
+                'in' => [
+                    CategoryAttribute::ATTRIBUTE_TYPE_PRODUCT,
+                    CategoryAttribute::ATTRIBUTE_TYPE_BRAND,
+                    CategoryAttribute::ATTRIBUTE_TYPE_CERTIFICATE,
+                    CategoryAttribute::ATTRIBUTE_TYPE_SIZE_CHART,
+                ],
+            ]
+        );
+
+        return array_values($collection->getItems());
+    }
 }

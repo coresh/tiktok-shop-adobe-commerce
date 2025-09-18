@@ -31,6 +31,7 @@ class Item extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\AbstractMode
     public const COLUMN_REFUND_RETURN_STATUS = 'refund_return_status';
     public const COLUMN_SHIPPING_IN_PROGRESS = 'shipping_in_progress';
     public const COLUMN_IS_GIFT = 'is_gift';
+    public const COLUMN_COMBINED_LISTING_SKUS = 'combined_listing_skus';
     public const COLUMN_UPDATE_DATE = 'update_date';
     public const COLUMN_CREATE_DATE = 'create_date';
 

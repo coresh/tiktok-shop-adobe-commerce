@@ -11,14 +11,23 @@ class Mapping extends AbstractContainer
     private ?\M2E\TikTokShop\Model\Magento\Product $magentoProduct = null;
     /** @var \M2E\TikTokShop\Model\Order\Item[] */
     private array $orderItems;
+    private \M2E\TikTokShop\Model\Magento\Product\BundleService $bundleService;
+    private \Magento\Framework\Data\Form\Element\Factory $elementFactory;
+    private \Magento\Framework\Data\FormFactory $formFactory;
 
     public function __construct(
         array $orderItems,
+        \M2E\TikTokShop\Model\Magento\Product\BundleService $bundleService,
+        \Magento\Framework\Data\Form\Element\Factory $elementFactory,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \M2E\TikTokShop\Block\Adminhtml\Magento\Context\Widget $context,
         array $data = []
     ) {
         $this->orderItems = $orderItems;
         parent::__construct($context, $data);
+        $this->bundleService = $bundleService;
+        $this->elementFactory = $elementFactory;
+        $this->formFactory = $formFactory;
     }
 
     public function getOrderItem(): \M2E\TikTokShop\Model\Order\Item
@@ -36,7 +45,7 @@ class Mapping extends AbstractContainer
         return implode(',', $result);
     }
 
-    public function getProductTypeHeader()
+    public function getProductTypeHeader(): string
     {
         $title = __('Custom Options');
 
@@ -69,14 +78,84 @@ class Mapping extends AbstractContainer
 
         $associatedOptions = $this->getOrderItem()->getAssociatedOptions();
 
-        if (
-            isset($associatedOptions[(int)$magentoOption['option_id']])
-            && $associatedOptions[(int)$magentoOption['option_id']] == $magentoOptionValue['value_id']
-        ) {
-            return true;
+        if (!isset($associatedOptions[(int)$magentoOption['option_id']])) {
+            return false;
         }
 
-        return false;
+        if (is_array($associatedOptions[(int)$magentoOption['option_id']])) {
+            return in_array(
+                $magentoOptionValue['value_id'],
+                $associatedOptions[(int)$magentoOption['option_id']]
+            );
+        }
+
+        return $associatedOptions[(int)$magentoOption['option_id']] == $magentoOptionValue['value_id'];
+    }
+
+    public function getChanelOption(): array
+    {
+        $combinedListingSkus = $this->getOrderItem()->getCombinedListingSkus();
+        if ($combinedListingSkus === null) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($combinedListingSkus->getList() as $combinedListingSku) {
+            $result[] = [
+                'label' => $combinedListingSku->sellerSku,
+                'value' => $combinedListingSku->productId,
+            ];
+        }
+
+        return $result;
+    }
+
+    public function getMagentoOptions(): array
+    {
+        if ($this->magentoProduct->isBundleType()) {
+            $magentoOptions = $this->bundleService->getOptionsWithSelections($this->magentoProduct);
+
+            $result = [];
+            foreach ($magentoOptions as $magentoOption) {
+                $option = [
+                    'option_id' => $magentoOption->getOptionId(),
+                    'label' => $magentoOption->getLabel(),
+                    'is_multiselect' => $magentoOption->isMultiselect(),
+                ];
+
+                foreach ($magentoOption->getSelections() as $selection) {
+                    $option['values'][] = [
+                        'value_id' => $selection->getSelectionId(),
+                        'product_ids' => [$selection->getProductId()],
+                        'label' => sprintf('%s (%s)', $selection->getLabel(), $selection->getSku()),
+                    ];
+                }
+
+                $result[] = $option;
+            }
+
+            return $result;
+        }
+
+        return [];
+    }
+
+    public function renderOptionElement(array $option)
+    {
+        $label = sprintf(
+            '<dt><label><span style="color: #eb5202">*</span>&nbsp;%s</label></dt>',
+            $this->_escaper->escapeHtml($option['label'])
+        );
+
+        $select = '<dd style="border-bottom: 1px solid #E7E7E7; margin: 5px 0 15px; padding: 0 0 12px;"><div class="input-box">';
+        if ($option['is_multiselect']) {
+            $select .= $this->renderMultiselect($option);
+        } else {
+            $select .= $this->renderSelect($option);
+        }
+        $select .= '</div></dd>';
+
+        return $label . $select;
     }
 
     protected function _beforeToHtml()
@@ -100,7 +179,11 @@ class Mapping extends AbstractContainer
             foreach ($magentoVariations as $key => $magentoVariation) {
                 $magentoOption['values'][] = [
                     'value_id' => $key,
-                    'label' => $magentoVariation->getName(),
+                    'label' => sprintf(
+                        '%s (%s)',
+                        $magentoVariation->getName(),
+                        $magentoVariation->getSku()
+                    ),
                     'product_ids' => [$magentoVariation->getId()],
                 ];
             }
@@ -144,12 +227,9 @@ class Mapping extends AbstractContainer
             $this->getLayout()->createBlock(\M2E\TikTokShop\Block\Adminhtml\HelpBlock::class)->setData([
                 'content' => __(
                     'As %extension_title was not able to find appropriate Option in Magento Product ' .
-                    'you are supposed find and Link it manualy.<br/>If you want to use the same Settings for the ' .
-                    'similar subsequent Orders, select appropriate check-box at the bottom. <br/><br/>' .
-                    '<b>Note:</b> Magento Order can be only created when all Products of Order are found ' .
-                    'in Magento Catalog.',
+                    'you are supposed find and Link it manualy.',
                     [
-                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle()
+                        'extension_title' => \M2E\TikTokShop\Helper\Module::getExtensionTitle(),
                     ]
                 ),
             ])
@@ -162,5 +242,59 @@ class Mapping extends AbstractContainer
         );
 
         parent::_beforeToHtml();
+    }
+
+    private function renderMultiselect(array $option): string
+    {
+        $multiselect = sprintf(
+            '<select multiple="multiple" name="%s" class="form-element select admin__control-multiselect required-entry">',
+            sprintf('option_id[%s][]', $option['option_id'])
+        );
+        $multiselect .= $this->renderSelectOptions($option);
+        $multiselect .= '</select>';
+
+        return $multiselect;
+    }
+
+    private function renderSelect(array $option): string
+    {
+        $selectHtml = sprintf(
+            '<select name="%s" class="form-element select admin__control-select required-entry">',
+            sprintf('option_id[%s]', $option['option_id'])
+        );
+        $selectHtml .= $this->renderSelectOptions($option);
+        $selectHtml .= '</select>';
+
+        return $selectHtml;
+    }
+
+    private function renderSelectOptions(array $option): string
+    {
+        $selectOptions = [];
+        $selectOptions[] = sprintf(
+            '<option value="" class="empty">%s</option>',
+            __('Select Option...')
+        );
+        foreach ($option['values'] as $value) {
+            $optionValue = json_encode([
+                'value_id' => $value['value_id'],
+                'product_ids' => $value['product_ids'],
+            ]);
+            $optionLabel = $value['label'];
+
+            $selectedAttribute = '';
+            if ($this->isMagentoOptionSelected($option, $value)) {
+                $selectedAttribute = ' selected="selected"';
+            }
+
+            $selectOptions[] = sprintf(
+                '<option value="%s"%s>%s</option>',
+                $this->_escaper->escapeHtmlAttr($optionValue),
+                $selectedAttribute,
+                $optionLabel
+            );
+        }
+
+        return implode('', $selectOptions);
     }
 }

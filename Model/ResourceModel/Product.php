@@ -31,6 +31,8 @@ class Product extends \M2E\TikTokShop\Model\ResourceModel\ActiveRecord\AbstractM
     public const COLUMN_LISTING_QUALITY_RECOMMENDATIONS = 'listing_quality_recommendations';
     public const COLUMN_AUDIT_FAILED_REASONS = 'audit_failed_reasons';
     public const COLUMN_MANUFACTURER_CONFIG_ID = 'manufacturer_config_id';
+    public const COLUMN_IS_VALID_CATEGORY_ATTRIBUTES = 'is_valid_category_attributes';
+    public const COLUMN_CATEGORY_ATTRIBUTES_ERRORS = 'category_attributes_errors';
     public const COLUMN_UPDATE_DATE = 'update_date';
     public const COLUMN_CREATE_DATE = 'create_date';
 

@@ -67,6 +67,23 @@ define([
             });
         },
 
+        saveAndEditClick: function (url)
+        {
+            this.submitForm(url);
+            this.validateSpecific();
+        },
+
+        saveAndCloseClick: function (url)
+        {
+            this.submitForm(url);
+            this.validateSpecific();
+        },
+
+        validateSpecific: function () {
+            let dictionaryId = jQuery('input#dictionary_id').val();
+            window.TikTokShopCategoryAttributeValidationPopup.setTemplateCategoryId(dictionaryId);
+        },
+
         // ---------------------------------------
 
         createSpecificsSnapshot: function () {

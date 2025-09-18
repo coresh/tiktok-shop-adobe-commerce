@@ -41,6 +41,10 @@ class NotListedChecker extends \M2E\TikTokShop\Model\Instruction\Synchronization
             return false;
         }
 
+        if ($listingProduct->isInvalidCategoryAttributes()) {
+            return false;
+        }
+
         return true;
     }
 

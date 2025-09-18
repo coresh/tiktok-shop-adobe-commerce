@@ -7,6 +7,11 @@ use M2E\TikTokShop\Model\ResourceModel\Order as OrderResource;
 
 class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 {
+    public const SUPPORTED_MAGENTO_PRODUCT_TYPES = [
+        \M2E\TikTokShop\Helper\Magento\Product::TYPE_SIMPLE,
+        \M2E\TikTokShop\Helper\Magento\Product::TYPE_BUNDLE,
+    ];
+
     public const ADDITIONAL_DATA_KEY_IN_ORDER = 'tiktokshop_order';
 
     public const MAGENTO_ORDER_CREATION_FAILED_YES = 1;

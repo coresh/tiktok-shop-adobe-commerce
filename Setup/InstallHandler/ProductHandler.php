@@ -164,6 +164,18 @@ class ProductHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 ['unsigned' => true, 'default' => null]
             )
             ->addColumn(
+                ListingProductResource::COLUMN_IS_VALID_CATEGORY_ATTRIBUTES,
+                Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => true, 'default' => null],
+            )
+            ->addColumn(
+                ListingProductResource::COLUMN_CATEGORY_ATTRIBUTES_ERRORS,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['nullable' => true, 'default' => null]
+            )
+            ->addColumn(
                 ListingProductResource::COLUMN_ONLINE_MANUFACTURER_ID,
                 Table::TYPE_TEXT,
                 255,

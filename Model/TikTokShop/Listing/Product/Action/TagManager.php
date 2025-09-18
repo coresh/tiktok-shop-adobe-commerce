@@ -59,4 +59,14 @@ class TagManager
             $this->tagBuffer->addTags($product, $tags);
         }
     }
+
+    public function removeTagByCode(\M2E\TikTokShop\Model\Product $listingProduct, string $code): void
+    {
+        $this->tagBuffer->removeTagByCode($listingProduct, $code);
+    }
+
+    public function flush(): void
+    {
+        $this->tagBuffer->flush();
+    }
 }

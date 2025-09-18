@@ -91,6 +91,11 @@ class Config implements \M2E\Core\Model\Setup\Upgrade\Entity\ConfigInterface
             'y25_m05' => [
                 \M2E\TikTokShop\Setup\Update\y25_m05\ModifyOrderItemTable::class,
             ],
+            'y25_m09' => [
+                \M2E\TikTokShop\Setup\Update\y25_m09\AddValidationAttributesColumns::class,
+                \M2E\TikTokShop\Setup\Update\y25_m09\CompleteWizards::class,
+                \M2E\TikTokShop\Setup\Update\y25_m09\AddSupportBundleProductsInOrder::class,
+            ],
         ];
     }
 }

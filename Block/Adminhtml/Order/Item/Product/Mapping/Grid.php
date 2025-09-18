@@ -64,7 +64,7 @@ class Grid extends AbstractGrid
             [
                 [
                     'attribute' => 'type_id',
-                    'in' => \M2E\TikTokShop\Helper\Magento\Product::TYPE_SIMPLE,
+                    'in' => \M2E\TikTokShop\Model\Order::SUPPORTED_MAGENTO_PRODUCT_TYPES,
                 ],
             ]
         );
@@ -224,12 +224,9 @@ class Grid extends AbstractGrid
     private function getProductTypes(): array
     {
         $magentoProductTypes = $this->productTypeModel->getOptionArray();
-        $knownTypes = [
-            \M2E\TikTokShop\Helper\Magento\Product::TYPE_SIMPLE,
-        ];
 
         foreach ($magentoProductTypes as $type => $magentoProductTypeLabel) {
-            if (in_array($type, $knownTypes)) {
+            if (in_array($type, \M2E\TikTokShop\Model\Order::SUPPORTED_MAGENTO_PRODUCT_TYPES)) {
                 continue;
             }
 

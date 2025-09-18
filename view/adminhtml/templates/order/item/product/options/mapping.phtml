@@ -35,7 +35,7 @@
     <div style="border-bottom: 1px solid #E7E7E7; padding: 5px 5px;">
 
         <?php
-        if (empty($block->getData('channel_options'))) : ?>
+        if (empty($block->getChanelOption())) : ?>
             <span style="font-style: italic;">
                 <?= /* @noEscape */ __('No Channel Options are available.'); ?>
             </span>
@@ -44,16 +44,11 @@
             <dl>
 
                 <?php
-                foreach ($block->getData('channel_options') as $channelOption) : ?>
+                foreach ($block->getChanelOption() as $channelOption) : ?>
                     <dt>
                         <label>
-                        <span style="font-weight: bold; font-style: italic;">
-                            <?php
-                            echo \M2E\Core\Helper\Data::escapeHtml($channelOption['label']); ?>:
-                        </span>
-                            <span>
-                            &nbsp;<?php
-                                echo \M2E\Core\Helper\Data::escapeHtml($channelOption['value']); ?>
+                        <span style="font-style: italic;">
+                            <?= \M2E\Core\Helper\Data::escapeHtml($channelOption['label']); ?>
                         </span>
                         </label>
                     </dt>
@@ -75,49 +70,9 @@
     <div>
 
         <dl>
-
-            <?php
-            foreach ($block->getData('magento_options') as $option) : ?>
-                <dt>
-                    <label>
-                        <span style="color: #eb5202">*</span>&nbsp;<?php
-                        echo \M2E\Core\Helper\Data::escapeHtml($option['label']); ?>
-                    </label>
-                </dt>
-                <dd style="border-bottom: 1px solid #E7E7E7; margin: 5px 0 15px; padding: 0 0 12px;">
-                    <div class="input-box">
-                        <select name="option_id[<?php
-                        echo (int)$option['option_id']; ?>]"
-                                class="form-element select admin__control-select required-entry">
-                            <option value="" class="empty"><?php
-                              /* @noEscape */ echo $block->__('Select Option...'); ?></option>
-                            <?php
-                            foreach ($option['values'] as $value) : ?>
-                                <?php
-                                $optionValue = json_encode([
-                                    'value_id' => $value['value_id'],
-                                    'product_ids' => $value['product_ids'],
-                                ]);
-                                $optionLabel = $value['label'];
-
-                                $selected = $block->isMagentoOptionSelected($option, $value);
-                                ?>
-                                <option value="<?php
-                                echo \M2E\Core\Helper\Data::escapeHtml($optionValue); ?>" <?php
-                                        if ($selected) :
-                                        ?>selected="selected"<?php
-                                endif; ?>>
-                                    <?php
-                                    echo \M2E\Core\Helper\Data::escapeHtml($optionLabel); ?>
-                                </option>
-                            <?php
-                            endforeach; ?>
-                        </select>
-                    </div>
-                </dd>
-            <?php
-            endforeach; ?>
-
+            <?php foreach ($block->getMagentoOptions() as $option) : ?>
+                <?= /* @noEscape */ $block->renderOptionElement($option) ?>
+            <?php endforeach; ?>
         </dl>
 
     </div>

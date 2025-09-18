@@ -31,7 +31,10 @@ class AssignProductDetails extends AbstractOrder
         $orderItems = $this->orderItemRepository->getByIds($orderItemIds);
         $optionsData = $this->getProductOptionsDataFromPost();
 
-        if (count($optionsData) == 0 || count($orderItems) === 0) {
+        if (
+            count($optionsData) == 0
+            || count($orderItems) === 0
+        ) {
             $this->setJsonContent(['error' => (string)__('Please specify Required Options.')]);
 
             return $this->getResult();

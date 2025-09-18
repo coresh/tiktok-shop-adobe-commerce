@@ -140,6 +140,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
                 'template_category_id' => ListingProductResource::COLUMN_TEMPLATE_CATEGORY_ID,
                 'listing_id' => ListingProductResource::COLUMN_LISTING_ID,
                 'audit_failed_reasons' => ListingProductResource::COLUMN_AUDIT_FAILED_REASONS,
+                'is_valid_category_attributes' => ListingProductResource::COLUMN_IS_VALID_CATEGORY_ATTRIBUTES,
             ],
             sprintf(
                 '{{table}}.%s = %s',

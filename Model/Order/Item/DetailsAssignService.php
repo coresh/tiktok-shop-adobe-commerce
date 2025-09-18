@@ -31,10 +31,12 @@ class DetailsAssignService
 
         foreach ($optionsData as $optionId => $optionData) {
             $optionId = (int)$optionId;
-            $valueId = (int)$optionData['value_id'];
+            foreach ($optionData as $optionItem) {
+                $valueId = (int)$optionItem['value_id'];
 
-            $associatedProducts["$optionId::$valueId"] = $optionData['product_ids'];
-            $associatedOptions[$optionId] = $valueId;
+                $associatedProducts["$optionId::$valueId"] = $optionItem['product_ids'];
+                $associatedOptions[$optionId][] = $valueId;
+            }
         }
 
         $loggedOrders = [];

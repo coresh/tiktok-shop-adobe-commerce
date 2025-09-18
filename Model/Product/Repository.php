@@ -670,4 +670,53 @@ class Repository
 
         return array_values($collection->getItems());
     }
+
+    /**
+     * @param int $templateCategoryId
+     * @param int|null $limit
+     *
+     * @return \M2E\TikTokShop\Model\Product[]
+     */
+    public function findProductsForValidateCategoryAttributes(
+        int $templateCategoryId,
+        int $limit
+    ): array {
+        $collection = $this->listingProductCollectionFactory->create();
+        $collection->addFieldToFilter(ListingProductResource::COLUMN_TEMPLATE_CATEGORY_ID, $templateCategoryId);
+        $collection->addFieldToFilter(ListingProductResource::COLUMN_IS_VALID_CATEGORY_ATTRIBUTES, ['null' => true]);
+        $collection->addFieldToFilter(ListingProductResource::COLUMN_STATUS, \M2E\TikTokShop\Model\Product::STATUS_NOT_LISTED);
+
+        $collection->getSelect()->limit($limit);
+
+        return array_values($collection->getItems());
+    }
+
+    /**
+     * @param int $templateCategoryId
+     *
+     * @return int
+     */
+    public function getCountProductsByCategoryId(int $templateCategoryId): int
+    {
+        $collection = $this->listingProductCollectionFactory->create();
+        $collection->addFieldToFilter(ListingProductResource::COLUMN_TEMPLATE_CATEGORY_ID, $templateCategoryId);
+
+        return (int)$collection->getSize();
+    }
+
+    public function resetCategoryAttributesValidationData(int $categoryId): void
+    {
+        $this->listingProductResource
+            ->getConnection()
+            ->update(
+                $this->listingProductResource->getMainTable(),
+                [
+                    ListingProductResource::COLUMN_IS_VALID_CATEGORY_ATTRIBUTES => null,
+                    ListingProductResource::COLUMN_CATEGORY_ATTRIBUTES_ERRORS => null,
+                ],
+                [
+                    sprintf('%s = %d', ListingProductResource::COLUMN_TEMPLATE_CATEGORY_ID, $categoryId),
+                ],
+            );
+    }
 }

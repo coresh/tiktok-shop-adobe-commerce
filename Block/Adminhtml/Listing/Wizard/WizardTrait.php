@@ -43,4 +43,14 @@ trait WizardTrait
 
         $this->addButton('next', $continueButtonData);
     }
+
+    private function getWizardIdFromRequest(): int
+    {
+        $id = (int)$this->getRequest()->getParam('id');
+        if (empty($id)) {
+            throw new \M2E\TikTokShop\Model\Listing\Wizard\Exception\NotFoundException('Params not valid.');
+        }
+
+        return $id;
+    }
 }

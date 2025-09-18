@@ -31,6 +31,7 @@ class ValidatorIssues
     public const ERROR_INVALID_SIZE_CHART_IMAGE_URL = '0019-m2e';
     public const ERROR_PRODUCT_NAME_INVALID_LENGTH = '0020-m2e';
     public const ERROR_VARIATIONS_EXCEED_LIMIT = '0021-m2e';
+    public const ERROR_CATEGORY_ATTRIBUTE_MISSING = '0022-m2e';
 
     public function mapByCode(string $code): ?ValidatorMessage
     {
@@ -56,6 +57,7 @@ class ValidatorIssues
             self::ERROR_INVALID_SIZE_CHART_IMAGE_URL => (string)__('The Size Chart field contains an invalid URL.'),
             self::ERROR_PRODUCT_NAME_INVALID_LENGTH => (string)__('The product name must contain between 1 and 255 characters.'),
             self::ERROR_VARIATIONS_EXCEED_LIMIT => (string)__('The number of product variations exceeds the allowed limit.'),
+            self::ERROR_CATEGORY_ATTRIBUTE_MISSING => (string)__('Unable to List Product Due to missing Item Attribute(s)'),
         ];
 
         if (!isset($map[$code])) {

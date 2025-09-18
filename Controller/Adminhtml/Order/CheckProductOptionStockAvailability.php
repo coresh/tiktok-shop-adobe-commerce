@@ -49,9 +49,10 @@ class CheckProductOptionStockAvailability extends AbstractOrder
 
         foreach ($optionsData as $optionId => $optionData) {
             $optionId = (int)$optionId;
-            $valueId = (int)$optionData['value_id'];
-
-            $associatedProducts["$optionId::$valueId"] = $optionData['product_ids'];
+            foreach ($optionData as $optionItem) {
+                $valueId = (int)$optionItem['value_id'];
+                $associatedProducts["$optionId::$valueId"] = $optionItem['product_ids'];
+            }
         }
 
         $firstOrderItem = reset($orderItems);

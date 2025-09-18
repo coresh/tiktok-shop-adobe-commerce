@@ -437,6 +437,12 @@ class OrderHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 ['default' => 0]
             )
             ->addColumn(
+                OrderItemResource::COLUMN_COMBINED_LISTING_SKUS,
+                Table::TYPE_TEXT,
+                \M2E\Core\Model\ResourceModel\Setup::LONG_COLUMN_SIZE,
+                ['default' => null]
+            )
+            ->addColumn(
                 OrderItemResource::COLUMN_UPDATE_DATE,
                 Table::TYPE_DATETIME,
                 null,

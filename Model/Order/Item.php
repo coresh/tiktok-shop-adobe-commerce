@@ -2,8 +2,8 @@
 
 namespace M2E\TikTokShop\Model\Order;
 
-use M2E\TikTokShop\Model\ResourceModel\Order\Item as OrderItemResource;
 use M2E\TikTokShop\Model\Order\ReturnRequest\Status as ReturnRequestStatus;
+use M2E\TikTokShop\Model\ResourceModel\Order\Item as OrderItemResource;
 
 class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 {
@@ -27,10 +27,10 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
     // ----------------------------------------
 
+    private \M2E\TikTokShop\Model\Order\Item\BundleSkuFinderFactory $bundleSkuFinderFactory;
     private \M2E\TikTokShop\Model\Order\Item\ProxyObjectFactory $proxyObjectFactory;
     private \M2E\Core\Helper\Magento\Store $magentoStoreHelper;
     private \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $magentoProductCollectionFactory;
-    private \M2E\TikTokShop\Model\Order\Item\OptionsFinder $optionsFinder;
     private \M2E\TikTokShop\Model\Product\Repository $listingProductRepository;
     private \M2E\TikTokShop\Model\Product\VariantSku $variantSku;
     private \M2E\TikTokShop\Model\Order\Item\ProductAssignService $productAssignService;
@@ -38,10 +38,10 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     private Repository $orderRepository;
 
     public function __construct(
+        \M2E\TikTokShop\Model\Order\Item\BundleSkuFinderFactory $bundleSkuFinderFactory,
         \M2E\TikTokShop\Model\Order\Repository $orderRepository,
         \M2E\TikTokShop\Model\Order\Item\ProductAssignService $productAssignService,
         \M2E\TikTokShop\Model\Product\Repository $listingProductRepository,
-        \M2E\TikTokShop\Model\Order\Item\OptionsFinder $optionsFinder,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $magentoProductCollectionFactory,
         \M2E\Core\Helper\Magento\Store $magentoStoreHelper,
         \M2E\TikTokShop\Model\Order\Item\ProxyObjectFactory $proxyObjectFactory,
@@ -59,11 +59,11 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             $resourceCollection,
             $data,
         );
+        $this->bundleSkuFinderFactory = $bundleSkuFinderFactory;
         $this->magentoProductFactory = $magentoProductFactory;
         $this->proxyObjectFactory = $proxyObjectFactory;
         $this->magentoStoreHelper = $magentoStoreHelper;
         $this->magentoProductCollectionFactory = $magentoProductCollectionFactory;
-        $this->optionsFinder = $optionsFinder;
         $this->listingProductRepository = $listingProductRepository;
         $this->productAssignService = $productAssignService;
         $this->orderRepository = $orderRepository;
@@ -309,11 +309,12 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             );
         }
 
-        $supportedProductTypes = [
-            \M2E\TikTokShop\Helper\Magento\Product::TYPE_SIMPLE,
-        ];
-
-        if (!in_array($this->getMagentoProduct()->getTypeId(), $supportedProductTypes)) {
+        if (
+            !in_array(
+                $this->getMagentoProduct()->getTypeId(),
+                \M2E\TikTokShop\Model\Order::SUPPORTED_MAGENTO_PRODUCT_TYPES
+            )
+        ) {
             $message = \M2E\TikTokShop\Helper\Module\Log::encodeDescription(
                 'Order Import does not support Product type: %type%.',
                 [
@@ -384,30 +385,16 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
         }
     }
 
-    /**
-     * @throws \M2E\TikTokShop\Model\Exception
-     */
     private function getAssociatedProductDetails(\M2E\TikTokShop\Model\Magento\Product $magentoProduct): array
     {
         if (!$magentoProduct->getTypeId()) {
             return [];
         }
 
-        $magentoOptions = $this
-            ->prepareMagentoOptions($magentoProduct->getVariationInstance()->getVariationsTypeRaw());
+        $bundleSkuFinder = $this->bundleSkuFinderFactory
+            ->create($magentoProduct, $this->getCombinedListingSkus());
 
-        $optionsFinder = $this->optionsFinder;
-        $optionsFinder->setProduct($magentoProduct)
-                      ->setMagentoOptions($magentoOptions)
-                      ->addChannelOptions();
-
-        $optionsFinder->find();
-
-        if (!$optionsFinder->hasFailedOptions()) {
-            return $optionsFinder->getOptionsData();
-        }
-
-        throw new \M2E\TikTokShop\Model\Exception($optionsFinder->getOptionsNotFoundMessage());
+        return $bundleSkuFinder->find() ?? [];
     }
 
     //########################################
@@ -989,5 +976,37 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
     public function isGiftItem(): bool
     {
         return (bool)$this->getData(OrderItemResource::COLUMN_IS_GIFT);
+    }
+
+    public function setCombinedListingSkus(
+        ?\M2E\TikTokShop\Model\Order\Item\CombinedListingSkus $combinedListingSkus
+    ) {
+        if ($combinedListingSkus !== null) {
+            $combinedListingSkus = json_encode($combinedListingSkus->toArray());
+        }
+
+        $this->setData(OrderItemResource::COLUMN_COMBINED_LISTING_SKUS, $combinedListingSkus);
+    }
+
+    public function getCombinedListingSkus(): ?\M2E\TikTokShop\Model\Order\Item\CombinedListingSkus
+    {
+        $combinedListingSkus = $this->getData(OrderItemResource::COLUMN_COMBINED_LISTING_SKUS);
+        if (empty($combinedListingSkus)) {
+            return null;
+        }
+
+        $combinedListingSkus = json_decode($combinedListingSkus, true);
+
+        $skus = [];
+        foreach ($combinedListingSkus as $combinedListingSku) {
+            $skus[] = new \M2E\TikTokShop\Model\Order\Item\CombinedListingSku(
+                $combinedListingSku[\M2E\TikTokShop\Model\Order\Item\CombinedListingSku::KEY_SKU_ID],
+                $combinedListingSku[\M2E\TikTokShop\Model\Order\Item\CombinedListingSku::KEY_SKU_COUNT],
+                $combinedListingSku[\M2E\TikTokShop\Model\Order\Item\CombinedListingSku::KEY_PRODUCT_ID],
+                $combinedListingSku[\M2E\TikTokShop\Model\Order\Item\CombinedListingSku::KEY_SELLER_SKU],
+            );
+        }
+
+        return new \M2E\TikTokShop\Model\Order\Item\CombinedListingSkus($skus);
     }
 }

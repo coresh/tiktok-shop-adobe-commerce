@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace M2E\TikTokShop\Block\Adminhtml\Grid\Column\Renderer;
 
+use M2E\TikTokShop\Model\ResourceModel\Product as ProductResource;
 use M2E\TikTokShop\Model\Product;
 
 class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options
@@ -34,6 +35,7 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options
         $html .= $this->getCurrentStatus($row);
         $html .= '</div>';
         $html .= $this->getScheduledTag($row);
+        $html .= $this->getItemAttributeValidationWarning($row);
 
         return $html;
     }
@@ -166,5 +168,24 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options
         );
 
         return $viewLogIcon->render($row);
+    }
+
+    private function getItemAttributeValidationWarning(\Magento\Framework\DataObject $row)
+    {
+        if ((int)$row->getData('status') !== Product::STATUS_NOT_LISTED) {
+            return '';
+        }
+
+        $isValid = $row->getData(ProductResource::COLUMN_IS_VALID_CATEGORY_ATTRIBUTES);
+        if ($isValid || $isValid === null) {
+            return '';
+        }
+
+        $warningMessage = (string)__('Unable to List Product Due to missing Item Attribute(s)');
+
+        return sprintf(
+            '<span class="fix-magento-tooltip m2e-tooltip-grid-warning" style="float:right;">%s</span>',
+            $this->getTooltipHtml($warningMessage)
+        );
     }
 }

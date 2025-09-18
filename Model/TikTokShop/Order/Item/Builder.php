@@ -52,6 +52,7 @@ class Builder
         $orderItem->setTaxDetails($this->getTaxDetails($rawChannelData));
         $orderItem->setTrackingDetails($this->getTrackingDetails($rawChannelData));
         $orderItem->setIsGift($rawChannelData['is_gift'] ?? false);
+        $orderItem->setCombinedListingSkus($this->getCombinedListingSkus($rawChannelData));
 
         if ($this->isNew) {
             $this->orderItemRepository->create($orderItem);
@@ -129,5 +130,25 @@ class Builder
         }
 
         return (bool)$rawData['is_buyer_request_refund'];
+    }
+
+    public function getCombinedListingSkus(array $rawData): ?\M2E\TikTokShop\Model\Order\Item\CombinedListingSkus
+    {
+        $rawCombinedListingSkus = $rawData['combined_listing_skus'] ?? [];
+        if (empty($rawCombinedListingSkus)) {
+            return null;
+        }
+
+        $skus = [];
+        foreach ($rawCombinedListingSkus as $rawCombinedListingSku) {
+            $skus[] = new \M2E\TikTokShop\Model\Order\Item\CombinedListingSku(
+                $rawCombinedListingSku[\M2E\TikTokShop\Model\Order\Item\CombinedListingSku::KEY_SKU_ID],
+                $rawCombinedListingSku[\M2E\TikTokShop\Model\Order\Item\CombinedListingSku::KEY_SKU_COUNT],
+                $rawCombinedListingSku[\M2E\TikTokShop\Model\Order\Item\CombinedListingSku::KEY_PRODUCT_ID],
+                $rawCombinedListingSku[\M2E\TikTokShop\Model\Order\Item\CombinedListingSku::KEY_SELLER_SKU],
+            );
+        }
+
+        return new \M2E\TikTokShop\Model\Order\Item\CombinedListingSkus($skus);
     }
 }
