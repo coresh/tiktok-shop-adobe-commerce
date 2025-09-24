@@ -391,8 +391,13 @@ class Item extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
             return [];
         }
 
+        $combinedListingSkus = $this->getCombinedListingSkus();
+        if (empty($combinedListingSkus)) {
+            return [];
+        }
+
         $bundleSkuFinder = $this->bundleSkuFinderFactory
-            ->create($magentoProduct, $this->getCombinedListingSkus());
+            ->create($magentoProduct, $combinedListingSkus);
 
         return $bundleSkuFinder->find() ?? [];
     }

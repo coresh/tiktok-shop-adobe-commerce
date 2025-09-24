@@ -95,7 +95,7 @@ class Mapping extends AbstractContainer
     public function getChanelOption(): array
     {
         $combinedListingSkus = $this->getOrderItem()->getCombinedListingSkus();
-        if ($combinedListingSkus === null) {
+        if (empty($combinedListingSkus)) {
             return [];
         }
 
