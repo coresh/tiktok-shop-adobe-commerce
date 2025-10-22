@@ -1566,4 +1566,14 @@ class Order extends \M2E\TikTokShop\Model\ActiveRecord\AbstractModel
 
         return false;
     }
+
+    public function getCpf(): ?string
+    {
+        $cpf = $this->getData(OrderResource::COLUMN_CPF);
+        if (empty($cpf)) {
+            return null;
+        }
+
+        return (string)$cpf;
+    }
 }

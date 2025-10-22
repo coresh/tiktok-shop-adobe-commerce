@@ -96,6 +96,9 @@ class Config implements \M2E\Core\Model\Setup\Upgrade\Entity\ConfigInterface
                 \M2E\TikTokShop\Setup\Update\y25_m09\CompleteWizards::class,
                 \M2E\TikTokShop\Setup\Update\y25_m09\AddSupportBundleProductsInOrder::class,
             ],
+            'y25_m10' => [
+                \M2E\TikTokShop\Setup\Update\y25_m10\AddSupportCPF::class,
+            ]
         ];
     }
 }

@@ -8,24 +8,12 @@ class ES extends \M2E\TikTokShop\Model\TikTokShop\Order\BaseAddressParser
 {
     public function getCity(): string
     {
-        foreach ($this->getDistricts() as $district) {
-            if ($district['level'] === 'municipality') {
-                return $district['name'];
-            }
-        }
-
-        return '';
+        return $this->getDistrictsCollection()->tryFindLevelName('municipality') ?? '';
     }
 
     public function getState(): string
     {
-        foreach ($this->getDistricts() as $district) {
-            if ($district['level'] === 'province') {
-                return $district['name'];
-            }
-        }
-
-        return '';
+        return $this->getDistrictsCollection()->tryFindLevelName('province') ?? '';
     }
 
     public function getStreetLines(): array
@@ -40,12 +28,6 @@ class ES extends \M2E\TikTokShop\Model\TikTokShop\Order\BaseAddressParser
 
     private function getAutonomousCommunity(): string
     {
-        foreach ($this->getDistricts() as $district) {
-            if ($district['level'] === 'autonomous community') {
-                return $district['name'];
-            }
-        }
-
-        return '';
+        return $this->getDistrictsCollection()->tryFindLevelName('autonomous community') ?? '';
     }
 }

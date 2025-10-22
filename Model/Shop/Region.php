@@ -148,6 +148,10 @@ class Region
     {
         return $this->regionCode === self::REGION_IE;
     }
+    public function isRegionCodeBR(): bool
+    {
+        return $this->regionCode === self::REGION_BR;
+    }
 
     public function getLocale(): string
     {

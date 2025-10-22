@@ -204,7 +204,19 @@ class Form extends AbstractContainer
         return $this->currency->getConvertRateFromBase($this->order->getCurrency(), $store) != 0;
     }
 
-    //########################################
+    // ----------------------------------------
+
+    public function isOrderHasCpf(): bool
+    {
+        return !empty($this->order->getCpf());
+    }
+
+    public function getOrderCpf(): string
+    {
+        return $this->order->getCpf() ?? '';
+    }
+
+    // ----------------------------------------
 
     public function getSubtotalPrice()
     {

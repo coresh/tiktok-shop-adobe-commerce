@@ -5,7 +5,7 @@ define([
     ManufacturerConfigurationTitleSuggest = Class.create({
 
         initialize: function (inputName, source) {
-            if (!source) {
+            if (source.length === 0) {
                 return;
             }
 

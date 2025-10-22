@@ -16,16 +16,23 @@ class SuggestedManufacturerList
         $this->attributeRepository = $attributeRepository;
     }
 
-    public function get(): ?array
+    public function get(): array
     {
-        $attributeOptions = $this
-            ->attributeRepository
-            ->get(self::MANUFACTURER_ATTRIBUTE_CODE)
-            ->getOptions();
+        try {
+            $attributeOptions = $this
+                ->attributeRepository
+                ->get(self::MANUFACTURER_ATTRIBUTE_CODE)
+                ->getOptions();
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
+            $attributeOptions = [];
+        }
 
         $result = [];
         foreach ($attributeOptions as $attributeOption) {
-            $result[] = ['id' => $attributeOption->getSortOrder(), 'label' => $attributeOption->getLabel()];
+            $result[] = [
+                'id' => $attributeOption->getSortOrder(),
+                'label' => $attributeOption->getLabel(),
+            ];
         }
 
         return $result;

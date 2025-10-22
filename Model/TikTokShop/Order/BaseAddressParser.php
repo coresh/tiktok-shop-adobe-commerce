@@ -7,21 +7,19 @@ namespace M2E\TikTokShop\Model\TikTokShop\Order;
 class BaseAddressParser
 {
     private array $serverData;
+    private \M2E\TikTokShop\Model\TikTokShop\Order\DistrictsCollection $districtsCollection;
 
     public function __construct(array $serverData)
     {
         $this->serverData = $serverData;
+        $this->districtsCollection = \M2E\TikTokShop\Model\TikTokShop\Order\DistrictsCollection::createFromArray(
+            $serverData['recipient_address']['district_info'] ?? []
+        );
     }
 
     public function getCity(): string
     {
-        foreach ($this->getDistricts() as $district) {
-            if ($district['level'] === 'county') {
-                return $district['name'];
-            }
-        }
-
-        return '';
+        return $this->getDistrictsCollection()->tryFindLevelName('county') ?? '';
     }
 
     public function getState(): string
@@ -60,21 +58,9 @@ class BaseAddressParser
         return $this->serverData['recipient_address']['region_code'] ?? '';
     }
 
-    /**
-     * @return array<array{level: string, name: string}>
-     */
-    public function getDistricts(): array
+    public function getDistrictsCollection(): \M2E\TikTokShop\Model\TikTokShop\Order\DistrictsCollection
     {
-        $district = [];
-
-        foreach ($this->serverData['recipient_address']['district_info'] ?? [] as $districtInfo) {
-            $district[] = [
-                'level' => $districtInfo['address_level_name'],
-                'name' => $districtInfo['address_name'],
-            ];
-        }
-
-        return $district;
+        return $this->districtsCollection;
     }
 
     public function getPostalCode(): string

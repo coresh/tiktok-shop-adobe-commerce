@@ -18,45 +18,18 @@ class IT extends \M2E\TikTokShop\Model\TikTokShop\Order\BaseAddressParser
 
     public function getState(): string
     {
-        foreach ($this->getDistricts() as $district) {
-            if ($district['level'] === 'province') {
-                return $district['name'];
-            }
-        }
-
-        return '';
+        return $this->getDistrictsCollection()->tryFindLevelName('province') ?? '';
     }
 
     public function getCity(): string
     {
-        foreach ($this->getDistricts() as $district) {
-            if ($district['level'] === 'city') {
-                return $district['name'];
-            }
-        }
-
-        return $this->getMunicipality();
-    }
-
-    private function getMunicipality(): string
-    {
-        foreach ($this->getDistricts() as $district) {
-            if ($district['level'] === 'municipality') {
-                return $district['name'];
-            }
-        }
-
-        return '';
+        return $this->getDistrictsCollection()->tryFindLevelName('city')
+            ?? $this->getDistrictsCollection()->tryFindLevelName('municipality')
+            ?? '';
     }
 
     private function getRegion(): string
     {
-        foreach ($this->getDistricts() as $district) {
-            if ($district['level'] === 'region') {
-                return $district['name'];
-            }
-        }
-
-        return '';
+        return $this->getDistrictsCollection()->tryFindLevelName('region') ?? '';
     }
 }

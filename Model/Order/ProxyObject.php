@@ -25,6 +25,7 @@ class ProxyObject
     protected \Magento\Tax\Model\Calculation $taxCalculation;
     private \M2E\Core\Model\Magento\CustomerFactory $magentoCustomerFactory;
     private \M2E\TikTokShop\Model\Config\Manager $config;
+    private \Magento\Customer\Helper\Address $addressHelper;
 
     public function __construct(
         \M2E\TikTokShop\Model\Order $order,
@@ -35,7 +36,8 @@ class ProxyObject
         TikTokShopPayment $payment,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        \M2E\TikTokShop\Model\Order\UserInfoFactory $userInfoFactory
+        \M2E\TikTokShop\Model\Order\UserInfoFactory $userInfoFactory,
+        \Magento\Customer\Helper\Address $addressHelper
     ) {
         $this->order = $order;
         $this->config = $config;
@@ -46,6 +48,7 @@ class ProxyObject
         $this->customerRepository = $customerRepository;
         $this->taxCalculation = $taxCalculation;
         $this->magentoCustomerFactory = $magentoCustomerFactory;
+        $this->addressHelper = $addressHelper;
     }
 
     public function createUserInfoFromRawName(string $rawName): UserInfo
@@ -296,11 +299,16 @@ class ProxyObject
             $this->addressData['city'] = $rawAddressData['city'];
             $this->addressData['postcode'] = $rawAddressData['postcode'];
             $this->addressData['telephone'] = $rawAddressData['telephone'];
-            $this->addressData['street'] = !empty($rawAddressData['street'])
-                ? array_filter($rawAddressData['street'])
-                : '';
+
+            $rawStreets = array_filter($rawAddressData['street'] ?? []);
+            if (count($rawStreets) > $this->addressHelper->getStreetLines($this->order->getStore())) {
+                $rawStreets = [implode(', ', $rawStreets)];
+            }
+
+            $this->addressData['street'] = $rawStreets;
             $this->addressData['company'] = !empty($rawAddressData['company']) ? $rawAddressData['company'] : '';
             $this->addressData['save_in_address_book'] = 0;
+            $this->addressData['vat_id'] = $this->order->getCpf();
         }
 
         return $this->addressData;

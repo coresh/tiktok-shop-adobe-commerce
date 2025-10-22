@@ -99,9 +99,9 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
                 ['category' => $categoryTableName],
                 sprintf('%s = template_category_id', CategoryDictionaryResource::COLUMN_ID),
                 [
-                    'path' => CategoryDictionaryResource::COLUMN_PATH,
-                    'category_id' => CategoryDictionaryResource::COLUMN_CATEGORY_ID,
-                    'is_valid' => CategoryDictionaryResource::COLUMN_IS_VALID,
+                    'tts_category_path' => CategoryDictionaryResource::COLUMN_PATH,
+                    'tts_category_category_id' => CategoryDictionaryResource::COLUMN_CATEGORY_ID,
+                    'tts_category_is_valid' => CategoryDictionaryResource::COLUMN_IS_VALID,
                 ],
                 null,
                 'left'
@@ -208,8 +208,8 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
 
     public function callbackColumnCategory($value, $row, $column, $isExport): string
     {
-        $categoryId = $row->getData('category_id') ?? '';
-        $path = $row->getData('path') ?? '';
+        $categoryId = $row->getData('tts_category_category_id') ?? '';
+        $path = $row->getData('tts_category_path') ?? '';
         if (empty($categoryId) && empty($path)) {
             return sprintf(
                 '<span style="color: #e22626;">%s</span>',
@@ -219,7 +219,7 @@ class Grid extends \M2E\TikTokShop\Block\Adminhtml\Listing\View\AbstractGrid
 
         $view = sprintf('%s (%s)', $path, $categoryId);
 
-        if (!$row->getData('is_valid')) {
+        if (!$row->getData('tts_category_is_valid')) {
             return sprintf(
                 '<div><p style="padding: 2px 0 0 10px">%s <span style="color: #f00;">%s</span></p></span>',
                 $view,

@@ -142,7 +142,7 @@ class Builder extends \Magento\Framework\DataObject
             'price' => $data['payment']['shipping_fee'],
             'service' => $data['delivery_option_name'],
             'address_detail' => $data['recipient_address']['address_detail'],
-            'district' => $addressParser->getDistricts(),
+            'district' => $addressParser->getDistrictsCollection()->getDistricts(),
             'address' => [
                 'buyer_name' => $addressParser->getBuyerName(),
                 'buyer_email' => $addressParser->getBuyerEmail(),
@@ -160,6 +160,10 @@ class Builder extends \Magento\Framework\DataObject
 
         $this->setData(OrderResource::COLUMN_SHIP_BY_DATE, $data['ship_by_date']);
         $this->setData(OrderResource::COLUMN_DELIVER_BY_DATE, $data['deliver_by_date']);
+
+        // CPF
+        $this->setData(OrderResource::COLUMN_CPF, $data['cpf']);
+        $this->setData(OrderResource::COLUMN_CPF_NAME, $data['cpf_name']);
 
         // ---------------------------------------
         $this->items = $data['items'];

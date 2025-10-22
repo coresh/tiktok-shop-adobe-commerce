@@ -226,6 +226,18 @@ class OrderHandler implements \M2E\Core\Model\Setup\InstallHandlerInterface
                 ['default' => 0]
             )
             ->addColumn(
+                OrderResource::COLUMN_CPF,
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => true]
+            )
+            ->addColumn(
+                OrderResource::COLUMN_CPF_NAME,
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => true]
+            )
+            ->addColumn(
                 OrderResource::COLUMN_CREATE_DATE,
                 Table::TYPE_DATETIME
             )

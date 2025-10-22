@@ -56,6 +56,11 @@ class AddressParserFactory
                 ->create(\M2E\TikTokShop\Model\TikTokShop\Order\AddressParser\IE::class, $arguments);
         }
 
+        if ($region->isRegionCodeBR()) {
+            return $this->objectManager
+                ->create(\M2E\TikTokShop\Model\TikTokShop\Order\AddressParser\BR::class, $arguments);
+        }
+
         return $this->objectManager
             ->create(\M2E\TikTokShop\Model\TikTokShop\Order\BaseAddressParser::class, $arguments);
     }
