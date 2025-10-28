@@ -225,6 +225,7 @@ class ProxyObject
         if ($accountModel->getOrdersSettings()->isCustomerNew()) {
             $customerInfo = $this->getAddressData();
 
+            /** @var \Magento\Customer\Model\Customer $customerObject */
             $customerObject = $this->customerFactory->create();
             $customerObject->setWebsiteId($accountModel->getOrdersSettings()->getCustomerNewWebsiteId());
             $customerObject->loadByEmail($customerInfo['email']);
@@ -232,6 +233,7 @@ class ProxyObject
             if ($customerObject->getId() !== null) {
                 $customerBuilder->setData($customerInfo);
                 $customerBuilder->updateAddress($customerObject);
+                $this->updateCustomerVatId($customerObject, $customerInfo);
 
                 return $customerObject->getDataModel();
             }
@@ -241,9 +243,12 @@ class ProxyObject
 
             $customerBuilder->setData($customerInfo);
             $customerBuilder->buildCustomer();
-            $customerBuilder->getCustomer()->save();
+            $customerObject = $customerBuilder->getCustomer();
+            $customerObject->save();
 
-            return $customerBuilder->getCustomer()->getDataModel();
+            $this->updateCustomerVatId($customerObject, $customerInfo);
+
+            return $customerObject->getDataModel();
         }
 
         return null;
@@ -357,7 +362,7 @@ class ProxyObject
             \Magento\Quote\Api\Data\PaymentInterface::KEY_ADDITIONAL_DATA => [
                 TikTokShopPayment::ADDITIONAL_DATA_KEY_PAYMENT_METHOD => $this->order->getPaymentMethod(),
                 TikTokShopPayment::ADDITIONAL_DATA_KEY_CHANNEL_ORDER_ID => $this->order->getTtsOrderId(),
-            ]
+            ],
         ];
     }
 
@@ -391,7 +396,7 @@ class ProxyObject
             'carrier_title' => (string)__(
                 '%channel_title Delivery Option',
                 [
-                    'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle()
+                    'channel_title' => \M2E\TikTokShop\Helper\Module::getChannelTitle(),
                 ]
             ),
             'shipping_method' => $shippingMethod . $additionalData,
@@ -624,7 +629,7 @@ class ProxyObject
                 [
                     'order_currency' => $this->getCurrency(),
                     'store_currency' => $store->getBaseCurrencyCode(),
-                    'currency_rate' => $currencyConvertRate
+                    'currency_rate' => $currencyConvertRate,
                 ]
             );
         }
@@ -655,5 +660,17 @@ class ProxyObject
     public function getSampleOrderComment(): array
     {
         return $this->order->isSample() ? [(string)__('This Order contains a free Sample')] : [];
+    }
+
+    private function updateCustomerVatId(\Magento\Customer\Model\Customer $customer, array $customerInfo)
+    {
+        if (empty($customerInfo['vat_id'] ?? null)) {
+            return;
+        }
+
+        foreach ($customer->getPrimaryAddresses() as $addressModel) {
+            $addressModel->setVatId($customerInfo['vat_id']);
+            $addressModel->save();
+        }
     }
 }
